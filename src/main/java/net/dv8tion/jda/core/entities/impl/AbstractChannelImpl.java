@@ -40,8 +40,7 @@ import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
-public abstract class AbstractChannelImpl<T extends AbstractChannelImpl<T>> implements Channel
-{
+public abstract class AbstractChannelImpl<T extends AbstractChannelImpl<T>> implements Channel {
     protected final long id;
     protected final GuildImpl guild;
 
@@ -56,83 +55,70 @@ public abstract class AbstractChannelImpl<T extends AbstractChannelImpl<T>> impl
     protected String name;
     protected int rawPosition;
 
-    public AbstractChannelImpl(long id, GuildImpl guild)
-    {
+    public AbstractChannelImpl(long id, GuildImpl guild) {
         this.id = id;
         this.guild = guild;
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
     @Override
-    public Guild getGuild()
-    {
+    public Guild getGuild() {
         return guild;
     }
 
     @Override
-    public Category getParent()
-    {
+    public Category getParent() {
         return guild.getCategoriesMap().get(parentId);
     }
 
     @Override
-    public int getPositionRaw()
-    {
+    public int getPositionRaw() {
         return rawPosition;
     }
 
     @Override
-    public JDA getJDA()
-    {
+    public JDA getJDA() {
         return getGuild().getJDA();
     }
 
     @Override
-    public PermissionOverride getPermissionOverride(Member member)
-    {
+    public PermissionOverride getPermissionOverride(Member member) {
         return member != null ? overrides.get(member.getUser().getIdLong()) : null;
     }
 
     @Override
-    public PermissionOverride getPermissionOverride(Role role)
-    {
+    public PermissionOverride getPermissionOverride(Role role) {
         return role != null ? overrides.get(role.getIdLong()) : null;
     }
 
     @Override
-    public List<PermissionOverride> getPermissionOverrides()
-    {
+    public List<PermissionOverride> getPermissionOverrides() {
         // already unmodifiable!
         return Arrays.asList(overrides.values(new PermissionOverride[overrides.size()]));
     }
 
     @Override
-    public List<PermissionOverride> getMemberPermissionOverrides()
-    {
+    public List<PermissionOverride> getMemberPermissionOverrides() {
         return Collections.unmodifiableList(getPermissionOverrides().stream()
-                .filter(PermissionOverride::isMemberOverride)
-                .collect(Collectors.toList()));
+            .filter(PermissionOverride::isMemberOverride)
+            .collect(Collectors.toList()));
     }
 
     @Override
-    public List<PermissionOverride> getRolePermissionOverrides()
-    {
+    public List<PermissionOverride> getRolePermissionOverrides() {
         return Collections.unmodifiableList(getPermissionOverrides().stream()
-                .filter(PermissionOverride::isRoleOverride)
-                .collect(Collectors.toList()));
+            .filter(PermissionOverride::isRoleOverride)
+            .collect(Collectors.toList()));
     }
 
     @Override
-    public ChannelManager getManager()
-    {
+    public ChannelManager getManager() {
         ChannelManager mng = manager;
-        if (mng == null)
-        {
+        if (mng == null) {
             mng = MiscUtil.locked(mngLock, () ->
             {
                 if (manager == null)
@@ -145,11 +131,9 @@ public abstract class AbstractChannelImpl<T extends AbstractChannelImpl<T>> impl
 
     @Override
     @Deprecated
-    public net.dv8tion.jda.core.managers.ChannelManagerUpdatable getManagerUpdatable()
-    {
+    public net.dv8tion.jda.core.managers.ChannelManagerUpdatable getManagerUpdatable() {
         net.dv8tion.jda.core.managers.ChannelManagerUpdatable mng = managerUpdatable;
-        if (mng == null)
-        {
+        if (mng == null) {
             mng = MiscUtil.locked(mngLock, () ->
             {
                 if (managerUpdatable == null)
@@ -161,16 +145,13 @@ public abstract class AbstractChannelImpl<T extends AbstractChannelImpl<T>> impl
     }
 
     @Override
-    public AuditableRestAction<Void> delete()
-    {
+    public AuditableRestAction<Void> delete() {
         checkPermission(Permission.MANAGE_CHANNEL);
 
         Route.CompiledRoute route = Route.Channels.DELETE_CHANNEL.compile(getId());
-        return new AuditableRestAction<Void>(getJDA(), route)
-        {
+        return new AuditableRestAction<Void>(getJDA(), route) {
             @Override
-            protected void handleResponse(Response response, Request<Void> request)
-            {
+            protected void handleResponse(Response response, Request<Void> request) {
                 if (response.isOk())
                     request.onSuccess(null);
                 else
@@ -180,8 +161,7 @@ public abstract class AbstractChannelImpl<T extends AbstractChannelImpl<T>> impl
     }
 
     @Override
-    public PermissionOverrideAction createPermissionOverride(Member member)
-    {
+    public PermissionOverrideAction createPermissionOverride(Member member) {
         Checks.notNull(member, "member");
         if (overrides.containsKey(member.getUser().getIdLong()))
             throw new IllegalStateException("Provided member already has a PermissionOverride in this channel!");
@@ -190,8 +170,7 @@ public abstract class AbstractChannelImpl<T extends AbstractChannelImpl<T>> impl
     }
 
     @Override
-    public PermissionOverrideAction createPermissionOverride(Role role)
-    {
+    public PermissionOverrideAction createPermissionOverride(Role role) {
         Checks.notNull(role, "role");
         if (overrides.containsKey(role.getIdLong()))
             throw new IllegalStateException("Provided role already has a PermissionOverride in this channel!");
@@ -200,8 +179,7 @@ public abstract class AbstractChannelImpl<T extends AbstractChannelImpl<T>> impl
     }
 
     @Override
-    public PermissionOverrideAction putPermissionOverride(Member member)
-    {
+    public PermissionOverrideAction putPermissionOverride(Member member) {
         checkPermission(Permission.MANAGE_PERMISSIONS);
         Checks.notNull(member, "member");
 
@@ -212,8 +190,7 @@ public abstract class AbstractChannelImpl<T extends AbstractChannelImpl<T>> impl
     }
 
     @Override
-    public PermissionOverrideAction putPermissionOverride(Role role)
-    {
+    public PermissionOverrideAction putPermissionOverride(Role role) {
         checkPermission(Permission.MANAGE_PERMISSIONS);
         Checks.notNull(role, "role");
 
@@ -224,8 +201,7 @@ public abstract class AbstractChannelImpl<T extends AbstractChannelImpl<T>> impl
     }
 
     @Override
-    public InviteAction createInvite()
-    {
+    public InviteAction createInvite() {
         if (!this.guild.getSelfMember().hasPermission(this, Permission.CREATE_INSTANT_INVITE))
             throw new InsufficientPermissionException(Permission.CREATE_INSTANT_INVITE);
 
@@ -233,29 +209,23 @@ public abstract class AbstractChannelImpl<T extends AbstractChannelImpl<T>> impl
     }
 
     @Override
-    public RestAction<List<Invite>> getInvites()
-    {
+    public RestAction<List<Invite>> getInvites() {
         if (!this.guild.getSelfMember().hasPermission(this, Permission.MANAGE_CHANNEL))
             throw new InsufficientPermissionException(Permission.MANAGE_CHANNEL);
 
         final Route.CompiledRoute route = Route.Invites.GET_CHANNEL_INVITES.compile(getId());
 
-        return new RestAction<List<Invite>>(getJDA(), route)
-        {
+        return new RestAction<List<Invite>>(getJDA(), route) {
             @Override
-            protected void handleResponse(final Response response, final Request<List<Invite>> request)
-            {
-                if (response.isOk())
-                {
+            protected void handleResponse(final Response response, final Request<List<Invite>> request) {
+                if (response.isOk()) {
                     EntityBuilder entityBuilder = this.api.getEntityBuilder();
                     JSONArray array = response.getArray();
                     List<Invite> invites = new ArrayList<>(array.length());
                     for (int i = 0; i < array.length(); i++)
                         invites.add(entityBuilder.createInvite(array.getJSONObject(i)));
                     request.onSuccess(Collections.unmodifiableList(invites));
-                }
-                else
-                {
+                } else {
                     request.onFailure(response);
                 }
             }
@@ -263,20 +233,17 @@ public abstract class AbstractChannelImpl<T extends AbstractChannelImpl<T>> impl
     }
 
     @Override
-    public long getIdLong()
-    {
+    public long getIdLong() {
         return id;
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return Long.hashCode(id);
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         if (!(obj instanceof Channel))
             return false;
         if (obj == this)
@@ -285,37 +252,34 @@ public abstract class AbstractChannelImpl<T extends AbstractChannelImpl<T>> impl
         return channel.getIdLong() == getIdLong();
     }
 
-    public TLongObjectMap<PermissionOverride> getOverrideMap()
-    {
+    public TLongObjectMap<PermissionOverride> getOverrideMap() {
         return overrides;
     }
 
     @SuppressWarnings("unchecked")
-    public T setName(String name)
-    {
+    public T setName(String name) {
         this.name = name;
         return (T) this;
     }
 
     @SuppressWarnings("unchecked")
-    public T setParent(long parentId)
-    {
+    public T setParent(long parentId) {
         this.parentId = parentId;
         return (T) this;
     }
 
     @SuppressWarnings("unchecked")
-    public T setPosition(int rawPosition)
-    {
+    public T setPosition(int rawPosition) {
         this.rawPosition = rawPosition;
         return (T) this;
     }
 
-    protected void checkPermission(Permission permission) {checkPermission(permission, null);}
-    protected void checkPermission(Permission permission, String message)
-    {
-        if (!guild.getSelfMember().hasPermission(this, permission))
-        {
+    protected void checkPermission(Permission permission) {
+        checkPermission(permission, null);
+    }
+
+    protected void checkPermission(Permission permission, String message) {
+        if (!guild.getSelfMember().hasPermission(this, permission)) {
             if (message != null)
                 throw new InsufficientPermissionException(permission, message);
             else

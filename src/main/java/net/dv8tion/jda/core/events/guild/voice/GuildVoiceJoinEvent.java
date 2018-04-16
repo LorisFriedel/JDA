@@ -27,12 +27,10 @@ import net.dv8tion.jda.core.entities.VoiceChannel;
  *
  * <p>Can be used to detect when a member joins a voice channel for the first time.
  */
-public class GuildVoiceJoinEvent extends GenericGuildVoiceEvent
-{
+public class GuildVoiceJoinEvent extends GenericGuildVoiceEvent {
     protected final VoiceChannel channelJoined;
 
-    public GuildVoiceJoinEvent(JDA api, long responseNumber, Member member)
-    {
+    public GuildVoiceJoinEvent(JDA api, long responseNumber, Member member) {
         super(api, responseNumber, member);
         this.channelJoined = member.getVoiceState().getChannel();
     }
@@ -42,8 +40,7 @@ public class GuildVoiceJoinEvent extends GenericGuildVoiceEvent
      *
      * @return The {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel}
      */
-    public VoiceChannel getChannelJoined()
-    {
+    public VoiceChannel getChannelJoined() {
         return channelJoined;
     }
 }

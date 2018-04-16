@@ -20,19 +20,17 @@ import net.dv8tion.jda.core.entities.*;
 
 /**
  * Indicates that a Message was edited in a {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel}.
- * 
+ *
  * <p>Can be used to detect a Message is edited in either a private or guild channel. Providing a MessageChannel and Message.
  * <br>This also includes whether a message is being pinned.
  *
  * <p><b>JDA does not have a cache for messages and is not able to provide previous information due to limitations by the
  * Discord API!</b>
  */
-public class MessageUpdateEvent extends GenericMessageEvent
-{
+public class MessageUpdateEvent extends GenericMessageEvent {
     private final Message message;
 
-    public MessageUpdateEvent(JDA api, long responseNumber, Message message)
-    {
+    public MessageUpdateEvent(JDA api, long responseNumber, Message message) {
         super(api, responseNumber, message.getIdLong(), message.getChannel());
         this.message = message;
     }
@@ -43,8 +41,7 @@ public class MessageUpdateEvent extends GenericMessageEvent
      *
      * @return The updated Message
      */
-    public Message getMessage()
-    {
+    public Message getMessage() {
         return message;
     }
 
@@ -52,11 +49,9 @@ public class MessageUpdateEvent extends GenericMessageEvent
      * The author of the Message.
      *
      * @return The message author
-     *
-     * @see    net.dv8tion.jda.core.entities.User User
+     * @see net.dv8tion.jda.core.entities.User User
      */
-    public User getAuthor()
-    {
+    public User getAuthor() {
         return message.getAuthor();
     }
 
@@ -66,8 +61,7 @@ public class MessageUpdateEvent extends GenericMessageEvent
      *
      * @return The Member instance for the author or null
      */
-    public Member getMember()
-    {
-        return  isFromType(ChannelType.TEXT) ? getGuild().getMember(getAuthor()) : null;
+    public Member getMember() {
+        return isFromType(ChannelType.TEXT) ? getGuild().getMember(getAuthor()) : null;
     }
 }

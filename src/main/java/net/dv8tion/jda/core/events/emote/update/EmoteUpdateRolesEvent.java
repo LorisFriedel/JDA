@@ -29,12 +29,10 @@ import java.util.List;
  *
  * <p>Identifier: {@code roles}
  */
-public class EmoteUpdateRolesEvent extends GenericEmoteUpdateEvent<List<Role>>
-{
+public class EmoteUpdateRolesEvent extends GenericEmoteUpdateEvent<List<Role>> {
     public static final String IDENTIFIER = "roles";
 
-    public EmoteUpdateRolesEvent(JDA api, long responseNumber, Emote emote, List<Role> oldRoles)
-    {
+    public EmoteUpdateRolesEvent(JDA api, long responseNumber, Emote emote, List<Role> oldRoles) {
         super(api, responseNumber, emote, oldRoles, emote.getRoles(), IDENTIFIER);
     }
 
@@ -43,8 +41,7 @@ public class EmoteUpdateRolesEvent extends GenericEmoteUpdateEvent<List<Role>>
      *
      * @return The old role whitelist
      */
-    public List<Role> getOldRoles()
-    {
+    public List<Role> getOldRoles() {
         return getOldValue();
     }
 
@@ -53,8 +50,7 @@ public class EmoteUpdateRolesEvent extends GenericEmoteUpdateEvent<List<Role>>
      *
      * @return The new role whitelist
      */
-    public List<Role> getNewRoles()
-    {
+    public List<Role> getNewRoles() {
         return getNewValue();
     }
 }

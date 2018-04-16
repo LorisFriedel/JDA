@@ -26,8 +26,7 @@ import java.util.Optional;
  * Indicates an unhandled error that is returned by Discord API Request using {@link net.dv8tion.jda.core.requests.RestAction RestAction}
  * <br>It holds an {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponse}
  */
-public class ErrorResponseException extends RuntimeException
-{
+public class ErrorResponseException extends RuntimeException {
     private final ErrorResponse errorResponse;
     private final Response response;
     private final String meaning;
@@ -36,14 +35,11 @@ public class ErrorResponseException extends RuntimeException
     /**
      * Creates a new ErrorResponseException instance
      *
-     * @param errorResponse
-     *        The {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponse} corresponding
-     *        for the received error response from Discord
-     * @param response
-     *        The Discord Response causing the ErrorResponse
+     * @param errorResponse The {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponse} corresponding
+     *                      for the received error response from Discord
+     * @param response      The Discord Response causing the ErrorResponse
      */
-    private ErrorResponseException(ErrorResponse errorResponse, Response response, int code, String meaning)
-    {
+    private ErrorResponseException(ErrorResponse errorResponse, Response response, int code, String meaning) {
         super(code + ": " + meaning);
 
         this.response = response;
@@ -56,10 +52,9 @@ public class ErrorResponseException extends RuntimeException
      * Whether this is an internal server error from discord (status 500)
      *
      * @return True, if this is an internal server error
-     *         {@link net.dv8tion.jda.core.requests.ErrorResponse#SERVER_ERROR ErrorResponse.SERVER_ERROR}
+     * {@link net.dv8tion.jda.core.requests.ErrorResponse#SERVER_ERROR ErrorResponse.SERVER_ERROR}
      */
-    public boolean isServerError()
-    {
+    public boolean isServerError() {
         return errorResponse == ErrorResponse.SERVER_ERROR;
     }
 
@@ -69,8 +64,7 @@ public class ErrorResponseException extends RuntimeException
      *
      * @return Never-null meaning of this error.
      */
-    public String getMeaning()
-    {
+    public String getMeaning() {
         return meaning;
     }
 
@@ -78,11 +72,9 @@ public class ErrorResponseException extends RuntimeException
      * The discord error code for this error response.
      *
      * @return The discord error code.
-     *
      * @see <a href="https://discordapp.com/developers/docs/topics/response-codes#json-error-response" target="_blank">Discord Error Codes</a>
      */
-    public int getErrorCode()
-    {
+    public int getErrorCode() {
         return code;
     }
 
@@ -92,8 +84,7 @@ public class ErrorResponseException extends RuntimeException
      *
      * @return {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponse}
      */
-    public ErrorResponse getErrorResponse()
-    {
+    public ErrorResponse getErrorResponse() {
         return errorResponse;
     }
 
@@ -102,44 +93,34 @@ public class ErrorResponseException extends RuntimeException
      *
      * @return {@link net.dv8tion.jda.core.requests.Response Response}
      */
-    public Response getResponse()
-    {
+    public Response getResponse() {
         return response;
     }
 
-    public static ErrorResponseException create(ErrorResponse errorResponse, Response response)
-    {
+    public static ErrorResponseException create(ErrorResponse errorResponse, Response response) {
         Optional<JSONObject> optObj = response.optObject();
         String meaning = errorResponse.getMeaning();
         int code = errorResponse.getCode();
-        if (response.isError() && response.getException() != null)
-        {
+        if (response.isError() && response.getException() != null) {
             // this generally means that an exception occurred trying to
             //make an http request. e.g.:
             //SocketTimeoutException/ UnknownHostException
             code = response.code;
             meaning = response.getException().getClass().getName();
-        }
-        else if (optObj.isPresent())
-        {
+        } else if (optObj.isPresent()) {
             JSONObject obj = optObj.get();
-            if (!obj.isNull("code") || !obj.isNull("message"))
-            {
+            if (!obj.isNull("code") || !obj.isNull("message")) {
                 if (!obj.isNull("code"))
                     code = obj.getInt("code");
                 if (!obj.isNull("message"))
                     meaning = obj.getString("message");
-            }
-            else
-            {
+            } else {
                 // This means that neither code or message is provided
                 //In that case we simply put the raw response in place!
                 code = response.code;
                 meaning = obj.toString();
             }
-        }
-        else
-        {
+        } else {
             // error response body is not JSON
             code = response.code;
             meaning = response.getString();

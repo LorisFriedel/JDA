@@ -29,12 +29,10 @@ import net.dv8tion.jda.core.entities.User;
  *
  * <p>Identifier: {@code status}
  */
-public class UserUpdateOnlineStatusEvent extends GenericUserPresenceEvent<OnlineStatus>
-{
+public class UserUpdateOnlineStatusEvent extends GenericUserPresenceEvent<OnlineStatus> {
     public static final String IDENTIFIER = "status";
 
-    public UserUpdateOnlineStatusEvent(JDA api, long responseNumber, User user, Guild guild, OnlineStatus oldOnlineStatus)
-    {
+    public UserUpdateOnlineStatusEvent(JDA api, long responseNumber, User user, Guild guild, OnlineStatus oldOnlineStatus) {
         super(api, responseNumber, user, guild, oldOnlineStatus,
             guild == null ? api.asClient().getFriend(user).getOnlineStatus() : guild.getMember(user).getOnlineStatus(), IDENTIFIER);
     }
@@ -44,8 +42,7 @@ public class UserUpdateOnlineStatusEvent extends GenericUserPresenceEvent<Online
      *
      * @return The old status
      */
-    public OnlineStatus getOldOnlineStatus()
-    {
+    public OnlineStatus getOldOnlineStatus() {
         return getOldValue();
     }
 
@@ -54,8 +51,7 @@ public class UserUpdateOnlineStatusEvent extends GenericUserPresenceEvent<Online
      *
      * @return The new status
      */
-    public OnlineStatus getNewOnlineStatus()
-    {
+    public OnlineStatus getNewOnlineStatus() {
         return getNewValue();
     }
 }

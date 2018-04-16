@@ -26,13 +26,11 @@ import net.dv8tion.jda.core.JDA;
  * <p>It is not recommended to simply use this and print each event as some throwables where already logged
  * by JDA. See {@link #isLogged()}.
  */
-public class ExceptionEvent extends Event
-{
+public class ExceptionEvent extends Event {
     protected final Throwable throwable;
     protected final boolean logged;
 
-    public ExceptionEvent(JDA api, Throwable throwable, boolean logged)
-    {
+    public ExceptionEvent(JDA api, Throwable throwable, boolean logged) {
         super(api);
         this.throwable = throwable;
         this.logged = logged;
@@ -43,8 +41,7 @@ public class ExceptionEvent extends Event
      *
      * @return True, if this throwable was already logged
      */
-    public boolean isLogged()
-    {
+    public boolean isLogged() {
         return logged;
     }
 
@@ -53,8 +50,7 @@ public class ExceptionEvent extends Event
      *
      * @return The cause
      */
-    public Throwable getCause()
-    {
+    public Throwable getCause() {
         return throwable;
     }
 }

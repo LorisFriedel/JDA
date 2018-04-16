@@ -28,36 +28,29 @@ import org.slf4j.Logger;
 import java.util.LinkedList;
 import java.util.List;
 
-public class GuildLock
-{
+public class GuildLock {
     public static final Logger LOG = JDALogger.getLog(GuildLock.class);
 
     private final JDA api;
     private final TLongObjectMap<List<JSONObject>> cache = new TLongObjectHashMap<>();
     private final TLongSet cached = new TLongHashSet();
 
-    public boolean isLocked(long guildId)
-    {
+    public boolean isLocked(long guildId) {
         return cached.contains(guildId);
     }
 
-    public void lock(long guildId)
-    {
-        if (!isLocked(guildId))
-        {
+    public void lock(long guildId) {
+        if (!isLocked(guildId)) {
             cached.add(guildId);
             cache.put(guildId, new LinkedList<>());
         }
     }
 
-    public void unlock(long guildId)
-    {
-        if (isLocked(guildId))
-        {
+    public void unlock(long guildId) {
+        if (isLocked(guildId)) {
             cached.remove(guildId);
             List<JSONObject> events = cache.remove(guildId);
-            if(events.size() > 0)
-            {
+            if (events.size() > 0) {
                 LOG.debug("Replaying {} events for unlocked guild with id {}", events.size(), guildId);
                 ((JDAImpl) api).getClient().handle(events);
                 LOG.debug("Finished replaying events for guild with id {}", guildId);
@@ -65,23 +58,19 @@ public class GuildLock
         }
     }
 
-    public void queue(long guildId, JSONObject event)
-    {
-        if (isLocked(guildId))
-        {
+    public void queue(long guildId, JSONObject event) {
+        if (isLocked(guildId)) {
             LOG.debug("Queueing up event for guild with id {}: {}", guildId, event);
             cache.get(guildId).add(event);
         }
     }
 
-    public void clear()
-    {
+    public void clear() {
         cache.clear();
         cached.clear();
     }
 
-    public GuildLock(JDA api)
-    {
+    public GuildLock(JDA api) {
         this.api = api;
     }
 }

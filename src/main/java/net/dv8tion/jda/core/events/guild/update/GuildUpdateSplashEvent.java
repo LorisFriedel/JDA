@@ -26,12 +26,10 @@ import net.dv8tion.jda.core.entities.Guild;
  *
  * <p>Identifier: {@code splash}
  */
-public class GuildUpdateSplashEvent extends GenericGuildUpdateEvent<String>
-{
+public class GuildUpdateSplashEvent extends GenericGuildUpdateEvent<String> {
     public static final String IDENTIFIER = "splash";
 
-    public GuildUpdateSplashEvent(JDA api, long responseNumber, Guild guild, String oldSplashId)
-    {
+    public GuildUpdateSplashEvent(JDA api, long responseNumber, Guild guild, String oldSplashId) {
         super(api, responseNumber, guild, oldSplashId, guild.getSplashId(), IDENTIFIER);
     }
 
@@ -40,8 +38,7 @@ public class GuildUpdateSplashEvent extends GenericGuildUpdateEvent<String>
      *
      * @return The old splash id, or null
      */
-    public String getOldSplashId()
-    {
+    public String getOldSplashId() {
         return getOldValue();
     }
 
@@ -50,8 +47,7 @@ public class GuildUpdateSplashEvent extends GenericGuildUpdateEvent<String>
      *
      * @return The url of the old splash, or null
      */
-    public String getOldSplashUrl()
-    {
+    public String getOldSplashUrl() {
         return previous == null ? null : "https://cdn.discordapp.com/splashes/" + guild.getId() + "/" + previous + ".jpg";
     }
 
@@ -60,8 +56,7 @@ public class GuildUpdateSplashEvent extends GenericGuildUpdateEvent<String>
      *
      * @return The new splash id, or null
      */
-    public String getNewSplashId()
-    {
+    public String getNewSplashId() {
         return getNewValue();
     }
 
@@ -70,8 +65,7 @@ public class GuildUpdateSplashEvent extends GenericGuildUpdateEvent<String>
      *
      * @return The url of the new splash, or null
      */
-    public String getNewSplashUrl()
-    {
+    public String getNewSplashUrl() {
         return next == null ? null : "https://cdn.discordapp.com/splashes/" + guild.getId() + "/" + next + ".jpg";
     }
 }

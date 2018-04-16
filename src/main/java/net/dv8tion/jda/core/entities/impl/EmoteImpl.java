@@ -35,10 +35,9 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * Represents a Custom Emote. (Emoji in official Discord API terminology)
  *
- * @since  2.2
+ * @since 2.2
  */
-public class EmoteImpl implements Emote
-{
+public class EmoteImpl implements Emote {
     private final long id;
     private final GuildImpl guild;
     private final JDAImpl api;
@@ -53,16 +52,14 @@ public class EmoteImpl implements Emote
     private boolean animated = false;
     private String name;
 
-    public EmoteImpl(long id, GuildImpl guild)
-    {
+    public EmoteImpl(long id, GuildImpl guild) {
         this.id = id;
         this.guild = guild;
         this.api = guild.getJDA();
         this.roles = Collections.synchronizedSet(new HashSet<>());
     }
 
-    public EmoteImpl(long id, JDAImpl api)
-    {
+    public EmoteImpl(long id, JDAImpl api) {
         this.id = id;
         this.api = api;
         this.guild = null;
@@ -70,55 +67,46 @@ public class EmoteImpl implements Emote
     }
 
     @Override
-    public Guild getGuild()
-    {
+    public Guild getGuild() {
         return guild;
     }
 
     @Override
-    public List<Role> getRoles()
-    {
+    public List<Role> getRoles() {
         if (isFake())
             throw new IllegalStateException("Unable to return roles because this emote is fake. (We do not know the origin Guild of this emote)");
         return Collections.unmodifiableList(new LinkedList<>(roles));
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
     @Override
-    public boolean isManaged()
-    {
+    public boolean isManaged() {
         return managed;
     }
 
     @Override
-    public boolean isFake()
-    {
+    public boolean isFake() {
         return guild == null;
     }
 
     @Override
-    public long getIdLong()
-    {
+    public long getIdLong() {
         return id;
     }
 
     @Override
-    public JDA getJDA()
-    {
+    public JDA getJDA() {
         return api;
     }
 
     @Override
-    public EmoteManager getManager()
-    {
+    public EmoteManager getManager() {
         EmoteManager m = manager;
-        if (m == null)
-        {
+        if (m == null) {
             m = MiscUtil.locked(mngLock, () ->
             {
                 if (manager == null)
@@ -131,11 +119,9 @@ public class EmoteImpl implements Emote
 
     @Override
     @Deprecated
-    public net.dv8tion.jda.client.managers.EmoteManagerUpdatable getManagerUpdatable()
-    {
+    public net.dv8tion.jda.client.managers.EmoteManagerUpdatable getManagerUpdatable() {
         net.dv8tion.jda.client.managers.EmoteManagerUpdatable m = managerUpdatable;
-        if (m == null)
-        {
+        if (m == null) {
             m = MiscUtil.locked(mngLock, () ->
             {
                 if (managerUpdatable == null)
@@ -147,14 +133,12 @@ public class EmoteImpl implements Emote
     }
 
     @Override
-    public boolean isAnimated()
-    {
+    public boolean isAnimated() {
         return animated;
     }
 
     @Override
-    public AuditableRestAction<Void> delete()
-    {
+    public AuditableRestAction<Void> delete() {
         if (isFake())
             throw new IllegalStateException("The emote you are trying to delete is not an actual emote we have access to (it is fake)!");
         if (managed)
@@ -163,11 +147,9 @@ public class EmoteImpl implements Emote
             throw new InsufficientPermissionException(Permission.MANAGE_EMOTES);
 
         Route.CompiledRoute route = Route.Emotes.DELETE_EMOTE.compile(getGuild().getId(), getId());
-        return new AuditableRestAction<Void>(getJDA(), route)
-        {
+        return new AuditableRestAction<Void>(getJDA(), route) {
             @Override
-            protected void handleResponse(Response response, Request<Void> request)
-            {
+            protected void handleResponse(Response response, Request<Void> request) {
                 if (response.isOk())
                     request.onSuccess(null);
                 else
@@ -178,36 +160,31 @@ public class EmoteImpl implements Emote
 
     // -- Setters --
 
-    public EmoteImpl setName(String name)
-    {
+    public EmoteImpl setName(String name) {
         this.name = name;
         return this;
     }
 
-    public EmoteImpl setAnimated(boolean animated)
-    {
+    public EmoteImpl setAnimated(boolean animated) {
         this.animated = animated;
         return this;
     }
 
-    public EmoteImpl setManaged(boolean val)
-    {
+    public EmoteImpl setManaged(boolean val) {
         this.managed = val;
         return this;
     }
 
     // -- Set Getter --
 
-    public Set<Role> getRoleSet()
-    {
+    public Set<Role> getRoleSet() {
         return this.roles;
     }
 
     // -- Object overrides --
 
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         if (!(obj instanceof EmoteImpl))
             return false;
 
@@ -217,20 +194,17 @@ public class EmoteImpl implements Emote
 
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return Long.hashCode(id);
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "E:" + getName() + '(' + getIdLong() + ')';
     }
 
     @Override
-    public EmoteImpl clone()
-    {
+    public EmoteImpl clone() {
         if (isFake()) return null;
         EmoteImpl copy = new EmoteImpl(id, guild).setManaged(managed).setAnimated(animated).setName(name);
         copy.roles.addAll(roles);

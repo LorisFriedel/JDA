@@ -50,12 +50,15 @@ import java.util.Set;
  *
  * @see net.dv8tion.jda.core.entities.Emote#getManager()
  */
-public class EmoteManager extends ManagerBase
-{
-    /** Used to reset the name field */
+public class EmoteManager extends ManagerBase {
+    /**
+     * Used to reset the name field
+     */
     public static final long NAME = 0x1;
 
-    /** Used to reset the roles field */
+    /**
+     * Used to reset the roles field
+     */
     public static final long ROLES = 0x2;
 
     protected final EmoteImpl emote;
@@ -66,14 +69,10 @@ public class EmoteManager extends ManagerBase
     /**
      * Creates a new EmoteManager instance
      *
-     * @param  emote
-     *         The target {@link net.dv8tion.jda.core.entities.impl.EmoteImpl EmoteImpl} to modify
-     *
-     * @throws java.lang.IllegalStateException
-     *         If the specified Emote is {@link net.dv8tion.jda.core.entities.Emote#isFake() fake} or {@link net.dv8tion.jda.core.entities.Emote#isManaged() managed}.
+     * @param emote The target {@link net.dv8tion.jda.core.entities.impl.EmoteImpl EmoteImpl} to modify
+     * @throws java.lang.IllegalStateException If the specified Emote is {@link net.dv8tion.jda.core.entities.Emote#isFake() fake} or {@link net.dv8tion.jda.core.entities.Emote#isManaged() managed}.
      */
-    public EmoteManager(EmoteImpl emote)
-    {
+    public EmoteManager(EmoteImpl emote) {
         super(emote.getJDA(), Route.Emotes.MODIFY_EMOTE.compile(emote.getGuild().getId(), emote.getId()));
         if (emote.isFake())
             throw new IllegalStateException("Cannot modify a fake emote");
@@ -87,8 +86,7 @@ public class EmoteManager extends ManagerBase
      *
      * @return the corresponding JDA instance
      */
-    public JDA getJDA()
-    {
+    public JDA getJDA() {
         return emote.getJDA();
     }
 
@@ -99,8 +97,7 @@ public class EmoteManager extends ManagerBase
      *
      * @return The parent {@link net.dv8tion.jda.core.entities.Guild Guild}
      */
-    public Guild getGuild()
-    {
+    public Guild getGuild() {
         return emote.getGuild();
     }
 
@@ -110,8 +107,7 @@ public class EmoteManager extends ManagerBase
      *
      * @return The target Emote
      */
-    public Emote getEmote()
-    {
+    public Emote getEmote() {
         return emote;
     }
 
@@ -122,19 +118,16 @@ public class EmoteManager extends ManagerBase
      *
      * <p><b>Flag Constants:</b>
      * <ul>
-     *     <li>{@link #NAME}</li>
-     *     <li>{@link #ROLES}</li>
+     * <li>{@link #NAME}</li>
+     * <li>{@link #ROLES}</li>
      * </ul>
      *
-     * @param  fields
-     *         Integer value containing the flags to reset.
-     *
+     * @param fields Integer value containing the flags to reset.
      * @return EmoteManager for chaining convenience
      */
     @Override
     @CheckReturnValue
-    public EmoteManager reset(long fields)
-    {
+    public EmoteManager reset(long fields) {
         super.reset(fields);
         if ((fields & ROLES) == ROLES)
             withLock(this.roles, List::clear);
@@ -150,19 +143,16 @@ public class EmoteManager extends ManagerBase
      *
      * <p><b>Flag Constants:</b>
      * <ul>
-     *     <li>{@link #NAME}</li>
-     *     <li>{@link #ROLES}</li>
+     * <li>{@link #NAME}</li>
+     * <li>{@link #ROLES}</li>
      * </ul>
      *
-     * @param  fields
-     *         Integer values containing the flags to reset.
-     *
+     * @param fields Integer values containing the flags to reset.
      * @return EmoteManager for chaining convenience
      */
     @Override
     @CheckReturnValue
-    public EmoteManager reset(long... fields)
-    {
+    public EmoteManager reset(long... fields) {
         super.reset(fields);
         return this;
     }
@@ -174,8 +164,7 @@ public class EmoteManager extends ManagerBase
      */
     @Override
     @CheckReturnValue
-    protected EmoteManager reset()
-    {
+    protected EmoteManager reset() {
         super.reset();
         withLock(this.roles, List::clear);
         this.name = null;
@@ -190,17 +179,12 @@ public class EmoteManager extends ManagerBase
      *
      * <p><b>Example</b>: {@code tatDab} or {@code fmgSUP}
      *
-     * @param  name
-     *         The new name for the selected {@link net.dv8tion.jda.core.entities.Emote Emote}
-     *
-     * @throws IllegalArgumentException
-     *         If the provided name is {@code null} or not between 2-32 characters long
-     *
+     * @param name The new name for the selected {@link net.dv8tion.jda.core.entities.Emote Emote}
      * @return EmoteManager for chaining convenience
+     * @throws IllegalArgumentException If the provided name is {@code null} or not between 2-32 characters long
      */
     @CheckReturnValue
-    public EmoteManager setName(String name)
-    {
+    public EmoteManager setName(String name) {
         Checks.notBlank(name, "Name");
         Checks.check(name.length() >= 2 && name.length() <= 32, "Name must be between 2-32 characters long");
         this.name = name;
@@ -214,24 +198,16 @@ public class EmoteManager extends ManagerBase
      *
      * <p>An emote's restriction roles <b>must not</b> contain {@code null}!
      *
-     * @param  roles
-     *         The new set of {@link net.dv8tion.jda.core.entities.Role Roles} for the selected {@link net.dv8tion.jda.core.entities.Emote Emote}
-     *         to be restricted to, or {@code null} to clear the roles
-     *
-     * @throws IllegalArgumentException
-     *         If any of the provided values is {@code null}
-     *
+     * @param roles The new set of {@link net.dv8tion.jda.core.entities.Role Roles} for the selected {@link net.dv8tion.jda.core.entities.Emote Emote}
+     *              to be restricted to, or {@code null} to clear the roles
      * @return EmoteManager for chaining convenience
+     * @throws IllegalArgumentException If any of the provided values is {@code null}
      */
     @CheckReturnValue
-    public EmoteManager setRoles(Set<Role> roles)
-    {
-        if (roles == null)
-        {
+    public EmoteManager setRoles(Set<Role> roles) {
+        if (roles == null) {
             withLock(this.roles, List::clear);
-        }
-        else
-        {
+        } else {
             Checks.notNull(roles, "Roles");
             roles.forEach((role) ->
             {
@@ -249,8 +225,7 @@ public class EmoteManager extends ManagerBase
     }
 
     @Override
-    protected RequestBody finalizeData()
-    {
+    protected RequestBody finalizeData() {
         JSONObject object = new JSONObject();
         if (shouldUpdate(NAME))
             object.put("name", name);
@@ -265,8 +240,7 @@ public class EmoteManager extends ManagerBase
     }
 
     @Override
-    protected boolean checkPermissions()
-    {
+    protected boolean checkPermissions() {
         if (!getGuild().getSelfMember().hasPermission(Permission.MANAGE_EMOTES))
             throw new InsufficientPermissionException(Permission.MANAGE_EMOTES);
         return super.checkPermissions();

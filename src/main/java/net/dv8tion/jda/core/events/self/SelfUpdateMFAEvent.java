@@ -26,12 +26,10 @@ import net.dv8tion.jda.core.JDA;
  *
  * <p>Identifier: {@code mfa_enabled}
  */
-public class SelfUpdateMFAEvent extends GenericSelfUpdateEvent<Boolean>
-{
+public class SelfUpdateMFAEvent extends GenericSelfUpdateEvent<Boolean> {
     public static final String IDENTIFIER = "mfa_enabled";
 
-    public SelfUpdateMFAEvent(JDA api, long responseNumber, boolean wasMfaEnabled)
-    {
+    public SelfUpdateMFAEvent(JDA api, long responseNumber, boolean wasMfaEnabled) {
         super(api, responseNumber, wasMfaEnabled, !wasMfaEnabled, IDENTIFIER);
     }
 
@@ -40,8 +38,7 @@ public class SelfUpdateMFAEvent extends GenericSelfUpdateEvent<Boolean>
      *
      * @return True, if the account had MFA enabled prior to this event
      */
-    public boolean wasMfaEnabled()
-    {
+    public boolean wasMfaEnabled() {
         return getOldValue();
     }
 }

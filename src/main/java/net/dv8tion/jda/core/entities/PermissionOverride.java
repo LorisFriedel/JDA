@@ -28,8 +28,7 @@ import java.util.List;
  * Represents the specific {@link net.dv8tion.jda.core.entities.Member Member} or {@link net.dv8tion.jda.core.entities.Role Role}
  * permission overrides that can be set for channels.
  */
-public interface PermissionOverride
-{
+public interface PermissionOverride {
     /**
      * This is the raw binary representation (as a base 10 long) of the permissions <b>allowed</b> by this override.
      * <br>The long relates to the offsets used by each {@link net.dv8tion.jda.core.Permission Permission}.
@@ -143,25 +142,20 @@ public interface PermissionOverride
      * <br>In the PermOverrideManager you can modify the permissions of the override.
      * You modify multiple fields in one request by chaining setters before calling {@link net.dv8tion.jda.core.requests.RestAction#queue() RestAction.queue()}.
      *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If the currently logged in account does not have {@link net.dv8tion.jda.core.Permission#MANAGE_CHANNEL Permission.MANAGE_CHANNEL}
-     *         or {@link net.dv8tion.jda.core.Permission#MANAGE_PERMISSIONS Permission.MANAGE_PERMISSIONS}
-     *
      * @return The PermOverrideManager of this override.
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If the currently logged in account does not have {@link net.dv8tion.jda.core.Permission#MANAGE_CHANNEL Permission.MANAGE_CHANNEL}
+     *                                                                         or {@link net.dv8tion.jda.core.Permission#MANAGE_PERMISSIONS Permission.MANAGE_PERMISSIONS}
      */
     PermOverrideManager getManager();
 
     /**
-     *  Returns the {@link net.dv8tion.jda.core.managers.PermOverrideManager PermOverrideManager} for this PermissionOverride.
+     * Returns the {@link net.dv8tion.jda.core.managers.PermOverrideManager PermOverrideManager} for this PermissionOverride.
      * In the PermOverrideManager you can modify the permissions of the override.
      * <br>This can be used to bulk update channel settings.
      *
      * @return The PermOverrideManager of this override.
-     *
-     * @see    #getManager()
-     *
-     * @deprecated
-     *         Use {@link #getManager()} instead
+     * @see #getManager()
+     * @deprecated Use {@link #getManager()} instead
      */
     @Deprecated
     PermOverrideManagerUpdatable getManagerUpdatable();
@@ -171,20 +165,18 @@ public interface PermissionOverride
      *
      * <p>Possible ErrorResponses include:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_OVERRIDE}
-     *     <br>If the the override was already deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_OVERRIDE}
+     * <br>If the the override was already deleted.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>If the channel this override was a part of was already deleted</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>If the channel this override was a part of was already deleted</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>If we were removed from the Guild</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>If we were removed from the Guild</li>
      * </ul>
      *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         if we don't have the permission to {@link net.dv8tion.jda.core.Permission#MANAGE_CHANNEL MANAGE_CHANNEL}
-     *
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException if we don't have the permission to {@link net.dv8tion.jda.core.Permission#MANAGE_CHANNEL MANAGE_CHANNEL}
      */
     @CheckReturnValue
     AuditableRestAction<Void> delete();

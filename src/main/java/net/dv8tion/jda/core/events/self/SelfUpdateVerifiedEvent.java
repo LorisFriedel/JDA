@@ -25,12 +25,10 @@ import net.dv8tion.jda.core.JDA;
  *
  * <p>Identifier: {@code verified}
  */
-public class SelfUpdateVerifiedEvent extends GenericSelfUpdateEvent<Boolean>
-{
+public class SelfUpdateVerifiedEvent extends GenericSelfUpdateEvent<Boolean> {
     public static final String IDENTIFIER = "verified";
 
-    public SelfUpdateVerifiedEvent(JDA api, long responseNumber, boolean wasVerified)
-    {
+    public SelfUpdateVerifiedEvent(JDA api, long responseNumber, boolean wasVerified) {
         super(api, responseNumber, wasVerified, !wasVerified, IDENTIFIER);
     }
 
@@ -39,8 +37,7 @@ public class SelfUpdateVerifiedEvent extends GenericSelfUpdateEvent<Boolean>
      *
      * @return True, if this account was previously verified
      */
-    public boolean wasVerified()
-    {
+    public boolean wasVerified() {
         return getOldValue();
     }
 }

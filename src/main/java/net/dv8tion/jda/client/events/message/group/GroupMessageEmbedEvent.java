@@ -22,18 +22,15 @@ import net.dv8tion.jda.core.entities.MessageEmbed;
 
 import java.util.List;
 
-public class GroupMessageEmbedEvent extends GenericGroupMessageEvent
-{
+public class GroupMessageEmbedEvent extends GenericGroupMessageEvent {
     private final List<MessageEmbed> embeds;
 
-    public GroupMessageEmbedEvent(JDA api, long responseNumber, long messageId, Group group, List<MessageEmbed> embeds)
-    {
+    public GroupMessageEmbedEvent(JDA api, long responseNumber, long messageId, Group group, List<MessageEmbed> embeds) {
         super(api, responseNumber, messageId, group);
         this.embeds = embeds;
     }
 
-    public List<MessageEmbed> getMessageEmbeds()
-    {
+    public List<MessageEmbed> getMessageEmbeds() {
         return embeds;
     }
 }

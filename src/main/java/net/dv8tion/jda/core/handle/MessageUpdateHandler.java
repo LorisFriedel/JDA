@@ -33,67 +33,49 @@ import org.json.JSONObject;
 
 import java.util.LinkedList;
 
-public class MessageUpdateHandler extends SocketHandler
-{
+public class MessageUpdateHandler extends SocketHandler {
 
-    public MessageUpdateHandler(JDAImpl api)
-    {
+    public MessageUpdateHandler(JDAImpl api) {
         super(api);
     }
 
     @Override
-    protected Long handleInternally(JSONObject content)
-    {
-        if (content.has("author"))
-        {
-            if (content.has("type"))
-            {
+    protected Long handleInternally(JSONObject content) {
+        if (content.has("author")) {
+            if (content.has("type")) {
                 MessageType type = MessageType.fromId(content.getInt("type"));
-                switch (type)
-                {
+                switch (type) {
                     case DEFAULT:
                         return handleMessage(content);
                     default:
                         WebSocketClient.LOG.debug("JDA received a message of unknown type. Type: {} JSON: {}", type, content);
                         return null;
                 }
-            }
-            else
-            {
+            } else {
                 //Received update with no "type" field which means its an update for a rich embed message
                 handleMessageEmbed(content);
                 return null;
             }
-        }
-        else if (content.has("call"))
-        {
+        } else if (content.has("call")) {
             handleCallMessage(content);
             return null;
-        }
-        else
+        } else
             return handleMessageEmbed(content);
     }
 
-    private Long handleMessage(JSONObject content)
-    {
+    private Long handleMessage(JSONObject content) {
         Message message;
-        try
-        {
+        try {
             message = api.getEntityBuilder().createMessage(content);
-        }
-        catch (IllegalArgumentException e)
-        {
-            switch (e.getMessage())
-            {
-                case EntityBuilder.MISSING_CHANNEL:
-                {
+        } catch (IllegalArgumentException e) {
+            switch (e.getMessage()) {
+                case EntityBuilder.MISSING_CHANNEL: {
                     final long channelId = content.getLong("channel_id");
                     api.getEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
                     EventCache.LOG.debug("Received a message update for a channel that JDA does not currently have cached");
                     return null;
                 }
-                case EntityBuilder.MISSING_USER:
-                {
+                case EntityBuilder.MISSING_USER: {
                     final long authorId = content.getJSONObject("author").getLong("id");
                     api.getEventCache().cache(EventCache.Type.USER, authorId, () -> handle(responseNumber, allContent));
                     EventCache.LOG.debug("Received a message update for a user that JDA does not currently have cached");
@@ -104,35 +86,30 @@ public class MessageUpdateHandler extends SocketHandler
             }
         }
 
-        switch (message.getChannelType())
-        {
-            case TEXT:
-            {
+        switch (message.getChannelType()) {
+            case TEXT: {
                 TextChannel channel = message.getTextChannel();
-                if (api.getGuildLock().isLocked(channel.getGuild().getIdLong()))
-                {
+                if (api.getGuildLock().isLocked(channel.getGuild().getIdLong())) {
                     return channel.getGuild().getIdLong();
                 }
                 api.getEventManager().handle(
-                        new GuildMessageUpdateEvent(
-                                api, responseNumber,
-                                message));
+                    new GuildMessageUpdateEvent(
+                        api, responseNumber,
+                        message));
                 break;
             }
-            case PRIVATE:
-            {
+            case PRIVATE: {
                 api.getEventManager().handle(
-                        new PrivateMessageUpdateEvent(
-                                api, responseNumber,
-                                message));
+                    new PrivateMessageUpdateEvent(
+                        api, responseNumber,
+                        message));
                 break;
             }
-            case GROUP:
-            {
+            case GROUP: {
                 api.getEventManager().handle(
-                        new GroupMessageUpdateEvent(
-                                api, responseNumber,
-                                message));
+                    new GroupMessageUpdateEvent(
+                        api, responseNumber,
+                        message));
                 break;
             }
 
@@ -143,14 +120,13 @@ public class MessageUpdateHandler extends SocketHandler
 
         //Combo event
         api.getEventManager().handle(
-                new MessageUpdateEvent(
-                        api, responseNumber,
-                        message));
+            new MessageUpdateEvent(
+                api, responseNumber,
+                message));
         return null;
     }
 
-    private Long handleMessageEmbed(JSONObject content)
-    {
+    private Long handleMessageEmbed(JSONObject content) {
         EntityBuilder builder = api.getEntityBuilder();
         final long messageId = content.getLong("id");
         final long channelId = content.getLong("channel_id");
@@ -162,53 +138,45 @@ public class MessageUpdateHandler extends SocketHandler
             channel = api.getFakePrivateChannelMap().get(channelId);
         if (channel == null && api.getAccountType() == AccountType.CLIENT)
             channel = api.asClient().getGroupById(channelId);
-        if (channel == null)
-        {
+        if (channel == null) {
             api.getEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
             EventCache.LOG.debug("Received message update for embeds for a channel/group that JDA does not have cached yet.");
             return null;
         }
 
         JSONArray embedsJson = content.getJSONArray("embeds");
-        for (int i = 0; i < embedsJson.length(); i++)
-        {
+        for (int i = 0; i < embedsJson.length(); i++) {
             embeds.add(builder.createMessageEmbed(embedsJson.getJSONObject(i)));
         }
 
-        if (channel instanceof TextChannel)
-        {
+        if (channel instanceof TextChannel) {
             TextChannel tChannel = (TextChannel) channel;
             if (api.getGuildLock().isLocked(tChannel.getGuild().getIdLong()))
                 return tChannel.getGuild().getIdLong();
             api.getEventManager().handle(
-                    new GuildMessageEmbedEvent(
-                            api, responseNumber,
-                            messageId, tChannel, embeds));
-        }
-        else if (channel instanceof PrivateChannel)
-        {
+                new GuildMessageEmbedEvent(
+                    api, responseNumber,
+                    messageId, tChannel, embeds));
+        } else if (channel instanceof PrivateChannel) {
             api.getEventManager().handle(
-                    new PrivateMessageEmbedEvent(
-                            api, responseNumber,
-                            messageId, (PrivateChannel) channel, embeds));
-        }
-        else
-        {
+                new PrivateMessageEmbedEvent(
+                    api, responseNumber,
+                    messageId, (PrivateChannel) channel, embeds));
+        } else {
             api.getEventManager().handle(
-                    new GroupMessageEmbedEvent(
-                            api, responseNumber,
-                            messageId, (Group) channel, embeds));
+                new GroupMessageEmbedEvent(
+                    api, responseNumber,
+                    messageId, (Group) channel, embeds));
         }
         //Combo event
         api.getEventManager().handle(
-                new MessageEmbedEvent(
-                        api, responseNumber,
-                        messageId, channel, embeds));
+            new MessageEmbedEvent(
+                api, responseNumber,
+                messageId, channel, embeds));
         return null;
     }
 
-    public void handleCallMessage(JSONObject content)
-    {
+    public void handleCallMessage(JSONObject content) {
         WebSocketClient.LOG.debug("Received a MESSAGE_UPDATE of type CALL: {}", content);
         //Called when someone joins call for first time.
         //  It is not called when they leave or rejoin. That is all dictated by VOICE_STATE_UPDATE.

@@ -30,12 +30,10 @@ import net.dv8tion.jda.core.events.user.update.UserUpdateGameEvent;
  * @deprecated Use {@link net.dv8tion.jda.core.events.user.update.UserUpdateGameEvent UserUpdateGameEvent}
  */
 @Deprecated
-public class UserGameUpdateEvent extends UserUpdateGameEvent
-{
+public class UserGameUpdateEvent extends UserUpdateGameEvent {
     protected final Game previousGame;
 
-    public UserGameUpdateEvent(JDA api, long responseNumber, User user, Guild guild, Game previousGame)
-    {
+    public UserGameUpdateEvent(JDA api, long responseNumber, User user, Guild guild, Game previousGame) {
         super(api, responseNumber, user, guild, previousGame);
         this.previousGame = previousGame;
     }
@@ -45,8 +43,7 @@ public class UserGameUpdateEvent extends UserUpdateGameEvent
      *
      * @return The previous {@link net.dv8tion.jda.core.entities.Game Game}
      */
-    public Game getPreviousGame()
-    {
+    public Game getPreviousGame() {
         return previousGame;
     }
 
@@ -55,8 +52,7 @@ public class UserGameUpdateEvent extends UserUpdateGameEvent
      *
      * @return The current {@link net.dv8tion.jda.core.entities.Game Game}
      */
-    public Game getCurrentGame()
-    {
+    public Game getCurrentGame() {
         return isRelationshipUpdate() ? getFriend().getGame() : getMember().getGame();
     }
 }

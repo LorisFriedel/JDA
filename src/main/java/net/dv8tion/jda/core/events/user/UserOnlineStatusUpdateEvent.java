@@ -30,12 +30,10 @@ import net.dv8tion.jda.core.events.user.update.UserUpdateOnlineStatusEvent;
  * @deprecated Use {@link net.dv8tion.jda.core.events.user.update.UserUpdateOnlineStatusEvent UserUpdateOnlineStatusEvent} instead
  */
 @Deprecated
-public class UserOnlineStatusUpdateEvent extends UserUpdateOnlineStatusEvent
-{
+public class UserOnlineStatusUpdateEvent extends UserUpdateOnlineStatusEvent {
     protected final OnlineStatus previousOnlineStatus;
 
-    public UserOnlineStatusUpdateEvent(JDA api, long responseNumber, User user, Guild guild, OnlineStatus previousOnlineStatus)
-    {
+    public UserOnlineStatusUpdateEvent(JDA api, long responseNumber, User user, Guild guild, OnlineStatus previousOnlineStatus) {
         super(api, responseNumber, user, guild, previousOnlineStatus);
         this.previousOnlineStatus = previousOnlineStatus;
     }
@@ -45,8 +43,7 @@ public class UserOnlineStatusUpdateEvent extends UserUpdateOnlineStatusEvent
      *
      * @return The previous status
      */
-    public OnlineStatus getPreviousOnlineStatus()
-    {
+    public OnlineStatus getPreviousOnlineStatus() {
         return previousOnlineStatus;
     }
 
@@ -55,8 +52,7 @@ public class UserOnlineStatusUpdateEvent extends UserUpdateOnlineStatusEvent
      *
      * @return The current status
      */
-    public OnlineStatus getCurrentOnlineStatus()
-    {
+    public OnlineStatus getCurrentOnlineStatus() {
         return isRelationshipUpdate() ? getFriend().getOnlineStatus() : getMember().getOnlineStatus();
     }
 }

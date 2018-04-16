@@ -42,20 +42,20 @@ import java.util.function.Consumer;
  *
  * <p>A default RestAction is issued with the following operations:
  * <ul>
- *     <li>{@link #queue()}, {@link #queue(Consumer)}, {@link #queue(Consumer, Consumer)}
- *     <br>The fastest and most simplistic way to execute a RestAction is to queue it.
- *     <br>This method has two optional callback functions, one with the generic type and another with a failure exception.</li>
+ * <li>{@link #queue()}, {@link #queue(Consumer)}, {@link #queue(Consumer, Consumer)}
+ * <br>The fastest and most simplistic way to execute a RestAction is to queue it.
+ * <br>This method has two optional callback functions, one with the generic type and another with a failure exception.</li>
  *
- *     <li>{@link #submit()}, {@link #submit(boolean)}
- *     <br>Provides a Future representing the pending request.
- *     <br>An optional parameter of type boolean can be passed to disable automated rate limit handling. (not recommended)</li>
+ * <li>{@link #submit()}, {@link #submit(boolean)}
+ * <br>Provides a Future representing the pending request.
+ * <br>An optional parameter of type boolean can be passed to disable automated rate limit handling. (not recommended)</li>
  *
- *     <li>{@link #complete()}, {@link #complete(boolean)}
- *     <br>Blocking execution building up on {@link #submit()}.
- *     <br>This will simply block the thread and return the Request result, or throw an exception.
- *     <br>An optional parameter of type boolean can be passed to disable automated rate limit handling. (not recommended)</li>
+ * <li>{@link #complete()}, {@link #complete(boolean)}
+ * <br>Blocking execution building up on {@link #submit()}.
+ * <br>This will simply block the thread and return the Request result, or throw an exception.
+ * <br>An optional parameter of type boolean can be passed to disable automated rate limit handling. (not recommended)</li>
  * </ul>
- *
+ * <p>
  * The most efficient way to use a RestAction is by using the asynchronous {@link #queue()} operations.
  * <br>These allow users to provide success and failure callbacks which will be called at a convenient time.
  *
@@ -64,21 +64,21 @@ import java.util.function.Consumer;
  * will be executed by a {@link java.util.concurrent.ScheduledExecutorService ScheduledExecutorService} after a
  * specified delay:
  * <ul>
- *     <li>{@link #queueAfter(long, TimeUnit)}
- *     <br>Schedules a call to {@link #queue()} with default callback {@link java.util.function.Consumer Consumers} to be executed after the specified {@code delay}.
- *     <br>The {@link java.util.concurrent.TimeUnit TimeUnit} is used to convert the provided long into a delay time.
- *     <br>Example: {@code queueAfter(1, TimeUnit.SECONDS);}
- *     <br>will call {@link #queue()} <b>1 second</b> later.</li>
+ * <li>{@link #queueAfter(long, TimeUnit)}
+ * <br>Schedules a call to {@link #queue()} with default callback {@link java.util.function.Consumer Consumers} to be executed after the specified {@code delay}.
+ * <br>The {@link java.util.concurrent.TimeUnit TimeUnit} is used to convert the provided long into a delay time.
+ * <br>Example: {@code queueAfter(1, TimeUnit.SECONDS);}
+ * <br>will call {@link #queue()} <b>1 second</b> later.</li>
  *
- *     <li>{@link #submitAfter(long, TimeUnit)}
- *     <br>This returns a {@link java.util.concurrent.ScheduledFuture ScheduledFuture} which
- *         can be joined into the current Thread using {@link java.util.concurrent.ScheduledFuture#get()}
- *     <br>The blocking call to {@code submitAfter(delay, unit).get()} will return
- *         the value processed by a call to {@link #complete()}</li>
+ * <li>{@link #submitAfter(long, TimeUnit)}
+ * <br>This returns a {@link java.util.concurrent.ScheduledFuture ScheduledFuture} which
+ * can be joined into the current Thread using {@link java.util.concurrent.ScheduledFuture#get()}
+ * <br>The blocking call to {@code submitAfter(delay, unit).get()} will return
+ * the value processed by a call to {@link #complete()}</li>
  *
- *     <li>{@link #completeAfter(long, TimeUnit)}
- *     <br>This operation simply sleeps for the given delay and will call {@link #complete()}
- *         once finished sleeping.</li>
+ * <li>{@link #completeAfter(long, TimeUnit)}
+ * <br>This operation simply sleeps for the given delay and will call {@link #complete()}
+ * once finished sleeping.</li>
  * </ul>
  *
  * <p>All of those operations provide overloads for optional parameters such as a custom
@@ -141,29 +141,25 @@ import java.util.function.Consumer;
  * <p>There is a dedicated <a href="https://github.com/DV8FromTheWorld/JDA/wiki/7)-Using-RestAction" target="_blank">wiki page</a>
  * for RestActions that can be useful for learning.
  *
- * @param <T>
- *        The generic response type for this RestAction
- *
+ * @param <T> The generic response type for this RestAction
  * @since 3.0
  */
-public abstract class RestAction<T>
-{
+public abstract class RestAction<T> {
     public static final Logger LOG = JDALogger.getLog(RestAction.class);
 
-    public static Consumer DEFAULT_SUCCESS = o -> {};
+    public static Consumer DEFAULT_SUCCESS = o -> {
+    };
     public static Consumer<Throwable> DEFAULT_FAILURE = t ->
     {
-        if (LOG.isDebugEnabled())
-        {
+        if (LOG.isDebugEnabled()) {
             LOG.error("RestAction queue returned failure", t);
-        }
-        else
-        {
+        } else {
             LOG.error("RestAction queue returned failure: [{}] {}", t.getClass().getSimpleName(), t.getMessage());
         }
     };
 
-    private static final Consumer FALLBACK_CONSUMER = o -> {};
+    private static final Consumer FALLBACK_CONSUMER = o -> {
+    };
 
     protected static boolean passContext = false;
 
@@ -183,11 +179,9 @@ public abstract class RestAction<T>
      *
      * <p>It is recommended to pass a context consumer as failure manually using {@code queue(success, ContextException.here(failure))}
      *
-     * @param  enable
-     *         True, if context should be passed to all failure consumers
+     * @param enable True, if context should be passed to all failure consumers
      */
-    public static void setPassContext(boolean enable)
-    {
+    public static void setPassContext(boolean enable) {
         passContext = enable;
     }
 
@@ -197,41 +191,32 @@ public abstract class RestAction<T>
      * <br>If set to {@code true} this can cause performance drops due to the creation of stack-traces on execution.
      *
      * @return True, if RestActions will keep track of context automatically
-     *
-     * @see    #setPassContext(boolean)
+     * @see #setPassContext(boolean)
      */
-    public static boolean isPassContext()
-    {
+    public static boolean isPassContext() {
         return passContext;
     }
 
     /**
      * Creates a new RestAction instance
      *
-     * @param  api
-     *         The current JDA instance
-     * @param  route
-     *         The {@link net.dv8tion.jda.core.requests.Route.CompiledRoute Route.CompiledRoute}
-     *         to be used for rate limit handling
+     * @param api   The current JDA instance
+     * @param route The {@link net.dv8tion.jda.core.requests.Route.CompiledRoute Route.CompiledRoute}
+     *              to be used for rate limit handling
      */
-    public RestAction(JDA api, Route.CompiledRoute route)
-    {
+    public RestAction(JDA api, Route.CompiledRoute route) {
         this(api, route, (RequestBody) null);
     }
 
     /**
      * Creates a new RestAction instance
      *
-     * @param  api
-     *         The current JDA instance
-     * @param  route
-     *         The {@link net.dv8tion.jda.core.requests.Route.CompiledRoute Route.CompiledRoute}
-     *         to be used for rate limit handling
-     * @param  data
-     *         The data that should be sent to the specified route. (can be null)
+     * @param api   The current JDA instance
+     * @param route The {@link net.dv8tion.jda.core.requests.Route.CompiledRoute Route.CompiledRoute}
+     *              to be used for rate limit handling
+     * @param data  The data that should be sent to the specified route. (can be null)
      */
-    public RestAction(JDA api, Route.CompiledRoute route, RequestBody data)
-    {
+    public RestAction(JDA api, Route.CompiledRoute route, RequestBody data) {
         Checks.notNull(api, "api");
 
         this.api = (JDAImpl) api;
@@ -242,16 +227,12 @@ public abstract class RestAction<T>
     /**
      * Creates a new RestAction instance
      *
-     * @param  api
-     *         The current JDA instance
-     * @param  route
-     *         The {@link net.dv8tion.jda.core.requests.Route.CompiledRoute Route.CompiledRoute}
-     *         to be used for rate limit handling
-     * @param  data
-     *         The data that should be sent to the specified route. (can be null)
+     * @param api   The current JDA instance
+     * @param route The {@link net.dv8tion.jda.core.requests.Route.CompiledRoute Route.CompiledRoute}
+     *              to be used for rate limit handling
+     * @param data  The data that should be sent to the specified route. (can be null)
      */
-    public RestAction(JDA api, Route.CompiledRoute route, JSONObject data)
-    {
+    public RestAction(JDA api, Route.CompiledRoute route, JSONObject data) {
         this(api, route, data == null ? null : RequestBody.create(Requester.MEDIA_TYPE_JSON, data.toString()));
 
         this.rawData = data;
@@ -262,8 +243,7 @@ public abstract class RestAction<T>
      *
      * @return The corresponding JDA instance
      */
-    public JDA getJDA()
-    {
+    public JDA getJDA() {
         return api;
     }
 
@@ -272,13 +252,10 @@ public abstract class RestAction<T>
      * <br>If the provided supplier evaluates to {@code false} or throws an exception this will not be finished.
      * When an exception is thrown from the supplier it will be provided to the failure callback.
      *
-     * @param  checks
-     *         The checks to run before executing the request, or {@code null} to run no checks
-     *
+     * @param checks The checks to run before executing the request, or {@code null} to run no checks
      * @return The current RestAction for chaining convenience
      */
-    public RestAction<T> setCheck(BooleanSupplier checks)
-    {
+    public RestAction<T> setCheck(BooleanSupplier checks) {
         this.checks = checks;
         return this;
     }
@@ -291,8 +268,7 @@ public abstract class RestAction<T>
      *
      * <p><b>This method is asynchronous</b>
      */
-    public void queue()
-    {
+    public void queue() {
         queue(null, null);
     }
 
@@ -302,12 +278,10 @@ public abstract class RestAction<T>
      *
      * <p><b>This method is asynchronous</b>
      *
-     * @param  success
-     *         The success callback that will be called at a convenient time
-     *         for the API. (can be null)
+     * @param success The success callback that will be called at a convenient time
+     *                for the API. (can be null)
      */
-    public void queue(Consumer<T> success)
-    {
+    public void queue(Consumer<T> success) {
         queue(success, null);
     }
 
@@ -316,16 +290,13 @@ public abstract class RestAction<T>
      *
      * <p><b>This method is asynchronous</b>
      *
-     * @param  success
-     *         The success callback that will be called at a convenient time
-     *         for the API. (can be null)
-     * @param  failure
-     *         The failure callback that will be called if the Request
-     *         encounters an exception at its execution point.
+     * @param success The success callback that will be called at a convenient time
+     *                for the API. (can be null)
+     * @param failure The failure callback that will be called if the Request
+     *                encounters an exception at its execution point.
      */
     @SuppressWarnings("unchecked")
-    public void queue(Consumer<T> success, Consumer<Throwable> failure)
-    {
+    public void queue(Consumer<T> success, Consumer<Throwable> failure) {
         Route.CompiledRoute route = finalizeRoute();
         Checks.notNull(route, "Route");
         RequestBody data = finalizeData();
@@ -347,8 +318,7 @@ public abstract class RestAction<T>
      *
      * @return Never-null {@link net.dv8tion.jda.core.requests.RequestFuture RequestFuture} representing the completion promise
      */
-    public RequestFuture<T> submit()
-    {
+    public RequestFuture<T> submit() {
         return submit(true);
     }
 
@@ -359,13 +329,10 @@ public abstract class RestAction<T>
      *
      * <p>Note: The usage of {@link java.util.concurrent.CompletionStage#toCompletableFuture() CompletionStage.toCompletableFuture()} is not supported.
      *
-     * @param  shouldQueue
-     *         Whether the Request should automatically handle rate limitations. (default true)
-     *
+     * @param shouldQueue Whether the Request should automatically handle rate limitations. (default true)
      * @return Never-null {@link net.dv8tion.jda.core.requests.RequestFuture RequestFuture} task representing the completion promise
      */
-    public RequestFuture<T> submit(boolean shouldQueue)
-    {
+    public RequestFuture<T> submit(boolean shouldQueue) {
         Route.CompiledRoute route = finalizeRoute();
         Checks.notNull(route, "Route");
         RequestBody data = finalizeData();
@@ -383,14 +350,10 @@ public abstract class RestAction<T>
      *
      * @return The response value
      */
-    public T complete()
-    {
-        try
-        {
+    public T complete() {
+        try {
             return complete(true);
-        }
-        catch (RateLimitedException e)
-        {
+        } catch (RateLimitedException e) {
             //This is so beyond impossible, but on the off chance that the laws of nature are rewritten
             // after the writing of this code, I'm placing this here.
             //Better safe than sorry?
@@ -403,29 +366,20 @@ public abstract class RestAction<T>
      * of an {@link #submit()} request.
      * <br>Used for synchronous logic.
      *
-     * @param  shouldQueue
-     *         Whether this should automatically handle rate limitations (default true)
-     *
-     * @throws RateLimitedException
-     *         If we were rate limited and the {@code shouldQueue} is false.
-     *         Use {@link #complete()} to avoid this Exception.
-     *
+     * @param shouldQueue Whether this should automatically handle rate limitations (default true)
      * @return The response value
+     * @throws RateLimitedException If we were rate limited and the {@code shouldQueue} is false.
+     *                              Use {@link #complete()} to avoid this Exception.
      */
-    public T complete(boolean shouldQueue) throws RateLimitedException
-    {
-        try
-        {
+    public T complete(boolean shouldQueue) throws RateLimitedException {
+        try {
             return submit(shouldQueue).get();
-        }
-        catch (Throwable e)
-        {
-            if (e instanceof ExecutionException)
-            {
+        } catch (Throwable e) {
+            if (e instanceof ExecutionException) {
                 Throwable t = e.getCause();
                 if (t instanceof RateLimitedException)
                     throw (RateLimitedException) t;
-                else if (t instanceof  PermissionException)
+                else if (t instanceof PermissionException)
                     throw (PermissionException) t;
                 else if (t instanceof ErrorResponseException)
                     throw (ErrorResponseException) t;
@@ -447,19 +401,13 @@ public abstract class RestAction<T>
      * <br>You can change the core pool size for this Executor through {@link net.dv8tion.jda.core.JDABuilder#setCorePoolSize(int) JDABuilder.setCorePoolSize(int)}
      * or you can provide your own Executor using {@link #submitAfter(long, java.util.concurrent.TimeUnit, java.util.concurrent.ScheduledExecutorService)}!
      *
-     * @param  delay
-     *         The delay after which this computation should be executed, negative to execute immediately
-     * @param  unit
-     *         The {@link java.util.concurrent.TimeUnit TimeUnit} to convert the specified {@code delay}
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided TimeUnit is {@code null}
-     *
+     * @param delay The delay after which this computation should be executed, negative to execute immediately
+     * @param unit  The {@link java.util.concurrent.TimeUnit TimeUnit} to convert the specified {@code delay}
      * @return {@link java.util.concurrent.ScheduledFuture ScheduledFuture} representing the
-     *         delayed operation
+     * delayed operation
+     * @throws java.lang.IllegalArgumentException If the provided TimeUnit is {@code null}
      */
-    public ScheduledFuture<T> submitAfter(long delay, TimeUnit unit)
-    {
+    public ScheduledFuture<T> submitAfter(long delay, TimeUnit unit) {
         return submitAfter(delay, unit, api.pool);
     }
 
@@ -473,22 +421,15 @@ public abstract class RestAction<T>
      *
      * <p>The specified {@link java.util.concurrent.ScheduledExecutorService ScheduledExecutorService} is used for this operation.
      *
-     * @param  delay
-     *         The delay after which this computation should be executed, negative to execute immediately
-     * @param  unit
-     *         The {@link java.util.concurrent.TimeUnit TimeUnit} to convert the specified {@code delay}
-     * @param  executor
-     *         The Non-null {@link java.util.concurrent.ScheduledExecutorService ScheduledExecutorService} that should be used
-     *         to schedule this operation
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided TimeUnit or ScheduledExecutorService is {@code null}
-     *
+     * @param delay    The delay after which this computation should be executed, negative to execute immediately
+     * @param unit     The {@link java.util.concurrent.TimeUnit TimeUnit} to convert the specified {@code delay}
+     * @param executor The Non-null {@link java.util.concurrent.ScheduledExecutorService ScheduledExecutorService} that should be used
+     *                 to schedule this operation
      * @return {@link java.util.concurrent.ScheduledFuture ScheduledFuture}
-     *         representing the delayed operation
+     * representing the delayed operation
+     * @throws java.lang.IllegalArgumentException If the provided TimeUnit or ScheduledExecutorService is {@code null}
      */
-    public ScheduledFuture<T> submitAfter(long delay, TimeUnit unit, ScheduledExecutorService executor)
-    {
+    public ScheduledFuture<T> submitAfter(long delay, TimeUnit unit, ScheduledExecutorService executor) {
         Checks.notNull(executor, "Scheduler");
         Checks.notNull(unit, "TimeUnit");
         return executor.schedule((Callable<T>) this::complete, delay, unit);
@@ -499,29 +440,19 @@ public abstract class RestAction<T>
      * when delay has been reached.
      * <br>If the specified delay is negative this action will execute immediately. (see: {@link TimeUnit#sleep(long)})
      *
-     * @param  delay
-     *         The delay after which to execute a call to {@link #complete()}
-     * @param  unit
-     *         The {@link java.util.concurrent.TimeUnit TimeUnit} which should be used
-     *         (this will use {@link java.util.concurrent.TimeUnit#sleep(long) unit.sleep(delay)})
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the specified {@link java.util.concurrent.TimeUnit TimeUnit} is {@code null}
-     * @throws java.lang.RuntimeException
-     *         If the sleep operation is interrupted
-     *
+     * @param delay The delay after which to execute a call to {@link #complete()}
+     * @param unit  The {@link java.util.concurrent.TimeUnit TimeUnit} which should be used
+     *              (this will use {@link java.util.concurrent.TimeUnit#sleep(long) unit.sleep(delay)})
      * @return The response value
+     * @throws java.lang.IllegalArgumentException If the specified {@link java.util.concurrent.TimeUnit TimeUnit} is {@code null}
+     * @throws java.lang.RuntimeException         If the sleep operation is interrupted
      */
-    public T completeAfter(long delay, TimeUnit unit)
-    {
+    public T completeAfter(long delay, TimeUnit unit) {
         Checks.notNull(unit, "TimeUnit");
-        try
-        {
+        try {
             unit.sleep(delay);
             return complete();
-        }
-        catch (InterruptedException e)
-        {
+        } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
@@ -539,19 +470,13 @@ public abstract class RestAction<T>
      * <br>You can change the core pool size for this Executor through {@link net.dv8tion.jda.core.JDABuilder#setCorePoolSize(int) JDABuilder.setCorePoolSize(int)}
      * or provide your own Executor with {@link #queueAfter(long, java.util.concurrent.TimeUnit, java.util.concurrent.ScheduledExecutorService)}
      *
-     * @param  delay
-     *         The delay after which this computation should be executed, negative to execute immediately
-     * @param  unit
-     *         The {@link java.util.concurrent.TimeUnit TimeUnit} to convert the specified {@code delay}
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided TimeUnit is {@code null}
-     *
+     * @param delay The delay after which this computation should be executed, negative to execute immediately
+     * @param unit  The {@link java.util.concurrent.TimeUnit TimeUnit} to convert the specified {@code delay}
      * @return {@link java.util.concurrent.ScheduledFuture ScheduledFuture}
-     *         representing the delayed operation
+     * representing the delayed operation
+     * @throws java.lang.IllegalArgumentException If the provided TimeUnit is {@code null}
      */
-    public ScheduledFuture<?> queueAfter(long delay, TimeUnit unit)
-    {
+    public ScheduledFuture<?> queueAfter(long delay, TimeUnit unit) {
         return queueAfter(delay, unit, api.pool);
     }
 
@@ -568,22 +493,15 @@ public abstract class RestAction<T>
      * <br>You can change the core pool size for this Executor through {@link net.dv8tion.jda.core.JDABuilder#setCorePoolSize(int) JDABuilder.setCorePoolSize(int)}
      * or provide your own Executor with {@link #queueAfter(long, java.util.concurrent.TimeUnit, java.util.function.Consumer, java.util.concurrent.ScheduledExecutorService)}
      *
-     * @param  delay
-     *         The delay after which this computation should be executed, negative to execute immediately
-     * @param  unit
-     *         The {@link java.util.concurrent.TimeUnit TimeUnit} to convert the specified {@code delay}
-     * @param  success
-     *         The success {@link java.util.function.Consumer Consumer} that should be called
-     *         once the {@link #queue(java.util.function.Consumer)} operation completes successfully.
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided TimeUnit is {@code null}
-     *
+     * @param delay   The delay after which this computation should be executed, negative to execute immediately
+     * @param unit    The {@link java.util.concurrent.TimeUnit TimeUnit} to convert the specified {@code delay}
+     * @param success The success {@link java.util.function.Consumer Consumer} that should be called
+     *                once the {@link #queue(java.util.function.Consumer)} operation completes successfully.
      * @return {@link java.util.concurrent.ScheduledFuture ScheduledFuture}
-     *         representing the delayed operation
+     * representing the delayed operation
+     * @throws java.lang.IllegalArgumentException If the provided TimeUnit is {@code null}
      */
-    public ScheduledFuture<?> queueAfter(long delay, TimeUnit unit, Consumer<T> success)
-    {
+    public ScheduledFuture<?> queueAfter(long delay, TimeUnit unit, Consumer<T> success) {
         return queueAfter(delay, unit, success, api.pool);
     }
 
@@ -598,25 +516,17 @@ public abstract class RestAction<T>
      * or provide your own Executor with
      * {@link #queueAfter(long, java.util.concurrent.TimeUnit, java.util.function.Consumer, java.util.function.Consumer, java.util.concurrent.ScheduledExecutorService)}
      *
-     * @param  delay
-     *         The delay after which this computation should be executed, negative to execute immediately
-     * @param  unit
-     *         The {@link java.util.concurrent.TimeUnit TimeUnit} to convert the specified {@code delay}
-     * @param  success
-     *         The success {@link java.util.function.Consumer Consumer} that should be called
-     *         once the {@link #queue(java.util.function.Consumer, java.util.function.Consumer)} operation completes successfully.
-     * @param  failure
-     *         The failure {@link java.util.function.Consumer Consumer} that should be called
-     *         in case of an error of the {@link #queue(java.util.function.Consumer, java.util.function.Consumer)} operation.
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided TimeUnit is {@code null}
-     *
+     * @param delay   The delay after which this computation should be executed, negative to execute immediately
+     * @param unit    The {@link java.util.concurrent.TimeUnit TimeUnit} to convert the specified {@code delay}
+     * @param success The success {@link java.util.function.Consumer Consumer} that should be called
+     *                once the {@link #queue(java.util.function.Consumer, java.util.function.Consumer)} operation completes successfully.
+     * @param failure The failure {@link java.util.function.Consumer Consumer} that should be called
+     *                in case of an error of the {@link #queue(java.util.function.Consumer, java.util.function.Consumer)} operation.
      * @return {@link java.util.concurrent.ScheduledFuture ScheduledFuture}
-     *         representing the delayed operation
+     * representing the delayed operation
+     * @throws java.lang.IllegalArgumentException If the provided TimeUnit is {@code null}
      */
-    public ScheduledFuture<?> queueAfter(long delay, TimeUnit unit, Consumer<T> success, Consumer<Throwable> failure)
-    {
+    public ScheduledFuture<?> queueAfter(long delay, TimeUnit unit, Consumer<T> success, Consumer<Throwable> failure) {
         return queueAfter(delay, unit, success, failure, api.pool);
     }
 
@@ -631,22 +541,15 @@ public abstract class RestAction<T>
      *
      * <p>The specified {@link java.util.concurrent.ScheduledExecutorService ScheduledExecutorService} is used for this operation.
      *
-     * @param  delay
-     *         The delay after which this computation should be executed, negative to execute immediately
-     * @param  unit
-     *         The {@link java.util.concurrent.TimeUnit TimeUnit} to convert the specified {@code delay}
-     * @param  executor
-     *         The Non-null {@link java.util.concurrent.ScheduledExecutorService ScheduledExecutorService} that should be used
-     *         to schedule this operation
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided TimeUnit or ScheduledExecutorService is {@code null}
-     *
+     * @param delay    The delay after which this computation should be executed, negative to execute immediately
+     * @param unit     The {@link java.util.concurrent.TimeUnit TimeUnit} to convert the specified {@code delay}
+     * @param executor The Non-null {@link java.util.concurrent.ScheduledExecutorService ScheduledExecutorService} that should be used
+     *                 to schedule this operation
      * @return {@link java.util.concurrent.ScheduledFuture ScheduledFuture}
-     *         representing the delayed operation
+     * representing the delayed operation
+     * @throws java.lang.IllegalArgumentException If the provided TimeUnit or ScheduledExecutorService is {@code null}
      */
-    public ScheduledFuture<?> queueAfter(long delay, TimeUnit unit, ScheduledExecutorService executor)
-    {
+    public ScheduledFuture<?> queueAfter(long delay, TimeUnit unit, ScheduledExecutorService executor) {
         return queueAfter(delay, unit, null, executor);
     }
 
@@ -661,25 +564,17 @@ public abstract class RestAction<T>
      *
      * <p>The specified {@link java.util.concurrent.ScheduledExecutorService ScheduledExecutorService} is used for this operation.
      *
-     * @param  delay
-     *         The delay after which this computation should be executed, negative to execute immediately
-     * @param  unit
-     *         The {@link java.util.concurrent.TimeUnit TimeUnit} to convert the specified {@code delay}
-     * @param  success
-     *         The success {@link java.util.function.Consumer Consumer} that should be called
-     *         once the {@link #queue(java.util.function.Consumer)} operation completes successfully.
-     * @param  executor
-     *         The Non-null {@link java.util.concurrent.ScheduledExecutorService ScheduledExecutorService} that should be used
-     *         to schedule this operation
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided TimeUnit or ScheduledExecutorService is {@code null}
-     *
+     * @param delay    The delay after which this computation should be executed, negative to execute immediately
+     * @param unit     The {@link java.util.concurrent.TimeUnit TimeUnit} to convert the specified {@code delay}
+     * @param success  The success {@link java.util.function.Consumer Consumer} that should be called
+     *                 once the {@link #queue(java.util.function.Consumer)} operation completes successfully.
+     * @param executor The Non-null {@link java.util.concurrent.ScheduledExecutorService ScheduledExecutorService} that should be used
+     *                 to schedule this operation
      * @return {@link java.util.concurrent.ScheduledFuture ScheduledFuture}
-     *         representing the delayed operation
+     * representing the delayed operation
+     * @throws java.lang.IllegalArgumentException If the provided TimeUnit or ScheduledExecutorService is {@code null}
      */
-    public ScheduledFuture<?> queueAfter(long delay, TimeUnit unit, Consumer<T> success, ScheduledExecutorService executor)
-    {
+    public ScheduledFuture<?> queueAfter(long delay, TimeUnit unit, Consumer<T> success, ScheduledExecutorService executor) {
         return queueAfter(delay, unit, success, null, executor);
     }
 
@@ -691,54 +586,53 @@ public abstract class RestAction<T>
      *
      * <p>The specified {@link java.util.concurrent.ScheduledExecutorService ScheduledExecutorService} is used for this operation.
      *
-     * @param  delay
-     *         The delay after which this computation should be executed, negative to execute immediately
-     * @param  unit
-     *         The {@link java.util.concurrent.TimeUnit TimeUnit} to convert the specified {@code delay}
-     * @param  success
-     *         The success {@link java.util.function.Consumer Consumer} that should be called
-     *         once the {@link #queue(java.util.function.Consumer, java.util.function.Consumer)} operation completes successfully.
-     * @param  failure
-     *         The failure {@link java.util.function.Consumer Consumer} that should be called
-     *         in case of an error of the {@link #queue(java.util.function.Consumer, java.util.function.Consumer)} operation.
-     * @param  executor
-     *         The Non-null {@link java.util.concurrent.ScheduledExecutorService ScheduledExecutorService} that should be used
-     *         to schedule this operation
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided TimeUnit or ScheduledExecutorService is {@code null}
-     *
+     * @param delay    The delay after which this computation should be executed, negative to execute immediately
+     * @param unit     The {@link java.util.concurrent.TimeUnit TimeUnit} to convert the specified {@code delay}
+     * @param success  The success {@link java.util.function.Consumer Consumer} that should be called
+     *                 once the {@link #queue(java.util.function.Consumer, java.util.function.Consumer)} operation completes successfully.
+     * @param failure  The failure {@link java.util.function.Consumer Consumer} that should be called
+     *                 in case of an error of the {@link #queue(java.util.function.Consumer, java.util.function.Consumer)} operation.
+     * @param executor The Non-null {@link java.util.concurrent.ScheduledExecutorService ScheduledExecutorService} that should be used
+     *                 to schedule this operation
      * @return {@link java.util.concurrent.ScheduledFuture ScheduledFuture}
-     *         representing the delayed operation
+     * representing the delayed operation
+     * @throws java.lang.IllegalArgumentException If the provided TimeUnit or ScheduledExecutorService is {@code null}
      */
-    public ScheduledFuture<?> queueAfter(long delay, TimeUnit unit, Consumer<T> success, Consumer<Throwable> failure, ScheduledExecutorService executor)
-    {
+    public ScheduledFuture<?> queueAfter(long delay, TimeUnit unit, Consumer<T> success, Consumer<Throwable> failure, ScheduledExecutorService executor) {
         Checks.notNull(executor, "Scheduler");
         Checks.notNull(unit, "TimeUnit");
         return executor.schedule(() -> queue(success, failure), delay, unit);
     }
 
-    protected RequestBody finalizeData() { return data; }
-    protected Route.CompiledRoute finalizeRoute() { return route; }
-    protected CaseInsensitiveMap<String, String> finalizeHeaders() { return null; }
-    protected BooleanSupplier finalizeChecks() { return null; }
+    protected RequestBody finalizeData() {
+        return data;
+    }
 
-    protected RequestBody getRequestBody(JSONObject object)
-    {
+    protected Route.CompiledRoute finalizeRoute() {
+        return route;
+    }
+
+    protected CaseInsensitiveMap<String, String> finalizeHeaders() {
+        return null;
+    }
+
+    protected BooleanSupplier finalizeChecks() {
+        return null;
+    }
+
+    protected RequestBody getRequestBody(JSONObject object) {
         this.rawData = object;
 
         return object == null ? null : RequestBody.create(Requester.MEDIA_TYPE_JSON, object.toString());
     }
 
-    protected RequestBody getRequestBody(JSONArray array)
-    {
+    protected RequestBody getRequestBody(JSONArray array) {
         this.rawData = array;
 
         return array == null ? null : RequestBody.create(Requester.MEDIA_TYPE_JSON, array.toString());
     }
 
-    private CheckWrapper getFinisher()
-    {
+    private CheckWrapper getFinisher() {
         BooleanSupplier pre = finalizeChecks();
         BooleanSupplier wrapped = this.checks;
         return (pre != null || wrapped != null) ? new CheckWrapper(wrapped, pre) : CheckWrapper.EMPTY;
@@ -751,40 +645,35 @@ public abstract class RestAction<T>
      * has already been retrieved or generated so that another request does not need to be made to Discord.
      * <br>Basically: Allows you to provide a value directly to the success returns.
      *
-     * @param <T>
-     *        The generic response type for this RestAction
+     * @param <T> The generic response type for this RestAction
      */
-    public static class EmptyRestAction<T> extends RestAction<T>
-    {
+    public static class EmptyRestAction<T> extends RestAction<T> {
         private final T returnObj;
 
-        public EmptyRestAction(JDA api, T returnObj)
-        {
+        public EmptyRestAction(JDA api, T returnObj) {
             super(api, null);
             this.returnObj = returnObj;
         }
 
         @Override
-        public void queue(Consumer<T> success, Consumer<Throwable> failure)
-        {
+        public void queue(Consumer<T> success, Consumer<Throwable> failure) {
             if (success != null)
                 success.accept(returnObj);
         }
 
         @Override
-        public RequestFuture<T> submit(boolean shouldQueue)
-        {
+        public RequestFuture<T> submit(boolean shouldQueue) {
             return new RestFuture<>(returnObj);
         }
 
         @Override
-        public T complete(boolean shouldQueue)
-        {
+        public T complete(boolean shouldQueue) {
             return returnObj;
         }
 
         @Override
-        protected void handleResponse(Response response, Request<T> request) { }
+        protected void handleResponse(Response response, Request<T> request) {
+        }
     }
 
     /*
@@ -797,35 +686,31 @@ public abstract class RestAction<T>
             return () -> hasPermission(Permission.MESSAGE_WRITE);
         }
      */
-    protected static class CheckWrapper implements BooleanSupplier
-    {
-        public static final CheckWrapper EMPTY = new CheckWrapper(null, null)
-        {
-            public boolean getAsBoolean() { return true; }
+    protected static class CheckWrapper implements BooleanSupplier {
+        public static final CheckWrapper EMPTY = new CheckWrapper(null, null) {
+            public boolean getAsBoolean() {
+                return true;
+            }
         };
 
         protected final BooleanSupplier pre;
         protected final BooleanSupplier wrapped;
 
-        public CheckWrapper(BooleanSupplier wrapped, BooleanSupplier pre)
-        {
+        public CheckWrapper(BooleanSupplier wrapped, BooleanSupplier pre) {
             this.pre = pre;
             this.wrapped = wrapped;
         }
 
-        public boolean pre()
-        {
+        public boolean pre() {
             return pre == null || pre.getAsBoolean();
         }
 
-        public boolean test()
-        {
+        public boolean test() {
             return wrapped == null || wrapped.getAsBoolean();
         }
 
         @Override
-        public boolean getAsBoolean()
-        {
+        public boolean getAsBoolean() {
             return pre() && test();
         }
     }

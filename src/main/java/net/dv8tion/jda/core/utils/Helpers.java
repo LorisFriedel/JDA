@@ -29,60 +29,50 @@ import java.util.Objects;
  *
  * <p>Specifically StringUtils.java and ExceptionUtils.java
  */
-public final class Helpers
-{
+public final class Helpers {
 
     // ## StringUtils ##
 
-    public static boolean isEmpty(final CharSequence seq)
-    {
+    public static boolean isEmpty(final CharSequence seq) {
         return seq == null || seq.length() == 0;
     }
 
-    public static boolean containsWhitespace(final CharSequence seq)
-    {
+    public static boolean containsWhitespace(final CharSequence seq) {
         if (isEmpty(seq))
             return false;
-        for (int i = 0; i < seq.length(); i++)
-        {
+        for (int i = 0; i < seq.length(); i++) {
             if (Character.isWhitespace(seq.charAt(i)))
                 return true;
         }
         return false;
     }
 
-    public static boolean isBlank(final CharSequence seq)
-    {
+    public static boolean isBlank(final CharSequence seq) {
         if (isEmpty(seq))
             return true;
-        for (int i = 0; i < seq.length(); i++)
-        {
+        for (int i = 0; i < seq.length(); i++) {
             if (!Character.isWhitespace(seq.charAt(i)))
                 return false;
         }
         return true;
     }
 
-    public static boolean equalsIgnoreCase(final String seq0, final String seq1)
-    {
+    public static boolean equalsIgnoreCase(final String seq0, final String seq1) {
         return Objects.equals(seq0, seq1) || (seq0 != null && seq0.equalsIgnoreCase(seq1));
     }
 
-    public static int countMatches(final CharSequence seq, final char c)
-    {
+    public static int countMatches(final CharSequence seq, final char c) {
         if (isEmpty(seq))
             return 0;
         int count = 0;
-        for (int i = 0; i < seq.length(); i++)
-        {
+        for (int i = 0; i < seq.length(); i++) {
             if (seq.charAt(i) == c)
                 count++;
         }
         return count;
     }
 
-    public static String truncate(final String input, final int maxWidth)
-    {
+    public static String truncate(final String input, final int maxWidth) {
         if (input == null)
             return null;
         Checks.notNegative(maxWidth, "maxWidth");
@@ -93,8 +83,7 @@ public final class Helpers
         return input.substring(0, maxWidth);
     }
 
-    public static String rightPad(final String input, final int size)
-    {
+    public static String rightPad(final String input, final int size) {
         int pads = size - input.length();
         if (pads <= 0)
             return input;
@@ -104,8 +93,7 @@ public final class Helpers
         return out.toString();
     }
 
-    public static String leftPad(final String input, final int size)
-    {
+    public static String leftPad(final String input, final int size) {
         int pads = size - input.length();
         if (pads <= 0)
             return input;
@@ -127,24 +115,19 @@ public final class Helpers
 
     // ## CollectionUtils ##
 
-    public static boolean deepEquals(Collection<?> first, Collection<?> second)
-    {
-        if (first != null)
-        {
+    public static boolean deepEquals(Collection<?> first, Collection<?> second) {
+        if (first != null) {
             if (second == null)
                 return false;
             if (first.size() != second.size())
                 return false;
-            for (Iterator<?> itFirst = first.iterator(), itSecond = second.iterator(); itFirst.hasNext(); )
-            {
+            for (Iterator<?> itFirst = first.iterator(), itSecond = second.iterator(); itFirst.hasNext(); ) {
                 Object elementFirst = itFirst.next();
                 Object elementSecond = itSecond.next();
                 if (!Objects.equals(elementFirst, elementSecond))
                     return false;
             }
-        }
-        else if (second != null)
-        {
+        } else if (second != null) {
             return false;
         }
         return true;
@@ -152,18 +135,15 @@ public final class Helpers
 
     // ## JSONObject ##
 
-    public static boolean optBoolean(JSONObject object, String key)
-    {
+    public static boolean optBoolean(JSONObject object, String key) {
         return !object.isNull(key) && object.getBoolean(key);
     }
 
-    public static int optInt(JSONObject object, String key, int defaultValue)
-    {
+    public static int optInt(JSONObject object, String key, int defaultValue) {
         return object.isNull(key) ? defaultValue : object.getInt(key);
     }
 
-    public static long optLong(JSONObject object, String key, long defaultValue)
-    {
+    public static long optLong(JSONObject object, String key, long defaultValue) {
         return object.isNull(key) ? defaultValue : object.getLong(key);
     }
 }

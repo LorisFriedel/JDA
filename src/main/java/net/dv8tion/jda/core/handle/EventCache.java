@@ -25,19 +25,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class EventCache
-{
+public class EventCache {
     public static final Logger LOG = JDALogger.getLog(EventCache.class);
     private final Map<Type, TLongObjectMap<List<Runnable>>> eventCache = new HashMap<>();
 
-    public void cache(Type type, long triggerId, Runnable handler)
-    {
+    public void cache(Type type, long triggerId, Runnable handler) {
         TLongObjectMap<List<Runnable>> triggerCache =
-                eventCache.computeIfAbsent(type, k -> new TLongObjectHashMap<>());
+            eventCache.computeIfAbsent(type, k -> new TLongObjectHashMap<>());
 
         List<Runnable> items = triggerCache.get(triggerId);
-        if (items == null)
-        {
+        if (items == null) {
             items = new LinkedList<>();
             triggerCache.put(triggerId, items);
         }
@@ -45,57 +42,46 @@ public class EventCache
         items.add(handler);
     }
 
-    public void playbackCache(Type type, long triggerId)
-    {
+    public void playbackCache(Type type, long triggerId) {
         List<Runnable> items;
-        try
-        {
+        try {
             items = eventCache.get(type).get(triggerId);
-        }
-        catch (NullPointerException e)
-        {
+        } catch (NullPointerException e) {
             //If we encounter an NPE that means something didn't exist.
             return;
         }
 
-        if (items != null && !items.isEmpty())
-        {
+        if (items != null && !items.isEmpty()) {
             EventCache.LOG.debug("Replaying {} events from the EventCache for a {} with id: {}",
                 items.size(), type, triggerId);
             List<Runnable> itemsCopy = new LinkedList<>(items);
             items.clear();
-            for (Runnable item : itemsCopy)
-            {
+            for (Runnable item : itemsCopy) {
                 item.run();
             }
         }
     }
 
-    public int size()
-    {
+    public int size() {
         return (int) eventCache.values().stream()
-                .mapToLong(typeMap ->
-                    typeMap.valueCollection().stream().mapToLong(List::size).sum())
-                .sum();
+            .mapToLong(typeMap ->
+                typeMap.valueCollection().stream().mapToLong(List::size).sum())
+            .sum();
     }
 
-    public void clear()
-    {
+    public void clear() {
         eventCache.clear();
     }
 
-    public void clear(Type type, long id)
-    {
-        try
-        {
+    public void clear(Type type, long id) {
+        try {
             List<Runnable> events = eventCache.get(type).remove(id);
             LOG.debug("Clearing cache for type {} with ID {} (Size: {})", type, id, events.size());
+        } catch (NullPointerException ignored) {
         }
-        catch (NullPointerException ignored) {}
     }
 
-    public enum Type
-    {
+    public enum Type {
         USER, GUILD, CHANNEL, ROLE, RELATIONSHIP, CALL
     }
 }

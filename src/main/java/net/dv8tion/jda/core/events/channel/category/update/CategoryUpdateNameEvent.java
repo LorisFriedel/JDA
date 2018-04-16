@@ -26,12 +26,10 @@ import net.dv8tion.jda.core.entities.Category;
  *
  * <p>Identifier: {@code name}
  */
-public class CategoryUpdateNameEvent extends GenericCategoryUpdateEvent<String>
-{
+public class CategoryUpdateNameEvent extends GenericCategoryUpdateEvent<String> {
     public static final String IDENTIFIER = "name";
 
-    public CategoryUpdateNameEvent(JDA api, long responseNumber, Category category, String oldName)
-    {
+    public CategoryUpdateNameEvent(JDA api, long responseNumber, Category category, String oldName) {
         super(api, responseNumber, category, oldName, category.getName(), IDENTIFIER);
     }
 
@@ -40,8 +38,7 @@ public class CategoryUpdateNameEvent extends GenericCategoryUpdateEvent<String>
      *
      * @return The previous name
      */
-    public String getOldName()
-    {
+    public String getOldName() {
         return getOldValue();
     }
 
@@ -50,8 +47,7 @@ public class CategoryUpdateNameEvent extends GenericCategoryUpdateEvent<String>
      *
      * @return The new name
      */
-    public String getNewName()
-    {
+    public String getNewName() {
         return getNewValue();
     }
 }

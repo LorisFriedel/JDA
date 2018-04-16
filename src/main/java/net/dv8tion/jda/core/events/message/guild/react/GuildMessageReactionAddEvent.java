@@ -25,10 +25,8 @@ import net.dv8tion.jda.core.entities.User;
  *
  * <p>Can be used to detect when a reaction is added in a guild
  */
-public class GuildMessageReactionAddEvent extends GenericGuildMessageReactionEvent
-{
-    public GuildMessageReactionAddEvent(JDA api, long responseNumber, User user, MessageReaction reaction)
-    {
+public class GuildMessageReactionAddEvent extends GenericGuildMessageReactionEvent {
+    public GuildMessageReactionAddEvent(JDA api, long responseNumber, User user, MessageReaction reaction) {
         super(api, responseNumber, user, reaction);
     }
 }

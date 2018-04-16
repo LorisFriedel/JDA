@@ -51,17 +51,26 @@ import java.util.List;
  *
  * @see net.dv8tion.jda.core.entities.Role#getManager()
  */
-public class RoleManager extends ManagerBase
-{
-    /** Used to reset the name field */
-    public static final long NAME        = 0x1;
-    /** Used to reset the color field */
-    public static final long COLOR       = 0x2;
-    /** Used to reset the permission field */
-    public static final long PERMISSION  = 0x4;
-    /** Used to reset the hoisted field */
-    public static final long HOIST       = 0x8;
-    /** Used to reset the mentionable field */
+public class RoleManager extends ManagerBase {
+    /**
+     * Used to reset the name field
+     */
+    public static final long NAME = 0x1;
+    /**
+     * Used to reset the color field
+     */
+    public static final long COLOR = 0x2;
+    /**
+     * Used to reset the permission field
+     */
+    public static final long PERMISSION = 0x4;
+    /**
+     * Used to reset the hoisted field
+     */
+    public static final long HOIST = 0x8;
+    /**
+     * Used to reset the mentionable field
+     */
     public static final long MENTIONABLE = 0x10;
 
     protected final Role role;
@@ -75,11 +84,9 @@ public class RoleManager extends ManagerBase
     /**
      * Creates a new RoleManager instance
      *
-     * @param role
-     *        {@link net.dv8tion.jda.core.entities.Role Role} that should be modified
+     * @param role {@link net.dv8tion.jda.core.entities.Role Role} that should be modified
      */
-    public RoleManager(Role role)
-    {
+    public RoleManager(Role role) {
         super(role.getJDA(), Route.Roles.MODIFY_ROLE.compile(role.getGuild().getId(), role.getId()));
         this.role = role;
         if (isPermissionChecksEnabled())
@@ -93,8 +100,7 @@ public class RoleManager extends ManagerBase
      *
      * @return The parent {@link net.dv8tion.jda.core.entities.Guild Guild}
      */
-    public Guild getGuild()
-    {
+    public Guild getGuild() {
         return role.getGuild();
     }
 
@@ -104,8 +110,7 @@ public class RoleManager extends ManagerBase
      *
      * @return The target Role
      */
-    public Role getRole()
-    {
+    public Role getRole() {
         return role;
     }
 
@@ -116,22 +121,19 @@ public class RoleManager extends ManagerBase
      *
      * <p><b>Flag Constants:</b>
      * <ul>
-     *     <li>{@link #NAME}</li>
-     *     <li>{@link #COLOR}</li>
-     *     <li>{@link #PERMISSION}</li>
-     *     <li>{@link #HOIST}</li>
-     *     <li>{@link #MENTIONABLE}</li>
+     * <li>{@link #NAME}</li>
+     * <li>{@link #COLOR}</li>
+     * <li>{@link #PERMISSION}</li>
+     * <li>{@link #HOIST}</li>
+     * <li>{@link #MENTIONABLE}</li>
      * </ul>
      *
-     * @param  fields
-     *         Integer value containing the flags to reset.
-     *
+     * @param fields Integer value containing the flags to reset.
      * @return RoleManager for chaining convenience
      */
     @Override
     @CheckReturnValue
-    public RoleManager reset(long fields)
-    {
+    public RoleManager reset(long fields) {
         super.reset(fields);
         if ((fields & NAME) == NAME)
             this.name = null;
@@ -147,22 +149,19 @@ public class RoleManager extends ManagerBase
      *
      * <p><b>Flag Constants:</b>
      * <ul>
-     *     <li>{@link #NAME}</li>
-     *     <li>{@link #COLOR}</li>
-     *     <li>{@link #PERMISSION}</li>
-     *     <li>{@link #HOIST}</li>
-     *     <li>{@link #MENTIONABLE}</li>
+     * <li>{@link #NAME}</li>
+     * <li>{@link #COLOR}</li>
+     * <li>{@link #PERMISSION}</li>
+     * <li>{@link #HOIST}</li>
+     * <li>{@link #MENTIONABLE}</li>
      * </ul>
      *
-     * @param  fields
-     *         Integer values containing the flags to reset.
-     *
+     * @param fields Integer values containing the flags to reset.
      * @return RoleManager for chaining convenience
      */
     @Override
     @CheckReturnValue
-    public RoleManager reset(long... fields)
-    {
+    public RoleManager reset(long... fields) {
         super.reset(fields);
         return this;
     }
@@ -174,8 +173,7 @@ public class RoleManager extends ManagerBase
      */
     @Override
     @CheckReturnValue
-    public RoleManager reset()
-    {
+    public RoleManager reset() {
         super.reset();
         this.name = null;
         this.color = Role.DEFAULT_COLOR_RAW;
@@ -187,17 +185,12 @@ public class RoleManager extends ManagerBase
      *
      * <p>A role name <b>must not</b> be {@code null} nor less than 1 characters or more than 32 characters long!
      *
-     * @param  name
-     *         The new name for the selected {@link net.dv8tion.jda.core.entities.Role Role}
-     *
-     * @throws IllegalArgumentException
-     *         If the provided name is {@code null} or not between 1-32 characters long
-     *
+     * @param name The new name for the selected {@link net.dv8tion.jda.core.entities.Role Role}
      * @return RoleManager for chaining convenience
+     * @throws IllegalArgumentException If the provided name is {@code null} or not between 1-32 characters long
      */
     @CheckReturnValue
-    public RoleManager setName(String name)
-    {
+    public RoleManager setName(String name) {
         Checks.notBlank(name, "Name");
         Checks.check(name.length() <= 32, "Name must be within 32 characters in length");
         this.name = name;
@@ -211,24 +204,17 @@ public class RoleManager extends ManagerBase
      * <p>Permissions may only include already present Permissions for the currently logged in account.
      * <br>You are unable to give permissions you don't have!
      *
-     * @param  perms
-     *         The new raw permission value for the selected {@link net.dv8tion.jda.core.entities.Role Role}
-     *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If the currently logged in account does not have permission to apply one of the specified permissions
-     *
+     * @param perms The new raw permission value for the selected {@link net.dv8tion.jda.core.entities.Role Role}
      * @return RoleManager for chaining convenience
-     *
-     * @see    #setPermissions(Collection)
-     * @see    #setPermissions(Permission...)
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If the currently logged in account does not have permission to apply one of the specified permissions
+     * @see #setPermissions(Collection)
+     * @see #setPermissions(Permission...)
      */
     @CheckReturnValue
-    public RoleManager setPermissions(long perms)
-    {
+    public RoleManager setPermissions(long perms) {
         long selfPermissions = PermissionUtil.getEffectivePermission(getGuild().getSelfMember());
         long missingPerms = ~selfPermissions & perms;
-        if (missingPerms != 0 && isPermissionChecksEnabled())
-        {
+        if (missingPerms != 0 && isPermissionChecksEnabled()) {
             List<Permission> permissionList = Permission.getPermissions(missingPerms);
             if (!permissionList.isEmpty())
                 throw new InsufficientPermissionException(permissionList.get(0));
@@ -244,23 +230,16 @@ public class RoleManager extends ManagerBase
      * <p>Permissions may only include already present Permissions for the currently logged in account.
      * <br>You are unable to give permissions you don't have!
      *
-     * @param  permissions
-     *         The new permission for the selected {@link net.dv8tion.jda.core.entities.Role Role}
-     *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If the currently logged in account does not have permission to apply one of the specified permissions
-     * @throws java.lang.IllegalArgumentException
-     *         If any of the provided values is {@code null}
-     *
+     * @param permissions The new permission for the selected {@link net.dv8tion.jda.core.entities.Role Role}
      * @return RoleManager for chaining convenience
-     *
-     * @see    #setPermissions(Collection)
-     * @see    #setPermissions(long)
-     * @see    net.dv8tion.jda.core.Permission#getRaw(net.dv8tion.jda.core.Permission...) Permission.getRaw(Permission...)
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If the currently logged in account does not have permission to apply one of the specified permissions
+     * @throws java.lang.IllegalArgumentException                              If any of the provided values is {@code null}
+     * @see #setPermissions(Collection)
+     * @see #setPermissions(long)
+     * @see net.dv8tion.jda.core.Permission#getRaw(net.dv8tion.jda.core.Permission...) Permission.getRaw(Permission...)
      */
     @CheckReturnValue
-    public RoleManager setPermissions(Permission... permissions)
-    {
+    public RoleManager setPermissions(Permission... permissions) {
         Checks.notNull(permissions, "Permissions");
         return setPermissions(Arrays.asList(permissions));
     }
@@ -271,24 +250,17 @@ public class RoleManager extends ManagerBase
      * <p>Permissions may only include already present Permissions for the currently logged in account.
      * <br>You are unable to give permissions you don't have!
      *
-     * @param  permissions
-     *         The new permission for the selected {@link net.dv8tion.jda.core.entities.Role Role}
-     *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If the currently logged in account does not have permission to apply one of the specified permissions
-     * @throws java.lang.IllegalArgumentException
-     *         If any of the provided values is {@code null}
-     *
+     * @param permissions The new permission for the selected {@link net.dv8tion.jda.core.entities.Role Role}
      * @return RoleManager for chaining convenience
-     *
-     * @see    #setPermissions(Permission...)
-     * @see    #setPermissions(long)
-     * @see    java.util.EnumSet EnumSet
-     * @see    net.dv8tion.jda.core.Permission#getRaw(java.util.Collection) Permission.getRaw(Collection)
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If the currently logged in account does not have permission to apply one of the specified permissions
+     * @throws java.lang.IllegalArgumentException                              If any of the provided values is {@code null}
+     * @see #setPermissions(Permission...)
+     * @see #setPermissions(long)
+     * @see java.util.EnumSet EnumSet
+     * @see net.dv8tion.jda.core.Permission#getRaw(java.util.Collection) Permission.getRaw(Collection)
      */
     @CheckReturnValue
-    public RoleManager setPermissions(Collection<Permission> permissions)
-    {
+    public RoleManager setPermissions(Collection<Permission> permissions) {
         Checks.noneNull(permissions, "Permissions");
         return setPermissions(Permission.getRaw(permissions));
     }
@@ -296,14 +268,11 @@ public class RoleManager extends ManagerBase
     /**
      * Sets the {@link java.awt.Color Color} of the selected {@link net.dv8tion.jda.core.entities.Role Role}.
      *
-     * @param  color
-     *         The new color for the selected {@link net.dv8tion.jda.core.entities.Role Role}
-     *
+     * @param color The new color for the selected {@link net.dv8tion.jda.core.entities.Role Role}
      * @return RoleManager for chaining convenience
      */
     @CheckReturnValue
-    public RoleManager setColor(Color color)
-    {
+    public RoleManager setColor(Color color) {
         this.color = color == null ? Role.DEFAULT_COLOR_RAW : color.getRGB();
         set |= COLOR;
         return this;
@@ -312,16 +281,12 @@ public class RoleManager extends ManagerBase
     /**
      * Sets the rgb color of the selected {@link net.dv8tion.jda.core.entities.Role Role}.
      *
-     * @param  rgb
-     *         The new color for the selected {@link net.dv8tion.jda.core.entities.Role Role}
-     *
+     * @param rgb The new color for the selected {@link net.dv8tion.jda.core.entities.Role Role}
      * @return RoleManager for chaining convenience
-     *
-     * @see    Role#DEFAULT_COLOR_RAW Role.DEFAULT_COLOR_RAW
+     * @see Role#DEFAULT_COLOR_RAW Role.DEFAULT_COLOR_RAW
      */
     @CheckReturnValue
-    public RoleManager setColor(int rgb)
-    {
+    public RoleManager setColor(int rgb) {
         this.color = rgb;
         set |= COLOR;
         return this;
@@ -330,14 +295,11 @@ public class RoleManager extends ManagerBase
     /**
      * Sets the <b><u>hoist state</u></b> of the selected {@link net.dv8tion.jda.core.entities.Role Role}.
      *
-     * @param  hoisted
-     *         Whether the selected {@link net.dv8tion.jda.core.entities.Role Role} should be hoisted
-     *
+     * @param hoisted Whether the selected {@link net.dv8tion.jda.core.entities.Role Role} should be hoisted
      * @return RoleManager for chaining convenience
      */
     @CheckReturnValue
-    public RoleManager setHoisted(boolean hoisted)
-    {
+    public RoleManager setHoisted(boolean hoisted) {
         this.hoist = hoisted;
         set |= HOIST;
         return this;
@@ -346,14 +308,11 @@ public class RoleManager extends ManagerBase
     /**
      * Sets the <b><u>mentionable state</u></b> of the selected {@link net.dv8tion.jda.core.entities.Role Role}.
      *
-     * @param  mentionable
-     *         Whether the selected {@link net.dv8tion.jda.core.entities.Role Role} should be mentionable
-     *
+     * @param mentionable Whether the selected {@link net.dv8tion.jda.core.entities.Role Role} should be mentionable
      * @return RoleManager for chaining convenience
      */
     @CheckReturnValue
-    public RoleManager setMentionable(boolean mentionable)
-    {
+    public RoleManager setMentionable(boolean mentionable) {
         this.mentionable = mentionable;
         set |= MENTIONABLE;
         return this;
@@ -365,21 +324,15 @@ public class RoleManager extends ManagerBase
      * <p>Permissions may only include already present Permissions for the currently logged in account.
      * <br>You are unable to give permissions you don't have!
      *
-     * @param  perms
-     *         The permission to give to the selected {@link net.dv8tion.jda.core.entities.Role Role}
-     *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If the currently logged in account does not have permission to apply one of the specified permissions
-     *
+     * @param perms The permission to give to the selected {@link net.dv8tion.jda.core.entities.Role Role}
      * @return RoleManager for chaining convenience
-     *
-     * @see    #setPermissions(Collection)
-     * @see    #setPermissions(Permission...)
-     * @see    net.dv8tion.jda.core.Permission#getRaw(net.dv8tion.jda.core.Permission...) Permission.getRaw(Permission...)
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If the currently logged in account does not have permission to apply one of the specified permissions
+     * @see #setPermissions(Collection)
+     * @see #setPermissions(Permission...)
+     * @see net.dv8tion.jda.core.Permission#getRaw(net.dv8tion.jda.core.Permission...) Permission.getRaw(Permission...)
      */
     @CheckReturnValue
-    public RoleManager givePermissions(Permission... perms)
-    {
+    public RoleManager givePermissions(Permission... perms) {
         Checks.notNull(perms, "Permissions");
         return givePermissions(Arrays.asList(perms));
     }
@@ -390,22 +343,16 @@ public class RoleManager extends ManagerBase
      * <p>Permissions may only include already present Permissions for the currently logged in account.
      * <br>You are unable to give permissions you don't have!
      *
-     * @param  perms
-     *         The permission to give to the selected {@link net.dv8tion.jda.core.entities.Role Role}
-     *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If the currently logged in account does not have permission to apply one of the specified permissions
-     *
+     * @param perms The permission to give to the selected {@link net.dv8tion.jda.core.entities.Role Role}
      * @return RoleManager for chaining convenience
-     *
-     * @see    #setPermissions(Collection)
-     * @see    #setPermissions(Permission...)
-     * @see    java.util.EnumSet EnumSet
-     * @see    net.dv8tion.jda.core.Permission#getRaw(java.util.Collection) Permission.getRaw(Collection)
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If the currently logged in account does not have permission to apply one of the specified permissions
+     * @see #setPermissions(Collection)
+     * @see #setPermissions(Permission...)
+     * @see java.util.EnumSet EnumSet
+     * @see net.dv8tion.jda.core.Permission#getRaw(java.util.Collection) Permission.getRaw(Collection)
      */
     @CheckReturnValue
-    public RoleManager givePermissions(Collection<Permission> perms)
-    {
+    public RoleManager givePermissions(Collection<Permission> perms) {
         Checks.noneNull(perms, "Permissions");
         return setPermissions(this.permissions | Permission.getRaw(perms));
     }
@@ -416,21 +363,15 @@ public class RoleManager extends ManagerBase
      * <p>Permissions may only include already present Permissions for the currently logged in account.
      * <br>You are unable to revoke permissions you don't have!
      *
-     * @param  perms
-     *         The permission to give to the selected {@link net.dv8tion.jda.core.entities.Role Role}
-     *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If the currently logged in account does not have permission to revoke one of the specified permissions
-     *
+     * @param perms The permission to give to the selected {@link net.dv8tion.jda.core.entities.Role Role}
      * @return RoleManager for chaining convenience
-     *
-     * @see    #setPermissions(Collection)
-     * @see    #setPermissions(Permission...)
-     * @see    net.dv8tion.jda.core.Permission#getRaw(net.dv8tion.jda.core.Permission...) Permission.getRaw(Permission...)
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If the currently logged in account does not have permission to revoke one of the specified permissions
+     * @see #setPermissions(Collection)
+     * @see #setPermissions(Permission...)
+     * @see net.dv8tion.jda.core.Permission#getRaw(net.dv8tion.jda.core.Permission...) Permission.getRaw(Permission...)
      */
     @CheckReturnValue
-    public RoleManager revokePermissions(Permission... perms)
-    {
+    public RoleManager revokePermissions(Permission... perms) {
         Checks.notNull(perms, "Permissions");
         return revokePermissions(Arrays.asList(perms));
     }
@@ -441,29 +382,22 @@ public class RoleManager extends ManagerBase
      * <p>Permissions may only include already present Permissions for the currently logged in account.
      * <br>You are unable to revoke permissions you don't have!
      *
-     * @param  perms
-     *         The permission to give to the selected {@link net.dv8tion.jda.core.entities.Role Role}
-     *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If the currently logged in account does not have permission to revoke one of the specified permissions
-     *
+     * @param perms The permission to give to the selected {@link net.dv8tion.jda.core.entities.Role Role}
      * @return RoleManager for chaining convenience
-     *
-     * @see    #setPermissions(Collection)
-     * @see    #setPermissions(Permission...)
-     * @see    java.util.EnumSet EnumSet
-     * @see    net.dv8tion.jda.core.Permission#getRaw(java.util.Collection) Permission.getRaw(Collection)
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If the currently logged in account does not have permission to revoke one of the specified permissions
+     * @see #setPermissions(Collection)
+     * @see #setPermissions(Permission...)
+     * @see java.util.EnumSet EnumSet
+     * @see net.dv8tion.jda.core.Permission#getRaw(java.util.Collection) Permission.getRaw(Collection)
      */
     @CheckReturnValue
-    public RoleManager revokePermissions(Collection<Permission> perms)
-    {
+    public RoleManager revokePermissions(Collection<Permission> perms) {
         Checks.noneNull(perms, "Permissions");
         return setPermissions(this.permissions & ~Permission.getRaw(perms));
     }
 
     @Override
-    protected RequestBody finalizeData()
-    {
+    protected RequestBody finalizeData() {
         JSONObject object = new JSONObject().put("name", role.getName());
         if (shouldUpdate(NAME))
             object.put("name", name);
@@ -480,8 +414,7 @@ public class RoleManager extends ManagerBase
     }
 
     @Override
-    protected boolean checkPermissions()
-    {
+    protected boolean checkPermissions() {
         Member selfMember = getGuild().getSelfMember();
         long selfPermissions = PermissionUtil.getEffectivePermission(selfMember);
         if ((selfPermissions & Permission.MANAGE_ROLES.getRawValue()) == 0)
@@ -489,8 +422,7 @@ public class RoleManager extends ManagerBase
         if (!selfMember.canInteract(role))
             throw new HierarchyException("Cannot modify a role that is higher or equal in hierarchy");
         long missingRaw = ~selfPermissions & permissions;
-        if (missingRaw != 0)
-        {
+        if (missingRaw != 0) {
             List<Permission> missingPermissions = Permission.getPermissions(missingRaw);
             if (!missingPermissions.isEmpty())
                 throw new InsufficientPermissionException(missingPermissions.get(0));

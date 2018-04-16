@@ -21,15 +21,13 @@ import net.dv8tion.jda.core.entities.User;
 
 /**
  * Indicates that a Message was edited in a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}.
- * 
+ *
  * <p>Can be used retrieve affected PrivateChannel and edited Message.
  */
-public class PrivateMessageUpdateEvent extends GenericPrivateMessageEvent
-{
+public class PrivateMessageUpdateEvent extends GenericPrivateMessageEvent {
     private final Message message;
 
-    public PrivateMessageUpdateEvent(JDA api, long responseNumber, Message message)
-    {
+    public PrivateMessageUpdateEvent(JDA api, long responseNumber, Message message) {
         super(api, responseNumber, message.getIdLong(), message.getPrivateChannel());
         this.message = message;
     }
@@ -39,8 +37,7 @@ public class PrivateMessageUpdateEvent extends GenericPrivateMessageEvent
      *
      * @return The Message
      */
-    public Message getMessage()
-    {
+    public Message getMessage() {
         return message;
     }
 
@@ -48,11 +45,9 @@ public class PrivateMessageUpdateEvent extends GenericPrivateMessageEvent
      * The author of this message
      *
      * @return The author of this message
-     *
-     * @see    net.dv8tion.jda.core.entities.User User
+     * @see net.dv8tion.jda.core.entities.User User
      */
-    public User getAuthor()
-    {
+    public User getAuthor() {
         return message.getAuthor();
     }
 }

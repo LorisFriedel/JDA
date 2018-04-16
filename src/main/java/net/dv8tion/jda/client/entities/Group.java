@@ -24,23 +24,27 @@ import net.dv8tion.jda.core.utils.cache.SnowflakeCacheView;
 import javax.annotation.CheckReturnValue;
 import java.util.List;
 
-public interface Group extends MessageChannel, CallableChannel
-{
+public interface Group extends MessageChannel, CallableChannel {
     /**
      * Returns the name set for this group.<br>
      * If no name has been set for this group, then null is returned.
      *
-     * @return
-     *      Possibly-null name of the group.
+     * @return Possibly-null name of the group.
      */
     String getName();
+
     String getIconId();
+
     String getIconUrl();
 
     User getOwner();
+
     SnowflakeCacheView<User> getUserCache();
+
     List<User> getUsers();
+
     List<User> getNonFriendUsers();
+
     List<Friend> getFriends();
 
     //getGroupManager()

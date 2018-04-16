@@ -28,8 +28,7 @@ import net.dv8tion.jda.core.requests.restaction.MessageAction;
 
 import java.io.InputStream;
 
-public class PrivateChannelImpl implements PrivateChannel
-{
+public class PrivateChannelImpl implements PrivateChannel {
     private final long id;
     private final User user;
 
@@ -37,21 +36,18 @@ public class PrivateChannelImpl implements PrivateChannel
     private Call currentCall = null;
     private boolean fake = false;
 
-    public PrivateChannelImpl(long id, User user)
-    {
+    public PrivateChannelImpl(long id, User user) {
         this.id = id;
         this.user = user;
     }
 
     @Override
-    public User getUser()
-    {
+    public User getUser() {
         return user;
     }
 
     @Override
-    public long getLatestMessageIdLong()
-    {
+    public long getLatestMessageIdLong() {
         final long messageId = lastMessageId;
         if (messageId < 0)
             throw new IllegalStateException("No last message id found.");
@@ -59,38 +55,31 @@ public class PrivateChannelImpl implements PrivateChannel
     }
 
     @Override
-    public boolean hasLatestMessage()
-    {
+    public boolean hasLatestMessage() {
         return lastMessageId > 0;
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return user.getName();
     }
 
     @Override
-    public ChannelType getType()
-    {
+    public ChannelType getType() {
         return ChannelType.PRIVATE;
     }
 
     @Override
-    public JDA getJDA()
-    {
+    public JDA getJDA() {
         return user.getJDA();
     }
 
     @Override
-    public RestAction<Void> close()
-    {
+    public RestAction<Void> close() {
         Route.CompiledRoute route = Route.Channels.DELETE_CHANNEL.compile(getId());
-        return new RestAction<Void>(getJDA(), route)
-        {
+        return new RestAction<Void>(getJDA(), route) {
             @Override
-            protected void handleResponse(Response response, Request<Void> request)
-            {
+            protected void handleResponse(Response response, Request<Void> request) {
                 if (response.isOk())
                     request.onSuccess(null);
                 else
@@ -100,71 +89,60 @@ public class PrivateChannelImpl implements PrivateChannel
     }
 
     @Override
-    public long getIdLong()
-    {
+    public long getIdLong() {
         return id;
     }
 
     @Override
-    public boolean isFake()
-    {
+    public boolean isFake() {
         return fake;
     }
 
     @Override
-    public RestAction<Call> startCall()
-    {
+    public RestAction<Call> startCall() {
         return null;
     }
 
     @Override
-    public Call getCurrentCall()
-    {
+    public Call getCurrentCall() {
         return currentCall;
     }
 
     @Override
-    public MessageAction sendMessage(CharSequence text)
-    {
+    public MessageAction sendMessage(CharSequence text) {
         checkBot();
         return PrivateChannel.super.sendMessage(text);
     }
 
     @Override
-    public MessageAction sendMessage(MessageEmbed embed)
-    {
+    public MessageAction sendMessage(MessageEmbed embed) {
         checkBot();
         return PrivateChannel.super.sendMessage(embed);
     }
 
     @Override
-    public MessageAction sendMessage(Message msg)
-    {
+    public MessageAction sendMessage(Message msg) {
         checkBot();
         return PrivateChannel.super.sendMessage(msg);
     }
 
     @Override
-    public MessageAction sendFile(InputStream data, String fileName, Message message)
-    {
+    public MessageAction sendFile(InputStream data, String fileName, Message message) {
         checkBot();
         return PrivateChannel.super.sendFile(data, fileName, message);
     }
 
-    public PrivateChannelImpl setFake(boolean fake)
-    {
+    public PrivateChannelImpl setFake(boolean fake) {
         this.fake = fake;
         return this;
     }
 
-    public PrivateChannelImpl setCurrentCall(Call currentCall)
-    {
+    public PrivateChannelImpl setCurrentCall(Call currentCall) {
         this.currentCall = currentCall;
         return this;
     }
 
-    public PrivateChannelImpl setLastMessageId(long id)
-    {
+    public PrivateChannelImpl setLastMessageId(long id) {
         this.lastMessageId = id;
         return this;
     }
@@ -173,26 +151,22 @@ public class PrivateChannelImpl implements PrivateChannel
 
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return Long.hashCode(id);
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         return obj instanceof PrivateChannelImpl
-                && this.id == ((PrivateChannelImpl) obj).id;
+            && this.id == ((PrivateChannelImpl) obj).id;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "PC:" + getUser().getName() + '(' + id + ')';
     }
 
-    private void checkBot()
-    {
+    private void checkBot() {
         if (user.isBot() && getJDA().getAccountType() == AccountType.BOT)
             throw new UnsupportedOperationException("Cannot send a private message between bots.");
     }

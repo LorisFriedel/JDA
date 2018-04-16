@@ -30,8 +30,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CallImpl implements Call
-{
+public class CallImpl implements Call {
     private final CallableChannel callableChannel;
     private final long messageId;
 
@@ -40,99 +39,84 @@ public class CallImpl implements Call
 
     private Region region;
 
-    public CallImpl(CallableChannel callableChannel, long messageId)
-    {
+    public CallImpl(CallableChannel callableChannel, long messageId) {
         this.callableChannel = callableChannel;
         this.messageId = messageId;
     }
 
     @Override
-    public Region getRegion()
-    {
+    public Region getRegion() {
         return region;
     }
 
     @Override
-    public boolean isGroupCall()
-    {
+    public boolean isGroupCall() {
         return callableChannel instanceof Group;
     }
 
     @Override
-    public CallableChannel getCallableChannel()
-    {
+    public CallableChannel getCallableChannel() {
         return callableChannel;
     }
 
     @Override
-    public Group getGroup()
-    {
+    public Group getGroup() {
         return isGroupCall() ? (Group) callableChannel : null;
     }
 
     @Override
-    public PrivateChannel getPrivateChannel()
-    {
+    public PrivateChannel getPrivateChannel() {
         return !isGroupCall() ? (PrivateChannel) callableChannel : null;
     }
 
     @Override
-    public String getMessageId()
-    {
+    public String getMessageId() {
         return Long.toUnsignedString(messageId);
     }
 
     @Override
-    public long getMessageIdLong()
-    {
+    public long getMessageIdLong() {
         return messageId;
     }
 
     @Override
-    public List<CallUser> getRingingUsers()
-    {
+    public List<CallUser> getRingingUsers() {
         return Collections.unmodifiableList(callUsers.valueCollection().stream()
-                .filter(CallUser::isRinging)
-                .collect(Collectors.toList()));
+            .filter(CallUser::isRinging)
+            .collect(Collectors.toList()));
     }
 
     @Override
-    public List<CallUser> getConnectedUsers()
-    {
+    public List<CallUser> getConnectedUsers() {
         return Collections.unmodifiableList(callUsers.valueCollection().stream()
-                .filter(cu -> cu.getVoiceState().isInCall())
-                .collect(Collectors.toList()));
+            .filter(cu -> cu.getVoiceState().isInCall())
+            .collect(Collectors.toList()));
     }
 
     @Override
-    public List<CallUser> getCallUserHistory()
-    {
+    public List<CallUser> getCallUserHistory() {
         return Collections.unmodifiableList(
-                new ArrayList<>(callUserHistory.valueCollection()));
+            new ArrayList<>(callUserHistory.valueCollection()));
     }
 
     @Override
-    public List<CallUser> getAllCallUsers()
-    {
+    public List<CallUser> getAllCallUsers() {
         return Collections.unmodifiableList(
-                new ArrayList<>(callUsers.valueCollection()));
+            new ArrayList<>(callUsers.valueCollection()));
     }
 
     @Override
-    public long getIdLong()
-    {
+    public long getIdLong() {
         return callableChannel.getIdLong();
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "Call(" + getIdLong() + ")";
     }
 
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         if (!(o instanceof Call))
             return false;
 
@@ -141,24 +125,20 @@ public class CallImpl implements Call
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return ("Call " + getId()).hashCode();
     }
 
-    public CallImpl setRegion(Region region)
-    {
+    public CallImpl setRegion(Region region) {
         this.region = region;
         return this;
     }
 
-    public TLongObjectMap<CallUser> getCallUserMap()
-    {
+    public TLongObjectMap<CallUser> getCallUserMap() {
         return callUsers;
     }
 
-    public TLongObjectMap<CallUser> getCallUserHistoryMap()
-    {
+    public TLongObjectMap<CallUser> getCallUserHistoryMap() {
         return callUserHistory;
     }
 }

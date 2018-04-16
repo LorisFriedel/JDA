@@ -26,16 +26,12 @@ import java.util.function.Supplier;
  * <p><b>This class is abstract and requires an implementation
  * for {@link #checkValue(Object)}</b>
  *
- * @param  <T>
- *         The Field-Type for this AccountField
- *
- * @since  3.0
+ * @param <T> The Field-Type for this AccountField
+ * @since 3.0
  */
 @Deprecated
-public abstract class AccountField<T> extends Field<T, net.dv8tion.jda.core.managers.AccountManagerUpdatable>
-{
-    public AccountField(net.dv8tion.jda.core.managers.AccountManagerUpdatable manager, Supplier<T> originalValue)
-    {
+public abstract class AccountField<T> extends Field<T, net.dv8tion.jda.core.managers.AccountManagerUpdatable> {
+    public AccountField(net.dv8tion.jda.core.managers.AccountManagerUpdatable manager, Supplier<T> originalValue) {
         super(manager, originalValue);
     }
 }

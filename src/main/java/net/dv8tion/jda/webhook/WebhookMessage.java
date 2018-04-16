@@ -38,8 +38,7 @@ import java.util.List;
  *
  * <p>This message can send multiple embeds at once!
  */
-public class WebhookMessage
-{
+public class WebhookMessage {
     protected static final MediaType OCTET = MediaType.parse("application/octet-stream");
     protected final String username, avatarUrl, content, fileName;
     protected final List<MessageEmbed> embeds;
@@ -48,8 +47,7 @@ public class WebhookMessage
 
     protected WebhookMessage(final String username, final String avatarUrl, final String content,
                              final List<MessageEmbed> embeds, final boolean isTTS,
-                             final InputStream file, final String fileName)
-    {
+                             final InputStream file, final String fileName) {
         this.username = username;
         this.avatarUrl = avatarUrl;
         this.content = content;
@@ -62,34 +60,24 @@ public class WebhookMessage
     /**
      * Creates a new WebhookMessage instance with the provided {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbeds}
      *
-     * @param  embeds
-     *         The embeds to use for this message
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If any of the provided embeds is {@code null}
-     *         or exceeds the maximum total character count of {@link MessageEmbed#EMBED_MAX_LENGTH_BOT}
-     *
+     * @param embeds The embeds to use for this message
      * @return The resulting WebhookMessage instance
+     * @throws java.lang.IllegalArgumentException If any of the provided embeds is {@code null}
+     *                                            or exceeds the maximum total character count of {@link MessageEmbed#EMBED_MAX_LENGTH_BOT}
      */
-    public static WebhookMessage of(MessageEmbed... embeds)
-    {
+    public static WebhookMessage of(MessageEmbed... embeds) {
         return new WebhookMessageBuilder().addEmbeds(embeds).build();
     }
 
     /**
      * Creates a new WebhookMessage instance with the provided {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbeds}
      *
-     * @param  embeds
-     *         The embeds to use for this message
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If any of the provided embeds is {@code null}
-     *         or exceeds the maximum total character count of {@link MessageEmbed#EMBED_MAX_LENGTH_BOT}
-     *
+     * @param embeds The embeds to use for this message
      * @return The resulting WebhookMessage instance
+     * @throws java.lang.IllegalArgumentException If any of the provided embeds is {@code null}
+     *                                            or exceeds the maximum total character count of {@link MessageEmbed#EMBED_MAX_LENGTH_BOT}
      */
-    public static WebhookMessage of(Collection<MessageEmbed> embeds)
-    {
+    public static WebhookMessage of(Collection<MessageEmbed> embeds) {
         return new WebhookMessageBuilder().addEmbeds(embeds).build();
     }
 
@@ -97,16 +85,11 @@ public class WebhookMessage
      * Creates a new WebhookMessage instance with the provided {@link net.dv8tion.jda.core.entities.Message Message}
      * <br><b>This does not copy the attachments of the provided message!</b>
      *
-     * @param  message
-     *         The message to use for this message
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided message is {@code null}
-     *
+     * @param message The message to use for this message
      * @return The resulting WebhookMessage instance
+     * @throws java.lang.IllegalArgumentException If the provided message is {@code null}
      */
-    public static WebhookMessage from(Message message)
-    {
+    public static WebhookMessage from(Message message) {
         Checks.notNull(message, "Message");
         final String content = message.getContentRaw();
         final List<MessageEmbed> embeds = message.getEmbeds();
@@ -119,18 +102,15 @@ public class WebhookMessage
      *
      * @return True, if this message contains an attachment
      */
-    public boolean isFile()
-    {
+    public boolean isFile() {
         return file != null;
     }
 
-    protected RequestBody getBody()
-    {
+    protected RequestBody getBody() {
         final JSONObject payload = new JSONObject();
         if (content != null)
             payload.put("content", content);
-        if (!embeds.isEmpty())
-        {
+        if (!embeds.isEmpty()) {
             final JSONArray array = new JSONArray();
             for (MessageEmbed embed : embeds)
                 array.put(embed.toJSONObject());
@@ -141,11 +121,10 @@ public class WebhookMessage
         if (username != null)
             payload.put("username", username);
         payload.put("tts", isTTS);
-        if (isFile())
-        {
+        if (isFile()) {
             final MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
             return builder.addFormDataPart("file", fileName, MiscUtil.createRequestBody(OCTET, file))
-                          .addFormDataPart("payload_json", payload.toString()).build();
+                .addFormDataPart("payload_json", payload.toString()).build();
         }
         return RequestBody.create(Requester.MEDIA_TYPE_JSON, payload.toString());
     }

@@ -29,14 +29,16 @@ package net.dv8tion.jda.core.utils.tuple;
  *
  * @param <L> the left element type
  * @param <R> the right element type
- *
  * @since Lang 3.0
  */
-public final class ImmutablePair<L, R> extends Pair<L, R>
-{
-    /** Left object */
+public final class ImmutablePair<L, R> extends Pair<L, R> {
+    /**
+     * Left object
+     */
     public final L left;
-    /** Right object */
+    /**
+     * Right object
+     */
     public final R right;
 
     /**
@@ -45,10 +47,10 @@ public final class ImmutablePair<L, R> extends Pair<L, R>
      * <p>This factory allows the pair to be created using inference to
      * obtain the generic types.</p>
      *
-     * @param <L> the left element type
-     * @param <R> the right element type
+     * @param <L>   the left element type
+     * @param <R>   the right element type
      * @param left  the left element, may be null
-     * @param right  the right element, may be null
+     * @param right the right element, may be null
      * @return a pair formed from the two parameters, not null
      */
     public static <L, R> ImmutablePair<L, R> of(final L left, final R right) {
@@ -59,7 +61,7 @@ public final class ImmutablePair<L, R> extends Pair<L, R>
      * Create a new pair instance.
      *
      * @param left  the left value, may be null
-     * @param right  the right value, may be null
+     * @param right the right value, may be null
      */
     public ImmutablePair(final L left, final R right) {
         super();

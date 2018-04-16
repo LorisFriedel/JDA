@@ -51,10 +51,9 @@ import java.util.List;
  * }
  * </code></pre>
  *
- * @since  3.0
+ * @since 3.0
  */
-public class MentionPaginationAction extends PaginationAction<Message, MentionPaginationAction>
-{
+public class MentionPaginationAction extends PaginationAction<Message, MentionPaginationAction> {
 
     protected final Guild guild;
 
@@ -67,11 +66,9 @@ public class MentionPaginationAction extends PaginationAction<Message, MentionPa
      * to get the recent mentions for a specific {@link net.dv8tion.jda.core.entities.Guild Guild}
      * use {@link #MentionPaginationAction(net.dv8tion.jda.core.entities.Guild)} instead!
      *
-     * @param api
-     *        The current JDA entity
+     * @param api The current JDA entity
      */
-    public MentionPaginationAction(JDA api)
-    {
+    public MentionPaginationAction(JDA api) {
         this(api, null);
     }
 
@@ -81,19 +78,14 @@ public class MentionPaginationAction extends PaginationAction<Message, MentionPa
      * the recent mentions for the specified {@link net.dv8tion.jda.core.entities.Guild Guild}!
      * <br>To get the global scope use {@link #MentionPaginationAction(net.dv8tion.jda.core.JDA)} instead.
      *
-     * @param guild
-     *        The Non-Null target {@link net.dv8tion.jda.core.entities.Guild Guild}
-     *
-     * @throws java.lang.NullPointerException
-     *         If the provided {@code guild} is {@code null}
+     * @param guild The Non-Null target {@link net.dv8tion.jda.core.entities.Guild Guild}
+     * @throws java.lang.NullPointerException If the provided {@code guild} is {@code null}
      */
-    public MentionPaginationAction(Guild guild)
-    {
+    public MentionPaginationAction(Guild guild) {
         this(guild.getJDA(), guild);
     }
 
-    private MentionPaginationAction(JDA api, Guild guild)
-    {
+    private MentionPaginationAction(JDA api, Guild guild) {
         super(api, Route.Self.GET_RECENT_MENTIONS.compile(), 1, 100, 100);
 
         this.guild = guild;
@@ -107,8 +99,7 @@ public class MentionPaginationAction extends PaginationAction<Message, MentionPa
      *
      * @return Possibly-null target Guild
      */
-    public Guild getGuild()
-    {
+    public Guild getGuild() {
         return guild;
     }
 
@@ -117,13 +108,10 @@ public class MentionPaginationAction extends PaginationAction<Message, MentionPa
      * include mentions that mention the public role of a Guild.
      * <br>Default: {@code true}
      *
-     * @param  isEveryoneMention
-     *         Whether to include everyone mentions
-     *
+     * @param isEveryoneMention Whether to include everyone mentions
      * @return The current MentionPaginationAction for chaining convenience
      */
-    public MentionPaginationAction setEveryone(boolean isEveryoneMention)
-    {
+    public MentionPaginationAction setEveryone(boolean isEveryoneMention) {
         this.isEveryone = isEveryoneMention;
         return this;
     }
@@ -133,20 +121,16 @@ public class MentionPaginationAction extends PaginationAction<Message, MentionPa
      * include mentions that mention a role in a Guild.
      * <br>Default: {@code true}
      *
-     * @param  isRoleMention
-     *         Whether to include role mentions
-     *
+     * @param isRoleMention Whether to include role mentions
      * @return The current MentionPaginationAction for chaining convenience
      */
-    public MentionPaginationAction setRole(boolean isRoleMention)
-    {
+    public MentionPaginationAction setRole(boolean isRoleMention) {
         this.isRole = isRoleMention;
         return this;
     }
 
     @Override
-    protected Route.CompiledRoute finalizeRoute()
-    {
+    protected Route.CompiledRoute finalizeRoute() {
         Route.CompiledRoute route = super.finalizeRoute();
 
         String limit, before, everyone, role;
@@ -167,29 +151,24 @@ public class MentionPaginationAction extends PaginationAction<Message, MentionPa
     }
 
     @Override
-    protected void handleResponse(Response response, Request<List<Message>> request)
-    {
-        if(!response.isOk())
-        {
+    protected void handleResponse(Response response, Request<List<Message>> request) {
+        if (!response.isOk()) {
             request.onFailure(response);
             return;
         }
 
-        EntityBuilder builder = api.getEntityBuilder();;
+        EntityBuilder builder = api.getEntityBuilder();
+        ;
         List<Message> mentions = new LinkedList<>();
         JSONArray arr = response.getArray();
-        for (int i = 0; i < arr.length(); i++)
-        {
-            try
-            {
+        for (int i = 0; i < arr.length(); i++) {
+            try {
                 final Message msg = builder.createMessage(arr.getJSONObject(i), false);
                 mentions.add(msg);
                 if (useCache)
                     cached.add(msg);
                 last = msg;
-            }
-            catch (JSONException | NullPointerException e)
-            {
+            } catch (JSONException | NullPointerException e) {
                 LOG.warn("Encountered exception in MentionPagination", e);
             }
         }

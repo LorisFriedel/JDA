@@ -31,21 +31,17 @@ import net.dv8tion.jda.core.managers.impl.AudioManagerImpl;
 import net.dv8tion.jda.core.requests.WebSocketClient;
 import org.json.JSONObject;
 
-public class ChannelDeleteHandler extends SocketHandler
-{
-    public ChannelDeleteHandler(JDAImpl api)
-    {
+public class ChannelDeleteHandler extends SocketHandler {
+    public ChannelDeleteHandler(JDAImpl api) {
         super(api);
     }
 
     @Override
-    protected Long handleInternally(JSONObject content)
-    {
+    protected Long handleInternally(JSONObject content) {
         ChannelType type = ChannelType.fromId(content.getInt("type"));
 
         long guildId = 0;
-        if (type.isGuild())
-        {
+        if (type.isGuild()) {
             guildId = content.getLong("guild_id");
             if (api.getGuildLock().isLocked(guildId))
                 return guildId;
@@ -53,14 +49,11 @@ public class ChannelDeleteHandler extends SocketHandler
 
         final long channelId = content.getLong("id");
 
-        switch (type)
-        {
-            case TEXT:
-            {
+        switch (type) {
+            case TEXT: {
                 GuildImpl guild = (GuildImpl) api.getGuildMap().get(guildId);
                 TextChannel channel = api.getTextChannelMap().remove(channelId);
-                if (channel == null)
-                {
+                if (channel == null) {
 //                    api.getEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
                     WebSocketClient.LOG.debug("CHANNEL_DELETE attempted to delete a text channel that is not yet cached. JSON: {}", content);
                     return null;
@@ -73,12 +66,10 @@ public class ChannelDeleteHandler extends SocketHandler
                         channel));
                 break;
             }
-            case VOICE:
-            {
+            case VOICE: {
                 GuildImpl guild = (GuildImpl) api.getGuildMap().get(guildId);
                 VoiceChannel channel = guild.getVoiceChannelsMap().remove(channelId);
-                if (channel == null)
-                {
+                if (channel == null) {
 //                    api.getEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
                     WebSocketClient.LOG.debug("CHANNEL_DELETE attempted to delete a voice channel that is not yet cached. JSON: {}", content);
                     return null;
@@ -87,8 +78,7 @@ public class ChannelDeleteHandler extends SocketHandler
                 //We use this instead of getAudioManager(Guild) so we don't create a new instance. Efficiency!
                 AudioManagerImpl manager = (AudioManagerImpl) api.getAudioManagerMap().get(guild.getIdLong());
                 if (manager != null && manager.isConnected()
-                        && manager.getConnectedChannel().getIdLong() == channel.getIdLong())
-                {
+                    && manager.getConnectedChannel().getIdLong() == channel.getIdLong()) {
                     manager.closeAudioConnection(ConnectionStatus.DISCONNECTED_CHANNEL_DELETED);
                 }
                 guild.getVoiceChannelsMap().remove(channel.getIdLong());
@@ -98,12 +88,10 @@ public class ChannelDeleteHandler extends SocketHandler
                         channel));
                 break;
             }
-            case CATEGORY:
-            {
+            case CATEGORY: {
                 GuildImpl guild = (GuildImpl) api.getGuildMap().get(guildId);
                 Category category = api.getCategoryMap().remove(channelId);
-                if (category == null)
-                {
+                if (category == null) {
 //                    api.getEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
                     WebSocketClient.LOG.debug("CHANNEL_DELETE attempted to delete a category channel that is not yet cached. JSON: {}", content);
                     return null;
@@ -116,14 +104,12 @@ public class ChannelDeleteHandler extends SocketHandler
                         category));
                 break;
             }
-            case PRIVATE:
-            {
+            case PRIVATE: {
                 PrivateChannel channel = api.getPrivateChannelMap().remove(channelId);
 
                 if (channel == null)
                     channel = api.getFakePrivateChannelMap().remove(channelId);
-                if (channel == null)
-                {
+                if (channel == null) {
 //                    api.getEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
                     WebSocketClient.LOG.debug("CHANNEL_DELETE attempted to delete a private channel that is not yet cached. JSON: {}", content);
                     return null;
@@ -140,13 +126,11 @@ public class ChannelDeleteHandler extends SocketHandler
                         channel));
                 break;
             }
-            case GROUP:
-            {
+            case GROUP: {
                 //TODO: close call on group leave (kill audio manager)
                 final long groupId = content.getLong("id");
                 GroupImpl group = (GroupImpl) api.asClient().getGroupMap().remove(groupId);
-                if (group == null)
-                {
+                if (group == null) {
 //                    api.getEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
                     WebSocketClient.LOG.debug("CHANNEL_DELETE attempted to delete a group that is not yet cached. JSON: {}", content);
                     return null;
@@ -158,10 +142,9 @@ public class ChannelDeleteHandler extends SocketHandler
                     // then we remove the fake user from the fake cache as it was only in this group
                     //Note: we getGroups() which gets all groups, however we already removed the current group above.
                     if (user.isFake()
-                            && !user.hasPrivateChannel()
-                            && api.asClient().getRelationshipMap().get(userId) == null
-                            && api.asClient().getGroups().stream().noneMatch(g -> g.getUsers().contains(user)))
-                    {
+                        && !user.hasPrivateChannel()
+                        && api.asClient().getRelationshipMap().get(userId) == null
+                        && api.asClient().getGroups().stream().noneMatch(g -> g.getUsers().contains(user))) {
                         api.getFakeUserMap().remove(userId);
                     }
 

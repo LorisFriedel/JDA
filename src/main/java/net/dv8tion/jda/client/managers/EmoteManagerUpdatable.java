@@ -54,8 +54,7 @@ import java.util.stream.Collectors;
  * must be from {@link net.dv8tion.jda.core.AccountType#CLIENT AccountType.CLIENT}
  */
 @Deprecated
-public class EmoteManagerUpdatable
-{
+public class EmoteManagerUpdatable {
     public static final Pattern NAME_PATTERN = Pattern.compile("^\\w+$");
 
     protected final EmoteImpl emote;
@@ -66,14 +65,10 @@ public class EmoteManagerUpdatable
     /**
      * Creates a new EmoteManagerUpdatable instance
      *
-     * @param  emote
-     *         The target {@link net.dv8tion.jda.core.entities.impl.EmoteImpl EmoteImpl} to modify
-     *
-     * @throws java.lang.IllegalStateException
-     *         If the specified Emote is {@link net.dv8tion.jda.core.entities.Emote#isFake() fake} or {@link net.dv8tion.jda.core.entities.Emote#isManaged() managed}.
+     * @param emote The target {@link net.dv8tion.jda.core.entities.impl.EmoteImpl EmoteImpl} to modify
+     * @throws java.lang.IllegalStateException If the specified Emote is {@link net.dv8tion.jda.core.entities.Emote#isFake() fake} or {@link net.dv8tion.jda.core.entities.Emote#isManaged() managed}.
      */
-    public EmoteManagerUpdatable(EmoteImpl emote)
-    {
+    public EmoteManagerUpdatable(EmoteImpl emote) {
         if (emote.isFake())
             throw new IllegalStateException("The emote you are trying to update is not an actual emote we have access to (it is fake)!");
         if (emote.isManaged())
@@ -88,8 +83,7 @@ public class EmoteManagerUpdatable
      *
      * @return the corresponding JDA instance
      */
-    public JDA getJDA()
-    {
+    public JDA getJDA() {
         return emote.getJDA();
     }
 
@@ -100,8 +94,7 @@ public class EmoteManagerUpdatable
      *
      * @return The parent {@link net.dv8tion.jda.core.entities.Guild Guild}
      */
-    public Guild getGuild()
-    {
+    public Guild getGuild() {
         return emote.getGuild();
     }
 
@@ -111,8 +104,7 @@ public class EmoteManagerUpdatable
      *
      * @return The target Emote
      */
-    public Emote getEmote()
-    {
+    public Emote getEmote() {
         return emote;
     }
 
@@ -130,8 +122,7 @@ public class EmoteManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.client.managers.fields.EmoteField EmoteField} - Type: {@code String}
      */
-    public EmoteField<String> getNameField()
-    {
+    public EmoteField<String> getNameField() {
         return name;
     }
 
@@ -149,8 +140,7 @@ public class EmoteManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.client.managers.fields.EmoteField EmoteField} - Type: {@link Collection}
      */
-    public EmoteField<Collection<Role>> getRolesField()
-    {
+    public EmoteField<Collection<Role>> getRolesField() {
         return roles;
     }
 
@@ -159,8 +149,7 @@ public class EmoteManagerUpdatable
      * for this manager instance by calling {@link net.dv8tion.jda.core.managers.fields.Field#reset() Field.reset()} sequentially
      * <br>This is automatically called by {@link #update()}
      */
-    public void reset()
-    {
+    public void reset() {
         name.reset();
         roles.reset();
     }
@@ -176,27 +165,24 @@ public class EmoteManagerUpdatable
      * <p>Possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} for this
      * update include the following:
      * <ul>
-     *      <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_EMOJI UNKNOWN_EMOJI}
-     *      <br>If the target Emote was deleted before finishing the task</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_EMOJI UNKNOWN_EMOJI}
+     * <br>If the target Emote was deleted before finishing the task</li>
      *
-     *      <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *      <br>If the currently logged in account was removed from the Guild before finishing the task</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>If the currently logged in account was removed from the Guild before finishing the task</li>
      *
-     *      <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *      <br>If the currently logged in account loses the {@link net.dv8tion.jda.core.Permission#MANAGE_EMOTES MANAGE_EMOTES Permission}
-     *          before finishing the task</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>If the currently logged in account loses the {@link net.dv8tion.jda.core.Permission#MANAGE_EMOTES MANAGE_EMOTES Permission}
+     * before finishing the task</li>
      * </ul>
      *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If the currently logged in account does not have the Permission {@link net.dv8tion.jda.core.Permission#MANAGE_EMOTES MANAGE_EMOTES}
-     *         in the underlying {@link net.dv8tion.jda.core.entities.Guild Guild}.
-     *
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
-     *         <br>Applies all changes that have been made in a single api-call.
+     * <br>Applies all changes that have been made in a single api-call.
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If the currently logged in account does not have the Permission {@link net.dv8tion.jda.core.Permission#MANAGE_EMOTES MANAGE_EMOTES}
+     *                                                                         in the underlying {@link net.dv8tion.jda.core.entities.Guild Guild}.
      */
     @CheckReturnValue
-    public AuditableRestAction<Void> update()
-    {
+    public AuditableRestAction<Void> update() {
         checkPermission(Permission.MANAGE_EMOTES);
 
         if (!needsUpdate())
@@ -211,11 +197,9 @@ public class EmoteManagerUpdatable
 
         reset(); //reset because we built the JSONObject needed to update
         Route.CompiledRoute route = Route.Emotes.MODIFY_EMOTE.compile(getGuild().getId(), emote.getId());
-        return new AuditableRestAction<Void>(getJDA(), route, body)
-        {
+        return new AuditableRestAction<Void>(getJDA(), route, body) {
             @Override
-            protected void handleResponse(Response response, Request<Void> request)
-            {
+            protected void handleResponse(Response response, Request<Void> request) {
                 if (response.isOk())
                     request.onSuccess(null);
                 else
@@ -224,25 +208,20 @@ public class EmoteManagerUpdatable
         };
     }
 
-    protected boolean needsUpdate()
-    {
+    protected boolean needsUpdate() {
         return name.shouldUpdate()
-                || roles.shouldUpdate();
+            || roles.shouldUpdate();
     }
 
-    protected void checkPermission(Permission perm)
-    {
+    protected void checkPermission(Permission perm) {
         if (!getGuild().getSelfMember().hasPermission(perm))
             throw new InsufficientPermissionException(perm);
     }
 
-    protected void setupFields()
-    {
-        name = new EmoteField<String>(this, emote::getName)
-        {
+    protected void setupFields() {
+        name = new EmoteField<String>(this, emote::getName) {
             @Override
-            public void checkValue(String value)
-            {
+            public void checkValue(String value) {
                 Checks.notNull(value, "emote name");
                 if (value.length() < 2 || value.length() > 32)
                     throw new IllegalArgumentException("Emote name must be 2 to 32 characters in length");
@@ -253,11 +232,9 @@ public class EmoteManagerUpdatable
             }
         };
 
-        roles = new EmoteField<Collection<Role>>(this, emote::getRoles)
-        {
+        roles = new EmoteField<Collection<Role>>(this, emote::getRoles) {
             @Override
-            public void checkValue(Collection<Role> value)
-            {
+            public void checkValue(Collection<Role> value) {
                 Checks.notNull(value, "Role Collection");
                 value.forEach(r -> Checks.notNull(r, "Role in Collection"));
             }

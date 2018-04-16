@@ -29,10 +29,9 @@ import org.json.JSONObject;
  * The Presence associated with the provided JDA instance
  * <br><b>Note that this does not automatically handle the 5/60 second rate limit!</b>
  *
- * @since  3.0
+ * @since 3.0
  */
-public class PresenceImpl implements Presence
-{
+public class PresenceImpl implements Presence {
 
     private final JDAImpl api;
     private boolean idle = false;
@@ -42,11 +41,9 @@ public class PresenceImpl implements Presence
     /**
      * Creates a new Presence representation for the provided JDAImpl instance
      *
-     * @param jda
-     *        The not-null JDAImpl instance to use
+     * @param jda The not-null JDAImpl instance to use
      */
-    public PresenceImpl(JDAImpl jda)
-    {
+    public PresenceImpl(JDAImpl jda) {
         this.api = jda;
     }
 
@@ -55,26 +52,22 @@ public class PresenceImpl implements Presence
 
 
     @Override
-    public JDA getJDA()
-    {
+    public JDA getJDA() {
         return api;
     }
 
     @Override
-    public OnlineStatus getStatus()
-    {
+    public OnlineStatus getStatus() {
         return status;
     }
 
     @Override
-    public Game getGame()
-    {
+    public Game getGame() {
         return game;
     }
 
     @Override
-    public boolean isIdle()
-    {
+    public boolean isIdle() {
         return idle;
     }
 
@@ -83,30 +76,26 @@ public class PresenceImpl implements Presence
 
 
     @Override
-    public void setStatus(OnlineStatus status)
-    {
+    public void setStatus(OnlineStatus status) {
         setPresence(status, game, idle);
     }
 
     @Override
-    public void setGame(Game game)
-    {
+    public void setGame(Game game) {
         setPresence(status, game);
     }
 
     @Override
-    public void setIdle(boolean idle)
-    {
+    public void setIdle(boolean idle) {
         setPresence(status, idle);
     }
 
     @Override
-    public void setPresence(OnlineStatus status, Game game, boolean idle)
-    {
+    public void setPresence(OnlineStatus status, Game game, boolean idle) {
         JSONObject gameObj = getGameJson(game);
 
         Checks.check(status != OnlineStatus.UNKNOWN,
-                "Cannot set the presence status to an unknown OnlineStatus!");
+            "Cannot set the presence status to an unknown OnlineStatus!");
         if (status == OnlineStatus.OFFLINE || status == null)
             status = OnlineStatus.INVISIBLE;
 
@@ -126,20 +115,17 @@ public class PresenceImpl implements Presence
     }
 
     @Override
-    public void setPresence(OnlineStatus status, Game game)
-    {
+    public void setPresence(OnlineStatus status, Game game) {
         setPresence(status, game, idle);
     }
 
     @Override
-    public void setPresence(OnlineStatus status, boolean idle)
-    {
+    public void setPresence(OnlineStatus status, boolean idle) {
         setPresence(status, game, idle);
     }
 
     @Override
-    public void setPresence(Game game, boolean idle)
-    {
+    public void setPresence(Game game, boolean idle) {
         setPresence(status, game, idle);
     }
 
@@ -147,8 +133,7 @@ public class PresenceImpl implements Presence
     /* -- Impl Setters -- */
 
 
-    public PresenceImpl setCacheStatus(OnlineStatus status)
-    {
+    public PresenceImpl setCacheStatus(OnlineStatus status) {
         if (status == null)
             throw new NullPointerException("Null OnlineStatus is not allowed.");
         if (status == OnlineStatus.OFFLINE)
@@ -157,14 +142,12 @@ public class PresenceImpl implements Presence
         return this;
     }
 
-    public PresenceImpl setCacheGame(Game game)
-    {
+    public PresenceImpl setCacheGame(Game game) {
         this.game = game;
         return this;
     }
 
-    public PresenceImpl setCacheIdle(boolean idle)
-    {
+    public PresenceImpl setCacheIdle(boolean idle) {
         this.idle = idle;
         return this;
     }
@@ -173,18 +156,16 @@ public class PresenceImpl implements Presence
     /* -- Internal Methods -- */
 
 
-    public JSONObject getFullPresence()
-    {
+    public JSONObject getFullPresence() {
         JSONObject game = getGameJson(this.game);
         return new JSONObject()
-              .put("afk", idle)
-              .put("since", System.currentTimeMillis())
-              .put("game", game == null ? JSONObject.NULL : game)
-              .put("status", getStatus().getKey());
+            .put("afk", idle)
+            .put("since", System.currentTimeMillis())
+            .put("game", game == null ? JSONObject.NULL : game)
+            .put("status", getStatus().getKey());
     }
 
-    private JSONObject getGameJson(Game game)
-    {
+    private JSONObject getGameJson(Game game) {
         if (game == null || game.getName() == null || game.getType() == null)
             return null;
         JSONObject gameObj = new JSONObject();
@@ -200,8 +181,7 @@ public class PresenceImpl implements Presence
     /* -- Terminal -- */
 
 
-    protected void update(JSONObject data)
-    {
+    protected void update(JSONObject data) {
         api.getClient().send(new JSONObject()
             .put("d", data)
             .put("op", WebSocketCode.PRESENCE).toString());

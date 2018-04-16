@@ -28,8 +28,7 @@ import java.util.List;
  *
  * @since 3.4.0
  */
-public interface Category extends Channel, Comparable<Category>
-{
+public interface Category extends Channel, Comparable<Category> {
     /**
      * All {@link net.dv8tion.jda.core.entities.Channel Channels} listed
      * for this Category
@@ -66,25 +65,19 @@ public interface Category extends Channel, Comparable<Category>
      * <p>Possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} caused by
      * the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} include the following:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The channel could not be created due to a permission discrepancy</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The channel could not be created due to a permission discrepancy</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>We were removed from the Guild before finishing the task</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>We were removed from the Guild before finishing the task</li>
      * </ul>
      *
-     * @param  name
-     *         The name of the TextChannel to create
-     *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If the logged in account does not have the {@link net.dv8tion.jda.core.Permission#MANAGE_CHANNEL} permission
-     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException
-     *         If the guild is temporarily not {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
-     * @throws IllegalArgumentException
-     *         If the provided name is {@code null} or less than 2 characters or greater than 100 characters in length
-     *
+     * @param name The name of the TextChannel to create
      * @return A specific {@link net.dv8tion.jda.core.requests.restaction.ChannelAction ChannelAction}
-     *         <br>This action allows to set fields for the new TextChannel before creating it
+     * <br>This action allows to set fields for the new TextChannel before creating it
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If the logged in account does not have the {@link net.dv8tion.jda.core.Permission#MANAGE_CHANNEL} permission
+     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException       If the guild is temporarily not {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
+     * @throws IllegalArgumentException                                        If the provided name is {@code null} or less than 2 characters or greater than 100 characters in length
      */
     @CheckReturnValue
     ChannelAction createTextChannel(String name);
@@ -99,25 +92,19 @@ public interface Category extends Channel, Comparable<Category>
      * <p>Possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} caused by
      * the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} include the following:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The channel could not be created due to a permission discrepancy</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The channel could not be created due to a permission discrepancy</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>We were removed from the Guild before finishing the task</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>We were removed from the Guild before finishing the task</li>
      * </ul>
      *
-     * @param  name
-     *         The name of the VoiceChannel to create
-     *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If the logged in account does not have the {@link net.dv8tion.jda.core.Permission#MANAGE_CHANNEL} permission
-     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException
-     *         If the guild is temporarily not {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
-     * @throws IllegalArgumentException
-     *         If the provided name is {@code null} or less than 2 characters or greater than 100 characters in length
-     *
+     * @param name The name of the VoiceChannel to create
      * @return A specific {@link net.dv8tion.jda.core.requests.restaction.ChannelAction ChannelAction}
-     *         <br>This action allows to set fields for the new VoiceChannel before creating it
+     * <br>This action allows to set fields for the new VoiceChannel before creating it
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If the logged in account does not have the {@link net.dv8tion.jda.core.Permission#MANAGE_CHANNEL} permission
+     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException       If the guild is temporarily not {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
+     * @throws IllegalArgumentException                                        If the provided name is {@code null} or less than 2 characters or greater than 100 characters in length
      */
     @CheckReturnValue
     ChannelAction createVoiceChannel(String name);
@@ -135,15 +122,15 @@ public interface Category extends Channel, Comparable<Category>
      *
      * <p>Possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} include:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNNKOWN_CHANNEL}
-     *     <br>One of the channels has been deleted before the completion of the task.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNNKOWN_CHANNEL}
+     * <br>One of the channels has been deleted before the completion of the task.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The currently logged in account was removed from the Guild.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The currently logged in account was removed from the Guild.</li>
      * </ul>
      *
      * @return A {@link net.dv8tion.jda.core.requests.restaction.order.CategoryOrderAction CategoryOrderAction} for
-     *         ordering the Category's {@link net.dv8tion.jda.core.entities.TextChannel TextChannels}.
+     * ordering the Category's {@link net.dv8tion.jda.core.entities.TextChannel TextChannels}.
      */
     @CheckReturnValue
     CategoryOrderAction<TextChannel> modifyTextChannelPositions();
@@ -161,15 +148,15 @@ public interface Category extends Channel, Comparable<Category>
      *
      * <p>Possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} include:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNNKOWN_CHANNEL}
-     *     <br>One of the channels has been deleted before the completion of the task.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNNKOWN_CHANNEL}
+     * <br>One of the channels has been deleted before the completion of the task.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The currently logged in account was removed from the Guild.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The currently logged in account was removed from the Guild.</li>
      * </ul>
      *
      * @return A {@link net.dv8tion.jda.core.requests.restaction.order.CategoryOrderAction CategoryOrderAction} for
-     *         ordering the Category's {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannels}.
+     * ordering the Category's {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannels}.
      */
     @CheckReturnValue
     CategoryOrderAction<VoiceChannel> modifyVoiceChannelPositions();

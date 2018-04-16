@@ -31,8 +31,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class PermissionOverrideImpl implements PermissionOverride
-{
+public class PermissionOverrideImpl implements PermissionOverride {
     private final long id;
     private final Channel channel;
     private final IPermissionHolder permissionHolder;
@@ -45,97 +44,81 @@ public class PermissionOverrideImpl implements PermissionOverride
     private long allow;
     private long deny;
 
-    public PermissionOverrideImpl(Channel channel, long id, IPermissionHolder permissionHolder)
-    {
+    public PermissionOverrideImpl(Channel channel, long id, IPermissionHolder permissionHolder) {
         this.channel = channel;
         this.id = id;
         this.permissionHolder = permissionHolder;
     }
 
     @Override
-    public long getAllowedRaw()
-    {
+    public long getAllowedRaw() {
         return allow;
     }
 
     @Override
-    public long getInheritRaw()
-    {
+    public long getInheritRaw() {
         return ~(allow | deny);
     }
 
     @Override
-    public long getDeniedRaw()
-    {
+    public long getDeniedRaw() {
         return deny;
     }
 
     @Override
-    public List<Permission> getAllowed()
-    {
+    public List<Permission> getAllowed() {
         return Collections.unmodifiableList(Permission.getPermissions(allow));
     }
 
     @Override
-    public List<Permission> getInherit()
-    {
+    public List<Permission> getInherit() {
         return Collections.unmodifiableList(Permission.getPermissions(getInheritRaw()));
     }
 
     @Override
-    public List<Permission> getDenied()
-    {
+    public List<Permission> getDenied() {
         return Collections.unmodifiableList(Permission.getPermissions(deny));
     }
 
     @Override
-    public JDA getJDA()
-    {
+    public JDA getJDA() {
         return channel.getJDA();
     }
 
     @Override
-    public Member getMember()
-    {
+    public Member getMember() {
         return isMemberOverride() ? (Member) permissionHolder : null;
     }
 
     @Override
-    public Role getRole()
-    {
+    public Role getRole() {
         return isRoleOverride() ? (Role) permissionHolder : null;
     }
 
     @Override
-    public Channel getChannel()
-    {
+    public Channel getChannel() {
         return channel;
     }
 
     @Override
-    public Guild getGuild()
-    {
+    public Guild getGuild() {
         return channel.getGuild();
     }
 
     @Override
-    public boolean isMemberOverride()
-    {
+    public boolean isMemberOverride() {
         return permissionHolder instanceof Member;
     }
 
     @Override
-    public boolean isRoleOverride()
-    {
+    public boolean isRoleOverride() {
         return permissionHolder instanceof Role;
     }
 
     @Override
-    public PermOverrideManager getManager()
-    {
+    public PermOverrideManager getManager() {
         PermOverrideManager mng = manager;
-        if (mng == null)
-        {
+        if (mng == null) {
             mng = MiscUtil.locked(mngLock, () ->
             {
                 if (manager == null)
@@ -148,11 +131,9 @@ public class PermissionOverrideImpl implements PermissionOverride
 
     @Override
     @Deprecated
-    public net.dv8tion.jda.core.managers.PermOverrideManagerUpdatable getManagerUpdatable()
-    {
+    public net.dv8tion.jda.core.managers.PermOverrideManagerUpdatable getManagerUpdatable() {
         net.dv8tion.jda.core.managers.PermOverrideManagerUpdatable mng = managerUpdatable;
-        if (mng == null)
-        {
+        if (mng == null) {
             mng = MiscUtil.locked(mngLock, () ->
             {
                 if (managerUpdatable == null)
@@ -164,18 +145,15 @@ public class PermissionOverrideImpl implements PermissionOverride
     }
 
     @Override
-    public AuditableRestAction<Void> delete()
-    {
+    public AuditableRestAction<Void> delete() {
         if (!channel.getGuild().getSelfMember().hasPermission(channel, Permission.MANAGE_PERMISSIONS))
             throw new InsufficientPermissionException(Permission.MANAGE_PERMISSIONS);
 
         String targetId = isRoleOverride() ? getRole().getId() : getMember().getUser().getId();
         Route.CompiledRoute route = Route.Channels.DELETE_PERM_OVERRIDE.compile(channel.getId(), targetId);
-        return new AuditableRestAction<Void>(getJDA(), route)
-        {
+        return new AuditableRestAction<Void>(getJDA(), route) {
             @Override
-            protected void handleResponse(Response response, Request<Void> request)
-            {
+            protected void handleResponse(Response response, Request<Void> request) {
                 if (response.isOk())
                     request.onSuccess(null);
                 else
@@ -184,37 +162,32 @@ public class PermissionOverrideImpl implements PermissionOverride
         };
     }
 
-    public PermissionOverrideImpl setAllow(long allow)
-    {
+    public PermissionOverrideImpl setAllow(long allow) {
         this.allow = allow;
         return this;
     }
 
-    public PermissionOverrideImpl setDeny(long deny)
-    {
+    public PermissionOverrideImpl setDeny(long deny) {
         this.deny = deny;
         return this;
     }
 
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         if (!(o instanceof PermissionOverrideImpl))
             return false;
         PermissionOverrideImpl oPerm = (PermissionOverrideImpl) o;
         return this == oPerm
-                || ((this.permissionHolder.equals(oPerm.permissionHolder)) && this.channel.equals(oPerm.channel));
+            || ((this.permissionHolder.equals(oPerm.permissionHolder)) && this.channel.equals(oPerm.channel));
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return toString().hashCode();
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "PermOver:(" + (isMemberOverride() ? "M" : "R") + ")(" + channel.getId() + " | " + id + ")";
     }
 

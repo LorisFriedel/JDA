@@ -30,17 +30,14 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
-public class TypingStartHandler extends SocketHandler
-{
+public class TypingStartHandler extends SocketHandler {
 
-    public TypingStartHandler(JDAImpl api)
-    {
+    public TypingStartHandler(JDAImpl api) {
         super(api);
     }
 
     @Override
-    protected Long handleInternally(JSONObject content)
-    {
+    protected Long handleInternally(JSONObject content) {
         final long channelId = content.getLong("channel_id");
         MessageChannel channel = api.getTextChannelMap().get(channelId);
         if (channel == null)
@@ -51,11 +48,10 @@ public class TypingStartHandler extends SocketHandler
             channel = api.asClient().getGroupById(channelId);
         if (channel == null)
             return null;    //We don't have the channel cached yet. We chose not to cache this event
-                            // because that happen very often and could easily fill up the EventCache if
-                            // we, for some reason, never get the channel. Especially in an active channel.
+        // because that happen very often and could easily fill up the EventCache if
+        // we, for some reason, never get the channel. Especially in an active channel.
 
-        if (channel instanceof TextChannel)
-        {
+        if (channel instanceof TextChannel) {
             final long guildId = ((TextChannel) channel).getGuild().getIdLong();
             if (api.getGuildLock().isLocked(guildId))
                 return guildId;
@@ -72,13 +68,13 @@ public class TypingStartHandler extends SocketHandler
 
         if (user == null)
             return null;    //Just like in the comment above, if for some reason we don't have the user for some reason
-                            // then we will just throw the event away.
+        // then we will just throw the event away.
 
         OffsetDateTime timestamp = Instant.ofEpochSecond(content.getInt("timestamp")).atOffset(ZoneOffset.UTC);
         api.getEventManager().handle(
-                new UserTypingEvent(
-                        api, responseNumber,
-                        user, channel, timestamp));
+            new UserTypingEvent(
+                api, responseNumber,
+                user, channel, timestamp));
         return null;
     }
 }

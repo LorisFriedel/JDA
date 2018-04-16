@@ -27,12 +27,10 @@ import java.util.List;
  *
  * <p>Can be used to retrieve affected member and guild. Provides a list of added roles.
  */
-public class GuildMemberRoleAddEvent extends GenericGuildMemberEvent
-{
+public class GuildMemberRoleAddEvent extends GenericGuildMemberEvent {
     private final List<Role> addedRoles;
 
-    public GuildMemberRoleAddEvent(JDA api, long responseNumber, Member member, List<Role> addedRoles)
-    {
+    public GuildMemberRoleAddEvent(JDA api, long responseNumber, Member member, List<Role> addedRoles) {
         super(api, responseNumber, member);
         this.addedRoles = Collections.unmodifiableList(addedRoles);
     }
@@ -42,8 +40,7 @@ public class GuildMemberRoleAddEvent extends GenericGuildMemberEvent
      *
      * @return The list of roles that were added
      */
-    public List<Role> getRoles()
-    {
+    public List<Role> getRoles() {
         return addedRoles;
     }
 }

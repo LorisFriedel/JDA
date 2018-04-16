@@ -22,30 +22,23 @@ import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.core.events.guild.UnavailableGuildJoinedEvent;
 import org.json.JSONObject;
 
-public class GuildCreateHandler extends SocketHandler
-{
+public class GuildCreateHandler extends SocketHandler {
 
-    public GuildCreateHandler(JDAImpl api)
-    {
+    public GuildCreateHandler(JDAImpl api) {
         super(api);
     }
 
     @Override
-    protected Long handleInternally(JSONObject content)
-    {
+    protected Long handleInternally(JSONObject content) {
         final long id = content.getLong("id");
         Guild g = api.getGuildById(id);
         Boolean wasAvail = (g == null || g.getName() == null) ? null : g.isAvailable();
         api.getEntityBuilder().createGuildFirstPass(content, guild ->
         {
-            if (guild.isAvailable())
-            {
-                if (!api.getClient().isReady())
-                {
+            if (guild.isAvailable()) {
+                if (!api.getClient().isReady()) {
                     getReadyHandler().guildSetupComplete(guild);
-                }
-                else
-                {
+                } else {
                     if (wasAvail == null) //didn't exist
                     {
                         api.getEventManager().handle(
@@ -53,28 +46,20 @@ public class GuildCreateHandler extends SocketHandler
                                 api, responseNumber,
                                 guild));
                         api.getEventCache().playbackCache(EventCache.Type.GUILD, guild.getIdLong());
-                    }
-                    else if (!wasAvail) //was previously unavailable
+                    } else if (!wasAvail) //was previously unavailable
                     {
                         api.getEventManager().handle(
                             new GuildAvailableEvent(
                                 api, responseNumber,
                                 guild));
-                    }
-                    else
-                    {
+                    } else {
                         throw new IllegalStateException("Got a GuildCreateEvent for a guild that already existed! ID: " + id);
                     }
                 }
-            }
-            else
-            {
-                if (!api.getClient().isReady())
-                {
+            } else {
+                if (!api.getClient().isReady()) {
                     getReadyHandler().acknowledgeGuild(guild, false, false, false);
-                }
-                else
-                {
+                } else {
                     //Proper GuildJoinedEvent is fired when guild was populated
                     api.getEventManager().handle(
                         new UnavailableGuildJoinedEvent(
@@ -86,8 +71,7 @@ public class GuildCreateHandler extends SocketHandler
         return null;
     }
 
-    private ReadyHandler getReadyHandler()
-    {
+    private ReadyHandler getReadyHandler() {
         return api.getClient().getHandler("READY");
     }
 }

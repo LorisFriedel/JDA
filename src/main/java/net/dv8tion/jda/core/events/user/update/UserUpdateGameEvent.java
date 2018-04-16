@@ -29,12 +29,10 @@ import net.dv8tion.jda.core.entities.User;
  *
  * <p>Identifier: {@code game}
  */
-public class UserUpdateGameEvent extends GenericUserPresenceEvent<Game>
-{
+public class UserUpdateGameEvent extends GenericUserPresenceEvent<Game> {
     public static final String IDENTIFIER = "game";
 
-    public UserUpdateGameEvent(JDA api, long responseNumber, User user, Guild guild, Game previousGame)
-    {
+    public UserUpdateGameEvent(JDA api, long responseNumber, User user, Guild guild, Game previousGame) {
         super(api, responseNumber, user, guild, previousGame,
             guild == null ? api.asClient().getFriend(user).getGame() : guild.getMember(user).getGame(), IDENTIFIER);
     }
@@ -44,8 +42,7 @@ public class UserUpdateGameEvent extends GenericUserPresenceEvent<Game>
      *
      * @return The previous {@link net.dv8tion.jda.core.entities.Game Game}
      */
-    public Game getOldGame()
-    {
+    public Game getOldGame() {
         return getOldValue();
     }
 
@@ -54,8 +51,7 @@ public class UserUpdateGameEvent extends GenericUserPresenceEvent<Game>
      *
      * @return The new {@link net.dv8tion.jda.core.entities.Game Game}
      */
-    public Game getNewGame()
-    {
+    public Game getNewGame() {
         return getNewValue();
     }
 }

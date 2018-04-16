@@ -26,16 +26,12 @@ import java.util.function.Supplier;
  * <p><b>This class is abstract and requires an implementation
  * for {@link #checkValue(Object)}</b>
  *
- * @param  <T>
- *         The Field-Type for this GuildField
- *
- * @since  3.0
+ * @param <T> The Field-Type for this GuildField
+ * @since 3.0
  */
 @Deprecated
-public abstract class GuildField<T> extends Field<T, net.dv8tion.jda.core.managers.GuildManagerUpdatable>
-{
-    public GuildField(net.dv8tion.jda.core.managers.GuildManagerUpdatable manager, Supplier<T> originalValue)
-    {
+public abstract class GuildField<T> extends Field<T, net.dv8tion.jda.core.managers.GuildManagerUpdatable> {
+    public GuildField(net.dv8tion.jda.core.managers.GuildManagerUpdatable manager, Supplier<T> originalValue) {
         super(manager, originalValue);
     }
 }

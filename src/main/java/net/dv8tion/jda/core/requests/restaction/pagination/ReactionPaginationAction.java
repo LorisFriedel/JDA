@@ -50,27 +50,23 @@ import java.util.List;
  * ));
  * </code></pre>
  *
- * @since  3.1
+ * @since 3.1
  */
-public class ReactionPaginationAction extends PaginationAction<User, ReactionPaginationAction>
-{
+public class ReactionPaginationAction extends PaginationAction<User, ReactionPaginationAction> {
 
     protected final MessageReaction reaction;
 
     /**
      * Creates a new PaginationAction instance
      *
-     * @param reaction
-     *        The target {@link net.dv8tion.jda.core.entities.MessageReaction MessageReaction}
+     * @param reaction The target {@link net.dv8tion.jda.core.entities.MessageReaction MessageReaction}
      */
-    public ReactionPaginationAction(MessageReaction reaction)
-    {
+    public ReactionPaginationAction(MessageReaction reaction) {
         super(reaction.getJDA(), Route.Messages.GET_REACTION_USERS.compile(reaction.getChannel().getId(), reaction.getMessageId(), getCode(reaction)), 1, 100, 100);
         this.reaction = reaction;
     }
 
-    protected static String getCode(MessageReaction reaction)
-    {
+    protected static String getCode(MessageReaction reaction) {
         MessageReaction.ReactionEmote emote = reaction.getReactionEmote();
 
         return emote.isEmote()
@@ -83,14 +79,12 @@ public class ReactionPaginationAction extends PaginationAction<User, ReactionPag
      *
      * @return The current MessageReaction
      */
-    public MessageReaction getReaction()
-    {
+    public MessageReaction getReaction() {
         return reaction;
     }
 
     @Override
-    protected Route.CompiledRoute finalizeRoute()
-    {
+    protected Route.CompiledRoute finalizeRoute() {
         Route.CompiledRoute route = super.finalizeRoute();
 
         String after = null;
@@ -108,29 +102,24 @@ public class ReactionPaginationAction extends PaginationAction<User, ReactionPag
     }
 
     @Override
-    protected void handleResponse(Response response, Request<List<User>> request)
-    {
-        if (!response.isOk())
-        {
+    protected void handleResponse(Response response, Request<List<User>> request) {
+        if (!response.isOk()) {
             request.onFailure(response);
             return;
         }
 
-        final EntityBuilder builder = api.getEntityBuilder();;
+        final EntityBuilder builder = api.getEntityBuilder();
+        ;
         final JSONArray array = response.getArray();
         final List<User> users = new LinkedList<>();
-        for (int i = 0; i < array.length(); i++)
-        {
-            try
-            {
+        for (int i = 0; i < array.length(); i++) {
+            try {
                 final User user = builder.createFakeUser(array.getJSONObject(i), false);
                 users.add(user);
                 if (useCache)
                     cached.add(user);
                 last = user;
-            }
-            catch (JSONException | NullPointerException e)
-            {
+            } catch (JSONException | NullPointerException e) {
                 LOG.warn("Encountered exception in ReactionPagination", e);
             }
         }

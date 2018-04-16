@@ -22,8 +22,7 @@ package net.dv8tion.jda.core.audit;
  *
  * <p>The expected types are not guaranteed to be accurate!
  */
-public enum AuditLogOption
-{
+public enum AuditLogOption {
     /**
      * Possible detail for {@link net.dv8tion.jda.core.audit.ActionType#MESSAGE_DELETE ActionType.MESSAGE_DELETE}
      * describing the amount of deleted messages.
@@ -97,8 +96,7 @@ public enum AuditLogOption
 
     private final String key;
 
-    AuditLogOption(String key)
-    {
+    AuditLogOption(String key) {
         this.key = key;
     }
 
@@ -107,14 +105,12 @@ public enum AuditLogOption
      *
      * @return Key for this option
      */
-    public String getKey()
-    {
+    public String getKey() {
         return key;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return name() + '(' + key + ')';
     }
 }

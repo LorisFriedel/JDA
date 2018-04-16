@@ -20,13 +20,11 @@ import net.dv8tion.jda.core.entities.TextChannel;
 
 /**
  * Indicates that a Guild Message was deleted.
- * 
+ *
  * <p>Can be used retrieve affected TextChannel and the id of the deleted Message.
  */
-public class GuildMessageDeleteEvent extends GenericGuildMessageEvent
-{
-    public GuildMessageDeleteEvent(JDA api, long responseNumber, long messageId, TextChannel channel)
-    {
+public class GuildMessageDeleteEvent extends GenericGuildMessageEvent {
+    public GuildMessageDeleteEvent(JDA api, long responseNumber, long messageId, TextChannel channel) {
         super(api, responseNumber, messageId, channel);
     }
 }

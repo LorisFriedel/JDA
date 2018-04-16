@@ -23,14 +23,11 @@ import net.dv8tion.jda.core.utils.MiscUtil;
  * {@link net.dv8tion.jda.core.utils.cache.CacheView CacheView} implementation
  * specifically to view {@link net.dv8tion.jda.core.entities.ISnowflake ISnowflake} implementations.
  */
-public interface SnowflakeCacheView<T extends ISnowflake> extends CacheView<T>
-{
+public interface SnowflakeCacheView<T extends ISnowflake> extends CacheView<T> {
     /**
      * Retrieves the entity represented by the provided ID.
      *
-     * @param  id
-     *         The ID of the entity
-     *
+     * @param id The ID of the entity
      * @return Possibly-null entity for the specified ID
      */
     T getElementById(long id);
@@ -38,17 +35,12 @@ public interface SnowflakeCacheView<T extends ISnowflake> extends CacheView<T>
     /**
      * Retrieves the entity represented by the provided ID.
      *
-     * @param  id
-     *         The ID of the entity
-     *
-     * @throws java.lang.NumberFormatException
-     *         If the provided String is {@code null} or
-     *         cannot be resolved to an unsigned long id
-     *
+     * @param id The ID of the entity
      * @return Possibly-null entity for the specified ID
+     * @throws java.lang.NumberFormatException If the provided String is {@code null} or
+     *                                         cannot be resolved to an unsigned long id
      */
-    default T getElementById(String id)
-    {
+    default T getElementById(String id) {
         return getElementById(MiscUtil.parseSnowflake(id));
     }
 }

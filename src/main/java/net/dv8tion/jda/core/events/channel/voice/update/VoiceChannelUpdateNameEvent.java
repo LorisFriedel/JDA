@@ -25,15 +25,13 @@ import net.dv8tion.jda.core.entities.VoiceChannel;
  *
  * <p>Identifier: {@code name}
  */
-public class VoiceChannelUpdateNameEvent extends GenericVoiceChannelUpdateEvent<String>
-{
+public class VoiceChannelUpdateNameEvent extends GenericVoiceChannelUpdateEvent<String> {
     public static final String IDENTIFIER = "name";
 
     private final String oldName;
     private final String newName;
 
-    public VoiceChannelUpdateNameEvent(JDA api, long responseNumber, VoiceChannel channel, String oldName)
-    {
+    public VoiceChannelUpdateNameEvent(JDA api, long responseNumber, VoiceChannel channel, String oldName) {
         super(api, responseNumber, channel);
         this.oldName = oldName;
         this.newName = channel.getName();
@@ -44,8 +42,7 @@ public class VoiceChannelUpdateNameEvent extends GenericVoiceChannelUpdateEvent<
      *
      * @return The old name
      */
-    public String getOldName()
-    {
+    public String getOldName() {
         return oldName;
     }
 
@@ -54,26 +51,22 @@ public class VoiceChannelUpdateNameEvent extends GenericVoiceChannelUpdateEvent<
      *
      * @return The new name
      */
-    public String getNewName()
-    {
+    public String getNewName() {
         return newName;
     }
 
     @Override
-    public String getPropertyIdentifier()
-    {
+    public String getPropertyIdentifier() {
         return IDENTIFIER;
     }
 
     @Override
-    public String getOldValue()
-    {
+    public String getOldValue() {
         return oldName;
     }
 
     @Override
-    public String getNewValue()
-    {
+    public String getNewValue() {
         return newName;
     }
 }

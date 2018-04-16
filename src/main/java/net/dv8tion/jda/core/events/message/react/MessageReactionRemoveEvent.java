@@ -22,13 +22,11 @@ import net.dv8tion.jda.core.entities.User;
 
 /**
  * Indicates that a user removed the reaction on a message
- * 
+ *
  * <p>Can be used to detect when a reaction is removed from a message
  */
-public class MessageReactionRemoveEvent extends GenericMessageReactionEvent
-{
-    public MessageReactionRemoveEvent(JDA api, long responseNumber, User user, MessageReaction reaction)
-    {
+public class MessageReactionRemoveEvent extends GenericMessageReactionEvent {
+    public MessageReactionRemoveEvent(JDA api, long responseNumber, User user, MessageReaction reaction) {
         super(api, responseNumber, user, reaction);
     }
 }

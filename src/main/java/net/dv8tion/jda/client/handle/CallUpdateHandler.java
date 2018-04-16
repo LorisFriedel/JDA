@@ -33,16 +33,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class CallUpdateHandler extends SocketHandler
-{
-    public CallUpdateHandler(JDAImpl api)
-    {
+public class CallUpdateHandler extends SocketHandler {
+    public CallUpdateHandler(JDAImpl api) {
         super(api);
     }
 
     @Override
-    protected Long handleInternally(JSONObject content)
-    {
+    protected Long handleInternally(JSONObject content) {
         final long channelId = content.getLong("channel_id");
         JSONArray ringing = content.getJSONArray("ringing");
         Region region = Region.fromKey(content.getString("region"));
@@ -50,75 +47,64 @@ public class CallUpdateHandler extends SocketHandler
         CallableChannel channel = api.asClient().getGroupById(channelId);
         if (channel == null)
             channel = api.getPrivateChannelMap().get(channelId);
-        if (channel == null)
-        {
+        if (channel == null) {
             api.getEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
             EventCache.LOG.debug("Received a CALL_UPDATE for a Group/PrivateChannel that has not yet been cached. JSON: {}", content);
             return null;
         }
 
         CallImpl call = (CallImpl) channel.getCurrentCall();
-        if (call == null)
-        {
+        if (call == null) {
             api.getEventCache().cache(EventCache.Type.CALL, channelId, () -> handle(responseNumber, allContent));
             EventCache.LOG.debug("Received a CALL_UPDATE for a Call that has not yet been cached. JSON: {}", content);
             return null;
         }
 
-        if (!Objects.equals(region, call.getRegion()))
-        {
+        if (!Objects.equals(region, call.getRegion())) {
             Region oldRegion = call.getRegion();
             call.setRegion(region);
             api.getEventManager().handle(
-                    new CallUpdateRegionEvent(
-                            api, responseNumber,
-                            call, oldRegion));
+                new CallUpdateRegionEvent(
+                    api, responseNumber,
+                    call, oldRegion));
         }
 
         //Deal with CallUser ringing status changes
-        if (ringing.length() > 0)
-        {
+        if (ringing.length() > 0) {
             List<Long> givenRingingIds = toLongList(ringing);
             List<CallUser> stoppedRingingUsers = new ArrayList<>();
             List<CallUser> startedRingingUsers = new ArrayList<>();
 
-            for (CallUser cUser : call.getRingingUsers())
-            {
+            for (CallUser cUser : call.getRingingUsers()) {
                 final long userId = cUser.getUser().getIdLong();
 
                 //If the ringing user is no longer ringing, change the ringing status
-                if (!givenRingingIds.contains(userId))
-                {
+                if (!givenRingingIds.contains(userId)) {
                     ((CallUserImpl) cUser).setRinging(false);
                     stoppedRingingUsers.add(cUser);
-                }
-                else
-                {
+                } else {
                     givenRingingIds.remove(userId);
                 }
             }
 
             //Any Ids that are users that have started ringing, so we need to set their ringing status as such
-            for (long userId : givenRingingIds)
-            {
+            for (long userId : givenRingingIds) {
                 CallUserImpl cUser = (CallUserImpl) call.getCallUserMap().get(userId);
                 cUser.setRinging(true);
                 startedRingingUsers.add(cUser);
             }
 
-            if (stoppedRingingUsers.size() > 0 || startedRingingUsers.size() > 0)
-            {
+            if (stoppedRingingUsers.size() > 0 || startedRingingUsers.size() > 0) {
                 api.getEventManager().handle(
-                        new CallUpdateRingingUsersEvent(
-                                api, responseNumber,
-                                call, stoppedRingingUsers, startedRingingUsers));
+                    new CallUpdateRingingUsersEvent(
+                        api, responseNumber,
+                        call, stoppedRingingUsers, startedRingingUsers));
             }
         }
         return null;
     }
 
-    private List<Long> toLongList(JSONArray array)
-    {
+    private List<Long> toLongList(JSONArray array) {
         List<Long> longs = new ArrayList<>();
         for (int i = 0; i < array.length(); i++)
             longs.add(array.getLong(i));

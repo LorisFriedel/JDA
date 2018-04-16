@@ -24,10 +24,8 @@ import net.dv8tion.jda.core.JDA;
  * <p>Can be used to mark the continuation of event flow which was stopped by the {@link net.dv8tion.jda.core.events.DisconnectEvent DisconnectEvent}.
  * User should replace any cached Objects (like User/Guild objects).
  */
-public class ReconnectedEvent extends Event
-{
-    public ReconnectedEvent(JDA api, long responseNumber)
-    {
+public class ReconnectedEvent extends Event {
+    public ReconnectedEvent(JDA api, long responseNumber) {
         super(api, responseNumber);
     }
 }

@@ -20,8 +20,7 @@ package net.dv8tion.jda.core;
  * <br>This is used by {@link net.dv8tion.jda.core.entities.Guild Guild} to where the server that hosts the
  * {@link net.dv8tion.jda.core.entities.Guild Guild} is located.
  */
-public enum Region
-{
+public enum Region {
     JAPAN("japan", "Japan", false),
     AMSTERDAM("amsterdam", "Amsterdam", false),
     BRAZIL("brazil", "Brazil", false),
@@ -58,8 +57,7 @@ public enum Region
     private final String name;
     private final boolean vip;
 
-    Region(String key, String name, boolean vip)
-    {
+    Region(String key, String name, boolean vip) {
         this.key = key;
         this.name = name;
         this.vip = vip;
@@ -70,8 +68,7 @@ public enum Region
      *
      * @return The name of this region
      */
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
@@ -80,8 +77,7 @@ public enum Region
      *
      * @return The key (internal name) of this region
      */
-    public String getKey()
-    {
+    public String getKey() {
         return key;
     }
 
@@ -92,26 +88,20 @@ public enum Region
      *
      * @return True if this region is a VIP audio region.
      */
-    public boolean isVip()
-    {
+    public boolean isVip() {
         return vip;
     }
 
     /**
      * Retrieves the {@link net.dv8tion.jda.core.Region Region} based on the provided key.
      *
-     * @param  key
-     *         The key relating to the {@link net.dv8tion.jda.core.Region Region} we wish to retrieve.
-     *
+     * @param key The key relating to the {@link net.dv8tion.jda.core.Region Region} we wish to retrieve.
      * @return The {@link net.dv8tion.jda.core.Region Region} matching the key. If there is no match,
-     *         returns {@link net.dv8tion.jda.core.Region#UNKNOWN UNKNOWN}.
+     * returns {@link net.dv8tion.jda.core.Region#UNKNOWN UNKNOWN}.
      */
-    public static Region fromKey(String key)
-    {
-        for (Region region : values())
-        {
-            if (region.getKey().equals(key))
-            {
+    public static Region fromKey(String key) {
+        for (Region region : values()) {
+            if (region.getKey().equals(key)) {
                 return region;
             }
         }
@@ -119,8 +109,7 @@ public enum Region
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return getName();
     }
 }

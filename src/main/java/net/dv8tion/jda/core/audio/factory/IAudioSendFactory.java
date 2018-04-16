@@ -24,16 +24,13 @@ package net.dv8tion.jda.core.audio.factory;
  * Implementations of this interface are provided to
  * {@link net.dv8tion.jda.core.JDABuilder#setAudioSendFactory(IAudioSendFactory) JDABuilder.setAudioSendFactory(IAudioSendFactory)}.
  */
-public interface IAudioSendFactory
-{
+public interface IAudioSendFactory {
     /**
      * Called by JDA's audio system when a new {@link net.dv8tion.jda.core.audio.factory.IAudioSendSystem IAudioSendSystem}
      * instance is needed to handle the sending of UDP audio packets to discord.
      *
-     * @param  packetProvider
-     *         The connection provided to the new {@link net.dv8tion.jda.core.audio.factory.IAudioSendSystem IAudioSendSystem}
-     *         object for proper setup and usage.
-     *
+     * @param packetProvider The connection provided to the new {@link net.dv8tion.jda.core.audio.factory.IAudioSendSystem IAudioSendSystem}
+     *                       object for proper setup and usage.
      * @return The newly constructed IAudioSendSystem, ready for {@link IAudioSendSystem#start()} to be called.
      */
     IAudioSendSystem createSendSystem(IPacketProvider packetProvider);

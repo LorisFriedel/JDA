@@ -35,20 +35,16 @@ import java.util.function.BooleanSupplier;
  * <br>This action contains a List or entities for the specified type {@code T} which
  * can be moved within the bounds but not removed, nor can any new entities be added.
  *
- * @param <T>
- *        The entity type for the {@link java.util.List List} of entities
- *        contained in the OrderAction's orderList
- * @param <M>
- *        The extension implementing the abstract operations of this OrderAction,
- *        this will be important for chaining convenience as it returns the specific
- *        implementation rather than a mask of this class. It allows us to implement
- *        chaining operations in this class instead of having to implement it in every
- *        inheriting class!
- *
+ * @param <T> The entity type for the {@link java.util.List List} of entities
+ *            contained in the OrderAction's orderList
+ * @param <M> The extension implementing the abstract operations of this OrderAction,
+ *            this will be important for chaining convenience as it returns the specific
+ *            implementation rather than a mask of this class. It allows us to implement
+ *            chaining operations in this class instead of having to implement it in every
+ *            inheriting class!
  * @since 3.0
  */
-public abstract class OrderAction<T, M extends OrderAction<T, M>> extends RestAction<Void>
-{
+public abstract class OrderAction<T, M extends OrderAction<T, M>> extends RestAction<Void> {
     protected final List<T> orderList;
     protected final boolean ascendingOrder;
     protected int selectedPosition = -1;
@@ -56,32 +52,25 @@ public abstract class OrderAction<T, M extends OrderAction<T, M>> extends RestAc
     /**
      * Creates a new OrderAction instance
      *
-     * @param api
-     *        JDA instance which is associated with the entities contained
-     *        in the order list
-     * @param route
-     *        The {@link net.dv8tion.jda.core.requests.Route.CompiledRoute CompiledRoute}
-     *        which is provided to the {@link RestAction#RestAction(JDA, Route.CompiledRoute, okhttp3.RequestBody) RestAction Constructor}
+     * @param api   JDA instance which is associated with the entities contained
+     *              in the order list
+     * @param route The {@link net.dv8tion.jda.core.requests.Route.CompiledRoute CompiledRoute}
+     *              which is provided to the {@link RestAction#RestAction(JDA, Route.CompiledRoute, okhttp3.RequestBody) RestAction Constructor}
      */
-    public OrderAction(JDA api, Route.CompiledRoute route)
-    {
+    public OrderAction(JDA api, Route.CompiledRoute route) {
         this(api, true, route);
     }
 
     /**
      * Creates a new OrderAction instance
      *
-     * @param api
-     *        JDA instance which is associated with the entities contained
-     *        in the order list
-     * @param ascendingOrder
-     *        Whether or not the order of items should be ascending
-     * @param route
-     *        The {@link net.dv8tion.jda.core.requests.Route.CompiledRoute CompiledRoute}
-     *        which is provided to the {@link RestAction#RestAction(JDA, Route.CompiledRoute, okhttp3.RequestBody) RestAction Constructor}
+     * @param api            JDA instance which is associated with the entities contained
+     *                       in the order list
+     * @param ascendingOrder Whether or not the order of items should be ascending
+     * @param route          The {@link net.dv8tion.jda.core.requests.Route.CompiledRoute CompiledRoute}
+     *                       which is provided to the {@link RestAction#RestAction(JDA, Route.CompiledRoute, okhttp3.RequestBody) RestAction Constructor}
      */
-    public OrderAction(JDA api, boolean ascendingOrder, Route.CompiledRoute route)
-    {
+    public OrderAction(JDA api, boolean ascendingOrder, Route.CompiledRoute route) {
         super(api, route);
         this.orderList = new ArrayList<>();
         this.ascendingOrder = ascendingOrder;
@@ -89,8 +78,7 @@ public abstract class OrderAction<T, M extends OrderAction<T, M>> extends RestAc
 
     @Override
     @SuppressWarnings("unchecked")
-    public M setCheck(BooleanSupplier checks)
-    {
+    public M setCheck(BooleanSupplier checks) {
         return (M) super.setCheck(checks);
     }
 
@@ -100,8 +88,7 @@ public abstract class OrderAction<T, M extends OrderAction<T, M>> extends RestAc
      *
      * @return Immutable List representing the current order
      */
-    public List<T> getCurrentOrder()
-    {
+    public List<T> getCurrentOrder() {
         return Collections.unmodifiableList(orderList);
     }
 
@@ -109,21 +96,15 @@ public abstract class OrderAction<T, M extends OrderAction<T, M>> extends RestAc
      * Selects a new current entity at the specified index
      * <br>This index is in correlation to the {@link #getCurrentOrder() current order}
      *
-     * @param  selectedPosition
-     *         The index for the new position that will be in focus for all modification
-     *         operations
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided position is out-of-bounds
-     *
+     * @param selectedPosition The index for the new position that will be in focus for all modification
+     *                         operations
      * @return The current OrderAction sub-implementation instance
-     *
-     * @see    #getSelectedPosition()
-     * @see    #getSelectedEntity()
+     * @throws java.lang.IllegalArgumentException If the provided position is out-of-bounds
+     * @see #getSelectedPosition()
+     * @see #getSelectedEntity()
      */
     @SuppressWarnings("unchecked")
-    public M selectPosition(int selectedPosition)
-    {
+    public M selectPosition(int selectedPosition) {
         Checks.notNegative(selectedPosition, "Provided selectedPosition");
         Checks.check(selectedPosition < orderList.size(), "Provided selectedPosition is too big and is out of bounds. selectedPosition: " + selectedPosition);
 
@@ -137,18 +118,14 @@ public abstract class OrderAction<T, M extends OrderAction<T, M>> extends RestAc
      * the specified entity in the {@link #getCurrentOrder() current order}
      * <br>This is a convenience function that uses {@link #selectPosition(int)} internally
      *
-     * @param  selectedEntity
-     *         The entity for the new position that will be in focus for all modification
-     *         operations
-     *
+     * @param selectedEntity The entity for the new position that will be in focus for all modification
+     *                       operations
      * @return The current OrderAction sub-implementation instance
-     *
-     * @see    #selectPosition(int)
-     * @see    #getSelectedPosition()
-     * @see    #getSelectedEntity()
+     * @see #selectPosition(int)
+     * @see #getSelectedPosition()
+     * @see #getSelectedEntity()
      */
-    public M selectPosition(T selectedEntity)
-    {
+    public M selectPosition(T selectedEntity) {
         Checks.notNull(selectedEntity, "Channel");
         validateInput(selectedEntity);
 
@@ -161,21 +138,17 @@ public abstract class OrderAction<T, M extends OrderAction<T, M>> extends RestAc
      *
      * @return The currently selected index, or -1 if no position has been selected yet
      */
-    public int getSelectedPosition()
-    {
+    public int getSelectedPosition() {
         return selectedPosition;
     }
 
     /**
      * The entity which is currently at the {@link #getSelectedPosition() selected position}
      *
-     * @throws java.lang.IllegalStateException
-     *         If no entity has been selected yet
-     *
      * @return The currently selected entity
+     * @throws java.lang.IllegalStateException If no entity has been selected yet
      */
-    public T getSelectedEntity()
-    {
+    public T getSelectedEntity() {
         if (selectedPosition == -1)
             throw new IllegalStateException("No position has been selected yet");
 
@@ -186,34 +159,24 @@ public abstract class OrderAction<T, M extends OrderAction<T, M>> extends RestAc
      * Moves the currently selected entity {@code amount} positions <b>UP</b>
      * in order by pushing all entities down by one position.
      *
-     * @param  amount
-     *         The amount of positions that should be moved
-     *
-     * @throws java.lang.IllegalStateException
-     *         If no entity has been selected yet
-     * @throws java.lang.IllegalArgumentException
-     *         If the specified amount would cause the entity to go out-of-bounds
-     *
+     * @param amount The amount of positions that should be moved
      * @return The current OrderAction sub-implementation instance
-     *
-     * @see    #moveTo(int)
+     * @throws java.lang.IllegalStateException    If no entity has been selected yet
+     * @throws java.lang.IllegalArgumentException If the specified amount would cause the entity to go out-of-bounds
+     * @see #moveTo(int)
      */
-    public M moveUp(int amount)
-    {
+    public M moveUp(int amount) {
         Checks.notNegative(amount, "Provided amount");
         if (selectedPosition == -1)
             throw new IllegalStateException("Cannot move until an item has been selected. Use #selectPosition first.");
-        if (ascendingOrder)
-        {
+        if (ascendingOrder) {
             Checks.check(selectedPosition - amount >= 0,
-                    "Amount provided to move up is too large and would be out of bounds." +
-                            "Selected position: " + selectedPosition + " Amount: " + amount + " Largest Position: " + orderList.size());
-        }
-        else
-        {
+                "Amount provided to move up is too large and would be out of bounds." +
+                    "Selected position: " + selectedPosition + " Amount: " + amount + " Largest Position: " + orderList.size());
+        } else {
             Checks.check(selectedPosition + amount < orderList.size(),
-                    "Amount provided to move up is too large and would be out of bounds." +
-                            "Selected position: " + selectedPosition + " Amount: " + amount + " Largest Position: " + orderList.size());
+                "Amount provided to move up is too large and would be out of bounds." +
+                    "Selected position: " + selectedPosition + " Amount: " + amount + " Largest Position: " + orderList.size());
         }
 
         if (ascendingOrder)
@@ -226,35 +189,25 @@ public abstract class OrderAction<T, M extends OrderAction<T, M>> extends RestAc
      * Moves the currently selected entity {@code amount} positions <b>DOWN</b>
      * in order by pushing all entities up by one position.
      *
-     * @param  amount
-     *         The amount of positions that should be moved
-     *
-     * @throws java.lang.IllegalStateException
-     *         If no entity has been selected yet
-     * @throws java.lang.IllegalArgumentException
-     *         If the specified amount would cause the entity to go out-of-bounds
-     *
+     * @param amount The amount of positions that should be moved
      * @return The current OrderAction sub-implementation instance
-     *
-     * @see    #moveTo(int)
+     * @throws java.lang.IllegalStateException    If no entity has been selected yet
+     * @throws java.lang.IllegalArgumentException If the specified amount would cause the entity to go out-of-bounds
+     * @see #moveTo(int)
      */
-    public M moveDown(int amount)
-    {
+    public M moveDown(int amount) {
         Checks.notNegative(amount, "Provided amount");
         if (selectedPosition == -1)
             throw new IllegalStateException("Cannot move until an item has been selected. Use #selectPosition first.");
 
-        if (ascendingOrder)
-        {
+        if (ascendingOrder) {
             Checks.check(selectedPosition + amount < orderList.size(),
-                    "Amount provided to move down is too large and would be out of bounds." +
-                            "Selected position: " + selectedPosition + " Amount: " + amount + " Largest Position: " + orderList.size());
-        }
-        else
-        {
+                "Amount provided to move down is too large and would be out of bounds." +
+                    "Selected position: " + selectedPosition + " Amount: " + amount + " Largest Position: " + orderList.size());
+        } else {
             Checks.check(selectedPosition - amount >= orderList.size(),
-                    "Amount provided to move down is too large and would be out of bounds." +
-                            "Selected position: " + selectedPosition + " Amount: " + amount + " Largest Position: " + orderList.size());
+                "Amount provided to move down is too large and would be out of bounds." +
+                    "Selected position: " + selectedPosition + " Amount: " + amount + " Largest Position: " + orderList.size());
         }
 
         if (ascendingOrder)
@@ -268,22 +221,15 @@ public abstract class OrderAction<T, M extends OrderAction<T, M>> extends RestAc
      * position (0 based index). All entities are moved in the
      * direction of the left <i>hole</i> to fill the gap.
      *
-     * @param  position
-     *         The new not-negative position for the currently selected entity
-     *
-     * @throws java.lang.IllegalStateException
-     *         If no entity has been selected yet
-     * @throws java.lang.IllegalArgumentException
-     *         If the specified position is out-of-bounds
-     *
+     * @param position The new not-negative position for the currently selected entity
      * @return The current OrderAction sub-implementation instance
-     *
-     * @see    #moveDown(int)
-     * @see    #moveUp(int)
+     * @throws java.lang.IllegalStateException    If no entity has been selected yet
+     * @throws java.lang.IllegalArgumentException If the specified position is out-of-bounds
+     * @see #moveDown(int)
+     * @see #moveUp(int)
      */
     @SuppressWarnings("unchecked")
-    public M moveTo(int position)
-    {
+    public M moveTo(int position) {
         Checks.notNegative(position, "Provided position");
         Checks.check(position < orderList.size(), "Provided position is too big and is out of bounds.");
 
@@ -297,22 +243,16 @@ public abstract class OrderAction<T, M extends OrderAction<T, M>> extends RestAc
      * Swaps the currently selected entity with the entity located
      * at the specified position. No other entities are affected by this operation.
      *
-     * @param  swapPosition
-     *         0 based index of target position
-     *
-     * @throws java.lang.IllegalStateException
-     *         If no entity has been selected yet
-     * @throws java.lang.IllegalArgumentException
-     *         If the specified position is out-of-bounds
-     *
+     * @param swapPosition 0 based index of target position
      * @return The current OrderAction sub-implementation instance
+     * @throws java.lang.IllegalStateException    If no entity has been selected yet
+     * @throws java.lang.IllegalArgumentException If the specified position is out-of-bounds
      */
     @SuppressWarnings("unchecked")
-    public M swapPosition(int swapPosition)
-    {
+    public M swapPosition(int swapPosition) {
         Checks.notNegative(swapPosition, "Provided swapPosition");
         Checks.check(swapPosition < orderList.size(), "Provided swapPosition is too big and is out of bounds. swapPosition: "
-                + swapPosition);
+            + swapPosition);
 
         T selectedItem = orderList.get(selectedPosition);
         T swapItem = orderList.get(swapPosition);
@@ -326,23 +266,16 @@ public abstract class OrderAction<T, M extends OrderAction<T, M>> extends RestAc
      * Swaps the currently selected entity with the specified entity.
      * No other entities are affected by this operation.
      *
-     * @param  swapEntity
-     *         Target entity to switch positions with
-     *
-     * @throws java.lang.IllegalStateException
-     *         If no entity has been selected yet
-     * @throws java.lang.IllegalArgumentException
-     *         If the specified position is out-of-bounds,
-     *         or if the target entity is {@code null} or not
-     *         available in this order action implementation
-     *
+     * @param swapEntity Target entity to switch positions with
      * @return The current OrderAction sub-implementation instance
-     *
-     * @see    #swapPosition(int)
+     * @throws java.lang.IllegalStateException    If no entity has been selected yet
+     * @throws java.lang.IllegalArgumentException If the specified position is out-of-bounds,
+     *                                            or if the target entity is {@code null} or not
+     *                                            available in this order action implementation
+     * @see #swapPosition(int)
      */
     @SuppressWarnings("unchecked")
-    public M swapPosition(T swapEntity)
-    {
+    public M swapPosition(T swapEntity) {
         Checks.notNull(swapEntity, "Provided swapEntity");
         validateInput(swapEntity);
 
@@ -354,12 +287,10 @@ public abstract class OrderAction<T, M extends OrderAction<T, M>> extends RestAc
      * {@link java.util.Collections#reverse(java.util.List) Collections.reverse(orderList)}
      *
      * @return The current OrderAction sub-implementation instance
-     *
-     * @see    java.util.Collections#reverse(java.util.List)
+     * @see java.util.Collections#reverse(java.util.List)
      */
     @SuppressWarnings("unchecked")
-    public M reverseOrder()
-    {
+    public M reverseOrder() {
         Collections.reverse(this.orderList);
         return (M) this;
     }
@@ -369,12 +300,10 @@ public abstract class OrderAction<T, M extends OrderAction<T, M>> extends RestAc
      * {@link java.util.Collections#shuffle(java.util.List) Collections.shuffle(orderList)}
      *
      * @return The current OrderAction sub-implementation instance
-     *
-     * @see    java.util.Collections#shuffle(java.util.List)
+     * @see java.util.Collections#shuffle(java.util.List)
      */
     @SuppressWarnings("unchecked")
-    public M shuffleOrder()
-    {
+    public M shuffleOrder() {
         Collections.shuffle(this.orderList);
         return (M) this;
     }
@@ -384,19 +313,13 @@ public abstract class OrderAction<T, M extends OrderAction<T, M>> extends RestAc
      * the specified {@link java.util.Comparator Comparator}.
      * <br>Using {@link java.util.ArrayList#sort(java.util.Comparator) ArrayList.sort(comparator)}
      *
-     * @param  comparator
-     *         Comparator used to sort the current order
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the specified comparator is {@code null}
-     *
+     * @param comparator Comparator used to sort the current order
      * @return The current OrderAction sub-implementation instance
-     *
-     * @see    java.util.ArrayList#sort(java.util.Comparator)
+     * @throws java.lang.IllegalArgumentException If the specified comparator is {@code null}
+     * @see java.util.ArrayList#sort(java.util.Comparator)
      */
     @SuppressWarnings("unchecked")
-    public M sortOrder(final Comparator<T> comparator)
-    {
+    public M sortOrder(final Comparator<T> comparator) {
         Checks.notNull(comparator, "Provided comparator");
 
         this.orderList.sort(comparator);
@@ -404,8 +327,7 @@ public abstract class OrderAction<T, M extends OrderAction<T, M>> extends RestAc
     }
 
     @Override
-    protected void handleResponse(Response response, Request<Void> request)
-    {
+    protected void handleResponse(Response response, Request<Void> request) {
         if (response.isOk())
             request.onSuccess(null);
         else

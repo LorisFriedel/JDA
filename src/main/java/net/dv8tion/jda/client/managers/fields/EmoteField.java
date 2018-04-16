@@ -26,16 +26,12 @@ import java.util.function.Supplier;
  * <p><b>This class is abstract and requires an implementation
  * for {@link #checkValue(Object)}</b>
  *
- * @param  <T>
- *         The Field-Type for this EmoteField
- *
- * @since  3.0
+ * @param <T> The Field-Type for this EmoteField
+ * @since 3.0
  */
 @Deprecated
-public abstract class EmoteField<T> extends net.dv8tion.jda.core.managers.fields.Field<T, net.dv8tion.jda.client.managers.EmoteManagerUpdatable>
-{
-    public EmoteField(net.dv8tion.jda.client.managers.EmoteManagerUpdatable manager, Supplier<T> originalValue)
-    {
+public abstract class EmoteField<T> extends net.dv8tion.jda.core.managers.fields.Field<T, net.dv8tion.jda.client.managers.EmoteManagerUpdatable> {
+    public EmoteField(net.dv8tion.jda.client.managers.EmoteManagerUpdatable manager, Supplier<T> originalValue) {
         super(manager, originalValue);
     }
 }

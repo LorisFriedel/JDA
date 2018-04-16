@@ -30,35 +30,28 @@ import java.util.function.Consumer;
 /**
  * Extension of RestAction to allow setting a reason, only available to accounts of {@link net.dv8tion.jda.core.AccountType#BOT AccountType.BOT}
  *
- * @param  <T>
- *         The return type
- *
- * @since  3.3.0
+ * @param <T> The return type
+ * @since 3.3.0
  */
-public abstract class AuditableRestAction<T> extends RestAction<T>
-{
+public abstract class AuditableRestAction<T> extends RestAction<T> {
 
     protected String reason = null;
 
-    public AuditableRestAction(JDA api, Route.CompiledRoute route)
-    {
+    public AuditableRestAction(JDA api, Route.CompiledRoute route) {
         super(api, route);
     }
 
-    public AuditableRestAction(JDA api, Route.CompiledRoute route, RequestBody data)
-    {
+    public AuditableRestAction(JDA api, Route.CompiledRoute route, RequestBody data) {
         super(api, route, data);
     }
 
-    public AuditableRestAction(JDA api, Route.CompiledRoute route, JSONObject data)
-    {
+    public AuditableRestAction(JDA api, Route.CompiledRoute route, JSONObject data) {
         super(api, route, data);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public AuditableRestAction<T> setCheck(BooleanSupplier checks)
-    {
+    public AuditableRestAction<T> setCheck(BooleanSupplier checks) {
         return (AuditableRestAction) super.setCheck(checks);
     }
 
@@ -76,21 +69,17 @@ public abstract class AuditableRestAction<T> extends RestAction<T>
      * <br>Using methods with a reason parameter will always work and <u>override</u> this header.</b>
      * (ct. {@link net.dv8tion.jda.core.managers.GuildController#ban(net.dv8tion.jda.core.entities.User, int, String) GuildController.ban(User, int, String)})
      *
-     * @param  reason
-     *         The reason for this action which should be logged in the Guild's AuditLogs
-     *
+     * @param reason The reason for this action which should be logged in the Guild's AuditLogs
      * @return The current AuditableRestAction instance for chaining convenience
      */
     @CheckReturnValue
-    public AuditableRestAction<T> reason(String reason)
-    {
+    public AuditableRestAction<T> reason(String reason) {
         this.reason = reason;
         return this;
     }
 
     @Override
-    protected CaseInsensitiveMap<String, String> finalizeHeaders()
-    {
+    protected CaseInsensitiveMap<String, String> finalizeHeaders() {
         CaseInsensitiveMap<String, String> headers = super.finalizeHeaders();
 
         if (reason == null || reason.isEmpty())
@@ -104,8 +93,7 @@ public abstract class AuditableRestAction<T> extends RestAction<T>
         return headers;
     }
 
-    private String uriEncode(String input)
-    {
+    private String uriEncode(String input) {
         String formEncode = MiscUtil.encodeUTF8(input);
         return formEncode.replace('+', ' ');
     }
@@ -115,38 +103,33 @@ public abstract class AuditableRestAction<T> extends RestAction<T>
      * has already been retrieved or generated so that another request does not need to be made to Discord.
      * <br>Basically: Allows you to provide a value directly to the success returns.
      *
-     * @param <T>
-     *        The generic response type for this RestAction
+     * @param <T> The generic response type for this RestAction
      */
-    public static class EmptyRestAction<T> extends AuditableRestAction<T>
-    {
+    public static class EmptyRestAction<T> extends AuditableRestAction<T> {
         protected final T content;
 
-        public EmptyRestAction(JDA api)
-        {
+        public EmptyRestAction(JDA api) {
             this(api, null);
         }
 
-        public EmptyRestAction(JDA api, T content)
-        {
+        public EmptyRestAction(JDA api, T content) {
             super(api, null);
             this.content = content;
         }
 
         @Override
-        public void queue(Consumer<T> success, Consumer<Throwable> failure)
-        {
+        public void queue(Consumer<T> success, Consumer<Throwable> failure) {
             if (success != null)
                 success.accept(content);
         }
 
         @Override
-        public RequestFuture<T> submit(boolean shouldQueue)
-        {
+        public RequestFuture<T> submit(boolean shouldQueue) {
             return new RestFuture<>(content);
         }
 
         @Override
-        protected void handleResponse(Response response, Request<T> request) { }
+        protected void handleResponse(Response response, Request<T> request) {
+        }
     }
 }

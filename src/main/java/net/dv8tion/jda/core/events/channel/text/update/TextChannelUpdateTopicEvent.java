@@ -25,12 +25,10 @@ import net.dv8tion.jda.core.entities.TextChannel;
  *
  * <p>Identifier: {@code topic}
  */
-public class TextChannelUpdateTopicEvent extends GenericTextChannelUpdateEvent<String>
-{
+public class TextChannelUpdateTopicEvent extends GenericTextChannelUpdateEvent<String> {
     public static final String IDENTIFIER = "topic";
 
-    public TextChannelUpdateTopicEvent(JDA api, long responseNumber, TextChannel channel, String oldTopic)
-    {
+    public TextChannelUpdateTopicEvent(JDA api, long responseNumber, TextChannel channel, String oldTopic) {
         super(api, responseNumber, channel, oldTopic, channel.getTopic(), IDENTIFIER);
     }
 
@@ -39,8 +37,7 @@ public class TextChannelUpdateTopicEvent extends GenericTextChannelUpdateEvent<S
      *
      * @return The old topic, or null
      */
-    public String getOldTopic()
-    {
+    public String getOldTopic() {
         return getOldValue();
     }
 
@@ -49,8 +46,7 @@ public class TextChannelUpdateTopicEvent extends GenericTextChannelUpdateEvent<S
      *
      * @return The new topic, or null
      */
-    public String getNewTopic()
-    {
+    public String getNewTopic() {
         return getNewValue();
     }
 }

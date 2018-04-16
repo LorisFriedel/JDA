@@ -21,24 +21,20 @@ import net.dv8tion.jda.core.entities.impl.JDAImpl;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
 import org.json.JSONObject;
 
-public class GuildMemberAddHandler extends SocketHandler
-{
+public class GuildMemberAddHandler extends SocketHandler {
 
-    public GuildMemberAddHandler(JDAImpl api)
-    {
+    public GuildMemberAddHandler(JDAImpl api) {
         super(api);
     }
 
     @Override
-    protected Long handleInternally(JSONObject content)
-    {
+    protected Long handleInternally(JSONObject content) {
         final long id = content.getLong("guild_id");
         if (api.getGuildLock().isLocked(id))
             return id;
 
         GuildImpl guild = (GuildImpl) api.getGuildMap().get(id);
-        if (guild == null)
-        {
+        if (guild == null) {
             api.getEventCache().cache(EventCache.Type.GUILD, id, () -> handle(responseNumber, allContent));
             EventCache.LOG.debug("Caching member for guild that is not yet cached. Guild ID: {} JSON: {}", id, content);
             return null;
@@ -46,9 +42,9 @@ public class GuildMemberAddHandler extends SocketHandler
 
         Member member = api.getEntityBuilder().createMember(guild, content);
         api.getEventManager().handle(
-                new GuildMemberJoinEvent(
-                        api, responseNumber,
-                        member));
+            new GuildMemberJoinEvent(
+                api, responseNumber,
+                member));
         api.getEventCache().playbackCache(EventCache.Type.USER, member.getUser().getIdLong());
         return null;
     }

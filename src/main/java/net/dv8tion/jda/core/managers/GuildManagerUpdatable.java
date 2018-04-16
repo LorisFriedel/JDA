@@ -52,8 +52,7 @@ import javax.annotation.CheckReturnValue;
  * <p><b>To use moderation abilities like creating Roles or banning Members use {@link net.dv8tion.jda.core.managers.GuildController GuildController}</b>
  */
 @Deprecated
-public class GuildManagerUpdatable
-{    
+public class GuildManagerUpdatable {
     protected final Guild guild;
 
     protected GuildField<String> name;
@@ -71,11 +70,9 @@ public class GuildManagerUpdatable
     /**
      * Creates a new GuildManagerUpdatable instance
      *
-     * @param guild
-     *        The {@link net.dv8tion.jda.core.entities.Guild Guild} that should be modified
+     * @param guild The {@link net.dv8tion.jda.core.entities.Guild Guild} that should be modified
      */
-    public GuildManagerUpdatable(Guild guild)
-    {
+    public GuildManagerUpdatable(Guild guild) {
         this.guild = guild;
         setupFields();
     }
@@ -85,8 +82,7 @@ public class GuildManagerUpdatable
      *
      * @return the corresponding JDA instance
      */
-    public JDA getJDA()
-    {
+    public JDA getJDA() {
         return guild.getJDA();
     }
 
@@ -96,8 +92,7 @@ public class GuildManagerUpdatable
      *
      * @return The {@link net.dv8tion.jda.core.entities.Guild Guild} of this Manager
      */
-    public Guild getGuild()
-    {
+    public Guild getGuild() {
         return guild;
     }
 
@@ -112,13 +107,10 @@ public class GuildManagerUpdatable
      * <br>Otherwise {@link net.dv8tion.jda.core.managers.fields.Field#setValue(Object) Field.setValue(...)} will
      * throw an {@link IllegalArgumentException IllegalArgumentException}.
      *
-     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException
-     *         If the Guild is temporarily not {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
-     *
      * @return {@link net.dv8tion.jda.core.managers.fields.GuildField GuildField} - Type: {@code String}
+     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException If the Guild is temporarily not {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
      */
-    public GuildField<String> getNameField()
-    {
+    public GuildField<String> getNameField() {
         checkAvailable();
 
         return name;
@@ -141,13 +133,10 @@ public class GuildManagerUpdatable
      * {@link net.dv8tion.jda.core.managers.fields.Field#setValue(Object) Field.setValue(...)} will
      * throw an {@link IllegalArgumentException IllegalArgumentException}.
      *
-     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException
-     *         If the Guild is temporarily not {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
-     *
      * @return {@link net.dv8tion.jda.core.managers.fields.GuildField GuildField} - Type: {@link net.dv8tion.jda.core.Region Region}
+     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException If the Guild is temporarily not {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
      */
-    public GuildField<Region> getRegionField()
-    {
+    public GuildField<Region> getRegionField() {
         checkAvailable();
 
         return region;
@@ -161,13 +150,10 @@ public class GuildManagerUpdatable
      * <p>To set the value use {@link net.dv8tion.jda.core.managers.fields.Field#setValue(Object) setValue(Icon)}
      * on the returned {@link net.dv8tion.jda.core.managers.fields.GuildField GuildField} instance.
      *
-     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException
-     *         If the Guild is temporarily not {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
-     *
      * @return {@link net.dv8tion.jda.core.managers.fields.GuildField GuildField} - Type: {@link net.dv8tion.jda.core.entities.Icon Icon}
+     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException If the Guild is temporarily not {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
      */
-    public GuildField<Icon> getIconField()
-    {
+    public GuildField<Icon> getIconField() {
         checkAvailable();
 
         return icon;
@@ -181,13 +167,10 @@ public class GuildManagerUpdatable
      * <p>To set the value use {@link net.dv8tion.jda.core.managers.fields.Field#setValue(Object) setValue(Icon)}
      * on the returned {@link net.dv8tion.jda.core.managers.fields.GuildField GuildField} instance.
      *
-     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException
-     *         If the Guild is temporarily not {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
-     *
      * @return {@link net.dv8tion.jda.core.managers.fields.GuildField GuildField} - Type: {@link net.dv8tion.jda.core.entities.Icon Icon}
+     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException If the Guild is temporarily not {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
      */
-    public GuildField<Icon> getSplashField()
-    {
+    public GuildField<Icon> getSplashField() {
         checkAvailable();
 
         return splash;
@@ -205,13 +188,10 @@ public class GuildManagerUpdatable
      * <br>Otherwise {@link net.dv8tion.jda.core.managers.fields.Field#setValue(Object) Field.setValue(...)} will
      * throw an {@link IllegalArgumentException IllegalArgumentException}.
      *
-     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException
-     *         If the Guild is temporarily not {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
-     *
      * @return {@link net.dv8tion.jda.core.managers.fields.GuildField GuildField} - Type: {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel}
+     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException If the Guild is temporarily not {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
      */
-    public GuildField<VoiceChannel> getAfkChannelField()
-    {
+    public GuildField<VoiceChannel> getAfkChannelField() {
         checkAvailable();
 
         return afkChannel;
@@ -229,13 +209,10 @@ public class GuildManagerUpdatable
      * <br>Otherwise {@link net.dv8tion.jda.core.managers.fields.Field#setValue(Object) Field.setValue(...)} will
      * throw an {@link IllegalArgumentException IllegalArgumentException}.
      *
-     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException
-     *         If the Guild is temporarily not {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
-     *
      * @return {@link net.dv8tion.jda.core.managers.fields.GuildField GuildField} - Type: {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
+     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException If the Guild is temporarily not {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
      */
-    public GuildField<TextChannel> getSystemChannelField()
-    {
+    public GuildField<TextChannel> getSystemChannelField() {
         checkAvailable();
 
         return systemChannel;
@@ -253,13 +230,10 @@ public class GuildManagerUpdatable
      * <br>Otherwise {@link net.dv8tion.jda.core.managers.fields.Field#setValue(Object) Field.setValue(...)} will
      * throw an {@link IllegalArgumentException IllegalArgumentException}.
      *
-     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException
-     *         If the Guild is temporarily not {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
-     *
      * @return {@link net.dv8tion.jda.core.managers.fields.GuildField GuildField} - Type: {@link net.dv8tion.jda.core.entities.Guild.Timeout Guild.Timeout}
+     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException If the Guild is temporarily not {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
      */
-    public GuildField<Guild.Timeout> getAfkTimeoutField()
-    {
+    public GuildField<Guild.Timeout> getAfkTimeoutField() {
         checkAvailable();
 
         return timeout;
@@ -277,13 +251,10 @@ public class GuildManagerUpdatable
      * <br>Otherwise {@link net.dv8tion.jda.core.managers.fields.Field#setValue(Object) Field.setValue(...)} will
      * throw an {@link IllegalArgumentException IllegalArgumentException}.
      *
-     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException
-     *         If the Guild is temporarily not {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
-     *
      * @return {@link net.dv8tion.jda.core.managers.fields.GuildField GuildField} - Type: {@link net.dv8tion.jda.core.entities.Guild.VerificationLevel Guild.VerificationLevel}
+     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException If the Guild is temporarily not {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
      */
-    public GuildField<Guild.VerificationLevel> getVerificationLevelField()
-    {
+    public GuildField<Guild.VerificationLevel> getVerificationLevelField() {
         checkAvailable();
 
         return verificationLevel;
@@ -301,13 +272,10 @@ public class GuildManagerUpdatable
      * <br>Otherwise {@link net.dv8tion.jda.core.managers.fields.Field#setValue(Object) Field.setValue(...)} will
      * throw an {@link IllegalArgumentException IllegalArgumentException}.
      *
-     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException
-     *         If the Guild is temporarily not {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
-     *
      * @return {@link net.dv8tion.jda.core.managers.fields.GuildField GuildField} - Type: {@link net.dv8tion.jda.core.entities.Guild.NotificationLevel Guild.NotificationLevel}
+     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException If the Guild is temporarily not {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
      */
-    public GuildField<Guild.NotificationLevel> getDefaultNotificationLevelField()
-    {
+    public GuildField<Guild.NotificationLevel> getDefaultNotificationLevelField() {
         checkAvailable();
 
         return defaultNotificationLevel;
@@ -325,13 +293,10 @@ public class GuildManagerUpdatable
      * <br>Otherwise {@link net.dv8tion.jda.core.managers.fields.Field#setValue(Object) Field.setValue(...)} will
      * throw an {@link IllegalArgumentException IllegalArgumentException}.
      *
-     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException
-     *         If the Guild is temporarily not {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
-     *
      * @return {@link net.dv8tion.jda.core.managers.fields.GuildField GuildField} - Type: {@link net.dv8tion.jda.core.entities.Guild.MFALevel Guild.MFALevel}
+     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException If the Guild is temporarily not {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
      */
-    public GuildField<Guild.MFALevel> getRequiredMFALevelField()
-    {
+    public GuildField<Guild.MFALevel> getRequiredMFALevelField() {
         checkAvailable();
         return mfaLevel;
     }
@@ -348,13 +313,10 @@ public class GuildManagerUpdatable
      * <br>Otherwise {@link net.dv8tion.jda.core.managers.fields.Field#setValue(Object) Field.setValue(...)} will
      * throw an {@link IllegalArgumentException IllegalArgumentException}.
      *
-     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException
-     *         If the Guild is temporarily not {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
-     *
      * @return {@link net.dv8tion.jda.core.managers.fields.GuildField GuildField} - Type: {@link net.dv8tion.jda.core.entities.Guild.ExplicitContentLevel Guild.ExplicitContentLevel}
+     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException If the Guild is temporarily not {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
      */
-    public GuildField<Guild.ExplicitContentLevel> getExplicitContentLevelField()
-    {
+    public GuildField<Guild.ExplicitContentLevel> getExplicitContentLevelField() {
         checkAvailable();
         return explicitContentLevel;
     }
@@ -363,8 +325,7 @@ public class GuildManagerUpdatable
      * Resets all queued updates. So the next call to {@link #update()} will change nothing.
      * <br>This is automatically called by {@link #update()}
      */
-    public void reset()
-    {
+    public void reset() {
         this.name.reset();
         this.region.reset();
         this.timeout.reset();
@@ -388,26 +349,22 @@ public class GuildManagerUpdatable
      * <p>Possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} for this
      * update include the following:
      * <ul>
-     *      <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_GUILD UNKNOWN_GUILD}
-     *      <br>If the Guild was deleted before finishing the task</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_GUILD UNKNOWN_GUILD}
+     * <br>If the Guild was deleted before finishing the task</li>
      *
-     *      <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *      <br>If the currently logged in account loses the {@link net.dv8tion.jda.core.Permission#MANAGE_SERVER MANAGE_SERVER Permission}
-     *          before finishing the task</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>If the currently logged in account loses the {@link net.dv8tion.jda.core.Permission#MANAGE_SERVER MANAGE_SERVER Permission}
+     * before finishing the task</li>
      * </ul>
      *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If the currently logged in account does not have the Permission {@link net.dv8tion.jda.core.Permission#MANAGE_SERVER MANAGE_SERVER}
-     *         in the underlying {@link net.dv8tion.jda.core.entities.Guild Guild}
-     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException
-     *         If the Guild is temporarily not {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
-     *
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
-     *         <br>Applies all changes that have been made in a single api-call.
+     * <br>Applies all changes that have been made in a single api-call.
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If the currently logged in account does not have the Permission {@link net.dv8tion.jda.core.Permission#MANAGE_SERVER MANAGE_SERVER}
+     *                                                                         in the underlying {@link net.dv8tion.jda.core.entities.Guild Guild}
+     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException       If the Guild is temporarily not {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
      */
     @CheckReturnValue
-    public AuditableRestAction<Void> update()
-    {
+    public AuditableRestAction<Void> update() {
         checkAvailable();
         checkPermission(Permission.MANAGE_SERVER);
 
@@ -440,11 +397,9 @@ public class GuildManagerUpdatable
 
         reset(); //now that we've built our JSON object, reset the manager back to the non-modified state
         Route.CompiledRoute route = Route.Guilds.MODIFY_GUILD.compile(guild.getId());
-        return new AuditableRestAction<Void>(guild.getJDA(), route, body)
-        {
+        return new AuditableRestAction<Void>(guild.getJDA(), route, body) {
             @Override
-            protected void handleResponse(Response response, Request<Void> request)
-            {
+            protected void handleResponse(Response response, Request<Void> request) {
                 if (response.isOk())
                     request.onSuccess(null);
                 else
@@ -453,96 +408,82 @@ public class GuildManagerUpdatable
         };
     }
 
-    protected boolean needToUpdate()
-    {
+    protected boolean needToUpdate() {
         return name.shouldUpdate()
-                || region.shouldUpdate()
-                || timeout.shouldUpdate()
-                || icon.shouldUpdate()
-                || splash.shouldUpdate()
-                || afkChannel.shouldUpdate()
-                || systemChannel.shouldUpdate()
-                || verificationLevel.shouldUpdate()
-                || defaultNotificationLevel.shouldUpdate()
-                || mfaLevel.shouldUpdate()
-                || explicitContentLevel.shouldUpdate();
+            || region.shouldUpdate()
+            || timeout.shouldUpdate()
+            || icon.shouldUpdate()
+            || splash.shouldUpdate()
+            || afkChannel.shouldUpdate()
+            || systemChannel.shouldUpdate()
+            || verificationLevel.shouldUpdate()
+            || defaultNotificationLevel.shouldUpdate()
+            || mfaLevel.shouldUpdate()
+            || explicitContentLevel.shouldUpdate();
     }
 
-    protected void checkAvailable()
-    {
+    protected void checkAvailable() {
         if (!guild.isAvailable())
             throw new GuildUnavailableException();
     }
 
-    protected void checkPermission(Permission perm)
-    {
+    protected void checkPermission(Permission perm) {
         if (!guild.getSelfMember().hasPermission(perm))
             throw new InsufficientPermissionException(perm);
     }
 
-    protected void setupFields()
-    {
-        this.name = new GuildField<String>(this, guild::getName)
-        {
+    protected void setupFields() {
+        this.name = new GuildField<String>(this, guild::getName) {
             @Override
-            public void checkValue(String value)
-            {
+            public void checkValue(String value) {
                 Checks.notNull(value, "guild name");
                 if (value.length() < 2 || value.length() > 100)
                     throw new IllegalArgumentException("Provided guild name must be 2 to 100 characters in length");
             }
         };
 
-        this.timeout = new GuildField<Guild.Timeout>(this, guild::getAfkTimeout)
-        {
+        this.timeout = new GuildField<Guild.Timeout>(this, guild::getAfkTimeout) {
             @Override
-            public void checkValue(Guild.Timeout value)
-            {
+            public void checkValue(Guild.Timeout value) {
                 Checks.notNull(value, "Timeout");
             }
         };
 
-        this.icon = new GuildField<Icon>(this, null)
-        {
+        this.icon = new GuildField<Icon>(this, null) {
             @Override
-            public void checkValue(Icon value) { }
+            public void checkValue(Icon value) {
+            }
 
             @Override
-            public Icon getOriginalValue()
-            {
+            public Icon getOriginalValue() {
                 throw new UnsupportedOperationException("Cannot easily provide the original Icon. Use Guild#getIconUrl() and download it yourself.");
             }
 
             @Override
-            public boolean shouldUpdate()
-            {
+            public boolean shouldUpdate() {
                 return isSet();
             }
         };
 
-        this.splash = new GuildField<Icon>(this, null)
-        {
+        this.splash = new GuildField<Icon>(this, null) {
             @Override
-            public void checkValue(Icon value) { }
+            public void checkValue(Icon value) {
+            }
 
             @Override
-            public Icon getOriginalValue()
-            {
+            public Icon getOriginalValue() {
                 throw new UnsupportedOperationException("Cannot easily provide the original Splash. Use Guild#getSplashUrl() and download it yourself.");
             }
 
             @Override
-            public boolean shouldUpdate()
-            {
+            public boolean shouldUpdate() {
                 return isSet();
             }
         };
 
-        this.region = new GuildField<Region>(this, guild::getRegion)
-        {
+        this.region = new GuildField<Region>(this, guild::getRegion) {
             @Override
-            public void checkValue(Region value)
-            {
+            public void checkValue(Region value) {
                 Checks.notNull(value, "Region");
                 if (value == Region.UNKNOWN)
                     throw new IllegalArgumentException("Cannot set Guild Region to UNKNOWN!");
@@ -551,67 +492,55 @@ public class GuildManagerUpdatable
             }
         };
 
-        this.afkChannel = new GuildField<VoiceChannel>(this, guild::getAfkChannel)
-        {
+        this.afkChannel = new GuildField<VoiceChannel>(this, guild::getAfkChannel) {
             @Override
-            public void checkValue(VoiceChannel value)
-            {
+            public void checkValue(VoiceChannel value) {
                 if (value != null && !guild.equals(value.getGuild()))
                     throw new IllegalArgumentException("Provided AFK Channel is not from this Guild!");
             }
         };
 
-        this.systemChannel = new GuildField<TextChannel>(this, guild::getSystemChannel)
-        {
+        this.systemChannel = new GuildField<TextChannel>(this, guild::getSystemChannel) {
             @Override
-            public void checkValue(TextChannel value)
-            {
+            public void checkValue(TextChannel value) {
                 if (value != null && !guild.equals(value.getGuild()))
                     throw new IllegalArgumentException("Provided system channel is not from this Guild!");
             }
         };
 
-        this.verificationLevel = new GuildField<Guild.VerificationLevel>(this, guild::getVerificationLevel)
-        {
+        this.verificationLevel = new GuildField<Guild.VerificationLevel>(this, guild::getVerificationLevel) {
             @Override
-            public void checkValue(Guild.VerificationLevel value)
-            {
+            public void checkValue(Guild.VerificationLevel value) {
                 Checks.notNull(value, "VerificationLevel");
                 if (value == Guild.VerificationLevel.UNKNOWN)
                     throw new IllegalArgumentException("Cannot set Guild VerificationLevel to UNKNOWN");
             }
         };
 
-        this.defaultNotificationLevel = new GuildField<Guild.NotificationLevel>(this, guild::getDefaultNotificationLevel)
-        {
+        this.defaultNotificationLevel = new GuildField<Guild.NotificationLevel>(this, guild::getDefaultNotificationLevel) {
             @Override
-            public void checkValue(Guild.NotificationLevel value)
-            {
+            public void checkValue(Guild.NotificationLevel value) {
                 Checks.notNull(value, "NotificationLevel");
                 if (value == Guild.NotificationLevel.UNKNOWN)
                     throw new IllegalArgumentException("Cannot set NotificationLevel to UNKNOWN");
             }
         };
 
-        this.mfaLevel = new GuildField<Guild.MFALevel>(this, guild::getRequiredMFALevel)
-        {
+        this.mfaLevel = new GuildField<Guild.MFALevel>(this, guild::getRequiredMFALevel) {
             @Override
-            public void checkValue(Guild.MFALevel value)
-            {
+            public void checkValue(Guild.MFALevel value) {
                 Checks.notNull(value, "MFALevel");
                 if (value == Guild.MFALevel.UNKNOWN)
                     throw new IllegalArgumentException("Cannot set MFALevel to UNKNOWN");
             }
         };
 
-        this.explicitContentLevel = new GuildField<Guild.ExplicitContentLevel>(this, guild::getExplicitContentLevel)
-        {
+        this.explicitContentLevel = new GuildField<Guild.ExplicitContentLevel>(this, guild::getExplicitContentLevel) {
             @Override
-            public void checkValue(Guild.ExplicitContentLevel value)
-            {
+            public void checkValue(Guild.ExplicitContentLevel value) {
                 Checks.notNull(value, "ExplicitContentLevel");
                 Checks.check(value != Guild.ExplicitContentLevel.UNKNOWN,
-                        "Cannot set ExplicitContentLevel to UNKNOWN");
+                    "Cannot set ExplicitContentLevel to UNKNOWN");
             }
         };
     }

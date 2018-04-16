@@ -38,25 +38,20 @@ import net.dv8tion.jda.core.utils.cache.SnowflakeCacheView;
  * <br>Custom implementations my not support all methods and throw
  * {@link java.lang.UnsupportedOperationException UnsupportedOperationExceptions} instead.
  *
- * @since  3.4
  * @author Aljoscha Grebe
+ * @since 3.4
  */
-public interface ShardManager
-{
+public interface ShardManager {
     /**
      * Adds all provided listeners to the event-listeners that will be used to handle events.
      *
      * <p>Note: when using the {@link net.dv8tion.jda.core.hooks.InterfacedEventManager InterfacedEventListener} (default),
      * given listener <b>must</b> be instance of {@link net.dv8tion.jda.core.hooks.EventListener EventListener}!
      *
-     * @param  listeners
-     *         The listener(s) which will react to events.
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If either listeners or one of it's objects is {@code null}.
+     * @param listeners The listener(s) which will react to events.
+     * @throws java.lang.IllegalArgumentException If either listeners or one of it's objects is {@code null}.
      */
-    default void addEventListener(final Object... listeners)
-    {
+    default void addEventListener(final Object... listeners) {
         Checks.noneNull(listeners, "listeners");
         this.getShardCache().forEach(jda -> jda.addEventListener(listeners));
     }
@@ -64,14 +59,10 @@ public interface ShardManager
     /**
      * Removes all provided listeners from the event-listeners and no longer uses them to handle events.
      *
-     * @param  listeners
-     *         The listener(s) to be removed.
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If either listeners or one of it's objects is {@code null}.
+     * @param listeners The listener(s) to be removed.
+     * @throws java.lang.IllegalArgumentException If either listeners or one of it's objects is {@code null}.
      */
-    default void removeEventListener(final Object... listeners)
-    {
+    default void removeEventListener(final Object... listeners) {
         Checks.noneNull(listeners, "listeners");
         this.getShardCache().forEach(jda -> jda.removeEventListener(listeners));
     }
@@ -83,14 +74,10 @@ public interface ShardManager
      * <p>Note: when using the {@link net.dv8tion.jda.core.hooks.InterfacedEventManager InterfacedEventListener} (default),
      * given listener <b>must</b> be instance of {@link net.dv8tion.jda.core.hooks.EventListener EventListener}!
      *
-     * @param  eventListenerProvider
-     *         The provider of listener(s) which will react to events.
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided listener provider or any of the listeners or provides are {@code null}.
+     * @param eventListenerProvider The provider of listener(s) which will react to events.
+     * @throws java.lang.IllegalArgumentException If the provided listener provider or any of the listeners or provides are {@code null}.
      */
-    default void addEventListeners(final IntFunction<Object> eventListenerProvider)
-    {
+    default void addEventListeners(final IntFunction<Object> eventListenerProvider) {
         Checks.notNull(eventListenerProvider, "event listener provider");
         this.getShardCache().forEach(jda ->
         {
@@ -104,15 +91,11 @@ public interface ShardManager
      * The provider takes shard ids, and returns a collection of listeners that shall be removed from the respective
      * shards.
      *
-     * @param eventListenerProvider
-     *        gets shard ids applied and is expected to return a collection of listeners that shall be removed from
-     *        the respective shards
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided event listeners provider is {@code null}.
+     * @param eventListenerProvider gets shard ids applied and is expected to return a collection of listeners that shall be removed from
+     *                              the respective shards
+     * @throws java.lang.IllegalArgumentException If the provided event listeners provider is {@code null}.
      */
-    default void removeEventListeners(final IntFunction<Collection<Object>> eventListenerProvider)
-    {
+    default void removeEventListeners(final IntFunction<Collection<Object>> eventListenerProvider) {
         Checks.notNull(eventListenerProvider, "event listener provider");
         this.getShardCache().forEach(jda ->
             jda.removeEventListener(eventListenerProvider.apply(jda.getShardInfo().getShardId()))
@@ -122,18 +105,14 @@ public interface ShardManager
     /**
      * Remove a listener provider. This will stop further created / restarted shards from getting a listener added by
      * that provider.
-     *
+     * <p>
      * Default is a no-op for backwards compatibility, see implementations like
      * {@link DefaultShardManager#removeEventListenerProvider(IntFunction)} for actual code
      *
-     * @param  eventListenerProvider
-     *         The provider of listeners that shall be removed.
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided listener provider is {@code null}.
+     * @param eventListenerProvider The provider of listeners that shall be removed.
+     * @throws java.lang.IllegalArgumentException If the provided listener provider is {@code null}.
      */
-    default void removeEventListenerProvider(IntFunction<Object> eventListenerProvider)
-    {
+    default void removeEventListenerProvider(IntFunction<Object> eventListenerProvider) {
     }
 
     /**
@@ -148,8 +127,7 @@ public interface ShardManager
      *
      * @return The amount of running shards.
      */
-    default int getShardsRunning()
-    {
+    default int getShardsRunning() {
         return (int) this.getShardCache().size();
     }
 
@@ -159,26 +137,22 @@ public interface ShardManager
      *
      * @return The managed amount of shards.
      */
-    default int getShardsTotal()
-    {
+    default int getShardsTotal() {
         return this.getShardsQueued() + this.getShardsRunning();
     }
 
     /**
      * Used to access Bot specific functions like OAuth information.
      *
-     * @throws java.lang.IllegalStateException
-     *         If there is no running shard
-     *
      * @return The {@link net.dv8tion.jda.bot.JDABot} registry for this instance of JDA.
+     * @throws java.lang.IllegalStateException If there is no running shard
      */
-    default RestAction<ApplicationInfo> getApplicationInfo()
-    {
+    default RestAction<ApplicationInfo> getApplicationInfo() {
         return this.getShardCache().stream()
-                .findAny()
-                .orElseThrow(() -> new IllegalStateException("no active shards"))
-                .asBot()
-                .getApplicationInfo();
+            .findAny()
+            .orElseThrow(() -> new IllegalStateException("no active shards"))
+            .asBot()
+            .getApplicationInfo();
     }
 
     /**
@@ -190,14 +164,13 @@ public interface ShardManager
      *
      * @return The average time in milliseconds between heartbeat and the heartbeat ack response
      */
-    default double getAveragePing()
-    {
+    default double getAveragePing() {
         return this.getShardCache()
-                .stream()
-                .mapToLong(JDA::getPing)
-                .filter(ping -> ping != -1)
-                .average()
-                .orElse(-1D);
+            .stream()
+            .mapToLong(JDA::getPing)
+            .filter(ping -> ping != -1)
+            .average()
+            .orElse(-1D);
     }
 
     /**
@@ -205,8 +178,7 @@ public interface ShardManager
      *
      * @return An immutable list of all visible {@link net.dv8tion.jda.core.entities.Category Categories}.
      */
-    default List<Category> getCategories()
-    {
+    default List<Category> getCategories() {
         return this.getCategoryCache().asList();
     }
 
@@ -214,16 +186,12 @@ public interface ShardManager
      * Gets a list of all {@link net.dv8tion.jda.core.entities.Category Categories} that have the same name as the one
      * provided. <br>If there are no matching categories this will return an empty list.
      *
-     * @param  name
-     *         The name to check
-     * @param  ignoreCase
-     *         Whether to ignore case on name checking
+     * @param name       The name to check
+     * @param ignoreCase Whether to ignore case on name checking
      * @return Immutable list of all categories matching the provided name
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided name is {@code null}
+     * @throws java.lang.IllegalArgumentException If the provided name is {@code null}
      */
-    default List<Category> getCategoriesByName(final String name, final boolean ignoreCase)
-    {
+    default List<Category> getCategoriesByName(final String name, final boolean ignoreCase) {
         return this.getCategoryCache().getElementsByName(name, ignoreCase);
     }
 
@@ -231,12 +199,10 @@ public interface ShardManager
      * Gets the {@link net.dv8tion.jda.core.entities.Category Category} that matches the provided id. <br>If there is no
      * matching {@link net.dv8tion.jda.core.entities.Category Category} this returns {@code null}.
      *
-     * @param  id
-     *         The snowflake ID of the wanted Category
+     * @param id The snowflake ID of the wanted Category
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.Category Category} for the provided ID.
      */
-    default Category getCategoryById(final long id)
-    {
+    default Category getCategoryById(final long id) {
         return this.getCategoryCache().getElementById(id);
     }
 
@@ -244,14 +210,11 @@ public interface ShardManager
      * Gets the {@link net.dv8tion.jda.core.entities.Category Category} that matches the provided id. <br>If there is no
      * matching {@link net.dv8tion.jda.core.entities.Category Category} this returns {@code null}.
      *
-     * @param  id
-     *         The snowflake ID of the wanted Category
+     * @param id The snowflake ID of the wanted Category
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.Category Category} for the provided ID.
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided ID is not a valid {@code long}
+     * @throws java.lang.IllegalArgumentException If the provided ID is not a valid {@code long}
      */
-    default Category getCategoryById(final String id)
-    {
+    default Category getCategoryById(final String id) {
         return this.getCategoryCache().getElementById(id);
     }
 
@@ -261,8 +224,7 @@ public interface ShardManager
      *
      * @return {@link net.dv8tion.jda.core.utils.cache.SnowflakeCacheView SnowflakeCacheView}
      */
-    default SnowflakeCacheView<Category> getCategoryCache()
-    {
+    default SnowflakeCacheView<Category> getCategoryCache() {
         return CacheView.allSnowflakes(() -> this.getShardCache().stream().map(JDA::getCategoryCache));
     }
 
@@ -271,13 +233,11 @@ public interface ShardManager
      *
      * <p><b>Unicode emojis are not included as {@link net.dv8tion.jda.core.entities.Emote Emote}!</b>
      *
-     * @param  id
-     *         The id of the requested {@link net.dv8tion.jda.core.entities.Emote}.
+     * @param id The id of the requested {@link net.dv8tion.jda.core.entities.Emote}.
      * @return An {@link net.dv8tion.jda.core.entities.Emote Emote} represented by this id or null if none is found in
      * our cache.
      */
-    default Emote getEmoteById(final long id)
-    {
+    default Emote getEmoteById(final long id) {
         return this.getEmoteCache().getElementById(id);
     }
 
@@ -286,15 +246,12 @@ public interface ShardManager
      *
      * <p><b>Unicode emojis are not included as {@link net.dv8tion.jda.core.entities.Emote Emote}!</b>
      *
-     * @param  id
-     *         The id of the requested {@link net.dv8tion.jda.core.entities.Emote}.
+     * @param id The id of the requested {@link net.dv8tion.jda.core.entities.Emote}.
      * @return An {@link net.dv8tion.jda.core.entities.Emote Emote} represented by this id or null if none is found in
-     *         our cache.
-     * @throws java.lang.NumberFormatException
-     *         If the provided {@code id} cannot be parsed by {@link Long#parseLong(String)}
+     * our cache.
+     * @throws java.lang.NumberFormatException If the provided {@code id} cannot be parsed by {@link Long#parseLong(String)}
      */
-    default Emote getEmoteById(final String id)
-    {
+    default Emote getEmoteById(final String id) {
         return this.getEmoteCache().getElementById(id);
     }
 
@@ -304,8 +261,7 @@ public interface ShardManager
      *
      * @return Unified {@link net.dv8tion.jda.core.utils.cache.SnowflakeCacheView SnowflakeCacheView}
      */
-    default SnowflakeCacheView<Emote> getEmoteCache()
-    {
+    default SnowflakeCacheView<Emote> getEmoteCache() {
         return CacheView.allSnowflakes(() -> this.getShardCache().stream().map(JDA::getEmoteCache));
     }
 
@@ -320,8 +276,7 @@ public interface ShardManager
      *
      * @return An immutable list of Emotes (which may or may not be available to usage).
      */
-    default List<Emote> getEmotes()
-    {
+    default List<Emote> getEmotes() {
         return this.getEmoteCache().asList();
     }
 
@@ -332,16 +287,13 @@ public interface ShardManager
      *
      * <p><b>Unicode emojis are not included as {@link net.dv8tion.jda.core.entities.Emote Emote}!</b>
      *
-     * @param  name
-     *         The name of the requested {@link net.dv8tion.jda.core.entities.Emote Emotes}.
-     * @param  ignoreCase
-     *         Whether to ignore case or not when comparing the provided name to each {@link
-     *         net.dv8tion.jda.core.entities.Emote#getName()}.
+     * @param name       The name of the requested {@link net.dv8tion.jda.core.entities.Emote Emotes}.
+     * @param ignoreCase Whether to ignore case or not when comparing the provided name to each {@link
+     *                   net.dv8tion.jda.core.entities.Emote#getName()}.
      * @return Possibly-empty list of all the {@link net.dv8tion.jda.core.entities.Emote Emotes} that all have the same
-     *         name as the provided name.
+     * name as the provided name.
      */
-    default List<Emote> getEmotesByName(final String name, final boolean ignoreCase)
-    {
+    default List<Emote> getEmotesByName(final String name, final boolean ignoreCase) {
         return this.getEmoteCache().getElementsByName(name, ignoreCase);
     }
 
@@ -349,13 +301,10 @@ public interface ShardManager
      * This returns the {@link net.dv8tion.jda.core.entities.Guild Guild} which has the same id as the one provided.
      * <br>If there is no connected guild with an id that matches the provided one, then this returns {@code null}.
      *
-     * @param  id
-     *         The id of the {@link net.dv8tion.jda.core.entities.Guild Guild}.
-     *
+     * @param id The id of the {@link net.dv8tion.jda.core.entities.Guild Guild}.
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.Guild Guild} with matching id.
      */
-    default Guild getGuildById(final long id)
-    {
+    default Guild getGuildById(final long id) {
         return this.getGuildCache().getElementById(id);
     }
 
@@ -363,13 +312,10 @@ public interface ShardManager
      * This returns the {@link net.dv8tion.jda.core.entities.Guild Guild} which has the same id as the one provided.
      * <br>If there is no connected guild with an id that matches the provided one, then this returns {@code null}.
      *
-     * @param  id
-     *         The id of the {@link net.dv8tion.jda.core.entities.Guild Guild}.
-     *
+     * @param id The id of the {@link net.dv8tion.jda.core.entities.Guild Guild}.
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.Guild Guild} with matching id.
      */
-    default Guild getGuildById(final String id)
-    {
+    default Guild getGuildById(final String id) {
         return this.getGuildCache().getElementById(id);
     }
 
@@ -379,10 +325,10 @@ public interface ShardManager
      *
      * @return {@link net.dv8tion.jda.core.utils.cache.SnowflakeCacheView SnowflakeCacheView}
      */
-    default SnowflakeCacheView<Guild> getGuildCache()
-    {
+    default SnowflakeCacheView<Guild> getGuildCache() {
         return CacheView.allSnowflakes(() -> this.getShardCache().stream().map(JDA::getGuildCache));
     }
+
     /**
      * An unmodifiable List of all {@link net.dv8tion.jda.core.entities.Guild Guilds} that the logged account is connected to.
      * <br>If this account is not connected to any {@link net.dv8tion.jda.core.entities.Guild Guilds}, this will return
@@ -390,39 +336,32 @@ public interface ShardManager
      *
      * @return Possibly-empty list of all the {@link net.dv8tion.jda.core.entities.Guild Guilds} that this account is connected to.
      */
-    default List<Guild> getGuilds()
-    {
+    default List<Guild> getGuilds() {
         return this.getGuildCache().asList();
     }
 
     /**
      * Gets all {@link net.dv8tion.jda.core.entities.Guild Guilds} that contain all given users as their members.
      *
-     * @param  users
-     *        The users which all the returned {@link net.dv8tion.jda.core.entities.Guild Guilds} must contain.
-     *
+     * @param users The users which all the returned {@link net.dv8tion.jda.core.entities.Guild Guilds} must contain.
      * @return Unmodifiable list of all {@link net.dv8tion.jda.core.entities.Guild Guild} instances which have all {@link net.dv8tion.jda.core.entities.User Users} in them.
      */
-    default List<Guild> getMutualGuilds(final Collection<User> users)
-    {
+    default List<Guild> getMutualGuilds(final Collection<User> users) {
         Checks.noneNull(users, "users");
         return Collections.unmodifiableList(
-                this.getGuildCache().stream()
+            this.getGuildCache().stream()
                 .filter(guild -> users.stream()
-                        .allMatch(guild::isMember))
+                    .allMatch(guild::isMember))
                 .collect(Collectors.toList()));
     }
 
     /**
      * Gets all {@link net.dv8tion.jda.core.entities.Guild Guilds} that contain all given users as their members.
      *
-     * @param  users
-     *         The users which all the returned {@link net.dv8tion.jda.core.entities.Guild Guilds} must contain.
-     *
+     * @param users The users which all the returned {@link net.dv8tion.jda.core.entities.Guild Guilds} must contain.
      * @return Unmodifiable list of all {@link net.dv8tion.jda.core.entities.Guild Guild} instances which have all {@link net.dv8tion.jda.core.entities.User Users} in them.
      */
-    default List<Guild> getMutualGuilds(final User... users)
-    {
+    default List<Guild> getMutualGuilds(final User... users) {
         Checks.notNull(users, "users");
         return this.getMutualGuilds(Arrays.asList(users));
     }
@@ -432,13 +371,10 @@ public interface ShardManager
      * <br>If there is no known {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel} with an id that matches the provided
      * one, then this returns {@code null}.
      *
-     * @param  id
-     *         The id of the {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}.
-     *
+     * @param id The id of the {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}.
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel} with matching id.
      */
-    default PrivateChannel getPrivateChannelById(final long id)
-    {
+    default PrivateChannel getPrivateChannelById(final long id) {
         return this.getPrivateChannelCache().getElementById(id);
     }
 
@@ -447,15 +383,11 @@ public interface ShardManager
      * <br>If there is no known {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel} with an id that matches the provided
      * one, then this returns {@code null}.
      *
-     * @param  id
-     *         The id of the {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}.
-     * @throws java.lang.NumberFormatException
-     *         If the provided {@code id} cannot be parsed by {@link Long#parseLong(String)}
-     *
+     * @param id The id of the {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}.
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel} with matching id.
+     * @throws java.lang.NumberFormatException If the provided {@code id} cannot be parsed by {@link Long#parseLong(String)}
      */
-    default PrivateChannel getPrivateChannelById(final String id)
-    {
+    default PrivateChannel getPrivateChannelById(final String id) {
         return this.getPrivateChannelCache().getElementById(id);
     }
 
@@ -465,8 +397,7 @@ public interface ShardManager
      *
      * @return {@link net.dv8tion.jda.core.utils.cache.SnowflakeCacheView SnowflakeCacheView}
      */
-    default SnowflakeCacheView<PrivateChannel> getPrivateChannelCache()
-    {
+    default SnowflakeCacheView<PrivateChannel> getPrivateChannelCache() {
         return CacheView.allSnowflakes(() -> this.getShardCache().stream().map(JDA::getPrivateChannelCache));
     }
 
@@ -475,8 +406,7 @@ public interface ShardManager
      *
      * @return Possibly-empty list of all {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannels}.
      */
-    default List<PrivateChannel> getPrivateChannels()
-    {
+    default List<PrivateChannel> getPrivateChannels() {
         return this.getPrivateChannelCache().asList();
     }
 
@@ -485,12 +415,10 @@ public interface ShardManager
      * over all {@link net.dv8tion.jda.core.entities.Guild Guilds} and check whether a Role from that Guild is assigned
      * to the specified ID and will return the first that can be found.
      *
-     * @param  id
-     *         The id of the searched Role
+     * @param id The id of the searched Role
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.Role Role} for the specified ID
      */
-    default Role getRoleById(final long id)
-    {
+    default Role getRoleById(final long id) {
         return this.getRoleCache().getElementById(id);
     }
 
@@ -499,14 +427,11 @@ public interface ShardManager
      * over all {@link net.dv8tion.jda.core.entities.Guild Guilds} and check whether a Role from that Guild is assigned
      * to the specified ID and will return the first that can be found.
      *
-     * @param  id
-     *         The id of the searched Role
+     * @param id The id of the searched Role
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.Role Role} for the specified ID
-     * @throws java.lang.NumberFormatException
-     *         If the provided {@code id} cannot be parsed by {@link Long#parseLong(String)}
+     * @throws java.lang.NumberFormatException If the provided {@code id} cannot be parsed by {@link Long#parseLong(String)}
      */
-    default Role getRoleById(final String id)
-    {
+    default Role getRoleById(final String id) {
         return this.getRoleCache().getElementById(id);
     }
 
@@ -516,8 +441,7 @@ public interface ShardManager
      *
      * @return Unified {@link net.dv8tion.jda.core.utils.cache.SnowflakeCacheView SnowflakeCacheView}
      */
-    default SnowflakeCacheView<Role> getRoleCache()
-    {
+    default SnowflakeCacheView<Role> getRoleCache() {
         return CacheView.allSnowflakes(() -> this.getShardCache().stream().map(JDA::getRoleCache));
     }
 
@@ -528,8 +452,7 @@ public interface ShardManager
      *
      * @return Immutable List of all visible Roles
      */
-    default List<Role> getRoles()
-    {
+    default List<Role> getRoles() {
         return this.getRoleCache().asList();
     }
 
@@ -538,14 +461,11 @@ public interface ShardManager
      * <br>This simply filters the Roles returned by {@link #getRoles()} with the provided name, either using
      * {@link String#equals(Object)} or {@link String#equalsIgnoreCase(String)} on {@link net.dv8tion.jda.core.entities.Role#getName()}.
      *
-     * @param  name
-     *         The name for the Roles
-     * @param  ignoreCase
-     *         Whether to use {@link String#equalsIgnoreCase(String)}
+     * @param name       The name for the Roles
+     * @param ignoreCase Whether to use {@link String#equalsIgnoreCase(String)}
      * @return Immutable List of all Roles matching the parameters provided.
      */
-    default List<Role> getRolesByName(final String name, final boolean ignoreCase)
-    {
+    default List<Role> getRolesByName(final String name, final boolean ignoreCase) {
         return this.getRoleCache().getElementsByName(name, ignoreCase);
     }
 
@@ -553,14 +473,11 @@ public interface ShardManager
      * This returns the {@link net.dv8tion.jda.core.JDA JDA} instance which has the same id as the one provided.
      * <br>If there is no shard with an id that matches the provided one, then this returns {@code null}.
      *
-     * @param  id
-     *         The id of the shard.
-     *
+     * @param id The id of the shard.
      * @return The {@link net.dv8tion.jda.core.JDA JDA} instance with the given shardId or
-     *         {@code null} if no shard has the given id
+     * {@code null} if no shard has the given id
      */
-    default JDA getShardById(final int id)
-    {
+    default JDA getShardById(final int id) {
         return this.getShardCache().getElementById(id);
     }
 
@@ -568,14 +485,11 @@ public interface ShardManager
      * This returns the {@link net.dv8tion.jda.core.JDA JDA} instance which has the same id as the one provided.
      * <br>If there is no shard with an id that matches the provided one, then this returns {@code null}.
      *
-     * @param  id
-     *         The id of the shard.
-     *
+     * @param id The id of the shard.
      * @return The {@link net.dv8tion.jda.core.JDA JDA} instance with the given shardId or
-     *         {@code null} if no shard has the given id
+     * {@code null} if no shard has the given id
      */
-    default JDA getShardById(final String id)
-    {
+    default JDA getShardById(final String id) {
         return this.getShardCache().getElementById(id);
     }
 
@@ -592,8 +506,7 @@ public interface ShardManager
      *
      * @return An immutable list of all managed {@link net.dv8tion.jda.core.JDA JDA} instances.
      */
-    default List<JDA> getShards()
-    {
+    default List<JDA> getShards() {
         return this.getShardCache().asList();
     }
 
@@ -601,14 +514,11 @@ public interface ShardManager
      * This returns the {@link net.dv8tion.jda.core.JDA.Status JDA.Status} of the shard which has the same id as the one provided.
      * <br>If there is no shard with an id that matches the provided one, then this returns {@code null}.
      *
-     * @param  shardId
-     *         The id of the shard.
-     *
+     * @param shardId The id of the shard.
      * @return The  {@link net.dv8tion.jda.core.JDA.Status JDA.Status} of the shard with the given shardId or
-     *         {@code null} if no shard has the given id
+     * {@code null} if no shard has the given id
      */
-    default JDA.Status getStatus(final int shardId)
-    {
+    default JDA.Status getStatus(final int shardId) {
         final JDA jda = this.getShardCache().getElementById(shardId);
         return jda == null ? null : jda.getStatus();
     }
@@ -618,10 +528,9 @@ public interface ShardManager
      *
      * @return All current shard statuses.
      */
-    default Map<JDA, Status> getStatuses()
-    {
+    default Map<JDA, Status> getStatuses() {
         return Collections.unmodifiableMap(this.getShardCache().stream()
-                .collect(Collectors.toMap(Function.identity(), JDA::getStatus)));
+            .collect(Collectors.toMap(Function.identity(), JDA::getStatus)));
     }
 
     /**
@@ -635,13 +544,10 @@ public interface ShardManager
      * hides any {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} that you don't have the
      * {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ} permission in.
      *
-     * @param  id
-     *         The id of the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.
-     *
+     * @param id The id of the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} with matching id.
      */
-    default TextChannel getTextChannelById(final long id)
-    {
+    default TextChannel getTextChannelById(final long id) {
         return this.getTextChannelCache().getElementById(id);
     }
 
@@ -656,13 +562,10 @@ public interface ShardManager
      * hides any {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} that you don't have the
      * {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ} permission in.
      *
-     * @param  id
-     *         The id of the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.
-     *
+     * @param id The id of the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} with matching id.
      */
-    default TextChannel getTextChannelById(final String id)
-    {
+    default TextChannel getTextChannelById(final String id) {
         return this.getTextChannelCache().getElementById(id);
     }
 
@@ -672,8 +575,7 @@ public interface ShardManager
      *
      * @return {@link net.dv8tion.jda.core.utils.cache.SnowflakeCacheView SnowflakeCacheView}
      */
-    default SnowflakeCacheView<TextChannel> getTextChannelCache()
-    {
+    default SnowflakeCacheView<TextChannel> getTextChannelCache() {
         return CacheView.allSnowflakes(() -> this.getShardCache().stream().map(JDA::getTextChannelCache));
     }
 
@@ -689,8 +591,7 @@ public interface ShardManager
      *
      * @return Possibly-empty list of all known {@link net.dv8tion.jda.core.entities.TextChannel TextChannels}.
      */
-    default List<TextChannel> getTextChannels()
-    {
+    default List<TextChannel> getTextChannels() {
         return this.getTextChannelCache().asList();
     }
 
@@ -698,13 +599,10 @@ public interface ShardManager
      * This returns the {@link net.dv8tion.jda.core.entities.User User} which has the same id as the one provided.
      * <br>If there is no visible user with an id that matches the provided one, this returns {@code null}.
      *
-     * @param  id
-     *         The id of the requested {@link net.dv8tion.jda.core.entities.User User}.
-     *
+     * @param id The id of the requested {@link net.dv8tion.jda.core.entities.User User}.
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.User User} with matching id.
      */
-    default User getUserById(final long id)
-    {
+    default User getUserById(final long id) {
         return this.getUserCache().getElementById(id);
     }
 
@@ -712,13 +610,10 @@ public interface ShardManager
      * This returns the {@link net.dv8tion.jda.core.entities.User User} which has the same id as the one provided.
      * <br>If there is no visible user with an id that matches the provided one, this returns {@code null}.
      *
-     * @param  id
-     *         The id of the requested {@link net.dv8tion.jda.core.entities.User User}.
-     *
+     * @param id The id of the requested {@link net.dv8tion.jda.core.entities.User User}.
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.User User} with matching id.
      */
-    default User getUserById(final String id)
-    {
+    default User getUserById(final String id) {
         return this.getUserCache().getElementById(id);
     }
 
@@ -728,8 +623,7 @@ public interface ShardManager
      *
      * @return {@link net.dv8tion.jda.core.utils.cache.SnowflakeCacheView SnowflakeCacheView}
      */
-    default SnowflakeCacheView<User> getUserCache()
-    {
+    default SnowflakeCacheView<User> getUserCache() {
         return CacheView.allSnowflakes(() -> this.getShardCache().stream().map(JDA::getUserCache));
     }
 
@@ -744,8 +638,7 @@ public interface ShardManager
      *
      * @return List of all {@link net.dv8tion.jda.core.entities.User Users} that are visible to JDA.
      */
-    default List<User> getUsers()
-    {
+    default List<User> getUsers() {
         return this.getUserCache().asList();
     }
 
@@ -754,12 +647,10 @@ public interface ShardManager
      * <br>If there is no known {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel} with an id that matches the provided
      * one, then this returns {@code null}.
      *
-     * @param  id The id of the {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel}.
-     *
+     * @param id The id of the {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel}.
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel} with matching id.
      */
-    default VoiceChannel getVoiceChannelById(final long id)
-    {
+    default VoiceChannel getVoiceChannelById(final long id) {
         return this.getVoiceChannelCache().getElementById(id);
     }
 
@@ -768,12 +659,10 @@ public interface ShardManager
      * <br>If there is no known {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel} with an id that matches the provided
      * one, then this returns {@code null}.
      *
-     * @param  id The id of the {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel}.
-     *
+     * @param id The id of the {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel}.
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel} with matching id.
      */
-    default VoiceChannel getVoiceChannelById(final String id)
-    {
+    default VoiceChannel getVoiceChannelById(final String id) {
         return this.getVoiceChannelCache().getElementById(id);
     }
 
@@ -783,8 +672,7 @@ public interface ShardManager
      *
      * @return {@link net.dv8tion.jda.core.utils.cache.SnowflakeCacheView SnowflakeCacheView}
      */
-    default SnowflakeCacheView<VoiceChannel> getVoiceChannelCache()
-    {
+    default SnowflakeCacheView<VoiceChannel> getVoiceChannelCache() {
         return CacheView.allSnowflakes(() -> this.getShardCache().stream().map(JDA::getVoiceChannelCache));
     }
 
@@ -794,16 +682,15 @@ public interface ShardManager
      *
      * @return Possible-empty list of all known {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannels}.
      */
-    default List<VoiceChannel> getVoiceChannels()
-    {
+    default List<VoiceChannel> getVoiceChannels() {
         return this.getVoiceChannelCache().asList();
     }
 
     /**
      * Restarts all shards, shutting old ones down first.
-     * 
+     * <p>
      * As all shards need to connect to discord again this will take equally long as the startup of a new ShardManager
-     * (using the 5000ms + backoff as delay between starting new JDA instances). 
+     * (using the 5000ms + backoff as delay between starting new JDA instances).
      */
     void restart();
 
@@ -811,11 +698,8 @@ public interface ShardManager
      * Restarts the shards with the given id only.
      * <br> If there is no shard with the given Id this method acts like {@link #start(int)}.
      *
-     * @param  id
-     *         The id of the target shard
-     *
-     * @throws IllegalArgumentException
-     *         if shardId is negative or higher than maxShardId
+     * @param id The id of the target shard
+     * @throws IllegalArgumentException if shardId is negative or higher than maxShardId
      */
     void restart(int id);
 
@@ -826,14 +710,11 @@ public interface ShardManager
      *
      * <p>This will also change the game for shards that are created in the future.
      *
-     * @param  game
-     *         A {@link net.dv8tion.jda.core.entities.Game Game} instance or null to reset
-     *
-     * @see    net.dv8tion.jda.core.entities.Game#playing(String)
-     * @see    net.dv8tion.jda.core.entities.Game#streaming(String, String)
+     * @param game A {@link net.dv8tion.jda.core.entities.Game Game} instance or null to reset
+     * @see net.dv8tion.jda.core.entities.Game#playing(String)
+     * @see net.dv8tion.jda.core.entities.Game#streaming(String, String)
      */
-    default void setGame(final Game game)
-    {
+    default void setGame(final Game game) {
         this.setGameProvider(id -> game);
     }
 
@@ -844,14 +725,11 @@ public interface ShardManager
      *
      * <p>This will also change the provider for shards that are created in the future.
      *
-     * @param  gameProvider
-     *         A {@link net.dv8tion.jda.core.entities.Game Game} instance or null to reset
-     *
-     * @see    net.dv8tion.jda.core.entities.Game#playing(String)
-     * @see    net.dv8tion.jda.core.entities.Game#streaming(String, String)
+     * @param gameProvider A {@link net.dv8tion.jda.core.entities.Game Game} instance or null to reset
+     * @see net.dv8tion.jda.core.entities.Game#playing(String)
+     * @see net.dv8tion.jda.core.entities.Game#streaming(String, String)
      */
-    default void setGameProvider(final IntFunction<Game> gameProvider)
-    {
+    default void setGameProvider(final IntFunction<Game> gameProvider) {
         this.getShardCache().forEach(jda -> jda.getPresence().setGame(gameProvider.apply(jda.getShardInfo().getShardId())));
     }
 
@@ -863,11 +741,9 @@ public interface ShardManager
      *
      * <p>This will also change the value for shards that are created in the future.
      *
-     * @param  idle
-     *        boolean
+     * @param idle boolean
      */
-    default void setIdle(final boolean idle)
-    {
+    default void setIdle(final boolean idle) {
         this.setIdleProvider(id -> idle);
     }
 
@@ -876,11 +752,9 @@ public interface ShardManager
      *
      * <p>This will also change the provider for shards that are created in the future.
      *
-     * @param  idleProvider
-     *        boolean
+     * @param idleProvider boolean
      */
-    default void setIdleProvider(final IntFunction<Boolean> idleProvider)
-    {
+    default void setIdleProvider(final IntFunction<Boolean> idleProvider) {
         this.getShardCache().forEach(jda -> jda.getPresence().setIdle(idleProvider.apply(jda.getShardInfo().getShardId())));
     }
 
@@ -889,15 +763,11 @@ public interface ShardManager
      *
      * <p>This will also change the status for shards that are created in the future.
      *
-     * @throws IllegalArgumentException
-     *         if the provided OnlineStatus is {@link net.dv8tion.jda.core.OnlineStatus#UNKNOWN UNKNOWN}
-     *
-     * @param  status
-     *         the {@link net.dv8tion.jda.core.OnlineStatus OnlineStatus}
-     *         to be used (OFFLINE/null {@literal ->} INVISIBLE)
+     * @param status the {@link net.dv8tion.jda.core.OnlineStatus OnlineStatus}
+     *               to be used (OFFLINE/null {@literal ->} INVISIBLE)
+     * @throws IllegalArgumentException if the provided OnlineStatus is {@link net.dv8tion.jda.core.OnlineStatus#UNKNOWN UNKNOWN}
      */
-    default void setStatus(final OnlineStatus status)
-    {
+    default void setStatus(final OnlineStatus status) {
         this.setStatusProvider(id -> status);
     }
 
@@ -906,15 +776,11 @@ public interface ShardManager
      *
      * <p>This will also change the provider for shards that are created in the future.
      *
-     * @throws IllegalArgumentException
-     *         if the provided OnlineStatus is {@link net.dv8tion.jda.core.OnlineStatus#UNKNOWN UNKNOWN}
-     *
-     * @param  statusProvider
-     *         the {@link net.dv8tion.jda.core.OnlineStatus OnlineStatus}
-     *         to be used (OFFLINE/null {@literal ->} INVISIBLE)
+     * @param statusProvider the {@link net.dv8tion.jda.core.OnlineStatus OnlineStatus}
+     *                       to be used (OFFLINE/null {@literal ->} INVISIBLE)
+     * @throws IllegalArgumentException if the provided OnlineStatus is {@link net.dv8tion.jda.core.OnlineStatus#UNKNOWN UNKNOWN}
      */
-    default void setStatusProvider(final IntFunction<OnlineStatus> statusProvider)
-    {
+    default void setStatusProvider(final IntFunction<OnlineStatus> statusProvider) {
         this.getShardCache().forEach(jda -> jda.getPresence().setStatus(statusProvider.apply(jda.getShardInfo().getShardId())));
     }
 
@@ -928,16 +794,14 @@ public interface ShardManager
      * Shuts down the shard with the given id only.
      * <br> This does nothing if there is no shard with the given id.
      *
-     * @param  shardId
-     *        The id of the shard that should be stopped
+     * @param shardId The id of the shard that should be stopped
      */
     void shutdown(int shardId);
 
     /**
      * Adds a new shard with the given id to this ShardManager and starts it.
      *
-     * @param  shardId
-     *        The id of the shard that should be started
+     * @param shardId The id of the shard that should be started
      */
     void start(int shardId);
 

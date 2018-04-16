@@ -36,8 +36,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ReceivedMessage extends AbstractMessage
-{
+public class ReceivedMessage extends AbstractMessage {
     private final Object mutex = new Object();
 
     protected final JDAImpl api;
@@ -69,8 +68,7 @@ public class ReceivedMessage extends AbstractMessage
         long id, MessageChannel channel, MessageType type,
         boolean fromWebhook, boolean mentionsEveryone, TLongSet mentionedUsers, TLongSet mentionedRoles, boolean tts, boolean pinned,
         String content, String nonce, User author, OffsetDateTime editTime,
-        List<MessageReaction> reactions, List<Attachment> attachments, List<MessageEmbed> embeds)
-    {
+        List<MessageReaction> reactions, List<Attachment> attachments, List<MessageEmbed> embeds) {
         super(content, nonce, tts);
         this.id = id;
         this.channel = channel;
@@ -89,46 +87,38 @@ public class ReceivedMessage extends AbstractMessage
     }
 
     @Override
-    public JDA getJDA()
-    {
+    public JDA getJDA() {
         return api;
     }
 
     @Override
-    public boolean isPinned()
-    {
+    public boolean isPinned() {
         return pinned;
     }
 
     @Override
-    public RestAction<Void> pin()
-    {
+    public RestAction<Void> pin() {
         return channel.pinMessageById(getIdLong());
     }
 
     @Override
-    public RestAction<Void> unpin()
-    {
+    public RestAction<Void> unpin() {
         return channel.unpinMessageById(getIdLong());
     }
 
     @Override
-    public RestAction<Void> addReaction(Emote emote)
-    {
+    public RestAction<Void> addReaction(Emote emote) {
         Checks.notNull(emote, "Emote");
 
         MessageReaction reaction = reactions.parallelStream()
-                .filter(r -> Objects.equals(r.getReactionEmote().getId(), emote.getId()))
-                .findFirst().orElse(null);
+            .filter(r -> Objects.equals(r.getReactionEmote().getId(), emote.getId()))
+            .findFirst().orElse(null);
 
-        if (reaction == null)
-        {
+        if (reaction == null) {
             checkFake(emote, "Emote");
             if (!emote.canInteract(getJDA().getSelfUser(), channel))
                 throw new IllegalArgumentException("Cannot react with the provided emote because it is not available in the current channel.");
-        }
-        else if (reaction.isSelf())
-        {
+        } else if (reaction.isSelf()) {
             return new RestAction.EmptyRestAction<>(getJDA(), null);
         }
 
@@ -136,13 +126,12 @@ public class ReceivedMessage extends AbstractMessage
     }
 
     @Override
-    public RestAction<Void> addReaction(String unicode)
-    {
+    public RestAction<Void> addReaction(String unicode) {
         Checks.notEmpty(unicode, "Provided Unicode");
 
         MessageReaction reaction = reactions.parallelStream()
-                .filter(r -> Objects.equals(r.getReactionEmote().getName(), unicode))
-                .findFirst().orElse(null);
+            .filter(r -> Objects.equals(r.getReactionEmote().getName(), unicode))
+            .findFirst().orElse(null);
 
         if (reaction != null && reaction.isSelf())
             return new RestAction.EmptyRestAction<>(getJDA(), null);
@@ -151,36 +140,29 @@ public class ReceivedMessage extends AbstractMessage
     }
 
     @Override
-    public RestAction<Void> clearReactions()
-    {
+    public RestAction<Void> clearReactions() {
         if (!isFromType(ChannelType.TEXT))
             throw new IllegalStateException("Cannot clear reactions from a message in a Group or PrivateChannel.");
         return getTextChannel().clearReactionsById(getId());
     }
 
     @Override
-    public MessageType getType()
-    {
+    public MessageType getType() {
         return type;
     }
 
     @Override
-    public long getIdLong()
-    {
+    public long getIdLong() {
         return id;
     }
 
     @Override
-    public synchronized List<User> getMentionedUsers()
-    {
-        if (userMentions == null)
-        {
+    public synchronized List<User> getMentionedUsers() {
+        if (userMentions == null) {
             userMentions = new ArrayList<>();
             Matcher matcher = MentionType.USER.getPattern().matcher(content);
-            while (matcher.find())
-            {
-                try
-                {
+            while (matcher.find()) {
+                try {
                     long id = MiscUtil.parseSnowflake(matcher.group(1));
                     if (!mentionedUsers.contains(id))
                         continue;
@@ -189,7 +171,8 @@ public class ReceivedMessage extends AbstractMessage
                         user = api.getFakeUserMap().get(id);
                     if (user != null && !userMentions.contains(user))
                         userMentions.add(user);
-                } catch (NumberFormatException ignored) {}
+                } catch (NumberFormatException ignored) {
+                }
             }
             userMentions = Collections.unmodifiableList(userMentions);
         }
@@ -198,22 +181,18 @@ public class ReceivedMessage extends AbstractMessage
     }
 
     @Override
-    public synchronized List<TextChannel> getMentionedChannels()
-    {
-        if (channelMentions == null)
-        {
+    public synchronized List<TextChannel> getMentionedChannels() {
+        if (channelMentions == null) {
             channelMentions = new ArrayList<>();
             Matcher matcher = MentionType.CHANNEL.getPattern().matcher(content);
-            while (matcher.find())
-            {
-                try
-                {
+            while (matcher.find()) {
+                try {
                     String id = matcher.group(1);
                     TextChannel channel = getJDA().getTextChannelById(id);
                     if (channel != null && !channelMentions.contains(channel))
                         channelMentions.add(channel);
+                } catch (NumberFormatException ignored) {
                 }
-                catch (NumberFormatException ignored) {}
             }
             channelMentions = Collections.unmodifiableList(channelMentions);
         }
@@ -222,16 +201,12 @@ public class ReceivedMessage extends AbstractMessage
     }
 
     @Override
-    public synchronized List<Role> getMentionedRoles()
-    {
-        if (roleMentions == null)
-        {
+    public synchronized List<Role> getMentionedRoles() {
+        if (roleMentions == null) {
             roleMentions = new ArrayList<>();
             Matcher matcher = MentionType.ROLE.getPattern().matcher(content);
-            while (matcher.find())
-            {
-                try
-                {
+            while (matcher.find()) {
+                try {
                     long id = MiscUtil.parseSnowflake(matcher.group(1));
                     if (!mentionedRoles.contains(id))
                         continue;
@@ -242,8 +217,8 @@ public class ReceivedMessage extends AbstractMessage
                         role = getJDA().getRoleById(id);
                     if (role != null && !roleMentions.contains(role))
                         roleMentions.add(role);
+                } catch (NumberFormatException ignored) {
                 }
-                catch (NumberFormatException ignored) {}
             }
             roleMentions = Collections.unmodifiableList(roleMentions);
         }
@@ -252,13 +227,11 @@ public class ReceivedMessage extends AbstractMessage
     }
 
     @Override
-    public List<Member> getMentionedMembers(Guild guild)
-    {
+    public List<Member> getMentionedMembers(Guild guild) {
         Checks.notNull(guild, "Guild");
         List<User> mentionedUsers = getMentionedUsers();
         List<Member> members = new ArrayList<>();
-        for (User user : mentionedUsers)
-        {
+        for (User user : mentionedUsers) {
             Member member = guild.getMember(user);
             if (member != null)
                 members.add(member);
@@ -268,8 +241,7 @@ public class ReceivedMessage extends AbstractMessage
     }
 
     @Override
-    public List<Member> getMentionedMembers()
-    {
+    public List<Member> getMentionedMembers() {
         if (isFromType(ChannelType.TEXT))
             return getMentionedMembers(getGuild());
         else
@@ -277,8 +249,7 @@ public class ReceivedMessage extends AbstractMessage
     }
 
     @Override
-    public List<IMentionable> getMentions(MentionType... types)
-    {
+    public List<IMentionable> getMentions(MentionType... types) {
         if (types == null || types.length == 0)
             return getMentions(MentionType.values());
         List<IMentionable> mentions = new ArrayList<>();
@@ -288,13 +259,12 @@ public class ReceivedMessage extends AbstractMessage
         boolean role = false;
         boolean user = false;
         boolean emote = false;
-        for (MentionType type : types)
-        {
-            switch (type)
-            {
+        for (MentionType type : types) {
+            switch (type) {
                 case EVERYONE:
                 case HERE:
-                default: continue;
+                default:
+                    continue;
                 case CHANNEL:
                     if (!channel)
                         mentions.addAll(getMentionedChannels());
@@ -320,53 +290,42 @@ public class ReceivedMessage extends AbstractMessage
     }
 
     @Override
-    public boolean isMentioned(IMentionable mentionable, MentionType... types)
-    {
+    public boolean isMentioned(IMentionable mentionable, MentionType... types) {
         Checks.notNull(types, "Mention Types");
         if (types.length == 0)
             return isMentioned(mentionable, MentionType.values());
         final boolean isUserEntity = mentionable instanceof User || mentionable instanceof Member;
-        for (MentionType type : types)
-        {
-            switch (type)
-            {
-                case HERE:
-                {
+        for (MentionType type : types) {
+            switch (type) {
+                case HERE: {
                     if (isMass("@here") && isUserEntity)
                         return true;
                     break;
                 }
-                case EVERYONE:
-                {
+                case EVERYONE: {
                     if (isMass("@everyone") && isUserEntity)
                         return true;
                     break;
                 }
-                case USER:
-                {
+                case USER: {
                     if (isUserMentioned(mentionable))
                         return true;
                     break;
                 }
-                case ROLE:
-                {
+                case ROLE: {
                     if (isRoleMentioned(mentionable))
                         return true;
                     break;
                 }
-                case CHANNEL:
-                {
-                    if (mentionable instanceof TextChannel)
-                    {
+                case CHANNEL: {
+                    if (mentionable instanceof TextChannel) {
                         if (getMentionedChannels().contains(mentionable))
                             return true;
                     }
                     break;
                 }
-                case EMOTE:
-                {
-                    if (mentionable instanceof Emote)
-                    {
+                case EMOTE: {
+                    if (mentionable instanceof Emote) {
                         if (getEmotes().contains(mentionable))
                             return true;
                     }
@@ -378,91 +337,72 @@ public class ReceivedMessage extends AbstractMessage
         return false;
     }
 
-    private boolean isUserMentioned(IMentionable mentionable)
-    {
-        if (mentionable instanceof User)
-        {
+    private boolean isUserMentioned(IMentionable mentionable) {
+        if (mentionable instanceof User) {
             return getMentionedUsers().contains(mentionable);
-        }
-        else if (mentionable instanceof Member)
-        {
+        } else if (mentionable instanceof Member) {
             final Member member = (Member) mentionable;
             return getMentionedUsers().contains(member.getUser());
         }
         return false;
     }
 
-    private boolean isRoleMentioned(IMentionable mentionable)
-    {
-        if (mentionable instanceof Role)
-        {
+    private boolean isRoleMentioned(IMentionable mentionable) {
+        if (mentionable instanceof Role) {
             return getMentionedRoles().contains(mentionable);
-        }
-        else if (mentionable instanceof Member)
-        {
+        } else if (mentionable instanceof Member) {
             final Member member = (Member) mentionable;
             return CollectionUtils.containsAny(getMentionedRoles(), member.getRoles());
-        }
-        else if (isFromType(ChannelType.TEXT) && mentionable instanceof User)
-        {
+        } else if (isFromType(ChannelType.TEXT) && mentionable instanceof User) {
             final Member member = getGuild().getMember((User) mentionable);
             return member != null && CollectionUtils.containsAny(getMentionedRoles(), member.getRoles());
         }
         return false;
     }
 
-    private boolean isMass(String s)
-    {
+    private boolean isMass(String s) {
         return mentionsEveryone && content.contains(s);
     }
 
     @Override
-    public boolean mentionsEveryone()
-    {
+    public boolean mentionsEveryone() {
         return mentionsEveryone;
     }
 
     @Override
-    public boolean isEdited()
-    {
+    public boolean isEdited() {
         return editedTime != null;
     }
 
     @Override
-    public OffsetDateTime getEditedTime()
-    {
+    public OffsetDateTime getEditedTime() {
         return editedTime;
     }
 
     @Override
-    public User getAuthor()
-    {
+    public User getAuthor() {
         return author;
     }
 
     @Override
-    public Member getMember()
-    {
+    public Member getMember() {
         return isFromType(ChannelType.TEXT) ? getGuild().getMember(getAuthor()) : null;
     }
 
     @Override
-    public String getContentStripped()
-    {
+    public String getContentStripped() {
         if (strippedContent != null)
             return strippedContent;
-        synchronized (mutex)
-        {
+        synchronized (mutex) {
             if (strippedContent != null)
                 return strippedContent;
             String tmp = getContentDisplay();
             //all the formatting keys to keep track of
-            String[] keys = new String[]{ "*", "_", "`", "~~" };
+            String[] keys = new String[]{"*", "_", "`", "~~"};
 
             //find all tokens (formatting strings described above)
             TreeSet<FormatToken> tokens = new TreeSet<>(Comparator.comparingInt(t -> t.start));
-            for (String key : keys)
-            {
+            for (String key : keys) {
                 Matcher matcher = Pattern.compile(Pattern.quote(key)).matcher(tmp);
                 while (matcher.find())
                     tokens.add(new FormatToken(key, matcher.start()));
@@ -472,32 +412,25 @@ public class ReceivedMessage extends AbstractMessage
             Deque<FormatToken> stack = new ArrayDeque<>();
             List<FormatToken> toRemove = new ArrayList<>();
             boolean inBlock = false;
-            for (FormatToken token : tokens)
-            {
+            for (FormatToken token : tokens) {
                 if (stack.isEmpty() || !stack.peek().format.equals(token.format) || stack.peek().start + token
-                        .format.length() == token.start)
+                    .format.length() == token.start)
 
                 {
                     //we are at opening tag
-                    if (!inBlock)
-                    {
+                    if (!inBlock) {
                         //we are outside of block -> handle normally
-                        if (token.format.equals("`"))
-                        {
+                        if (token.format.equals("`")) {
                             //block start... invalidate all previous tags
                             stack.clear();
                             inBlock = true;
                         }
                         stack.push(token);
-                    }
-                    else if (token.format.equals("`"))
-                    {
+                    } else if (token.format.equals("`")) {
                         //we are inside of a block -> handle only block tag
                         stack.push(token);
                     }
-                }
-                else if (!stack.isEmpty())
-                {
+                } else if (!stack.isEmpty()) {
                     //we found a matching close-tag
                     toRemove.add(stack.pop());
                     toRemove.add(token);
@@ -511,8 +444,7 @@ public class ReceivedMessage extends AbstractMessage
             toRemove.sort(Comparator.comparingInt(t -> t.start));
             StringBuilder out = new StringBuilder();
             int currIndex = 0;
-            for (FormatToken formatToken : toRemove)
-            {
+            for (FormatToken formatToken : toRemove) {
                 if (currIndex < formatToken.start)
                     out.append(tmp.substring(currIndex, formatToken.start));
                 currIndex = formatToken.start + formatToken.format.length();
@@ -526,17 +458,14 @@ public class ReceivedMessage extends AbstractMessage
     }
 
     @Override
-    public String getContentDisplay()
-    {
+    public String getContentDisplay() {
         if (altContent != null)
             return altContent;
-        synchronized (mutex)
-        {
+        synchronized (mutex) {
             if (altContent != null)
                 return altContent;
             String tmp = content;
-            for (User user : getMentionedUsers())
-            {
+            for (User user : getMentionedUsers()) {
                 String name;
                 if (isFromType(ChannelType.TEXT) && getGuild().isMember(user))
                     name = getGuild().getMember(user).getEffectiveName();
@@ -544,16 +473,13 @@ public class ReceivedMessage extends AbstractMessage
                     name = user.getName();
                 tmp = tmp.replaceAll("<@!?" + Pattern.quote(user.getId()) + '>', '@' + Matcher.quoteReplacement(name));
             }
-            for (Emote emote : getEmotes())
-            {
+            for (Emote emote : getEmotes()) {
                 tmp = tmp.replace(emote.getAsMention(), ":" + emote.getName() + ":");
             }
-            for (TextChannel mentionedChannel : getMentionedChannels())
-            {
+            for (TextChannel mentionedChannel : getMentionedChannels()) {
                 tmp = tmp.replace(mentionedChannel.getAsMention(), '#' + mentionedChannel.getName());
             }
-            for (Role mentionedRole : getMentionedRoles())
-            {
+            for (Role mentionedRole : getMentionedRoles()) {
                 tmp = tmp.replace(mentionedRole.getAsMention(), '@' + mentionedRole.getName());
             }
             return altContent = tmp;
@@ -561,18 +487,15 @@ public class ReceivedMessage extends AbstractMessage
     }
 
     @Override
-    public String getContentRaw()
-    {
+    public String getContentRaw() {
         return content;
     }
 
     @Override
-    public List<String> getInvites()
-    {
+    public List<String> getInvites() {
         if (invites != null)
             return invites;
-        synchronized (mutex)
-        {
+        synchronized (mutex) {
             if (invites != null)
                 return invites;
             invites = new ArrayList<>();
@@ -584,83 +507,68 @@ public class ReceivedMessage extends AbstractMessage
     }
 
     @Override
-    public String getNonce()
-    {
+    public String getNonce() {
         return nonce;
     }
 
     @Override
-    public boolean isFromType(ChannelType type)
-    {
+    public boolean isFromType(ChannelType type) {
         return getChannelType() == type;
     }
 
     @Override
-    public ChannelType getChannelType()
-    {
+    public ChannelType getChannelType() {
         return channel.getType();
     }
 
     @Override
-    public MessageChannel getChannel()
-    {
+    public MessageChannel getChannel() {
         return channel;
     }
 
     @Override
-    public PrivateChannel getPrivateChannel()
-    {
+    public PrivateChannel getPrivateChannel() {
         return isFromType(ChannelType.PRIVATE) ? (PrivateChannel) channel : null;
     }
 
     @Override
-    public Group getGroup()
-    {
+    public Group getGroup() {
         return isFromType(ChannelType.GROUP) ? (Group) channel : null;
     }
 
     @Override
-    public TextChannel getTextChannel()
-    {
+    public TextChannel getTextChannel() {
         return isFromType(ChannelType.TEXT) ? (TextChannel) channel : null;
     }
 
     @Override
-    public Category getCategory()
-    {
+    public Category getCategory() {
         return isFromType(ChannelType.TEXT) ? getTextChannel().getParent() : null;
     }
 
     @Override
-    public Guild getGuild()
-    {
+    public Guild getGuild() {
         return isFromType(ChannelType.TEXT) ? getTextChannel().getGuild() : null;
     }
 
     @Override
-    public List<Attachment> getAttachments()
-    {
+    public List<Attachment> getAttachments() {
         return attachments;
     }
 
     @Override
-    public List<MessageEmbed> getEmbeds()
-    {
+    public List<MessageEmbed> getEmbeds() {
         return embeds;
     }
 
     @Override
-    public synchronized List<Emote> getEmotes()
-    {
-        if (this.emoteMentions == null)
-        {
+    public synchronized List<Emote> getEmotes() {
+        if (this.emoteMentions == null) {
             TLongSet foundIds = new TLongHashSet();
             emoteMentions = new ArrayList<>();
             Matcher matcher = MentionType.EMOTE.getPattern().matcher(getContentRaw());
-            while (matcher.find())
-            {
-                try
-                {
+            while (matcher.find()) {
+                try {
                     final long emoteId = MiscUtil.parseSnowflake(matcher.group(2));
                     // ensure distinct
                     if (foundIds.contains(emoteId))
@@ -675,8 +583,8 @@ public class ReceivedMessage extends AbstractMessage
                     if (emote == null)
                         emote = new EmoteImpl(emoteId, api).setAnimated(animated).setName(emoteName);
                     emoteMentions.add(emote);
+                } catch (NumberFormatException ignored) {
                 }
-                catch (NumberFormatException ignored) {}
             }
             emoteMentions = Collections.unmodifiableList(emoteMentions);
         }
@@ -684,45 +592,38 @@ public class ReceivedMessage extends AbstractMessage
     }
 
     @Override
-    public List<MessageReaction> getReactions()
-    {
+    public List<MessageReaction> getReactions() {
         return reactions;
     }
 
     @Override
-    public boolean isWebhookMessage()
-    {
+    public boolean isWebhookMessage() {
         return fromWebhook;
     }
 
     @Override
-    public boolean isTTS()
-    {
+    public boolean isTTS() {
         return isTTS;
     }
 
     @Override
-    public MessageAction editMessage(CharSequence newContent)
-    {
+    public MessageAction editMessage(CharSequence newContent) {
         return editMessage(new MessageBuilder().append(newContent).build());
     }
 
     @Override
-    public MessageAction editMessage(MessageEmbed newContent)
-    {
+    public MessageAction editMessage(MessageEmbed newContent) {
         return editMessage(new MessageBuilder().setEmbed(newContent).build());
     }
 
     @Override
-    public MessageAction editMessageFormat(String format, Object... args)
-    {
+    public MessageAction editMessageFormat(String format, Object... args) {
         Checks.notBlank(format, "Format String");
         return editMessage(new MessageBuilder().appendFormat(format, args).build());
     }
 
     @Override
-    public MessageAction editMessage(Message newContent)
-    {
+    public MessageAction editMessage(Message newContent) {
         if (!getJDA().getSelfUser().equals(getAuthor()))
             throw new IllegalStateException("Attempted to update message that was not sent by this account. You cannot modify other User's messages!");
 
@@ -730,22 +631,19 @@ public class ReceivedMessage extends AbstractMessage
     }
 
     @Override
-    public AuditableRestAction<Void> delete()
-    {
-        if (!getJDA().getSelfUser().equals(getAuthor()))
-        {
+    public AuditableRestAction<Void> delete() {
+        if (!getJDA().getSelfUser().equals(getAuthor())) {
             if (isFromType(ChannelType.PRIVATE) || isFromType(ChannelType.GROUP))
                 throw new IllegalStateException("Cannot delete another User's messages in a Group or PrivateChannel.");
             else if (!getGuild().getSelfMember()
-                    .hasPermission((TextChannel) getChannel(), Permission.MESSAGE_MANAGE))
+                .hasPermission((TextChannel) getChannel(), Permission.MESSAGE_MANAGE))
                 throw new InsufficientPermissionException(Permission.MESSAGE_MANAGE);
         }
         return channel.deleteMessageById(getIdLong());
     }
 
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         if (!(o instanceof ReceivedMessage))
             return false;
         ReceivedMessage oMsg = (ReceivedMessage) o;
@@ -753,29 +651,24 @@ public class ReceivedMessage extends AbstractMessage
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return Long.hashCode(id);
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return author != null
             ? String.format("M:%#s:%.20s(%s)", author, this, getId())
             : String.format("M:%.20s", this); // this message was made using MessageBuilder
     }
 
     @Override
-    protected void unsupported()
-    {
+    protected void unsupported() {
         throw new UnsupportedOperationException("This operation is not supported on received messages!");
     }
 
-    private boolean hasPermission(Permission permission)
-    {
-        switch (channel.getType())
-        {
+    private boolean hasPermission(Permission permission) {
+        switch (channel.getType()) {
             case TEXT:
                 return getMember().hasPermission(getTextChannel(), permission);
             default:
@@ -783,25 +676,21 @@ public class ReceivedMessage extends AbstractMessage
         }
     }
 
-    private void checkPermission(Permission permission)
-    {
-        if (channel.getType() == ChannelType.TEXT)
-        {
+    private void checkPermission(Permission permission) {
+        if (channel.getType() == ChannelType.TEXT) {
             Channel location = (Channel) channel;
             if (!location.getGuild().getSelfMember().hasPermission(location, permission))
                 throw new InsufficientPermissionException(permission);
         }
     }
 
-    private void checkFake(IFakeable o, String name)
-    {
+    private void checkFake(IFakeable o, String name) {
         if (o.isFake())
             throw new IllegalArgumentException("We are unable to use a fake " + name + " in this situation!");
     }
 
     @Override
-    public void formatTo(Formatter formatter, int flags, int width, int precision)
-    {
+    public void formatTo(Formatter formatter, int flags, int width, int precision) {
         boolean upper = (flags & FormattableFlags.UPPERCASE) == FormattableFlags.UPPERCASE;
         boolean leftJustified = (flags & FormattableFlags.LEFT_JUSTIFY) == FormattableFlags.LEFT_JUSTIFY;
         boolean alt = (flags & FormattableFlags.ALTERNATE) == FormattableFlags.ALTERNATE;
@@ -814,13 +703,11 @@ public class ReceivedMessage extends AbstractMessage
         appendFormat(formatter, width, precision, leftJustified, out);
     }
 
-    private static class FormatToken
-    {
+    private static class FormatToken {
         public final String format;
         public final int start;
 
-        public FormatToken(String format, int start)
-        {
+        public FormatToken(String format, int start) {
             this.format = format;
             this.start = start;
         }

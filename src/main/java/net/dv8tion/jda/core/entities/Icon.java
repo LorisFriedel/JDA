@@ -32,12 +32,10 @@ import java.util.Base64;
  *
  * @since 3.0
  */
-public class Icon
-{
+public class Icon {
     protected final String encoding;
 
-    protected Icon(String base64Encoding)
-    {
+    protected Icon(String base64Encoding) {
         //Note: the usage of `image/jpeg` does not mean png/gif are not supported!
         this.encoding = "data:image/jpeg;base64," + base64Encoding;
     }
@@ -47,8 +45,7 @@ public class Icon
      *
      * @return String representation of the encoded data for this icon
      */
-    public String getEncoding()
-    {
+    public String getEncoding() {
         return encoding;
     }
 
@@ -56,20 +53,13 @@ public class Icon
      * Creates an {@link Icon Icon} with the specified {@link java.io.File File}.
      * <br>We here read the specified File and forward the retrieved byte data to {@link #from(byte[])}.
      *
-     * @param  file
-     *         An existing, not-null file.
-     *
-     * @throws IllegalArgumentException
-     *         if the provided file is either null or does not exist
-     * @throws IOException
-     *         if there is a problem while reading the file.
-     *
+     * @param file An existing, not-null file.
      * @return An Icon instance representing the specified File
-     *
-     * @see    net.dv8tion.jda.core.utils.IOUtil#readFully(File)
+     * @throws IllegalArgumentException if the provided file is either null or does not exist
+     * @throws IOException              if there is a problem while reading the file.
+     * @see net.dv8tion.jda.core.utils.IOUtil#readFully(File)
      */
-    public static Icon from(File file) throws IOException
-    {
+    public static Icon from(File file) throws IOException {
         Checks.notNull(file, "Provided File");
         Checks.check(file.exists(), "Provided file does not exist!");
 
@@ -80,21 +70,14 @@ public class Icon
      * Creates an {@link Icon Icon} with the specified {@link java.io.InputStream InputStream}.
      * <br>We here read the specified InputStream and forward the retrieved byte data to {@link #from(byte[])}.
      *
-     * @param  stream
-     *         A not-null InputStream.
-     *
-     * @throws IllegalArgumentException
-     *         if the provided stream is null
-     * @throws IOException
-     *         If the first byte cannot be read for any reason other than the end of the file,
-     *         if the input stream has been closed, or if some other I/O error occurs.
-     *
+     * @param stream A not-null InputStream.
      * @return An Icon instance representing the specified InputStream
-     *
-     * @see    net.dv8tion.jda.core.utils.IOUtil#readFully(InputStream)
+     * @throws IllegalArgumentException if the provided stream is null
+     * @throws IOException              If the first byte cannot be read for any reason other than the end of the file,
+     *                                  if the input stream has been closed, or if some other I/O error occurs.
+     * @see net.dv8tion.jda.core.utils.IOUtil#readFully(InputStream)
      */
-    public static Icon from(InputStream stream) throws IOException
-    {
+    public static Icon from(InputStream stream) throws IOException {
         Checks.notNull(stream, "InputStream");
 
         return from(IOUtil.readFully(stream));
@@ -103,24 +86,16 @@ public class Icon
     /**
      * Creates an {@link Icon Icon} with the specified image data.
      *
-     * @param  data
-     *         not-null image data bytes.
-     *
-     * @throws IllegalArgumentException
-     *         if the provided data is null
-     *
+     * @param data not-null image data bytes.
      * @return An Icon instance representing the specified image data
+     * @throws IllegalArgumentException if the provided data is null
      */
-    public static Icon from(byte[] data)
-    {
+    public static Icon from(byte[] data) {
         Checks.notNull(data, "Provided byte[]");
 
-        try
-        {
+        try {
             return new Icon(new String(Base64.getEncoder().encode(data), "UTF-8"));
-        }
-        catch (UnsupportedEncodingException e)
-        {
+        } catch (UnsupportedEncodingException e) {
             throw new AssertionError(e); // thanks JDK 1.4
         }
     }

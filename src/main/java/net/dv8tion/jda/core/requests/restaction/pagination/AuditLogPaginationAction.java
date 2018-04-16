@@ -72,17 +72,15 @@ import java.util.List;
  * }
  * </code></pre>
  *
- * @since  3.2
+ * @since 3.2
  */
-public class AuditLogPaginationAction extends PaginationAction<AuditLogEntry, AuditLogPaginationAction>
-{
+public class AuditLogPaginationAction extends PaginationAction<AuditLogEntry, AuditLogPaginationAction> {
     protected final Guild guild;
     // filters
     protected ActionType type = null;
     protected String userId = null;
 
-    public AuditLogPaginationAction(Guild guild)
-    {
+    public AuditLogPaginationAction(Guild guild) {
         super(guild.getJDA(), Route.Guilds.GET_AUDIT_LOGS.compile(guild.getId()), 1, 100, 100);
         if (!guild.getSelfMember().hasPermission(Permission.VIEW_AUDIT_LOGS))
             throw new InsufficientPermissionException(Permission.VIEW_AUDIT_LOGS);
@@ -92,14 +90,11 @@ public class AuditLogPaginationAction extends PaginationAction<AuditLogEntry, Au
     /**
      * Filters retrieved entities by the specified {@link net.dv8tion.jda.core.audit.ActionType ActionType}
      *
-     * @param  type
-     *         {@link net.dv8tion.jda.core.audit.ActionType ActionType} used to filter,
-     *         or {@code null} to remove type filtering
-     *
+     * @param type {@link net.dv8tion.jda.core.audit.ActionType ActionType} used to filter,
+     *             or {@code null} to remove type filtering
      * @return The current AuditLogPaginationAction for chaining convenience
      */
-    public AuditLogPaginationAction type(ActionType type)
-    {
+    public AuditLogPaginationAction type(ActionType type) {
         this.type = type;
         return this;
     }
@@ -108,14 +103,11 @@ public class AuditLogPaginationAction extends PaginationAction<AuditLogEntry, Au
      * Filters retrieved entities by the specified {@link net.dv8tion.jda.core.entities.User User}.
      * <br>This specified the action issuer and not the target of an action. (Targets need not be users)
      *
-     * @param  user
-     *         {@link net.dv8tion.jda.core.entities.User User} used to filter,
-     *         or {@code null} to remove user filtering
-     *
+     * @param user {@link net.dv8tion.jda.core.entities.User User} used to filter,
+     *             or {@code null} to remove user filtering
      * @return The current AuditLogPaginationAction for chaining convenience
      */
-    public AuditLogPaginationAction user(User user)
-    {
+    public AuditLogPaginationAction user(User user) {
         return user(user == null ? null : user.getId());
     }
 
@@ -123,14 +115,11 @@ public class AuditLogPaginationAction extends PaginationAction<AuditLogEntry, Au
      * Filters retrieved entities by the specified {@link net.dv8tion.jda.core.entities.User User} id.
      * <br>This specified the action issuer and not the target of an action. (Targets need not be users)
      *
-     * @param  userId
-     *         {@link net.dv8tion.jda.core.entities.User User} id used to filter,
-     *         or {@code null} to remove user filtering
-     *
+     * @param userId {@link net.dv8tion.jda.core.entities.User User} id used to filter,
+     *               or {@code null} to remove user filtering
      * @return The current AuditLogPaginationAction for chaining convenience
      */
-    public AuditLogPaginationAction user(String userId)
-    {
+    public AuditLogPaginationAction user(String userId) {
         this.userId = userId;
         return this;
     }
@@ -138,14 +127,11 @@ public class AuditLogPaginationAction extends PaginationAction<AuditLogEntry, Au
     /**
      * Filters retrieved entities by the specified {@link net.dv8tion.jda.core.entities.User User} id.
      *
-     * @param  userId
-     *         {@link net.dv8tion.jda.core.entities.User User} id used to filter,
-     *         or {@code null} to remove user filtering
-     *
+     * @param userId {@link net.dv8tion.jda.core.entities.User User} id used to filter,
+     *               or {@code null} to remove user filtering
      * @return The current AuditLogPaginationAction for chaining convenience
      */
-    public AuditLogPaginationAction user(long userId)
-    {
+    public AuditLogPaginationAction user(long userId) {
         return user(Long.toUnsignedString(userId));
     }
 
@@ -155,14 +141,12 @@ public class AuditLogPaginationAction extends PaginationAction<AuditLogEntry, Au
      *
      * @return The never-null target Guild
      */
-    public Guild getGuild()
-    {
+    public Guild getGuild() {
         return guild;
     }
 
     @Override
-    protected Route.CompiledRoute finalizeRoute()
-    {
+    protected Route.CompiledRoute finalizeRoute() {
         Route.CompiledRoute route = super.finalizeRoute();
 
         final String limit = String.valueOf(this.limit.get());
@@ -183,10 +167,8 @@ public class AuditLogPaginationAction extends PaginationAction<AuditLogEntry, Au
     }
 
     @Override
-    protected void handleResponse(Response response, Request<List<AuditLogEntry>> request)
-    {
-        if (!response.isOk())
-        {
+    protected void handleResponse(Response response, Request<List<AuditLogEntry>> request) {
+        if (!response.isOk()) {
             request.onFailure(response);
             return;
         }
@@ -199,15 +181,12 @@ public class AuditLogPaginationAction extends PaginationAction<AuditLogEntry, Au
         EntityBuilder builder = api.getEntityBuilder();
 
         TLongObjectMap<JSONObject> userMap = new TLongObjectHashMap<>();
-        for (int i = 0; i < users.length(); i++)
-        {
+        for (int i = 0; i < users.length(); i++) {
             JSONObject user = users.getJSONObject(i);
             userMap.put(user.getLong("id"), user);
         }
-        for (int i = 0; i < entries.length(); i++)
-        {
-            try
-            {
+        for (int i = 0; i < entries.length(); i++) {
+            try {
                 JSONObject entry = entries.getJSONObject(i);
                 JSONObject user = userMap.get(entry.getLong("user_id"));
                 AuditLogEntry result = builder.createAuditLogEntry((GuildImpl) guild, entry, user);
@@ -215,9 +194,7 @@ public class AuditLogPaginationAction extends PaginationAction<AuditLogEntry, Au
                 if (this.useCache)
                     this.cached.add(result);
                 this.last = result;
-            }
-            catch (JSONException | NullPointerException e)
-            {
+            } catch (JSONException | NullPointerException e) {
                 LOG.warn("Encountered exception in AuditLogPagination", e);
             }
         }

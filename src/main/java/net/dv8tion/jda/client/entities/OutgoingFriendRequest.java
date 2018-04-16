@@ -20,8 +20,7 @@ import net.dv8tion.jda.core.requests.RestAction;
 
 import javax.annotation.CheckReturnValue;
 
-public interface OutgoingFriendRequest extends Relationship
-{
+public interface OutgoingFriendRequest extends Relationship {
     @CheckReturnValue
     RestAction cancel();
 }

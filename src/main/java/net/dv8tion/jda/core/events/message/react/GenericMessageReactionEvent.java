@@ -27,13 +27,11 @@ import net.dv8tion.jda.core.events.message.GenericMessageEvent;
  *
  * <p>Can be used to detect both remove and add events.
  */
-public class GenericMessageReactionEvent extends GenericMessageEvent
-{
+public class GenericMessageReactionEvent extends GenericMessageEvent {
     protected User issuer;
     protected MessageReaction reaction;
 
-    public GenericMessageReactionEvent(JDA api, long responseNumber, User user, MessageReaction reaction)
-    {
+    public GenericMessageReactionEvent(JDA api, long responseNumber, User user, MessageReaction reaction) {
         super(api, responseNumber, reaction.getMessageIdLong(), reaction.getChannel());
         this.issuer = user;
         this.reaction = reaction;
@@ -44,8 +42,7 @@ public class GenericMessageReactionEvent extends GenericMessageEvent
      *
      * @return The reacting user
      */
-    public User getUser()
-    {
+    public User getUser() {
         return issuer;
     }
 
@@ -55,8 +52,7 @@ public class GenericMessageReactionEvent extends GenericMessageEvent
      *
      * @return Member of the reacting user or null
      */
-    public Member getMember()
-    {
+    public Member getMember() {
         Guild guild = getGuild();
         return guild != null ? guild.getMember(getUser()) : null;
     }
@@ -66,8 +62,7 @@ public class GenericMessageReactionEvent extends GenericMessageEvent
      *
      * @return The MessageReaction
      */
-    public MessageReaction getReaction()
-    {
+    public MessageReaction getReaction() {
         return reaction;
     }
 
@@ -77,8 +72,7 @@ public class GenericMessageReactionEvent extends GenericMessageEvent
      *
      * @return The ReactionEmote instance
      */
-    public MessageReaction.ReactionEmote getReactionEmote()
-    {
+    public MessageReaction.ReactionEmote getReactionEmote() {
         return reaction.getReactionEmote();
     }
 }

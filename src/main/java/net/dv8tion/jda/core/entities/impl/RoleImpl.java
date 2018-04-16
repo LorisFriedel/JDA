@@ -40,8 +40,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class RoleImpl implements Role
-{
+public class RoleImpl implements Role {
     private final long id;
     private final Guild guild;
 
@@ -58,22 +57,19 @@ public class RoleImpl implements Role
     private int color;
     private int rawPosition;
 
-    public RoleImpl(long id, Guild guild)
-    {
+    public RoleImpl(long id, Guild guild) {
         this.id = id;
         this.guild = guild;
     }
 
     @Override
-    public int getPosition()
-    {
+    public int getPosition() {
         if (this == guild.getPublicRole())
             return -1;
 
         //Subtract 1 to get into 0-index, and 1 to disregard the everyone role.
         int i = guild.getRoles().size() - 2;
-        for (Role r : guild.getRoles())
-        {
+        for (Role r : guild.getRoles()) {
             if (r == this)
                 return i;
             i--;
@@ -82,72 +78,60 @@ public class RoleImpl implements Role
     }
 
     @Override
-    public int getPositionRaw()
-    {
+    public int getPositionRaw() {
         return rawPosition;
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
     @Override
-    public boolean isManaged()
-    {
+    public boolean isManaged() {
         return managed;
     }
 
     @Override
-    public boolean isHoisted()
-    {
+    public boolean isHoisted() {
         return hoisted;
     }
 
     @Override
-    public boolean isMentionable()
-    {
+    public boolean isMentionable() {
         return mentionable;
     }
 
     @Override
-    public long getPermissionsRaw()
-    {
+    public long getPermissionsRaw() {
         return rawPermissions;
     }
 
     @Override
-    public List<Permission> getPermissions()
-    {
+    public List<Permission> getPermissions() {
         return Collections.unmodifiableList(
-                Permission.getPermissions(rawPermissions));
+            Permission.getPermissions(rawPermissions));
     }
 
     @Override
-    public Color getColor()
-    {
+    public Color getColor() {
         return color != Role.DEFAULT_COLOR_RAW ? new Color(color) : null;
     }
 
     @Override
-    public int getColorRaw()
-    {
+    public int getColorRaw() {
         return color;
     }
 
     @Override
-    public boolean isPublicRole()
-    {
+    public boolean isPublicRole() {
         return this.equals(this.getGuild().getPublicRole());
     }
 
     @Override
-    public boolean hasPermission(Permission... permissions)
-    {
+    public boolean hasPermission(Permission... permissions) {
         long effectivePerms = rawPermissions | guild.getPublicRole().getPermissionsRaw();
-        for (Permission perm : permissions)
-        {
+        for (Permission perm : permissions) {
             final long rawValue = perm.getRawValue();
             if ((effectivePerms & rawValue) != rawValue)
                 return false;
@@ -156,19 +140,16 @@ public class RoleImpl implements Role
     }
 
     @Override
-    public boolean hasPermission(Collection<Permission> permissions)
-    {
+    public boolean hasPermission(Collection<Permission> permissions) {
         Checks.notNull(permissions, "Permission Collection");
 
         return hasPermission(permissions.toArray(Permission.EMPTY_PERMISSIONS));
     }
 
     @Override
-    public boolean hasPermission(Channel channel, Permission... permissions)
-    {
+    public boolean hasPermission(Channel channel, Permission... permissions) {
         long effectivePerms = PermissionUtil.getEffectivePermission(channel, this);
-        for (Permission perm : permissions)
-        {
+        for (Permission perm : permissions) {
             final long rawValue = perm.getRawValue();
             if ((effectivePerms & rawValue) != rawValue)
                 return false;
@@ -177,43 +158,37 @@ public class RoleImpl implements Role
     }
 
     @Override
-    public boolean hasPermission(Channel channel, Collection<Permission> permissions)
-    {
+    public boolean hasPermission(Channel channel, Collection<Permission> permissions) {
         Checks.notNull(permissions, "Permission Collection");
 
         return hasPermission(channel, permissions.toArray(Permission.EMPTY_PERMISSIONS));
     }
 
     @Override
-    public boolean canInteract(Role role)
-    {
+    public boolean canInteract(Role role) {
         return PermissionUtil.canInteract(this, role);
     }
 
     @Override
-    public Guild getGuild()
-    {
+    public Guild getGuild() {
         return guild;
     }
 
     @Override
-    public RoleAction createCopy(Guild guild)
-    {
+    public RoleAction createCopy(Guild guild) {
         Checks.notNull(guild, "Guild");
         return guild.getController().createRole()
-                    .setColor(color)
-                    .setHoisted(hoisted)
-                    .setMentionable(mentionable)
-                    .setName(name)
-                    .setPermissions(rawPermissions);
+            .setColor(color)
+            .setHoisted(hoisted)
+            .setMentionable(mentionable)
+            .setName(name)
+            .setPermissions(rawPermissions);
     }
 
     @Override
-    public RoleManager getManager()
-    {
+    public RoleManager getManager() {
         RoleManager mng = manager;
-        if (mng == null)
-        {
+        if (mng == null) {
             mng = MiscUtil.locked(mngLock, () ->
             {
                 if (manager == null)
@@ -226,11 +201,9 @@ public class RoleImpl implements Role
 
     @Override
     @Deprecated
-    public net.dv8tion.jda.core.managers.RoleManagerUpdatable getManagerUpdatable()
-    {
+    public net.dv8tion.jda.core.managers.RoleManagerUpdatable getManagerUpdatable() {
         net.dv8tion.jda.core.managers.RoleManagerUpdatable mng = managerUpdatable;
-        if (mng == null)
-        {
+        if (mng == null) {
             mng = MiscUtil.locked(mngLock, () ->
             {
                 if (managerUpdatable == null)
@@ -242,21 +215,18 @@ public class RoleImpl implements Role
     }
 
     @Override
-    public AuditableRestAction<Void> delete()
-    {
+    public AuditableRestAction<Void> delete() {
         if (!getGuild().getSelfMember().hasPermission(Permission.MANAGE_ROLES))
             throw new InsufficientPermissionException(Permission.MANAGE_ROLES);
-        if(!PermissionUtil.canInteract(getGuild().getSelfMember(), this))
+        if (!PermissionUtil.canInteract(getGuild().getSelfMember(), this))
             throw new HierarchyException("Can't delete role >= highest self-role");
         if (managed)
             throw new UnsupportedOperationException("Cannot delete a Role that is managed. ");
 
         Route.CompiledRoute route = Route.Roles.DELETE_ROLE.compile(guild.getId(), getId());
-        return new AuditableRestAction<Void>(getJDA(), route)
-        {
+        return new AuditableRestAction<Void>(getJDA(), route) {
             @Override
-            protected void handleResponse(Response response, Request<Void> request)
-            {
+            protected void handleResponse(Response response, Request<Void> request) {
                 if (response.isOk())
                     request.onSuccess(null);
                 else
@@ -266,26 +236,22 @@ public class RoleImpl implements Role
     }
 
     @Override
-    public JDA getJDA()
-    {
+    public JDA getJDA() {
         return guild.getJDA();
     }
 
     @Override
-    public String getAsMention()
-    {
+    public String getAsMention() {
         return "<@&" + getId() + '>';
     }
 
     @Override
-    public long getIdLong()
-    {
+    public long getIdLong() {
         return id;
     }
 
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         if (!(o instanceof Role))
             return false;
         Role oRole = (Role) o;
@@ -293,20 +259,17 @@ public class RoleImpl implements Role
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return Long.hashCode(id);
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "R:" + getName() + '(' + id + ')';
     }
 
     @Override
-    public int compareTo(Role r)
-    {
+    public int compareTo(Role r) {
         if (this == r)
             return 0;
 
@@ -327,44 +290,37 @@ public class RoleImpl implements Role
 
     // -- Setters --
 
-    public RoleImpl setName(String name)
-    {
+    public RoleImpl setName(String name) {
         this.name = name;
         return this;
     }
 
-    public RoleImpl setColor(int color)
-    {
+    public RoleImpl setColor(int color) {
         this.color = color;
         return this;
     }
 
-    public RoleImpl setManaged(boolean managed)
-    {
+    public RoleImpl setManaged(boolean managed) {
         this.managed = managed;
         return this;
     }
 
-    public RoleImpl setHoisted(boolean hoisted)
-    {
+    public RoleImpl setHoisted(boolean hoisted) {
         this.hoisted = hoisted;
         return this;
     }
 
-    public RoleImpl setMentionable(boolean mentionable)
-    {
+    public RoleImpl setMentionable(boolean mentionable) {
         this.mentionable = mentionable;
         return this;
     }
 
-    public RoleImpl setRawPermissions(long rawPermissions)
-    {
+    public RoleImpl setRawPermissions(long rawPermissions) {
         this.rawPermissions = rawPermissions;
         return this;
     }
 
-    public RoleImpl setRawPosition(int rawPosition)
-    {
+    public RoleImpl setRawPosition(int rawPosition) {
         this.rawPosition = rawPosition;
         return this;
     }

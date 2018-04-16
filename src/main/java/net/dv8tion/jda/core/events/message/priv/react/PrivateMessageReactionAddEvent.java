@@ -25,10 +25,8 @@ import net.dv8tion.jda.core.entities.User;
  *
  * <p>Can be used to detect when a reaction is added in a private channel.
  */
-public class PrivateMessageReactionAddEvent extends GenericPrivateMessageReactionEvent
-{
-    public PrivateMessageReactionAddEvent(JDA api, long responseNumber, User user, MessageReaction reaction)
-    {
+public class PrivateMessageReactionAddEvent extends GenericPrivateMessageReactionEvent {
+    public PrivateMessageReactionAddEvent(JDA api, long responseNumber, User user, MessageReaction reaction) {
         super(api, responseNumber, user, reaction);
     }
 }

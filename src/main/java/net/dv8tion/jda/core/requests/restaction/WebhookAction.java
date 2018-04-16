@@ -33,13 +33,11 @@ import java.util.function.BooleanSupplier;
  * {@link net.dv8tion.jda.core.entities.Webhook Webhook} Builder system created as an extension of {@link net.dv8tion.jda.core.requests.RestAction}
  * <br>Provides an easy way to gather and deliver information to Discord to create {@link net.dv8tion.jda.core.entities.Webhook Webhooks}.
  */
-public class WebhookAction extends AuditableRestAction<Webhook>
-{
+public class WebhookAction extends AuditableRestAction<Webhook> {
     protected String name;
     protected Icon avatar = null;
 
-    public WebhookAction(JDA api, Route.CompiledRoute route, String name)
-    {
+    public WebhookAction(JDA api, Route.CompiledRoute route, String name) {
         super(api, route);
         this.name = name;
     }
@@ -47,17 +45,12 @@ public class WebhookAction extends AuditableRestAction<Webhook>
     /**
      * Sets the <b>Name</b> for the custom Webhook User
      *
-     * @param  name
-     *         A not-null String name for the new Webhook user.
-     *
-     * @throws IllegalArgumentException
-     *         If the specified name is not in the range of 2-100.
-     *
+     * @param name A not-null String name for the new Webhook user.
      * @return The current WebhookAction for chaining convenience.
+     * @throws IllegalArgumentException If the specified name is not in the range of 2-100.
      */
     @CheckReturnValue
-    public WebhookAction setName(String name)
-    {
+    public WebhookAction setName(String name) {
         Checks.notNull(name, "Webhook name");
         Checks.check(name.length() >= 2 && name.length() <= 100, "The webhook name must be in the range of 2-100!");
 
@@ -66,42 +59,35 @@ public class WebhookAction extends AuditableRestAction<Webhook>
     }
 
     @Override
-    public WebhookAction setCheck(BooleanSupplier checks)
-    {
+    public WebhookAction setCheck(BooleanSupplier checks) {
         return (WebhookAction) super.setCheck(checks);
     }
 
     /**
      * Sets the <b>Avatar</b> for the custom Webhook User
      *
-     * @param  icon
-     *         An {@link net.dv8tion.jda.core.entities.Icon Icon} for the new avatar.
-     *         Or null to use default avatar.
-     *
+     * @param icon An {@link net.dv8tion.jda.core.entities.Icon Icon} for the new avatar.
+     *             Or null to use default avatar.
      * @return The current WebhookAction for chaining convenience.
      */
     @CheckReturnValue
-    public WebhookAction setAvatar(Icon icon)
-    {
+    public WebhookAction setAvatar(Icon icon) {
         this.avatar = icon;
         return this;
     }
 
     @Override
-    public RequestBody finalizeData()
-    {
+    public RequestBody finalizeData() {
         JSONObject object = new JSONObject();
-        object.put("name",   name);
+        object.put("name", name);
         object.put("avatar", avatar != null ? avatar.getEncoding() : JSONObject.NULL);
 
         return getRequestBody(object);
     }
 
     @Override
-    protected void handleResponse(Response response, Request<Webhook> request)
-    {
-        if (!response.isOk())
-        {
+    protected void handleResponse(Response response, Request<Webhook> request) {
+        if (!response.isOk()) {
             request.onFailure(response);
             return;
         }

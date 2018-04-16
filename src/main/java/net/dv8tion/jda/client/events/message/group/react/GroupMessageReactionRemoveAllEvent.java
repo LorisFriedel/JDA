@@ -20,10 +20,8 @@ import net.dv8tion.jda.client.entities.Group;
 import net.dv8tion.jda.client.events.message.group.GenericGroupMessageEvent;
 import net.dv8tion.jda.core.JDA;
 
-public class GroupMessageReactionRemoveAllEvent extends GenericGroupMessageEvent
-{
-    public GroupMessageReactionRemoveAllEvent(JDA api, long responseNumber, long messageId, Group channel)
-    {
+public class GroupMessageReactionRemoveAllEvent extends GenericGroupMessageEvent {
+    public GroupMessageReactionRemoveAllEvent(JDA api, long responseNumber, long messageId, Group channel) {
         super(api, responseNumber, messageId, channel);
     }
 }

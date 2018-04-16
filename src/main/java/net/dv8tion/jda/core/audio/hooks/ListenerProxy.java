@@ -18,78 +18,61 @@ package net.dv8tion.jda.core.audio.hooks;
 
 import net.dv8tion.jda.core.entities.User;
 
-public class ListenerProxy implements ConnectionListener
-{
+public class ListenerProxy implements ConnectionListener {
     private final Object listenerLock = new Object();
     private ConnectionListener listener = null;
 
     @Override
-    public void onPing(long ping)
-    {
-        synchronized (listenerLock)
-        {
-            if (listener == null)
+    public void onPing(long ping) {
+        synchronized (listenerLock) {
+            if (listener == null) {
                 return;
+            }
 
-            try
-            {
+            try {
                 listener.onPing(ping);
-            }
-            catch (Throwable t)
-            {
+            } catch (Throwable t) {
                 t.printStackTrace();
             }
         }
     }
 
     @Override
-    public void onStatusChange(ConnectionStatus status)
-    {
-        synchronized (listenerLock)
-        {
-            if (listener == null)
+    public void onStatusChange(ConnectionStatus status) {
+        synchronized (listenerLock) {
+            if (listener == null) {
                 return;
+            }
 
-            try
-            {
+            try {
                 listener.onStatusChange(status);
-            }
-            catch (Throwable t)
-            {
+            } catch (Throwable t) {
                 t.printStackTrace();
             }
         }
     }
 
     @Override
-    public void onUserSpeaking(User user, boolean speaking)
-    {
-        synchronized (listenerLock)
-        {
-            if (listener == null)
+    public void onUserSpeaking(User user, boolean speaking) {
+        synchronized (listenerLock) {
+            if (listener == null) {
                 return;
-
-            try
-            {
-                listener.onUserSpeaking(user, speaking);
             }
-            catch (Throwable t)
-            {
+            try {
+                listener.onUserSpeaking(user, speaking);
+            } catch (Throwable t) {
                 t.printStackTrace();
             }
         }
     }
 
-    public void setListener(ConnectionListener listener)
-    {
-        synchronized (listenerLock)
-        {
+    public void setListener(ConnectionListener listener) {
+        synchronized (listenerLock) {
             this.listener = listener;
         }
     }
 
-    public ConnectionListener getListener()
-    {
+    public ConnectionListener getListener() {
         return listener;
     }
 }

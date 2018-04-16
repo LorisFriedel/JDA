@@ -31,8 +31,7 @@ import java.util.FormattableFlags;
 import java.util.Formatter;
 import java.util.List;
 
-public class UserImpl implements User
-{
+public class UserImpl implements User {
     protected final long id;
     protected final JDAImpl api;
 
@@ -43,65 +42,55 @@ public class UserImpl implements User
     protected boolean bot;
     protected boolean fake = false;
 
-    public UserImpl(long id, JDAImpl api)
-    {
+    public UserImpl(long id, JDAImpl api) {
         this.id = id;
         this.api = api;
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
     @Override
-    public String getDiscriminator()
-    {
+    public String getDiscriminator() {
         return String.format("%04d", discriminator);
     }
 
     @Override
-    public String getAvatarId()
-    {
+    public String getAvatarId() {
         return avatarId;
     }
 
     @Override
-    public String getAvatarUrl()
-    {
+    public String getAvatarUrl() {
         return getAvatarId() == null ? null : "https://cdn.discordapp.com/avatars/" + getId() + "/" + getAvatarId()
-                + (getAvatarId().startsWith("a_") ? ".gif" : ".png");
+            + (getAvatarId().startsWith("a_") ? ".gif" : ".png");
     }
 
     @Override
-    public String getDefaultAvatarId()
-    {
+    public String getDefaultAvatarId() {
         return DefaultAvatar.values()[Integer.parseInt(getDiscriminator()) % DefaultAvatar.values().length].toString();
     }
 
     @Override
-    public String getDefaultAvatarUrl()
-    {
+    public String getDefaultAvatarUrl() {
         return "https://discordapp.com/assets/" + getDefaultAvatarId() + ".png";
     }
 
     @Override
-    public String getEffectiveAvatarUrl()
-    {
+    public String getEffectiveAvatarUrl() {
         return getAvatarUrl() == null ? getDefaultAvatarUrl() : getAvatarUrl();
     }
 
 
     @Override
-    public boolean hasPrivateChannel()
-    {
+    public boolean hasPrivateChannel() {
         return privateChannel != null;
     }
 
     @Override
-    public RestAction<PrivateChannel> openPrivateChannel()
-    {
+    public RestAction<PrivateChannel> openPrivateChannel() {
         if (privateChannel != null)
             return new RestAction.EmptyRestAction<>(getJDA(), privateChannel);
 
@@ -110,19 +99,14 @@ public class UserImpl implements User
 
         Route.CompiledRoute route = Route.Self.CREATE_PRIVATE_CHANNEL.compile();
         JSONObject body = new JSONObject().put("recipient_id", getId());
-        return new RestAction<PrivateChannel>(api, route, body)
-        {
+        return new RestAction<PrivateChannel>(api, route, body) {
             @Override
-            protected void handleResponse(Response response, Request<PrivateChannel> request)
-            {
-                if (response.isOk())
-                {
+            protected void handleResponse(Response response, Request<PrivateChannel> request) {
+                if (response.isOk()) {
                     PrivateChannel priv = api.getEntityBuilder().createPrivateChannel(response.getObject());
                     UserImpl.this.privateChannel = priv;
                     request.onSuccess(priv);
-                }
-                else
-                {
+                } else {
                     request.onFailure(response);
                 }
             }
@@ -130,13 +114,11 @@ public class UserImpl implements User
     }
 
     @Override
-    public List<Guild> getMutualGuilds()
-    {
+    public List<Guild> getMutualGuilds() {
         return getJDA().getMutualGuilds(this);
     }
 
-    public PrivateChannel getPrivateChannel()
-    {
+    public PrivateChannel getPrivateChannel() {
         if (!hasPrivateChannel())
             throw new IllegalStateException("There is no PrivateChannel for this user yet! Use User#openPrivateChannel() first!");
 
@@ -144,38 +126,32 @@ public class UserImpl implements User
     }
 
     @Override
-    public boolean isBot()
-    {
+    public boolean isBot() {
         return bot;
     }
 
     @Override
-    public JDA getJDA()
-    {
+    public JDA getJDA() {
         return api;
     }
 
     @Override
-    public String getAsMention()
-    {
+    public String getAsMention() {
         return "<@" + id + '>';
     }
 
     @Override
-    public long getIdLong()
-    {
+    public long getIdLong() {
         return id;
     }
 
     @Override
-    public boolean isFake()
-    {
+    public boolean isFake() {
         return fake;
     }
 
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         if (!(o instanceof UserImpl))
             return false;
         UserImpl oUser = (UserImpl) o;
@@ -183,58 +159,49 @@ public class UserImpl implements User
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return Long.hashCode(id);
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "U:" + getName() + '(' + id + ')';
     }
 
     // -- Setters --
 
-    public UserImpl setName(String name)
-    {
+    public UserImpl setName(String name) {
         this.name = name;
         return this;
     }
 
-    public UserImpl setDiscriminator(String discriminator)
-    {
+    public UserImpl setDiscriminator(String discriminator) {
         this.discriminator = Short.parseShort(discriminator);
         return this;
     }
 
-    public UserImpl setAvatarId(String avatarId)
-    {
+    public UserImpl setAvatarId(String avatarId) {
         this.avatarId = avatarId;
         return this;
     }
 
-    public UserImpl setPrivateChannel(PrivateChannel privateChannel)
-    {
+    public UserImpl setPrivateChannel(PrivateChannel privateChannel) {
         this.privateChannel = privateChannel;
         return this;
     }
 
-    public UserImpl setBot(boolean bot)
-    {
+    public UserImpl setBot(boolean bot) {
         this.bot = bot;
         return this;
     }
 
-    public UserImpl setFake(boolean fake)
-    {
+    public UserImpl setFake(boolean fake) {
         this.fake = fake;
         return this;
     }
 
     @Override
-    public void formatTo(Formatter formatter, int flags, int width, int precision)
-    {
+    public void formatTo(Formatter formatter, int flags, int width, int precision) {
         boolean alt = (flags & FormattableFlags.ALTERNATE) == FormattableFlags.ALTERNATE;
         boolean upper = (flags & FormattableFlags.UPPERCASE) == FormattableFlags.UPPERCASE;
         boolean leftJustified = (flags & FormattableFlags.LEFT_JUSTIFY) == FormattableFlags.LEFT_JUSTIFY;
@@ -250,8 +217,7 @@ public class UserImpl implements User
         MiscUtil.appendTo(formatter, width, precision, leftJustified, out);
     }
 
-    public enum DefaultAvatar
-    {
+    public enum DefaultAvatar {
         BLURPLE("6debd47ed13483642cf09e832ed0bc1b"),
         GREY("322c936a8c8be1b803cd94861bdfa868"),
         GREEN("dd4dbc0016779df1378e7812eabaa04d"),
@@ -260,14 +226,12 @@ public class UserImpl implements User
 
         private final String text;
 
-        DefaultAvatar(String text)
-        {
+        DefaultAvatar(String text) {
             this.text = text;
         }
 
         @Override
-        public String toString()
-        {
+        public String toString() {
             return text;
         }
     }

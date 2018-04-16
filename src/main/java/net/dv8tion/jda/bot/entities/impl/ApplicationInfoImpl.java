@@ -23,8 +23,7 @@ import net.dv8tion.jda.core.entities.User;
 
 import java.util.Collection;
 
-public class ApplicationInfoImpl implements ApplicationInfo
-{
+public class ApplicationInfoImpl implements ApplicationInfo {
     private final JDA api;
 
 
@@ -37,8 +36,7 @@ public class ApplicationInfoImpl implements ApplicationInfo
     private final User owner;
 
     public ApplicationInfoImpl(JDA api, String description, boolean doesBotRequireCodeGrant, String iconId, long id,
-            boolean isBotPublic, String name, User owner)
-    {
+                               boolean isBotPublic, String name, User owner) {
         this.api = api;
         this.description = description;
         this.doesBotRequireCodeGrant = doesBotRequireCodeGrant;
@@ -50,55 +48,46 @@ public class ApplicationInfoImpl implements ApplicationInfo
     }
 
     @Override
-    public final boolean doesBotRequireCodeGrant()
-    {
+    public final boolean doesBotRequireCodeGrant() {
         return this.doesBotRequireCodeGrant;
     }
 
     @Override
-    public boolean equals(final Object obj)
-    {
+    public boolean equals(final Object obj) {
         return obj instanceof ApplicationInfoImpl && this.id == ((ApplicationInfoImpl) obj).id;
     }
 
     @Override
-    public String getDescription()
-    {
+    public String getDescription() {
         return this.description;
     }
 
     @Override
-    public String getIconId()
-    {
+    public String getIconId() {
         return this.iconId;
     }
 
     @Override
-    public String getIconUrl()
-    {
+    public String getIconUrl() {
         return this.iconId == null ? null
-                : "https://cdn.discordapp.com/app-icons/" + this.id + '/' + this.iconId + ".png";
+            : "https://cdn.discordapp.com/app-icons/" + this.id + '/' + this.iconId + ".png";
     }
 
     @Override
-    public long getIdLong()
-    {
+    public long getIdLong() {
         return this.id;
     }
 
     @Override
-    public String getInviteUrl(final String guildId, final Collection<Permission> permissions)
-    {
+    public String getInviteUrl(final String guildId, final Collection<Permission> permissions) {
         StringBuilder builder = new StringBuilder("https://discordapp.com/oauth2/authorize?client_id=");
         builder.append(this.getId());
         builder.append("&scope=bot");
-        if (permissions != null && !permissions.isEmpty())
-        {
+        if (permissions != null && !permissions.isEmpty()) {
             builder.append("&permissions=");
             builder.append(Permission.getRaw(permissions));
         }
-        if (guildId != null)
-        {
+        if (guildId != null) {
             builder.append("&guild_id=");
             builder.append(guildId);
         }
@@ -106,38 +95,32 @@ public class ApplicationInfoImpl implements ApplicationInfo
     }
 
     @Override
-    public JDA getJDA()
-    {
+    public JDA getJDA() {
         return this.api;
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return this.name;
     }
 
     @Override
-    public User getOwner()
-    {
+    public User getOwner() {
         return this.owner;
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return Long.hashCode(this.id);
     }
 
     @Override
-    public final boolean isBotPublic()
-    {
+    public final boolean isBotPublic() {
         return this.isBotPublic;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "ApplicationInfo(" + this.id + ")";
     }
 

@@ -19,9 +19,9 @@
  * specifically designed to change the order of discord entities.
  * <br>Such as:
  * <ul>
- *     <li>{@link net.dv8tion.jda.core.requests.restaction.order.CategoryOrderAction Categories}</li>
- *     <li>{@link net.dv8tion.jda.core.requests.restaction.order.ChannelOrderAction Channels}</li>
- *     <li>{@link net.dv8tion.jda.core.requests.restaction.order.RoleOrderAction Roles}</li>
+ * <li>{@link net.dv8tion.jda.core.requests.restaction.order.CategoryOrderAction Categories}</li>
+ * <li>{@link net.dv8tion.jda.core.requests.restaction.order.ChannelOrderAction Channels}</li>
+ * <li>{@link net.dv8tion.jda.core.requests.restaction.order.RoleOrderAction Roles}</li>
  * </ul>
  *
  * <p>Abstract base implementation can be found at {@link net.dv8tion.jda.core.requests.restaction.order.OrderAction OrderAction}

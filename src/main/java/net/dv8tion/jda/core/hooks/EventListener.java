@@ -26,16 +26,15 @@ import net.dv8tion.jda.core.events.Event;
  * <p><b>Examples: </b>
  * <br>
  * <code>
- *     JDA jda = new {@link net.dv8tion.jda.core.JDABuilder JDABuilder}(AccountType.BOT).{@link net.dv8tion.jda.core.JDABuilder#addEventListener(Object...) addEventListener(listeners)}.buildBlocking();<br>
- *     {@link net.dv8tion.jda.core.JDA#addEventListener(Object...) jda.addEventListener(listeners)};
+ * JDA jda = new {@link net.dv8tion.jda.core.JDABuilder JDABuilder}(AccountType.BOT).{@link net.dv8tion.jda.core.JDABuilder#addEventListener(Object...) addEventListener(listeners)}.buildBlocking();<br>
+ * {@link net.dv8tion.jda.core.JDA#addEventListener(Object...) jda.addEventListener(listeners)};
  * </code>
  *
  * @see net.dv8tion.jda.core.hooks.ListenerAdapter
  * @see net.dv8tion.jda.core.hooks.InterfacedEventManager
  */
 @FunctionalInterface
-public interface EventListener
-{
+public interface EventListener {
 
     /**
      * Handles any {@link net.dv8tion.jda.core.events.Event Event}.
@@ -43,8 +42,7 @@ public interface EventListener
      * <p>To get specific events with Methods like {@code onMessageReceived(MessageReceivedEvent event)}
      * take a look at: {@link net.dv8tion.jda.core.hooks.ListenerAdapter ListenerAdapter}
      *
-     * @param  event
-     *         The Event to handle.
+     * @param event The Event to handle.
      */
     void onEvent(Event event);
 }

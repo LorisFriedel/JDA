@@ -29,15 +29,13 @@ import java.util.List;
  *
  * <p>Identifier: {@code permission}
  */
-public class RoleUpdatePermissionsEvent extends GenericRoleUpdateEvent<List<Permission>>
-{
+public class RoleUpdatePermissionsEvent extends GenericRoleUpdateEvent<List<Permission>> {
     public static final String IDENTIFIER = "permission";
 
     private final long oldPermissionsRaw;
     private final long newPermissionsRaw;
 
-    public RoleUpdatePermissionsEvent(JDA api, long responseNumber, Role role, long oldPermissionsRaw)
-    {
+    public RoleUpdatePermissionsEvent(JDA api, long responseNumber, Role role, long oldPermissionsRaw) {
         super(api, responseNumber, role, Permission.getPermissions(oldPermissionsRaw), role.getPermissions(), IDENTIFIER);
         this.oldPermissionsRaw = oldPermissionsRaw;
         this.newPermissionsRaw = role.getPermissionsRaw();
@@ -48,8 +46,7 @@ public class RoleUpdatePermissionsEvent extends GenericRoleUpdateEvent<List<Perm
      *
      * @return The old permissions
      */
-    public List<Permission> getOldPermissions()
-    {
+    public List<Permission> getOldPermissions() {
         return getOldValue();
     }
 
@@ -58,8 +55,7 @@ public class RoleUpdatePermissionsEvent extends GenericRoleUpdateEvent<List<Perm
      *
      * @return The old permissions
      */
-    public long getOldPermissionsRaw()
-    {
+    public long getOldPermissionsRaw() {
         return oldPermissionsRaw;
     }
 
@@ -68,8 +64,7 @@ public class RoleUpdatePermissionsEvent extends GenericRoleUpdateEvent<List<Perm
      *
      * @return The new permissions
      */
-    public List<Permission> getNewPermissions()
-    {
+    public List<Permission> getNewPermissions() {
         return getNewValue();
     }
 
@@ -78,8 +73,7 @@ public class RoleUpdatePermissionsEvent extends GenericRoleUpdateEvent<List<Perm
      *
      * @return The new permissions
      */
-    public long getNewPermissionsRaw()
-    {
+    public long getNewPermissionsRaw() {
         return newPermissionsRaw;
     }
 }

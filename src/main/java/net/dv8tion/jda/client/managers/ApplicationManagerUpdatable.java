@@ -45,14 +45,13 @@ import java.util.regex.Pattern;
  * <p>The {@link net.dv8tion.jda.client.managers.ApplicationManager ApplicationManager} implementation
  * simplifies this process by giving simple setters that return the {@link #update() update} {@link net.dv8tion.jda.core.requests.RestAction RestAction}
  *
- * @since  3.0
  * @author Aljoscha Grebe
+ * @since 3.0
  */
 @Deprecated
-public class ApplicationManagerUpdatable
-{
+public class ApplicationManagerUpdatable {
     public final static Pattern URL_PATTERN = Pattern.compile("\\s*https?://.+\\..{2,}\\s*",
-            Pattern.CASE_INSENSITIVE);
+        Pattern.CASE_INSENSITIVE);
 
     private final ApplicationImpl application;
 
@@ -63,8 +62,7 @@ public class ApplicationManagerUpdatable
     private ApplicationField<String> name;
     private ApplicationField<List<String>> redirectUris;
 
-    public ApplicationManagerUpdatable(final ApplicationImpl application)
-    {
+    public ApplicationManagerUpdatable(final ApplicationImpl application) {
         this.application = application;
 
         this.setupFields();
@@ -75,8 +73,7 @@ public class ApplicationManagerUpdatable
      *
      * @return the corresponding JDA instance
      */
-    public JDA getJDA()
-    {
+    public JDA getJDA() {
         return this.application.getJDA();
     }
 
@@ -86,8 +83,7 @@ public class ApplicationManagerUpdatable
      *
      * @return The {@link net.dv8tion.jda.client.entities.Application Application}
      */
-    public final Application getApplication()
-    {
+    public final Application getApplication() {
         return this.application;
     }
 
@@ -102,10 +98,9 @@ public class ApplicationManagerUpdatable
      * <br>Otherwise {@link net.dv8tion.jda.core.managers.fields.Field#setValue(Object) Field.setValue(...)} will
      * throw an {@link IllegalArgumentException IllegalArgumentException}.
      *
-     *  @return {@link net.dv8tion.jda.client.managers.fields.ApplicationField ApplicationField} - Type: {@code String}
+     * @return {@link net.dv8tion.jda.client.managers.fields.ApplicationField ApplicationField} - Type: {@code String}
      */
-    public final ApplicationField<String> getDescriptionField()
-    {
+    public final ApplicationField<String> getDescriptionField() {
         return this.description;
     }
 
@@ -120,10 +115,9 @@ public class ApplicationManagerUpdatable
      * <br>Otherwise {@link net.dv8tion.jda.core.managers.fields.Field#setValue(Object) Field.setValue(...)} will
      * throw an {@link IllegalArgumentException IllegalArgumentException}.
      *
-     *  @return {@link net.dv8tion.jda.client.managers.fields.ApplicationField ApplicationField} - Type: {@code Boolean}
+     * @return {@link net.dv8tion.jda.client.managers.fields.ApplicationField ApplicationField} - Type: {@code Boolean}
      */
-    public final ApplicationField<Boolean> getDoesBotRequireCodeGrantField()
-    {
+    public final ApplicationField<Boolean> getDoesBotRequireCodeGrantField() {
         return this.doesBotRequireCodeGrant;
     }
 
@@ -135,11 +129,10 @@ public class ApplicationManagerUpdatable
      * <p>To set the value use {@link net.dv8tion.jda.core.managers.fields.Field#setValue(Object) setValue(Icon)}
      * on the returned {@link net.dv8tion.jda.client.managers.fields.ApplicationField ApplicationField} instance.
      *
-     *  @return {@link net.dv8tion.jda.client.managers.fields.ApplicationField ApplicationField}
-     *          - Type: {@link net.dv8tion.jda.core.entities.Icon Icon}
+     * @return {@link net.dv8tion.jda.client.managers.fields.ApplicationField ApplicationField}
+     * - Type: {@link net.dv8tion.jda.core.entities.Icon Icon}
      */
-    public final ApplicationField<Icon> getIconField()
-    {
+    public final ApplicationField<Icon> getIconField() {
         return this.icon;
     }
 
@@ -154,10 +147,9 @@ public class ApplicationManagerUpdatable
      * <br>Otherwise {@link net.dv8tion.jda.core.managers.fields.Field#setValue(Object) Field.setValue(...)} will
      * throw an {@link IllegalArgumentException IllegalArgumentException}.
      *
-     *  @return {@link net.dv8tion.jda.client.managers.fields.ApplicationField ApplicationField} - Type: {@code Boolean}
+     * @return {@link net.dv8tion.jda.client.managers.fields.ApplicationField ApplicationField} - Type: {@code Boolean}
      */
-    public final ApplicationField<Boolean> getIsBotPublicField()
-    {
+    public final ApplicationField<Boolean> getIsBotPublicField() {
         return this.isBotPublic;
     }
 
@@ -172,10 +164,9 @@ public class ApplicationManagerUpdatable
      * <br>Otherwise {@link net.dv8tion.jda.core.managers.fields.Field#setValue(Object) Field.setValue(...)} will
      * throw an {@link IllegalArgumentException IllegalArgumentException}.
      *
-     *  @return {@link net.dv8tion.jda.client.managers.fields.ApplicationField ApplicationField} - Type: {@code String}
+     * @return {@link net.dv8tion.jda.client.managers.fields.ApplicationField ApplicationField} - Type: {@code String}
      */
-    public final ApplicationField<String> getNameField()
-    {
+    public final ApplicationField<String> getNameField() {
         return this.name;
     }
 
@@ -193,10 +184,9 @@ public class ApplicationManagerUpdatable
      * <br>Otherwise {@link net.dv8tion.jda.core.managers.fields.Field#setValue(Object) Field.setValue(...)} will
      * throw an {@link IllegalArgumentException IllegalArgumentException}.
      *
-     *  @return {@link net.dv8tion.jda.client.managers.fields.ApplicationField ApplicationField} - Type: {@code List<String>}
+     * @return {@link net.dv8tion.jda.client.managers.fields.ApplicationField ApplicationField} - Type: {@code List<String>}
      */
-    public final ApplicationField<List<String>> getRedirectUrisField()
-    {
+    public final ApplicationField<List<String>> getRedirectUrisField() {
         return this.redirectUris;
     }
 
@@ -205,8 +195,7 @@ public class ApplicationManagerUpdatable
      * for this manager instance by calling {@link net.dv8tion.jda.core.managers.fields.Field#reset() Field.reset()} sequentially
      * <br>This is automatically called by {@link #update()}
      */
-    public void reset()
-    {
+    public void reset() {
         this.description.reset();
         this.doesBotRequireCodeGrant.reset();
         this.icon.reset();
@@ -215,91 +204,75 @@ public class ApplicationManagerUpdatable
         this.redirectUris.reset();
     }
 
-    protected boolean needsUpdate()
-    {
+    protected boolean needsUpdate() {
         return this.description.shouldUpdate() || this.doesBotRequireCodeGrant.shouldUpdate()
-                || this.icon.shouldUpdate() || this.isBotPublic.shouldUpdate() || this.name.shouldUpdate()
-                || this.redirectUris.shouldUpdate();
+            || this.icon.shouldUpdate() || this.isBotPublic.shouldUpdate() || this.name.shouldUpdate()
+            || this.redirectUris.shouldUpdate();
     }
 
-    protected void setupFields()
-    {
-        this.description = new ApplicationField<String>(this, this.application::getDescription)
-        {
+    protected void setupFields() {
+        this.description = new ApplicationField<String>(this, this.application::getDescription) {
             @Override
-            public void checkValue(final String value)
-            {
+            public void checkValue(final String value) {
                 if (value != null && value.length() > 400)
                     throw new IllegalArgumentException("application description must not be more than 400 characters long");
             }
         };
 
-        this.doesBotRequireCodeGrant = new ApplicationField<Boolean>(this, this.application::doesBotRequireCodeGrant)
-        {
+        this.doesBotRequireCodeGrant = new ApplicationField<Boolean>(this, this.application::doesBotRequireCodeGrant) {
             @Override
-            public void checkValue(final Boolean value)
-            {
+            public void checkValue(final Boolean value) {
                 Checks.notNull(value, "doesBotRequireCodeGrant");
             }
         };
 
-        this.icon = new ApplicationField<Icon>(this, null)
-        {
+        this.icon = new ApplicationField<Icon>(this, null) {
             @Override
-            public void checkValue(final Icon value)
-            {}
-
-            @Override
-            public Icon getOriginalValue()
-            {
-                throw new UnsupportedOperationException(
-                        "Cannot easily provide the original Avatar. Use Application#getIconUrl() and download it yourself.");
+            public void checkValue(final Icon value) {
             }
 
             @Override
-            public boolean shouldUpdate()
-            {
+            public Icon getOriginalValue() {
+                throw new UnsupportedOperationException(
+                    "Cannot easily provide the original Avatar. Use Application#getIconUrl() and download it yourself.");
+            }
+
+            @Override
+            public boolean shouldUpdate() {
                 return this.isSet();
             }
         };
 
-        this.isBotPublic = new ApplicationField<Boolean>(this, this.application::isBotPublic)
-        {
+        this.isBotPublic = new ApplicationField<Boolean>(this, this.application::isBotPublic) {
             @Override
-            public void checkValue(final Boolean value)
-            {
+            public void checkValue(final Boolean value) {
                 Checks.notNull(value, "isBotPublic");
             }
         };
 
-        this.name = new ApplicationField<String>(this, this.application::getName)
-        {
+        this.name = new ApplicationField<String>(this, this.application::getName) {
             @Override
-            public void checkValue(final String value)
-            {
+            public void checkValue(final String value) {
                 Checks.notNull(value, "application name");
                 if (value.length() < 2 || value.length() > 32)
                     throw new IllegalArgumentException("Application name must be 2 to 32 characters in length");
             }
         };
 
-        this.redirectUris = new ApplicationField<List<String>>(this, this.application::getRedirectUris)
-        {
+        this.redirectUris = new ApplicationField<List<String>>(this, this.application::getRedirectUris) {
             @Override
-            public void checkValue(final List<String> value)
-            {
+            public void checkValue(final List<String> value) {
                 Checks.notNull(value, "redirect uris");
-                for (final String url : value)
-                {
+                for (final String url : value) {
 
                     Checks.notNull(url, "redirect uri");
                     if (!ApplicationManagerUpdatable.URL_PATTERN.matcher(url).matches())
                         throw new IllegalArgumentException("URL must be a valid http or https url.");
                 }
             }
+
             @Override
-            public ApplicationManagerUpdatable setValue(List<String> value)
-            {
+            public ApplicationManagerUpdatable setValue(List<String> value) {
                 checkValue(value);
 
                 this.value = Collections.unmodifiableList(new ArrayList<>(value));
@@ -318,12 +291,11 @@ public class ApplicationManagerUpdatable
      * <br>This is automatically called if this method returns successfully.
      *
      * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type: Void
-     *         <br>Updates all modified fields or does nothing if none of the {@link net.dv8tion.jda.core.managers.fields.Field Fields}
-     *         have been modified. ({@link net.dv8tion.jda.core.requests.RestAction.EmptyRestAction EmptyRestAction})
+     * <br>Updates all modified fields or does nothing if none of the {@link net.dv8tion.jda.core.managers.fields.Field Fields}
+     * have been modified. ({@link net.dv8tion.jda.core.requests.RestAction.EmptyRestAction EmptyRestAction})
      */
     @CheckReturnValue
-    public RestAction<Void> update()
-    {
+    public RestAction<Void> update() {
         if (!this.needsUpdate())
             return new RestAction.EmptyRestAction<>(getJDA(), null);
 
@@ -332,37 +304,33 @@ public class ApplicationManagerUpdatable
         // All fields are required or they are resetted to default
 
         body.put("description",
-                this.description.shouldUpdate() ? this.description.getValue() : this.description.getOriginalValue());
+            this.description.shouldUpdate() ? this.description.getValue() : this.description.getOriginalValue());
 
         body.put("bot_require_code_grant", this.doesBotRequireCodeGrant.shouldUpdate()
-                ? this.doesBotRequireCodeGrant.getValue() : this.doesBotRequireCodeGrant.getOriginalValue());
+            ? this.doesBotRequireCodeGrant.getValue() : this.doesBotRequireCodeGrant.getOriginalValue());
 
         body.put("icon",
-                this.icon.shouldUpdate()
-                        ? this.icon.getValue() == null ? JSONObject.NULL : this.icon.getValue().getEncoding()
-                        : this.application.getIconUrl());
+            this.icon.shouldUpdate()
+                ? this.icon.getValue() == null ? JSONObject.NULL : this.icon.getValue().getEncoding()
+                : this.application.getIconUrl());
 
         body.put("bot_public",
-                this.isBotPublic.shouldUpdate() ? this.isBotPublic.getValue() : this.isBotPublic.getOriginalValue());
+            this.isBotPublic.shouldUpdate() ? this.isBotPublic.getValue() : this.isBotPublic.getOriginalValue());
 
         body.put("name", this.name.shouldUpdate() ? this.name.getValue() : this.name.getOriginalValue());
 
-        body.put("redirect_uris", this.redirectUris.shouldUpdate() ? this.redirectUris.getValue() :  this.redirectUris.getOriginalValue());
+        body.put("redirect_uris", this.redirectUris.shouldUpdate() ? this.redirectUris.getValue() : this.redirectUris.getOriginalValue());
 
         reset();    //now that we've built our JSON object, reset the manager back to the non-modified state
 
         Route.CompiledRoute route = Route.Applications.MODIFY_APPLICATION.compile(this.application.getId());
-        return new RestAction<Void>(this.getJDA(), route, body)
-        {
+        return new RestAction<Void>(this.getJDA(), route, body) {
             @Override
-            protected void handleResponse(final Response response, final Request<Void> request)
-            {
-                if (response.isOk())
-                {
+            protected void handleResponse(final Response response, final Request<Void> request) {
+                if (response.isOk()) {
                     ApplicationManagerUpdatable.this.application.updateFromJson(response.getObject());
                     request.onSuccess(null);
-                }
-                else
+                } else
                     request.onFailure(response);
             }
         };

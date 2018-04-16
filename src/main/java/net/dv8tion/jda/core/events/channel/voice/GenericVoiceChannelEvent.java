@@ -26,12 +26,10 @@ import net.dv8tion.jda.core.events.Event;
  *
  * <p>Can be used to detect any VoiceChannelEvent.
  */
-public abstract class GenericVoiceChannelEvent extends Event
-{
+public abstract class GenericVoiceChannelEvent extends Event {
     private final VoiceChannel channel;
 
-    public GenericVoiceChannelEvent(JDA api, long responseNumber, VoiceChannel channel)
-    {
+    public GenericVoiceChannelEvent(JDA api, long responseNumber, VoiceChannel channel) {
         super(api, responseNumber);
         this.channel = channel;
     }
@@ -41,8 +39,7 @@ public abstract class GenericVoiceChannelEvent extends Event
      *
      * @return The VoiceChannel
      */
-    public VoiceChannel getChannel()
-    {
+    public VoiceChannel getChannel() {
         return channel;
     }
 
@@ -52,8 +49,7 @@ public abstract class GenericVoiceChannelEvent extends Event
      *
      * @return The Guild
      */
-    public Guild getGuild()
-    {
+    public Guild getGuild() {
         return channel.getGuild();
     }
 }

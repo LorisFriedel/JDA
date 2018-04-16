@@ -23,16 +23,14 @@ import net.dv8tion.jda.core.events.guild.GenericGuildEvent;
 /**
  * Indicates that a {@link net.dv8tion.jda.core.entities.Message Message} event is fired from a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.
  * <br>Every GuildMessageEvent is derived from this event and can be casted.
- * 
+ *
  * <p>Can be used to detect any GuildMessageEvent.
  */
-public abstract class GenericGuildMessageEvent extends GenericGuildEvent
-{
+public abstract class GenericGuildMessageEvent extends GenericGuildEvent {
     protected final long messageId;
     protected final TextChannel channel;
 
-    public GenericGuildMessageEvent(JDA api, long responseNumber, long messageId, TextChannel channel)
-    {
+    public GenericGuildMessageEvent(JDA api, long responseNumber, long messageId, TextChannel channel) {
         super(api, responseNumber, channel.getGuild());
         this.messageId = messageId;
         this.channel = channel;
@@ -43,8 +41,7 @@ public abstract class GenericGuildMessageEvent extends GenericGuildEvent
      *
      * @return The message id
      */
-    public String getMessageId()
-    {
+    public String getMessageId() {
         return Long.toUnsignedString(messageId);
     }
 
@@ -53,25 +50,19 @@ public abstract class GenericGuildMessageEvent extends GenericGuildEvent
      *
      * @return The message id
      */
-    public long getMessageIdLong()
-    {
+    public long getMessageIdLong() {
         return messageId;
     }
 
     /**
      * Deprecated
      *
-     * @param  type
-     *         The channel type
-     *
+     * @param type The channel type
      * @return True, if provided with ChannelType.TEXT
-     *
-     * @deprecated
-     *         It's nonsense for this to exist
+     * @deprecated It's nonsense for this to exist
      */
     @Deprecated
-    public boolean isFromType(ChannelType type)
-    {
+    public boolean isFromType(ChannelType type) {
         return getChannel().getType() == type;
     }
 
@@ -79,13 +70,10 @@ public abstract class GenericGuildMessageEvent extends GenericGuildEvent
      * Deprecated
      *
      * @return ChannelType.TEXT
-     *
-     * @deprecated
-     *         It's nonsense for this to exist
+     * @deprecated It's nonsense for this to exist
      */
     @Deprecated
-    public ChannelType getChannelType()
-    {
+    public ChannelType getChannelType() {
         return getChannel().getType();
     }
 
@@ -94,8 +82,7 @@ public abstract class GenericGuildMessageEvent extends GenericGuildEvent
      *
      * @return The TextChannel for this message
      */
-    public TextChannel getChannel()
-    {
+    public TextChannel getChannel() {
         return channel;
     }
 }

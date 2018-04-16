@@ -21,15 +21,13 @@ import net.dv8tion.jda.core.entities.User;
 
 /**
  * Indicates that a Message was sent in a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}.
- * 
+ *
  * <p>Can be used to retrieve affected PrivateChannel and Message.
  */
-public class PrivateMessageReceivedEvent extends GenericPrivateMessageEvent
-{
+public class PrivateMessageReceivedEvent extends GenericPrivateMessageEvent {
     private final Message message;
 
-    public PrivateMessageReceivedEvent(JDA api, long responseNumber, Message message)
-    {
+    public PrivateMessageReceivedEvent(JDA api, long responseNumber, Message message) {
         super(api, responseNumber, message.getIdLong(), message.getPrivateChannel());
         this.message = message;
     }
@@ -39,8 +37,7 @@ public class PrivateMessageReceivedEvent extends GenericPrivateMessageEvent
      *
      * @return The Message
      */
-    public Message getMessage()
-    {
+    public Message getMessage() {
         return message;
     }
 
@@ -48,11 +45,9 @@ public class PrivateMessageReceivedEvent extends GenericPrivateMessageEvent
      * The author for this message
      *
      * @return The author for this message
-     *
-     * @see    net.dv8tion.jda.core.entities.User User
+     * @see net.dv8tion.jda.core.entities.User User
      */
-    public User getAuthor()
-    {
+    public User getAuthor() {
         return message.getAuthor();
     }
 }

@@ -21,23 +21,19 @@ import net.dv8tion.jda.client.events.group.GenericGroupEvent;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.ChannelType;
 
-public abstract class GenericGroupMessageEvent extends GenericGroupEvent
-{
+public abstract class GenericGroupMessageEvent extends GenericGroupEvent {
     protected final long messageId;
 
-    public GenericGroupMessageEvent(JDA api, long responseNumber, long messageId, Group group)
-    {
+    public GenericGroupMessageEvent(JDA api, long responseNumber, long messageId, Group group) {
         super(api, responseNumber, group);
         this.messageId = messageId;
     }
 
-    public String getMessageId()
-    {
+    public String getMessageId() {
         return Long.toUnsignedString(messageId);
     }
 
-    public long getMessageIdLong()
-    {
+    public long getMessageIdLong() {
         return messageId;
     }
 }

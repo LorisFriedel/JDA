@@ -27,16 +27,14 @@ import net.dv8tion.jda.core.events.UpdateEvent;
  *
  * <p>Can be used to detect any SelfUserEvent.
  */
-public abstract class GenericSelfUpdateEvent<T> extends Event implements UpdateEvent<SelfUser, T>
-{
+public abstract class GenericSelfUpdateEvent<T> extends Event implements UpdateEvent<SelfUser, T> {
     protected final T previous;
     protected final T next;
     protected final String identifier;
 
     public GenericSelfUpdateEvent(
         JDA api, long responseNumber,
-        T previous, T next, String identifier)
-    {
+        T previous, T next, String identifier) {
         super(api, responseNumber);
         this.previous = previous;
         this.next = next;
@@ -48,38 +46,32 @@ public abstract class GenericSelfUpdateEvent<T> extends Event implements UpdateE
      *
      * @return The {@link net.dv8tion.jda.core.entities.SelfUser SelfUser}
      */
-    public SelfUser getSelfUser()
-    {
+    public SelfUser getSelfUser() {
         return api.getSelfUser();
     }
 
     @Override
-    public SelfUser getEntity()
-    {
+    public SelfUser getEntity() {
         return getSelfUser();
     }
 
     @Override
-    public String getPropertyIdentifier()
-    {
+    public String getPropertyIdentifier() {
         return identifier;
     }
 
     @Override
-    public T getOldValue()
-    {
+    public T getOldValue() {
         return previous;
     }
 
     @Override
-    public T getNewValue()
-    {
+    public T getNewValue() {
         return next;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "SelfUserUpdate[" + getPropertyIdentifier() + "](" + getOldValue() + "->" + getNewValue() + ')';
     }
 }

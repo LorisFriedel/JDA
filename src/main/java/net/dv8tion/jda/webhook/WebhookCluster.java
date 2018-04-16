@@ -59,11 +59,11 @@ import java.util.function.Predicate;
  * when building via {@link #buildWebhooks(Webhook...)} and {@link #buildWebhooks(Collection) buildWebhooks(Collection&lt;Webhook&gt;)}.
  * <br>The following settings can be used:
  * <ul>
- *     <li>{@link #setDefaultExecutorService(ScheduledExecutorService)}</li>
- *     <li>{@link #setDefaultHttpClientBuilder(OkHttpClient.Builder)}</li>
- *     <li>{@link #setDefaultHttpClient(OkHttpClient)}</li>
- *     <li>{@link #setDefaultThreadFactory(ThreadFactory)}</li>
- *     <li>{@link #setDefaultDaemon(boolean)}</li>
+ * <li>{@link #setDefaultExecutorService(ScheduledExecutorService)}</li>
+ * <li>{@link #setDefaultHttpClientBuilder(OkHttpClient.Builder)}</li>
+ * <li>{@link #setDefaultHttpClient(OkHttpClient)}</li>
+ * <li>{@link #setDefaultThreadFactory(ThreadFactory)}</li>
+ * <li>{@link #setDefaultDaemon(boolean)}</li>
  * </ul>
  *
  * <p>Note that when you provide your own {@link java.util.concurrent.ScheduledExecutorService ScheduledExecutorService} you are able to shut it down
@@ -86,8 +86,7 @@ import java.util.function.Predicate;
  * Calling close on the cluster means it will <i><b>remove and close</b></i> all currently registered webhooks.
  * <br>The cluster may still be used after closing.
  */
-public class WebhookCluster implements AutoCloseable
-{
+public class WebhookCluster implements AutoCloseable {
     protected final List<WebhookClient> webhooks;
     protected OkHttpClient.Builder defaultHttpClientBuilder;
     protected OkHttpClient defaultHttpClient;
@@ -99,14 +98,10 @@ public class WebhookCluster implements AutoCloseable
      * Creates a new WebhookCluster with the provided
      * {@link net.dv8tion.jda.webhook.WebhookClient WebhookClients} as initial client cache.
      *
-     * @param  initialClients
-     *         Collection of WebhookClients that should be added
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If any of the provided clients is {@code null} or closed
+     * @param initialClients Collection of WebhookClients that should be added
+     * @throws java.lang.IllegalArgumentException If any of the provided clients is {@code null} or closed
      */
-    public WebhookCluster(@Nonnull Collection<? extends WebhookClient> initialClients)
-    {
+    public WebhookCluster(@Nonnull Collection<? extends WebhookClient> initialClients) {
         webhooks = new ArrayList<>(initialClients.size());
         for (WebhookClient client : initialClients)
             addWebhooks(client);
@@ -116,14 +111,10 @@ public class WebhookCluster implements AutoCloseable
      * Creates a new WebhookCluster with the specified initial capacity.
      * <br>For more information about this see {@link java.util.ArrayList ArrayList}.
      *
-     * @param  initialCapacity
-     *         The initial capacity for this cluster
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided capacity is negative
+     * @param initialCapacity The initial capacity for this cluster
+     * @throws java.lang.IllegalArgumentException If the provided capacity is negative
      */
-    public WebhookCluster(int initialCapacity)
-    {
+    public WebhookCluster(int initialCapacity) {
         webhooks = new ArrayList<>(initialCapacity);
     }
 
@@ -131,8 +122,7 @@ public class WebhookCluster implements AutoCloseable
      * Creates a new WebhookCluster with default initial capacity
      * and no registered {@link net.dv8tion.jda.webhook.WebhookClient WebhookClients}
      */
-    public WebhookCluster()
-    {
+    public WebhookCluster() {
         webhooks = new ArrayList<>();
     }
 
@@ -143,13 +133,10 @@ public class WebhookCluster implements AutoCloseable
      * used when building {@link net.dv8tion.jda.webhook.WebhookClient WebhookClients} via
      * {@link #buildWebhooks(Webhook...)} or {@link #buildWebhooks(Collection)}.
      *
-     * @param  builder
-     *         The default builder, {@code null} to reset
-     *
+     * @param builder The default builder, {@code null} to reset
      * @return The current WebhookCluster for chaining convenience
      */
-    public WebhookCluster setDefaultHttpClientBuilder(@Nullable OkHttpClient.Builder builder)
-    {
+    public WebhookCluster setDefaultHttpClientBuilder(@Nullable OkHttpClient.Builder builder) {
         this.defaultHttpClientBuilder = builder;
         return this;
     }
@@ -159,13 +146,10 @@ public class WebhookCluster implements AutoCloseable
      * used when building {@link net.dv8tion.jda.webhook.WebhookClient WebhookClients} via
      * {@link #buildWebhooks(Webhook...)} or {@link #buildWebhooks(Collection)}.
      *
-     * @param  defaultHttpClient
-     *         The default client, {@code null} to reset
-     *
+     * @param defaultHttpClient The default client, {@code null} to reset
      * @return The current WebhookCluster for chaining convenience
      */
-    public WebhookCluster setDefaultHttpClient(@Nullable OkHttpClient defaultHttpClient)
-    {
+    public WebhookCluster setDefaultHttpClient(@Nullable OkHttpClient defaultHttpClient) {
         this.defaultHttpClient = defaultHttpClient;
         return this;
     }
@@ -175,13 +159,10 @@ public class WebhookCluster implements AutoCloseable
      * used when building {@link net.dv8tion.jda.webhook.WebhookClient WebhookClients} via
      * {@link #buildWebhooks(Webhook...)} or {@link #buildWebhooks(Collection)}.
      *
-     * @param  executorService
-     *         The default executor service, {@code null} to reset
-     *
+     * @param executorService The default executor service, {@code null} to reset
      * @return The current WebhookCluster for chaining convenience
      */
-    public WebhookCluster setDefaultExecutorService(@Nullable ScheduledExecutorService executorService)
-    {
+    public WebhookCluster setDefaultExecutorService(@Nullable ScheduledExecutorService executorService) {
         this.defaultPool = executorService;
         return this;
     }
@@ -191,15 +172,12 @@ public class WebhookCluster implements AutoCloseable
      * to create Threads for rate limitation handling of the created {@link net.dv8tion.jda.webhook.WebhookClient WebhookClient}!
      * <br>This allows changing thread information such as name without having to create your own executor.
      *
-     * @param  factory
-     *         The {@link java.util.concurrent.ThreadFactory ThreadFactory} that will
-     *         be used when no {@link java.util.concurrent.ScheduledExecutorService ScheduledExecutorService}
-     *         has been set via {@link #setDefaultExecutorService(ScheduledExecutorService)}
-     *
+     * @param factory The {@link java.util.concurrent.ThreadFactory ThreadFactory} that will
+     *                be used when no {@link java.util.concurrent.ScheduledExecutorService ScheduledExecutorService}
+     *                has been set via {@link #setDefaultExecutorService(ScheduledExecutorService)}
      * @return The current WebhookCluster for chaining convenience
      */
-    public WebhookCluster setDefaultThreadFactory(@Nullable ThreadFactory factory)
-    {
+    public WebhookCluster setDefaultThreadFactory(@Nullable ThreadFactory factory) {
         this.threadFactory = factory;
         return this;
     }
@@ -211,13 +189,10 @@ public class WebhookCluster implements AutoCloseable
      *
      * <p>This will not be used when the default thread pool has been set via {@link #setDefaultExecutorService(ScheduledExecutorService)}!
      *
-     * @param  isDaemon
-     *         True, if the threads should be daemon
-     *
+     * @param isDaemon True, if the threads should be daemon
      * @return The current WebhookCluster for chaining convenience
      */
-    public WebhookCluster setDefaultDaemon(boolean isDaemon)
-    {
+    public WebhookCluster setDefaultDaemon(boolean isDaemon) {
         this.isDaemon = isDaemon;
         return this;
     }
@@ -230,23 +205,16 @@ public class WebhookCluster implements AutoCloseable
      * <br>The {@link net.dv8tion.jda.webhook.WebhookClientBuilder WebhookClientBuilders}
      * will be supplied with the default settings of this cluster.
      *
-     * @param  webhooks
-     *         Webhooks to target (duplicates will not be filtered)
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided array or any of the contained
-     *         webhooks is {@code null}
-     *
+     * @param webhooks Webhooks to target (duplicates will not be filtered)
      * @return The current WebhookCluster for chaining convenience
-     *
-     * @see    #buildWebhooks(Webhook...)
-     * @see    #newBuilder(Webhook)
+     * @throws java.lang.IllegalArgumentException If the provided array or any of the contained
+     *                                            webhooks is {@code null}
+     * @see #buildWebhooks(Webhook...)
+     * @see #newBuilder(Webhook)
      */
-    public WebhookCluster buildWebhooks(Webhook... webhooks)
-    {
+    public WebhookCluster buildWebhooks(Webhook... webhooks) {
         Checks.notNull(webhooks, "Webhooks");
-        for (Webhook webhook : webhooks)
-        {
+        for (Webhook webhook : webhooks) {
             Checks.notNull(webhook, "Webhook");
             buildWebhook(webhook.getIdLong(), webhook.getToken());
         }
@@ -259,23 +227,16 @@ public class WebhookCluster implements AutoCloseable
      * <br>The {@link net.dv8tion.jda.webhook.WebhookClientBuilder WebhookClientBuilders}
      * will be supplied with the default settings of this cluster.
      *
-     * @param  webhooks
-     *         Webhooks to target (duplicates will not be filtered)
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided collection or any of the contained
-     *         webhooks is {@code null}
-     *
+     * @param webhooks Webhooks to target (duplicates will not be filtered)
      * @return The current WebhookCluster for chaining convenience
-     *
-     * @see    #buildWebhooks(Webhook...)
-     * @see    #newBuilder(Webhook)
+     * @throws java.lang.IllegalArgumentException If the provided collection or any of the contained
+     *                                            webhooks is {@code null}
+     * @see #buildWebhooks(Webhook...)
+     * @see #newBuilder(Webhook)
      */
-    public WebhookCluster buildWebhooks(Collection<Webhook> webhooks)
-    {
+    public WebhookCluster buildWebhooks(Collection<Webhook> webhooks) {
         Checks.notNull(webhooks, "Webhooks");
-        for (Webhook webhook : webhooks)
-        {
+        for (Webhook webhook : webhooks) {
             Checks.notNull(webhook, "Webhook");
             buildWebhook(webhook.getIdLong(), webhook.getToken());
         }
@@ -288,20 +249,13 @@ public class WebhookCluster implements AutoCloseable
      * <br>The {@link net.dv8tion.jda.webhook.WebhookClientBuilder WebhookClientBuilders}
      * will be supplied with the default settings of this cluster.
      *
-     * @param  id
-     *         The id for the webhook
-     * @param  token
-     *         The token for the webhook
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided webhooks token is {@code null} or contains whitespace
-     *
+     * @param id    The id for the webhook
+     * @param token The token for the webhook
      * @return The current WebhookCluster for chaining convenience
-     *
-     * @see    #newBuilder(long, String)
+     * @throws java.lang.IllegalArgumentException If the provided webhooks token is {@code null} or contains whitespace
+     * @see #newBuilder(long, String)
      */
-    public WebhookCluster buildWebhook(long id, String token)
-    {
+    public WebhookCluster buildWebhook(long id, String token) {
         this.webhooks.add(newBuilder(id, token).build());
         return this;
     }
@@ -310,25 +264,18 @@ public class WebhookCluster implements AutoCloseable
      * Creates a new {@link net.dv8tion.jda.webhook.WebhookClientBuilder WebhookClientBuilder}
      * with the defined default settings of this cluster.
      *
-     * @param  id
-     *         The webhook id
-     * @param  token
-     *         The webhook token
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the token is {@code null}, empty or contains blanks
-     *
+     * @param id    The webhook id
+     * @param token The webhook token
      * @return The WebhookClientBuilder with default settings
-     *
-     * @see    net.dv8tion.jda.webhook.WebhookClientBuilder#WebhookClientBuilder(long, String) new WebhookClientBuilder(long, String)
+     * @throws java.lang.IllegalArgumentException If the token is {@code null}, empty or contains blanks
+     * @see net.dv8tion.jda.webhook.WebhookClientBuilder#WebhookClientBuilder(long, String) new WebhookClientBuilder(long, String)
      */
-    public WebhookClientBuilder newBuilder(long id, String token)
-    {
+    public WebhookClientBuilder newBuilder(long id, String token) {
         WebhookClientBuilder builder = new WebhookClientBuilder(id, token);
         builder.setExecutorService(defaultPool)
-               .setHttpClient(defaultHttpClient)
-               .setThreadFactory(threadFactory)
-               .setDaemon(isDaemon);
+            .setHttpClient(defaultHttpClient)
+            .setThreadFactory(threadFactory)
+            .setDaemon(isDaemon);
         if (defaultHttpClientBuilder != null)
             builder.setHttpClientBuilder(defaultHttpClientBuilder);
         return builder;
@@ -338,18 +285,12 @@ public class WebhookCluster implements AutoCloseable
      * Creates a new {@link net.dv8tion.jda.webhook.WebhookClientBuilder WebhookClientBuilder}
      * with the defined default settings of this cluster.
      *
-     * @param  webhook
-     *         The target webhook
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the webhook is {@code null}
-     *
+     * @param webhook The target webhook
      * @return The WebhookClientBuilder with default settings
-     *
-     * @see    net.dv8tion.jda.webhook.WebhookClientBuilder#WebhookClientBuilder(Webhook) new WebhookClientBuilder(Webhook)
+     * @throws java.lang.IllegalArgumentException If the webhook is {@code null}
+     * @see net.dv8tion.jda.webhook.WebhookClientBuilder#WebhookClientBuilder(Webhook) new WebhookClientBuilder(Webhook)
      */
-    public WebhookClientBuilder newBuilder(Webhook webhook)
-    {
+    public WebhookClientBuilder newBuilder(Webhook webhook) {
         Checks.notNull(webhook, "Webhook");
         return newBuilder(webhook.getIdLong(), webhook.getToken());
     }
@@ -359,20 +300,14 @@ public class WebhookCluster implements AutoCloseable
      * to this cluster's list of receivers.
      * <br>Duplicate clients are supported and will not be filtered automatically.
      *
-     * @param  clients
-     *         WebhookClients to add
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided array or any of the contained
-     *         clients is {@code null} or closed
-     *
+     * @param clients WebhookClients to add
      * @return The current WebhookCluster for chaining convenience
+     * @throws java.lang.IllegalArgumentException If the provided array or any of the contained
+     *                                            clients is {@code null} or closed
      */
-    public WebhookCluster addWebhooks(WebhookClient... clients)
-    {
+    public WebhookCluster addWebhooks(WebhookClient... clients) {
         Checks.notNull(clients, "Clients");
-        for (WebhookClient client : clients)
-        {
+        for (WebhookClient client : clients) {
             Checks.notNull(client, "Client");
             Checks.check(!client.isShutdown,
                 "One of the provided WebhookClients has been closed already!");
@@ -386,20 +321,14 @@ public class WebhookCluster implements AutoCloseable
      * to this cluster's list of receivers.
      * <br>Duplicate clients are supported and will not be filtered automatically.
      *
-     * @param  clients
-     *         WebhookClients to add
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided collection or any of the contained
-     *         clients is {@code null} or closed
-     *
+     * @param clients WebhookClients to add
      * @return The current WebhookCluster for chaining convenience
+     * @throws java.lang.IllegalArgumentException If the provided collection or any of the contained
+     *                                            clients is {@code null} or closed
      */
-    public WebhookCluster addWebhooks(Collection<WebhookClient> clients)
-    {
+    public WebhookCluster addWebhooks(Collection<WebhookClient> clients) {
         Checks.notNull(clients, "Clients");
-        for (WebhookClient client : clients)
-        {
+        for (WebhookClient client : clients) {
             Checks.notNull(client, "Client");
             Checks.check(!client.isShutdown,
                 "One of the provided WebhookClients has been closed already!");
@@ -415,16 +344,11 @@ public class WebhookCluster implements AutoCloseable
      *
      * <p><b>Note that the removed clients are not closed by this operation!</b>
      *
-     * @param  clients
-     *         WebhookClients to remove
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided array is {@code null}
-     *
+     * @param clients WebhookClients to remove
      * @return The current WebhookCluster for chaining convenience
+     * @throws java.lang.IllegalArgumentException If the provided array is {@code null}
      */
-    public WebhookCluster removeWebhooks(WebhookClient... clients)
-    {
+    public WebhookCluster removeWebhooks(WebhookClient... clients) {
         Checks.notNull(clients, "Clients");
         webhooks.removeAll(Arrays.asList(clients));
         return this;
@@ -437,16 +361,11 @@ public class WebhookCluster implements AutoCloseable
      *
      * <p><b>Note that the removed clients are not closed by this operation!</b>
      *
-     * @param  clients
-     *         WebhookClients to remove
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided collection is {@code null}
-     *
+     * @param clients WebhookClients to remove
      * @return The current WebhookCluster for chaining convenience
+     * @throws java.lang.IllegalArgumentException If the provided collection is {@code null}
      */
-    public WebhookCluster removeWebhooks(Collection<WebhookClient> clients)
-    {
+    public WebhookCluster removeWebhooks(Collection<WebhookClient> clients) {
         Checks.notNull(clients, "Clients");
         webhooks.removeAll(clients);
         return this;
@@ -459,20 +378,14 @@ public class WebhookCluster implements AutoCloseable
      *
      * <p><b>Note that the removed clients are not closed by this operation!</b>
      *
-     * @param  predicate
-     *         The filter
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided filter is {@code null}
-     *
+     * @param predicate The filter
      * @return List of removed clients
+     * @throws java.lang.IllegalArgumentException If the provided filter is {@code null}
      */
-    public List<WebhookClient> removeIf(Predicate<WebhookClient> predicate)
-    {
+    public List<WebhookClient> removeIf(Predicate<WebhookClient> predicate) {
         Checks.notNull(predicate, "Predicate");
         List<WebhookClient> clients = new ArrayList<>();
-        for (WebhookClient client : webhooks)
-        {
+        for (WebhookClient client : webhooks) {
             if (predicate.test(client))
                 clients.add(client);
         }
@@ -485,20 +398,14 @@ public class WebhookCluster implements AutoCloseable
      * the specified filter.
      * <br>The filter may return {@code true} for all clients that should be <b>removed and closed</b>.
      *
-     * @param  predicate
-     *         The filter to decide which clients to remove
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided filter is {@code null}
-     *
+     * @param predicate The filter to decide which clients to remove
      * @return List of removed and closed clients
+     * @throws java.lang.IllegalArgumentException If the provided filter is {@code null}
      */
-    public List<WebhookClient> closeIf(Predicate<WebhookClient> predicate)
-    {
+    public List<WebhookClient> closeIf(Predicate<WebhookClient> predicate) {
         Checks.notNull(predicate, "Filter");
         List<WebhookClient> clients = new ArrayList<>();
-        for (WebhookClient client : webhooks)
-        {
+        for (WebhookClient client : webhooks) {
             if (predicate.test(client))
                 clients.add(client);
         }
@@ -513,8 +420,7 @@ public class WebhookCluster implements AutoCloseable
      *
      * @return Immutable list of registered receivers
      */
-    public List<WebhookClient> getWebhooks()
-    {
+    public List<WebhookClient> getWebhooks() {
         return Collections.unmodifiableList(new ArrayList<>(webhooks));
     }
 
@@ -529,29 +435,20 @@ public class WebhookCluster implements AutoCloseable
      * <p>Hint: Use {@link net.dv8tion.jda.webhook.WebhookMessageBuilder WebhookMessageBuilder} to
      * create a {@link net.dv8tion.jda.webhook.WebhookMessage WebhookMessage} instance!
      *
-     * @param  filter
-     *         The filter that decides what clients receive the message
-     * @param  message
-     *         The message that should be sent to the filtered clients
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If any of the provided arguments is {@code null}
-     * @throws java.util.concurrent.RejectedExecutionException
-     *         If any of the receivers has been shutdown
-     * @throws net.dv8tion.jda.core.exceptions.HttpException
-     *         If the HTTP request fails
-     *
+     * @param filter  The filter that decides what clients receive the message
+     * @param message The message that should be sent to the filtered clients
      * @return A list of {@link java.util.concurrent.Future Future} instances
-     *         representing all message tasks.
+     * representing all message tasks.
+     * @throws java.lang.IllegalArgumentException              If any of the provided arguments is {@code null}
+     * @throws java.util.concurrent.RejectedExecutionException If any of the receivers has been shutdown
+     * @throws net.dv8tion.jda.core.exceptions.HttpException   If the HTTP request fails
      */
-    public List<RequestFuture<?>> multicast(Predicate<WebhookClient> filter, WebhookMessage message)
-    {
+    public List<RequestFuture<?>> multicast(Predicate<WebhookClient> filter, WebhookMessage message) {
         Checks.notNull(filter, "Filter");
         Checks.notNull(message, "Message");
         final RequestBody body = message.getBody();
         final List<RequestFuture<?>> callbacks = new ArrayList<>();
-        for (WebhookClient client : webhooks)
-        {
+        for (WebhookClient client : webhooks) {
             if (filter.test(client))
                 callbacks.add(client.execute(body));
         }
@@ -565,21 +462,14 @@ public class WebhookCluster implements AutoCloseable
      * <p>Hint: Use {@link net.dv8tion.jda.webhook.WebhookMessageBuilder WebhookMessageBuilder} to
      * create a {@link net.dv8tion.jda.webhook.WebhookMessage WebhookMessage} instance!
      *
-     * @param  message
-     *         The message that should be sent to the clients
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If any of the provided arguments is {@code null}
-     * @throws java.util.concurrent.RejectedExecutionException
-     *         If any of the receivers has been shutdown
-     * @throws net.dv8tion.jda.core.exceptions.HttpException
-     *         If the HTTP request fails
-     *
+     * @param message The message that should be sent to the clients
      * @return A list of {@link java.util.concurrent.Future Future} instances
-     *         representing all message tasks.
+     * representing all message tasks.
+     * @throws java.lang.IllegalArgumentException              If any of the provided arguments is {@code null}
+     * @throws java.util.concurrent.RejectedExecutionException If any of the receivers has been shutdown
+     * @throws net.dv8tion.jda.core.exceptions.HttpException   If the HTTP request fails
      */
-    public List<RequestFuture<?>> broadcast(WebhookMessage message)
-    {
+    public List<RequestFuture<?>> broadcast(WebhookMessage message) {
         Checks.notNull(message, "Message");
         final RequestBody body = message.getBody();
         final List<RequestFuture<?>> callbacks = new ArrayList<>(webhooks.size());
@@ -595,21 +485,14 @@ public class WebhookCluster implements AutoCloseable
      * <p>Hint: Use {@link net.dv8tion.jda.core.MessageBuilder MessageBuilder} to
      * create a {@link net.dv8tion.jda.core.entities.Message Message} instance!
      *
-     * @param  message
-     *         The message that should be sent to the clients
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided message is {@code null}
-     * @throws java.util.concurrent.RejectedExecutionException
-     *         If any of the receivers has been shutdown
-     * @throws net.dv8tion.jda.core.exceptions.HttpException
-     *         If the HTTP request fails
-     *
+     * @param message The message that should be sent to the clients
      * @return A list of {@link java.util.concurrent.Future Future} instances
-     *         representing all message tasks.
+     * representing all message tasks.
+     * @throws java.lang.IllegalArgumentException              If the provided message is {@code null}
+     * @throws java.util.concurrent.RejectedExecutionException If any of the receivers has been shutdown
+     * @throws net.dv8tion.jda.core.exceptions.HttpException   If the HTTP request fails
      */
-    public List<RequestFuture<?>> broadcast(Message message)
-    {
+    public List<RequestFuture<?>> broadcast(Message message) {
         return broadcast(WebhookMessage.from(message));
     }
 
@@ -622,21 +505,14 @@ public class WebhookCluster implements AutoCloseable
      * <p>Hint: Use {@link net.dv8tion.jda.core.EmbedBuilder EmbedBuilder} to
      * create a {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbeds} instance!
      *
-     * @param  embeds
-     *         The embeds that should be sent to the clients
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If any of the provided arguments is {@code null}
-     * @throws java.util.concurrent.RejectedExecutionException
-     *         If any of the receivers has been shutdown
-     * @throws net.dv8tion.jda.core.exceptions.HttpException
-     *         If the HTTP request fails
-     *
+     * @param embeds The embeds that should be sent to the clients
      * @return A list of {@link java.util.concurrent.Future Future} instances
-     *         representing all message tasks.
+     * representing all message tasks.
+     * @throws java.lang.IllegalArgumentException              If any of the provided arguments is {@code null}
+     * @throws java.util.concurrent.RejectedExecutionException If any of the receivers has been shutdown
+     * @throws net.dv8tion.jda.core.exceptions.HttpException   If the HTTP request fails
      */
-    public List<RequestFuture<?>> broadcast(MessageEmbed... embeds)
-    {
+    public List<RequestFuture<?>> broadcast(MessageEmbed... embeds) {
         return broadcast(WebhookMessage.of(embeds));
     }
 
@@ -649,21 +525,14 @@ public class WebhookCluster implements AutoCloseable
      * <p>Hint: Use {@link net.dv8tion.jda.core.EmbedBuilder EmbedBuilder} to
      * create a {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbeds} instance!
      *
-     * @param  embeds
-     *         The embeds that should be sent to the clients
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If any of the provided arguments is {@code null}
-     * @throws java.util.concurrent.RejectedExecutionException
-     *         If any of the receivers has been shutdown
-     * @throws net.dv8tion.jda.core.exceptions.HttpException
-     *         If the HTTP request fails
-     *
+     * @param embeds The embeds that should be sent to the clients
      * @return A list of {@link java.util.concurrent.Future Future} instances
-     *         representing all message tasks.
+     * representing all message tasks.
+     * @throws java.lang.IllegalArgumentException              If any of the provided arguments is {@code null}
+     * @throws java.util.concurrent.RejectedExecutionException If any of the receivers has been shutdown
+     * @throws net.dv8tion.jda.core.exceptions.HttpException   If the HTTP request fails
      */
-    public List<RequestFuture<?>> broadcast(Collection<MessageEmbed> embeds)
-    {
+    public List<RequestFuture<?>> broadcast(Collection<MessageEmbed> embeds) {
         return broadcast(WebhookMessage.of(embeds));
     }
 
@@ -671,21 +540,14 @@ public class WebhookCluster implements AutoCloseable
      * Sends the provided text message
      * to all registered {@link net.dv8tion.jda.webhook.WebhookClient WebhookClients}.
      *
-     * @param  content
-     *         The text that should be sent to the clients
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided content is {@code null} or blank
-     * @throws java.util.concurrent.RejectedExecutionException
-     *         If any of the receivers has been shutdown
-     * @throws net.dv8tion.jda.core.exceptions.HttpException
-     *         If the HTTP request fails
-     *
+     * @param content The text that should be sent to the clients
      * @return A list of {@link java.util.concurrent.Future Future} instances
-     *         representing all message tasks.
+     * representing all message tasks.
+     * @throws java.lang.IllegalArgumentException              If the provided content is {@code null} or blank
+     * @throws java.util.concurrent.RejectedExecutionException If any of the receivers has been shutdown
+     * @throws net.dv8tion.jda.core.exceptions.HttpException   If the HTTP request fails
      */
-    public List<RequestFuture<?>> broadcast(String content)
-    {
+    public List<RequestFuture<?>> broadcast(String content) {
         Checks.notBlank(content, "Content");
         Checks.check(content.length() <= 2000, "Content may not exceed 2000 characters!");
         final RequestBody body = WebhookClient.newBody(new JSONObject().put("content", content).toString());
@@ -701,21 +563,14 @@ public class WebhookCluster implements AutoCloseable
      *
      * <p><b>The provided data should not exceed 8MB in size!</b>
      *
-     * @param  file
-     *         The file that should be sent to the clients
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided file is {@code null}, does not exist or ist not readable
-     * @throws java.util.concurrent.RejectedExecutionException
-     *         If any of the receivers has been shutdown
-     * @throws net.dv8tion.jda.core.exceptions.HttpException
-     *         If the HTTP request fails
-     *
+     * @param file The file that should be sent to the clients
      * @return A list of {@link java.util.concurrent.Future Future} instances
-     *         representing all message tasks.
+     * representing all message tasks.
+     * @throws java.lang.IllegalArgumentException              If the provided file is {@code null}, does not exist or ist not readable
+     * @throws java.util.concurrent.RejectedExecutionException If any of the receivers has been shutdown
+     * @throws net.dv8tion.jda.core.exceptions.HttpException   If the HTTP request fails
      */
-    public List<RequestFuture<?>> broadcast(File file)
-    {
+    public List<RequestFuture<?>> broadcast(File file) {
         Checks.notNull(file, "File");
         return broadcast(file, file.getName());
     }
@@ -726,23 +581,15 @@ public class WebhookCluster implements AutoCloseable
      *
      * <p><b>The provided data should not exceed 8MB in size!</b>
      *
-     * @param  file
-     *         The file that should be sent to the clients
-     * @param  fileName
-     *         The name that should be given to the file
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided file is {@code null}, does not exist or ist not readable
-     * @throws java.util.concurrent.RejectedExecutionException
-     *         If any of the receivers has been shutdown
-     * @throws net.dv8tion.jda.core.exceptions.HttpException
-     *         If the HTTP request fails
-     *
+     * @param file     The file that should be sent to the clients
+     * @param fileName The name that should be given to the file
      * @return A list of {@link java.util.concurrent.Future Future} instances
-     *         representing all message tasks.
+     * representing all message tasks.
+     * @throws java.lang.IllegalArgumentException              If the provided file is {@code null}, does not exist or ist not readable
+     * @throws java.util.concurrent.RejectedExecutionException If any of the receivers has been shutdown
+     * @throws net.dv8tion.jda.core.exceptions.HttpException   If the HTTP request fails
      */
-    public List<RequestFuture<?>> broadcast(File file, String fileName)
-    {
+    public List<RequestFuture<?>> broadcast(File file, String fileName) {
         Checks.notNull(file, "File");
         Checks.check(file.length() <= Message.MAX_FILE_SIZE, "Provided File exceeds the maximum size of 8MB!");
         return broadcast(new WebhookMessageBuilder().setFile(file, fileName).build());
@@ -754,23 +601,15 @@ public class WebhookCluster implements AutoCloseable
      *
      * <p><b>The provided data should not exceed 8MB in size!</b>
      *
-     * @param  data
-     *         The data that should be sent to the clients
-     * @param  fileName
-     *         The name that should be given to the attachment
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided data is {@code null}
-     * @throws java.util.concurrent.RejectedExecutionException
-     *         If any of the receivers has been shutdown
-     * @throws net.dv8tion.jda.core.exceptions.HttpException
-     *         If the HTTP request fails
-     *
+     * @param data     The data that should be sent to the clients
+     * @param fileName The name that should be given to the attachment
      * @return A list of {@link java.util.concurrent.Future Future} instances
-     *         representing all message tasks.
+     * representing all message tasks.
+     * @throws java.lang.IllegalArgumentException              If the provided data is {@code null}
+     * @throws java.util.concurrent.RejectedExecutionException If any of the receivers has been shutdown
+     * @throws net.dv8tion.jda.core.exceptions.HttpException   If the HTTP request fails
      */
-    public List<RequestFuture<?>> broadcast(InputStream data, String fileName)
-    {
+    public List<RequestFuture<?>> broadcast(InputStream data, String fileName) {
         return broadcast(new WebhookMessageBuilder().setFile(data, fileName).build());
     }
 
@@ -780,23 +619,15 @@ public class WebhookCluster implements AutoCloseable
      *
      * <p><b>The provided data should not exceed 8MB in size!</b>
      *
-     * @param  data
-     *         The data that should be sent to the clients
-     * @param  fileName
-     *         The name that should be given to the attachment
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided data is {@code null}
-     * @throws java.util.concurrent.RejectedExecutionException
-     *         If any of the receivers has been shutdown
-     * @throws net.dv8tion.jda.core.exceptions.HttpException
-     *         If the HTTP request fails
-     *
+     * @param data     The data that should be sent to the clients
+     * @param fileName The name that should be given to the attachment
      * @return A list of {@link java.util.concurrent.Future Future} instances
-     *         representing all message tasks.
+     * representing all message tasks.
+     * @throws java.lang.IllegalArgumentException              If the provided data is {@code null}
+     * @throws java.util.concurrent.RejectedExecutionException If any of the receivers has been shutdown
+     * @throws net.dv8tion.jda.core.exceptions.HttpException   If the HTTP request fails
      */
-    public List<RequestFuture<?>> broadcast(byte[] data, String fileName)
-    {
+    public List<RequestFuture<?>> broadcast(byte[] data, String fileName) {
         Checks.notNull(data, "Data");
         Checks.check(data.length < Message.MAX_FILE_SIZE, "Provided data exceeds the maximum size of 8MB!");
         return broadcast(new WebhookMessageBuilder().setFile(data, fileName).build());
@@ -807,8 +638,7 @@ public class WebhookCluster implements AutoCloseable
      * and removes the from this cluster!
      */
     @Override
-    public void close()
-    {
+    public void close() {
         webhooks.forEach(WebhookClient::close);
         webhooks.clear();
     }

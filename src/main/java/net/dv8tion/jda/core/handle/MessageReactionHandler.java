@@ -36,23 +36,20 @@ import net.dv8tion.jda.core.requests.WebSocketClient;
 import net.dv8tion.jda.core.utils.JDALogger;
 import org.json.JSONObject;
 
-public class MessageReactionHandler extends SocketHandler
-{
+public class MessageReactionHandler extends SocketHandler {
 
     private final boolean add;
 
-    public MessageReactionHandler(JDAImpl api, boolean add)
-    {
+    public MessageReactionHandler(JDAImpl api, boolean add) {
         super(api);
         this.add = add;
     }
 
     @Override
-    protected Long handleInternally(JSONObject content)
-    {
+    protected Long handleInternally(JSONObject content) {
         JSONObject emoji = content.getJSONObject("emoji");
 
-        final long userId    = content.getLong("user_id");
+        final long userId = content.getLong("user_id");
         final long messageId = content.getLong("message_id");
         final long channelId = content.getLong("channel_id");
 
@@ -60,8 +57,7 @@ public class MessageReactionHandler extends SocketHandler
         String emojiName = emoji.optString("name", null);
         final boolean emojiAnimated = emoji.optBoolean("animated");
 
-        if (emojiId == null && emojiName == null)
-        {
+        if (emojiId == null && emojiName == null) {
             WebSocketClient.LOG.debug("Received a reaction {} with no name nor id. json: {}",
                 JDALogger.getLazyString(() -> add ? "add" : "remove"), content);
             return null;
@@ -70,54 +66,42 @@ public class MessageReactionHandler extends SocketHandler
         User user = api.getUserById(userId);
         if (user == null)
             user = api.getFakeUserMap().get(userId);
-        if (user == null)
-        {
+        if (user == null) {
             api.getEventCache().cache(EventCache.Type.USER, userId, () -> handle(responseNumber, allContent));
             EventCache.LOG.debug("Received a reaction for a user that JDA does not currently have cached");
             return null;
         }
 
         MessageChannel channel = api.getTextChannelById(channelId);
-        if (channel == null)
-        {
+        if (channel == null) {
             channel = api.getPrivateChannelById(channelId);
         }
-        if (channel == null)
-        {
+        if (channel == null) {
             channel = api.getFakePrivateChannelMap().get(channelId);
         }
-        if (channel == null && api.getAccountType() == AccountType.CLIENT)
-        {
+        if (channel == null && api.getAccountType() == AccountType.CLIENT) {
             channel = api.asClient().getGroupById(channelId);
         }
-        if (channel == null)
-        {
+        if (channel == null) {
             api.getEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
             EventCache.LOG.debug("Received a reaction for a channel that JDA does not currently have cached");
             return null;
         }
 
         MessageReaction.ReactionEmote rEmote;
-        if (emojiId != null)
-        {
+        if (emojiId != null) {
             Emote emote = api.getEmoteById(emojiId);
-            if (emote == null)
-            {
-                if (emojiName != null)
-                {
+            if (emote == null) {
+                if (emojiName != null) {
                     emote = new EmoteImpl(emojiId, api).setAnimated(emojiAnimated).setName(emojiName);
-                }
-                else
-                {
+                } else {
                     WebSocketClient.LOG.debug("Received a reaction {} with a null name. json: {}",
                         JDALogger.getLazyString(() -> add ? "add" : "remove"), content);
                     return null;
                 }
             }
             rEmote = new MessageReaction.ReactionEmote(emote);
-        }
-        else
-        {
+        } else {
             rEmote = new MessageReaction.ReactionEmote(emojiName, null, api);
         }
         MessageReaction reaction = new MessageReaction(channel, rEmote, messageId, user.equals(api.getSelfUser()), -1);
@@ -129,63 +113,59 @@ public class MessageReactionHandler extends SocketHandler
         return null;
     }
 
-    private void onAdd(MessageReaction reaction, User user)
-    {
+    private void onAdd(MessageReaction reaction, User user) {
         IEventManager manager = api.getEventManager();
-        switch (reaction.getChannelType())
-        {
+        switch (reaction.getChannelType()) {
             case TEXT:
                 manager.handle(
                     new GuildMessageReactionAddEvent(
-                            api, responseNumber,
-                            user, reaction));
+                        api, responseNumber,
+                        user, reaction));
                 break;
             case GROUP:
                 manager.handle(
                     new GroupMessageReactionAddEvent(
-                            api, responseNumber,
-                            user, reaction));
+                        api, responseNumber,
+                        user, reaction));
                 break;
             case PRIVATE:
                 manager.handle(
                     new PrivateMessageReactionAddEvent(
-                            api, responseNumber,
-                            user, reaction));
+                        api, responseNumber,
+                        user, reaction));
         }
 
         manager.handle(
             new MessageReactionAddEvent(
-                    api, responseNumber,
-                    user, reaction));
+                api, responseNumber,
+                user, reaction));
     }
 
-    private void onRemove(MessageReaction reaction, User user)
-    {
+    private void onRemove(MessageReaction reaction, User user) {
         IEventManager manager = api.getEventManager();
-        switch (reaction.getChannelType())
-        {
+        switch (reaction.getChannelType()) {
             case TEXT:
                 manager.handle(
                     new GuildMessageReactionRemoveEvent(
-                            api, responseNumber,
-                            user, reaction));
+                        api, responseNumber,
+                        user, reaction));
                 break;
             case GROUP:
                 manager.handle(
                     new GroupMessageReactionRemoveEvent(
-                            api, responseNumber,
-                            user, reaction));
+                        api, responseNumber,
+                        user, reaction));
                 break;
             case PRIVATE:
                 manager.handle(
                     new PrivateMessageReactionRemoveEvent(
-                            api, responseNumber,
-                            user, reaction));
+                        api, responseNumber,
+                        user, reaction));
         }
 
         manager.handle(
             new MessageReactionRemoveEvent(
-                    api, responseNumber,
-                    user, reaction));
+                api, responseNumber,
+                user, reaction));
     }
 }

@@ -18,8 +18,7 @@ package net.dv8tion.jda.core;
 /**
  * Contains information to this specific build of JDA.
  */
-public class JDAInfo
-{
+public class JDAInfo {
     public static final int DISCORD_REST_VERSION = 6;
     public static final String GITHUB = "https://github.com/DV8FromTheWorld/JDA";
     public static final String VERSION_MAJOR = "@versionMajor@";

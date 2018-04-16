@@ -21,9 +21,9 @@ import net.dv8tion.jda.core.requests.RestAction;
 
 import javax.annotation.CheckReturnValue;
 
-public interface CallableChannel extends ISnowflake
-{
+public interface CallableChannel extends ISnowflake {
     @CheckReturnValue
     RestAction<Call> startCall();
+
     Call getCurrentCall();
 }

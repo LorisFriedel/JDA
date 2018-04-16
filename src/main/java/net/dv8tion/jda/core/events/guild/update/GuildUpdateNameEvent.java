@@ -26,12 +26,10 @@ import net.dv8tion.jda.core.entities.Guild;
  *
  * <p>Identifier: {@code name}
  */
-public class GuildUpdateNameEvent extends GenericGuildUpdateEvent<String>
-{
+public class GuildUpdateNameEvent extends GenericGuildUpdateEvent<String> {
     public static final String IDENTIFIER = "name";
 
-    public GuildUpdateNameEvent(JDA api, long responseNumber, Guild guild, String oldName)
-    {
+    public GuildUpdateNameEvent(JDA api, long responseNumber, Guild guild, String oldName) {
         super(api, responseNumber, guild, oldName, guild.getName(), IDENTIFIER);
     }
 
@@ -40,8 +38,7 @@ public class GuildUpdateNameEvent extends GenericGuildUpdateEvent<String>
      *
      * @return The old name
      */
-    public String getOldName()
-    {
+    public String getOldName() {
         return getOldValue();
     }
 
@@ -50,8 +47,7 @@ public class GuildUpdateNameEvent extends GenericGuildUpdateEvent<String>
      *
      * @return The new name
      */
-    public String getNewName()
-    {
+    public String getNewName() {
         return getNewValue();
     }
 }

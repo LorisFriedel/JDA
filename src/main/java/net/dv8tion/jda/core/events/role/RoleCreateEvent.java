@@ -24,10 +24,8 @@ import net.dv8tion.jda.core.entities.Role;
  *
  * <p>Can be used to retrieve the created Role and its Guild.
  */
-public class RoleCreateEvent extends GenericRoleEvent
-{
-    public RoleCreateEvent(JDA api, long responseNumber, Role createdRole)
-    {
+public class RoleCreateEvent extends GenericRoleEvent {
+    public RoleCreateEvent(JDA api, long responseNumber, Role createdRole) {
         super(api, responseNumber, createdRole);
     }
 }

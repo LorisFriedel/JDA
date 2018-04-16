@@ -74,8 +74,7 @@ import net.dv8tion.jda.core.utils.tuple.Pair;
  * builder.build();
  * </code></pre>
  */
-public interface SessionController
-{
+public interface SessionController {
     /**
      * The default delay (in seconds) to wait between running {@link net.dv8tion.jda.core.utils.SessionController.SessionConnectNode SessionConnectNodes}
      */
@@ -86,8 +85,7 @@ public interface SessionController
      * a WebSocket should be started. (Connecting and Reconnecting)
      * <br>This should only add the node to a queue and execute the queue with respect to the {@link #IDENTIFY_DELAY}.
      *
-     * @param  node
-     *         The {@link net.dv8tion.jda.core.utils.SessionController.SessionConnectNode SessionConnectNode}
+     * @param node The {@link net.dv8tion.jda.core.utils.SessionController.SessionConnectNode SessionConnectNode}
      */
     void appendSession(SessionConnectNode node);
 
@@ -97,8 +95,7 @@ public interface SessionController
      * <br>When this happened the {@link net.dv8tion.jda.core.utils.SessionController.SessionConnectNode#run(boolean) SessionConnectNode.run(boolean)}
      * will be a no-op and does not contribute to the {@link #IDENTIFY_DELAY}.
      *
-     * @param node
-     *        The {@link net.dv8tion.jda.core.utils.SessionController.SessionConnectNode SessionConnectNode} to remove from the queue.
+     * @param node The {@link net.dv8tion.jda.core.utils.SessionController.SessionConnectNode SessionConnectNode} to remove from the queue.
      */
     void removeSession(SessionConnectNode node);
 
@@ -113,8 +110,7 @@ public interface SessionController
      * Called by the {@link net.dv8tion.jda.core.requests.RateLimiter RateLimiter} if the global rest ratelimit
      * has changed.
      *
-     * @param ratelimit
-     *        The new global ratelimit
+     * @param ratelimit The new global ratelimit
      */
     void setGlobalRatelimit(long ratelimit);
 
@@ -123,9 +119,7 @@ public interface SessionController
      * when a new session starts (Connecting, Reconnecting).
      * <br>Should provide the gateway endpoint (wss) to connect to.
      *
-     * @param  api
-     *         The current JDA instance (used for RestActions and ShardInfo)
-     *
+     * @param api The current JDA instance (used for RestActions and ShardInfo)
      * @return The gateway endpoint
      */
     String getGateway(JDA api);
@@ -135,12 +129,9 @@ public interface SessionController
      * when a new shards is starting.
      * <br>Should provide a {@link net.dv8tion.jda.core.utils.tuple.Pair Pair} with {@code (gateway, shardTotal)}.
      *
-     * @param  api
-     *         The current JDA instance (used for RestActions and ShardInfo)
-     *
+     * @param api The current JDA instance (used for RestActions and ShardInfo)
      * @return The Pair consisting of the gateway endpoint to connect to and the shardTotal
-     *
-     * @see    #getGateway(net.dv8tion.jda.core.JDA)
+     * @see #getGateway(net.dv8tion.jda.core.JDA)
      */
     Pair<String, Integer> getGatewayBot(JDA api);
 
@@ -150,8 +141,7 @@ public interface SessionController
      *
      * <p><b>Note: None of the provided session nodes can be resumed, the resume timeframe has already passed</b>
      */
-    interface SessionConnectNode
-    {
+    interface SessionConnectNode {
         /**
          * Whether this node is reconnecting. Can be used to setup a priority based system.
          *
@@ -178,12 +168,9 @@ public interface SessionController
          * When called, establishes the session.
          * <br>This will return once the required payload to start the session has been delivered.
          *
-         * @param  isLast
-         *         True, if this is the last node in a queue worker.
-         *         When false this will not wait for the payload to be delivered.
-         *
-         * @throws InterruptedException
-         *         If the calling thread is interrupted
+         * @param isLast True, if this is the last node in a queue worker.
+         *               When false this will not wait for the payload to be delivered.
+         * @throws InterruptedException If the calling thread is interrupted
          */
         void run(boolean isLast) throws InterruptedException;
     }

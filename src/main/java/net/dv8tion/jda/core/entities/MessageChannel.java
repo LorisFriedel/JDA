@@ -44,26 +44,25 @@ import java.util.*;
  * <p>This will use {@link #getName()} rather than {@link Object#toString()}!
  * <br>Supported Features:
  * <ul>
- *     <li><b>Alternative</b>
- *     <br>   - Prepends the name with {@code #}
- *              (Example: {@code %#s} - results in <code>#{@link #getName()}</code>)</li>
+ * <li><b>Alternative</b>
+ * <br>   - Prepends the name with {@code #}
+ * (Example: {@code %#s} - results in <code>#{@link #getName()}</code>)</li>
  *
- *     <li><b>Width/Left-Justification</b>
- *     <br>   - Ensures the size of a format
- *              (Example: {@code %20s} - uses at minimum 20 chars;
- *              {@code %-10s} - uses left-justified padding)</li>
+ * <li><b>Width/Left-Justification</b>
+ * <br>   - Ensures the size of a format
+ * (Example: {@code %20s} - uses at minimum 20 chars;
+ * {@code %-10s} - uses left-justified padding)</li>
  *
- *     <li><b>Precision</b>
- *     <br>   - Cuts the content to the specified size
- *              (Example: {@code %.20s})</li>
+ * <li><b>Precision</b>
+ * <br>   - Cuts the content to the specified size
+ * (Example: {@code %.20s})</li>
  * </ul>
  *
  * <p>More information on formatting syntax can be found in the {@link java.util.Formatter format syntax documentation}!
  * <br><b>{@link net.dv8tion.jda.core.entities.TextChannel TextChannel} is a special case which uses {@link IMentionable#getAsMention() IMentionable.getAsMention()}
  * by default and uses the <code>#{@link #getName()}</code> format as <u>alternative</u></b>
  */
-public interface MessageChannel extends ISnowflake, Formattable
-{
+public interface MessageChannel extends ISnowflake, Formattable {
 
     /**
      * The id for the most recent message sent
@@ -73,13 +72,10 @@ public interface MessageChannel extends ISnowflake, Formattable
      * <p>This value is updated on each {@link net.dv8tion.jda.core.events.message.MessageReceivedEvent MessageReceivedEvent}
      * and <u><b>will be reset to {@code null} if the message associated with this ID gets deleted</b></u>
      *
-     * @throws java.lang.IllegalStateException
-     *         If no message id is available
-     *
      * @return The most recent message's id
+     * @throws java.lang.IllegalStateException If no message id is available
      */
-    default String getLatestMessageId()
-    {
+    default String getLatestMessageId() {
         return Long.toUnsignedString(getLatestMessageIdLong());
     }
 
@@ -91,10 +87,8 @@ public interface MessageChannel extends ISnowflake, Formattable
      * <p>This value is updated on each {@link net.dv8tion.jda.core.events.message.MessageReceivedEvent MessageReceivedEvent}
      * and <u><b>will be reset to {@code null} if the message associated with this ID gets deleted</b></u>
      *
-     * @throws java.lang.IllegalStateException
-     *         If no message id is available
-     *
      * @return The most recent message's id
+     * @throws java.lang.IllegalStateException If no message id is available
      */
     long getLatestMessageIdLong();
 
@@ -108,8 +102,7 @@ public interface MessageChannel extends ISnowflake, Formattable
      * method will throw an {@link java.util.NoSuchElementException NoSuchElementException}
      *
      * @return True, if a latest message id is available for retrieval by {@link #getLatestMessageId()}
-     *
-     * @see    #getLatestMessageId()
+     * @see #getLatestMessageId()
      */
     boolean hasLatestMessage();
 
@@ -117,13 +110,13 @@ public interface MessageChannel extends ISnowflake, Formattable
      * This method is a shortcut method to return the following information in the following situation:
      * If the MessageChannel is instance of..
      * <ul>
-     *     <li><b>TextChannel</b> - Returns {@link TextChannel#getName()}</li>
-     *     <li><b>PrivateChannel</b> Returns {@link PrivateChannel#getUser()}{@link net.dv8tion.jda.core.entities.User#getName() .getName()}</li>
-     *     <li><b>Group</b> - Returns {@link net.dv8tion.jda.client.entities.Group#getName() Group.getName()}</li>
+     * <li><b>TextChannel</b> - Returns {@link TextChannel#getName()}</li>
+     * <li><b>PrivateChannel</b> Returns {@link PrivateChannel#getUser()}{@link net.dv8tion.jda.core.entities.User#getName() .getName()}</li>
+     * <li><b>Group</b> - Returns {@link net.dv8tion.jda.client.entities.Group#getName() Group.getName()}</li>
      * </ul>
      *
      * @return Possibly-null "name" of the MessageChannel. Different implementations determine what the name. Only
-     *         {@link net.dv8tion.jda.client.entities.Group Group} could have a {@code null} name.
+     * {@link net.dv8tion.jda.client.entities.Group Group} could have a {@code null} name.
      */
     String getName();
 
@@ -154,34 +147,25 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>For {@link net.dv8tion.jda.core.requests.ErrorResponse} information, refer to {@link #sendMessage(Message)}.
      *
-     * @param  text
-     *         the text to build into a Message to send to the MessageChannel.
-     *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does
-     *         not have
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE}</li>
-     *         </ul>
-     * @throws net.dv8tion.jda.client.exceptions.VerificationLevelException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel} and
-     *         {@link net.dv8tion.jda.core.entities.TextChannel#getGuild() TextChannel.getGuild()}{@link net.dv8tion.jda.core.entities.Guild#checkVerification() .checkVerification()}
-     *         returns false.
-     * @throws java.lang.IllegalArgumentException
-     *         if the provided text is null, empty or longer than 2000 characters
-     * @throws java.lang.UnsupportedOperationException
-     *         If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
-     *         and both the currently logged in account and the target user are bots.
-     *
+     * @param text the text to build into a Message to send to the MessageChannel.
      * @return {@link net.dv8tion.jda.core.requests.restaction.MessageAction MessageAction}
-     *         <br>The newly created Message after it has been sent to Discord.
-     *
+     * <br>The newly created Message after it has been sent to Discord.
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does
+     *                                                                         not have
+     *                                                                         <ul>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE}</li>
+     *                                                                         </ul>
+     * @throws net.dv8tion.jda.client.exceptions.VerificationLevelException    If this is a {@link net.dv8tion.jda.core.entities.TextChannel} and
+     *                                                                         {@link net.dv8tion.jda.core.entities.TextChannel#getGuild() TextChannel.getGuild()}{@link net.dv8tion.jda.core.entities.Guild#checkVerification() .checkVerification()}
+     *                                                                         returns false.
+     * @throws java.lang.IllegalArgumentException                              if the provided text is null, empty or longer than 2000 characters
+     * @throws java.lang.UnsupportedOperationException                         If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
+     *                                                                         and both the currently logged in account and the target user are bots.
      * @see net.dv8tion.jda.core.MessageBuilder
      */
     @CheckReturnValue
-    default MessageAction sendMessage(CharSequence text)
-    {
+    default MessageAction sendMessage(CharSequence text) {
         Checks.notEmpty(text, "Provided text for message");
         Checks.check(text.length() <= 2000, "Provided text for message must be less than 2000 characters in length");
 
@@ -205,42 +189,32 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>For {@link net.dv8tion.jda.core.requests.ErrorResponse} information, refer to {@link #sendMessage(Message)}.
      *
-     * @param  format
-     *         The string that should be formatted, if this is {@code null} or empty
-     *         the content of the Message would be empty and cause a builder exception.
-     * @param  args
-     *         The arguments for your format
-     *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does
-     *         not have
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE}</li>
-     *         </ul>
-     * @throws net.dv8tion.jda.client.exceptions.VerificationLevelException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel} and
-     *         {@link net.dv8tion.jda.core.entities.TextChannel#getGuild() TextChannel.getGuild()}{@link net.dv8tion.jda.core.entities.Guild#checkVerification() .checkVerification()}
-     *         returns false.
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided format text is {@code null}, empty or longer than 2000 characters
-     * @throws java.lang.UnsupportedOperationException
-     *         If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
-     *         and both the currently logged in account and the target user are bots.
-     * @throws java.util.IllegalFormatException
-     *         If a format string contains an illegal syntax,
-     *         a format specifier that is incompatible with the given arguments,
-     *         insufficient arguments given the format string, or other illegal conditions.
-     *         For specification of all possible formatting errors,
-     *         see the <a href="../util/Formatter.html#detail">Details</a>
-     *         section of the formatter class specification.
-     *
+     * @param format The string that should be formatted, if this is {@code null} or empty
+     *               the content of the Message would be empty and cause a builder exception.
+     * @param args   The arguments for your format
      * @return {@link net.dv8tion.jda.core.requests.restaction.MessageAction MessageAction}
-     *         <br>The newly created Message after it has been sent to Discord.
+     * <br>The newly created Message after it has been sent to Discord.
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does
+     *                                                                         not have
+     *                                                                         <ul>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE}</li>
+     *                                                                         </ul>
+     * @throws net.dv8tion.jda.client.exceptions.VerificationLevelException    If this is a {@link net.dv8tion.jda.core.entities.TextChannel} and
+     *                                                                         {@link net.dv8tion.jda.core.entities.TextChannel#getGuild() TextChannel.getGuild()}{@link net.dv8tion.jda.core.entities.Guild#checkVerification() .checkVerification()}
+     *                                                                         returns false.
+     * @throws java.lang.IllegalArgumentException                              If the provided format text is {@code null}, empty or longer than 2000 characters
+     * @throws java.lang.UnsupportedOperationException                         If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
+     *                                                                         and both the currently logged in account and the target user are bots.
+     * @throws java.util.IllegalFormatException                                If a format string contains an illegal syntax,
+     *                                                                         a format specifier that is incompatible with the given arguments,
+     *                                                                         insufficient arguments given the format string, or other illegal conditions.
+     *                                                                         For specification of all possible formatting errors,
+     *                                                                         see the <a href="../util/Formatter.html#detail">Details</a>
+     *                                                                         section of the formatter class specification.
      */
     @CheckReturnValue
-    default MessageAction sendMessageFormat(String format, Object... args)
-    {
+    default MessageAction sendMessageFormat(String format, Object... args) {
         Checks.notEmpty(format, "Format");
         return sendMessage(String.format(format, args));
     }
@@ -259,37 +233,28 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>For {@link net.dv8tion.jda.core.requests.ErrorResponse} information, refer to {@link #sendMessage(Message)}.
      *
-     * @param  embed
-     *         the {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed} to send
-     *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does
-     *         not have
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_EMBED_LINKS Permission.MESSAGE_EMBED_LINKS}</li>
-     *         </ul>
-     * @throws net.dv8tion.jda.client.exceptions.VerificationLevelException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel} and
-     *         {@link net.dv8tion.jda.core.entities.TextChannel#getGuild() TextChannel.getGuild()}{@link net.dv8tion.jda.core.entities.Guild#checkVerification() .checkVerification()}
-     *         returns false.
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided embed is {@code null} or if the provided {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed}
-     *         is not {@link net.dv8tion.jda.core.entities.MessageEmbed#isSendable(net.dv8tion.jda.core.AccountType) sendable}
-     * @throws java.lang.UnsupportedOperationException
-     *         If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
-     *         and both the currently logged in account and the target user are bots.
-     *
+     * @param embed the {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed} to send
      * @return {@link net.dv8tion.jda.core.requests.restaction.MessageAction MessageAction}
-     *         <br>The newly created Message after it has been sent to Discord.
-     *
-     * @see    net.dv8tion.jda.core.MessageBuilder
-     * @see    net.dv8tion.jda.core.EmbedBuilder
+     * <br>The newly created Message after it has been sent to Discord.
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does
+     *                                                                         not have
+     *                                                                         <ul>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_EMBED_LINKS Permission.MESSAGE_EMBED_LINKS}</li>
+     *                                                                         </ul>
+     * @throws net.dv8tion.jda.client.exceptions.VerificationLevelException    If this is a {@link net.dv8tion.jda.core.entities.TextChannel} and
+     *                                                                         {@link net.dv8tion.jda.core.entities.TextChannel#getGuild() TextChannel.getGuild()}{@link net.dv8tion.jda.core.entities.Guild#checkVerification() .checkVerification()}
+     *                                                                         returns false.
+     * @throws java.lang.IllegalArgumentException                              If the provided embed is {@code null} or if the provided {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed}
+     *                                                                         is not {@link net.dv8tion.jda.core.entities.MessageEmbed#isSendable(net.dv8tion.jda.core.AccountType) sendable}
+     * @throws java.lang.UnsupportedOperationException                         If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
+     *                                                                         and both the currently logged in account and the target user are bots.
+     * @see net.dv8tion.jda.core.MessageBuilder
+     * @see net.dv8tion.jda.core.EmbedBuilder
      */
     @CheckReturnValue
-    default MessageAction sendMessage(MessageEmbed embed)
-    {
+    default MessageAction sendMessage(MessageEmbed embed) {
         Checks.notNull(embed, "Provided embed");
 
         Route.CompiledRoute route = Route.Messages.SEND_MESSAGE.compile(getId());
@@ -305,58 +270,49 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The send request was attempted after the account lost {@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE} in
-     *         the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The send request was attempted after the account lost {@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE} in
+     * the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNAUTHORIZED UNAUTHORIZED}
-     *     <br>If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel} and the recipient User blocked you</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNAUTHORIZED UNAUTHORIZED}
+     * <br>If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel} and the recipient User blocked you</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#CANNOT_SEND_TO_USER CANNOT_SEND_TO_USER}
-     *     <br>If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel} and the currently logged in account
-     *         does not share any Guilds with the recipient User</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#CANNOT_SEND_TO_USER CANNOT_SEND_TO_USER}
+     * <br>If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel} and the currently logged in account
+     * does not share any Guilds with the recipient User</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The send request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The send request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param  msg
-     *         the {@link net.dv8tion.jda.core.entities.Message Message} to send
-     *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does
-     *         not have
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_EMBED_LINKS Permission.MESSAGE_EMBED_LINKS} (if this message is only an embed)</li>
-     *         </ul>
-     * @throws net.dv8tion.jda.client.exceptions.VerificationLevelException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel} and
-     *         {@link net.dv8tion.jda.core.entities.TextChannel#getGuild() TextChannel.getGuild()}{@link net.dv8tion.jda.core.entities.Guild#checkVerification() .checkVerification()}
-     *         returns false.
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided message is {@code null} or the provided {@link net.dv8tion.jda.core.entities.Message Message}
-     *         contains an {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed}
-     *         that is not {@link net.dv8tion.jda.core.entities.MessageEmbed#isSendable(net.dv8tion.jda.core.AccountType) sendable}
-     * @throws java.lang.UnsupportedOperationException
-     *         If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
-     *         and both the currently logged in account and the target user are bots.
-     *
+     * @param msg the {@link net.dv8tion.jda.core.entities.Message Message} to send
      * @return {@link net.dv8tion.jda.core.requests.restaction.MessageAction MessageAction}
-     *         <br>The newly created Message after it has been sent to Discord.
-     *
-     * @see    net.dv8tion.jda.core.MessageBuilder
+     * <br>The newly created Message after it has been sent to Discord.
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does
+     *                                                                         not have
+     *                                                                         <ul>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_EMBED_LINKS Permission.MESSAGE_EMBED_LINKS} (if this message is only an embed)</li>
+     *                                                                         </ul>
+     * @throws net.dv8tion.jda.client.exceptions.VerificationLevelException    If this is a {@link net.dv8tion.jda.core.entities.TextChannel} and
+     *                                                                         {@link net.dv8tion.jda.core.entities.TextChannel#getGuild() TextChannel.getGuild()}{@link net.dv8tion.jda.core.entities.Guild#checkVerification() .checkVerification()}
+     *                                                                         returns false.
+     * @throws java.lang.IllegalArgumentException                              If the provided message is {@code null} or the provided {@link net.dv8tion.jda.core.entities.Message Message}
+     *                                                                         contains an {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed}
+     *                                                                         that is not {@link net.dv8tion.jda.core.entities.MessageEmbed#isSendable(net.dv8tion.jda.core.AccountType) sendable}
+     * @throws java.lang.UnsupportedOperationException                         If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
+     *                                                                         and both the currently logged in account and the target user are bots.
+     * @see net.dv8tion.jda.core.MessageBuilder
      */
     @CheckReturnValue
-    default MessageAction sendMessage(Message msg)
-    {
+    default MessageAction sendMessage(Message msg) {
         Checks.notNull(msg, "Message");
 
         Route.CompiledRoute route = Route.Messages.SEND_MESSAGE.compile(getId());
@@ -374,36 +330,29 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>For {@link net.dv8tion.jda.core.requests.ErrorResponse} information, refer to the documentation for {@link #sendFile(java.io.File, String, Message)}.
      *
-     * @param  file
-     *         The file to upload to the {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel}.
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>Provided {@code file} is null.</li>
-     *             <li>Provided {@code file} does not exist.</li>
-     *             <li>Provided {@code file} is unreadable.</li>
-     *             <li>Provided {@code file} is greater than 8MiB for normal and 50MiB for nitro accounts.</li>
-     *             <li>Provided {@link net.dv8tion.jda.core.entities.Message Message} is not {@code null} <b>and</b>
-     *                 contains a {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed} which
-     *                 is not {@link net.dv8tion.jda.core.entities.MessageEmbed#isSendable(net.dv8tion.jda.core.AccountType) sendable}</li>
-     *         </ul>
-     * @throws net.dv8tion.jda.core.exceptions.PermissionException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_ATTACH_FILES Permission.MESSAGE_ATTACH_FILES}</li>
-     *         </ul>
-     * @throws java.lang.UnsupportedOperationException
-     *         If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
-     *         and both the currently logged in account and the target user are bots.
-     *
+     * @param file The file to upload to the {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel}.
      * @return {@link net.dv8tion.jda.core.requests.restaction.MessageAction MessageAction}
-     *         <br>The {@link net.dv8tion.jda.core.entities.Message Message} created from this upload.
+     * <br>The {@link net.dv8tion.jda.core.entities.Message Message} created from this upload.
+     * @throws java.lang.IllegalArgumentException                  <ul>
+     *                                                             <li>Provided {@code file} is null.</li>
+     *                                                             <li>Provided {@code file} does not exist.</li>
+     *                                                             <li>Provided {@code file} is unreadable.</li>
+     *                                                             <li>Provided {@code file} is greater than 8MiB for normal and 50MiB for nitro accounts.</li>
+     *                                                             <li>Provided {@link net.dv8tion.jda.core.entities.Message Message} is not {@code null} <b>and</b>
+     *                                                             contains a {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed} which
+     *                                                             is not {@link net.dv8tion.jda.core.entities.MessageEmbed#isSendable(net.dv8tion.jda.core.AccountType) sendable}</li>
+     *                                                             </ul>
+     * @throws net.dv8tion.jda.core.exceptions.PermissionException If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
+     *                                                             <ul>
+     *                                                             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
+     *                                                             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE}</li>
+     *                                                             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_ATTACH_FILES Permission.MESSAGE_ATTACH_FILES}</li>
+     *                                                             </ul>
+     * @throws java.lang.UnsupportedOperationException             If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
+     *                                                             and both the currently logged in account and the target user are bots.
      */
     @CheckReturnValue
-    default MessageAction sendFile(File file)
-    {
+    default MessageAction sendFile(File file) {
         return sendFile(file, (Message) null);
     }
 
@@ -415,50 +364,42 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The {@code fileName} parameter is used to inform Discord about what the file should be called. This is 2 fold:
      * <ol>
-     *     <li>The file name provided is the name that is found in {@link net.dv8tion.jda.core.entities.Message.Attachment#getFileName()}
-     *          after upload and it is the name that will show up in the client when the upload is displayed.
-     *     <br>Note: The fileName does not show up on the Desktop client for images. It does on mobile however.</li>
-     *     <li>The extension of the provided fileName also determines who Discord will treat the file. Discord currently only
-     *         has special handling for image file types, but the fileName's extension must indicate that it is an image file.
-     *         This means it has to end in something like .png, .jpg, .jpeg, .gif, etc. As a note, you can also not provide
-     *         a full name for the file and instead ONLY provide the extension like "png" or "gif" and Discord will generate
-     *         a name for the upload and append the fileName as the extension.</li>
+     * <li>The file name provided is the name that is found in {@link net.dv8tion.jda.core.entities.Message.Attachment#getFileName()}
+     * after upload and it is the name that will show up in the client when the upload is displayed.
+     * <br>Note: The fileName does not show up on the Desktop client for images. It does on mobile however.</li>
+     * <li>The extension of the provided fileName also determines who Discord will treat the file. Discord currently only
+     * has special handling for image file types, but the fileName's extension must indicate that it is an image file.
+     * This means it has to end in something like .png, .jpg, .jpeg, .gif, etc. As a note, you can also not provide
+     * a full name for the file and instead ONLY provide the extension like "png" or "gif" and Discord will generate
+     * a name for the upload and append the fileName as the extension.</li>
      * </ol>
      *
      * <p>For {@link net.dv8tion.jda.core.requests.ErrorResponse} information, refer to the documentation for {@link #sendFile(java.io.File, String, Message)}.
      *
-     * @param  file
-     *         The file to upload to the {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel}.
-     * @param  fileName
-     *         The name that should be sent to discord
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>Provided {@code file} is null.</li>
-     *             <li>Provided {@code file} does not exist.</li>
-     *             <li>Provided {@code file} is unreadable.</li>
-     *             <li>Provided {@code file} is greater than 8MiB for normal and 50MiB for nitro accounts.</li>
-     *             <li>Provided {@link net.dv8tion.jda.core.entities.Message Message} is not {@code null} <b>and</b>
-     *                 contains a {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed} which
-     *                 is not {@link net.dv8tion.jda.core.entities.MessageEmbed#isSendable(net.dv8tion.jda.core.AccountType) sendable}</li>
-     *         </ul>
-     * @throws net.dv8tion.jda.core.exceptions.PermissionException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_ATTACH_FILES Permission.MESSAGE_ATTACH_FILES}</li>
-     *         </ul>
-     * @throws java.lang.UnsupportedOperationException
-     *         If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
-     *         and both the currently logged in account and the target user are bots.
-     *
+     * @param file     The file to upload to the {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel}.
+     * @param fileName The name that should be sent to discord
      * @return {@link net.dv8tion.jda.core.requests.restaction.MessageAction MessageAction}
-     *         <br>The {@link net.dv8tion.jda.core.entities.Message Message} created from this upload.
+     * <br>The {@link net.dv8tion.jda.core.entities.Message Message} created from this upload.
+     * @throws java.lang.IllegalArgumentException                  <ul>
+     *                                                             <li>Provided {@code file} is null.</li>
+     *                                                             <li>Provided {@code file} does not exist.</li>
+     *                                                             <li>Provided {@code file} is unreadable.</li>
+     *                                                             <li>Provided {@code file} is greater than 8MiB for normal and 50MiB for nitro accounts.</li>
+     *                                                             <li>Provided {@link net.dv8tion.jda.core.entities.Message Message} is not {@code null} <b>and</b>
+     *                                                             contains a {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed} which
+     *                                                             is not {@link net.dv8tion.jda.core.entities.MessageEmbed#isSendable(net.dv8tion.jda.core.AccountType) sendable}</li>
+     *                                                             </ul>
+     * @throws net.dv8tion.jda.core.exceptions.PermissionException If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
+     *                                                             <ul>
+     *                                                             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
+     *                                                             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE}</li>
+     *                                                             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_ATTACH_FILES Permission.MESSAGE_ATTACH_FILES}</li>
+     *                                                             </ul>
+     * @throws java.lang.UnsupportedOperationException             If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
+     *                                                             and both the currently logged in account and the target user are bots.
      */
     @CheckReturnValue
-    default MessageAction sendFile(File file, String fileName)
-    {
+    default MessageAction sendFile(File file, String fileName) {
         return sendFile(file, fileName, null);
     }
 
@@ -472,31 +413,23 @@ public interface MessageChannel extends ISnowflake, Formattable
      * <p>For information about the {@code fileName} parameter, Refer to the documentation for {@link #sendFile(java.io.File, String, Message)}.
      * <br>For {@link net.dv8tion.jda.core.requests.ErrorResponse} information, refer to the documentation for {@link #sendFile(java.io.File, String, Message)}.
      *
-     * @param  data
-     *         The InputStream data to upload to the {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel}.
-     * @param  fileName
-     *         The name that should be sent to discord
-     *         <br>Refer to the documentation for {@link #sendFile(java.io.File, String, Message)} for information about this parameter.
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided filename is {@code null} or {@code empty}.
-     * @throws net.dv8tion.jda.core.exceptions.PermissionException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_ATTACH_FILES Permission.MESSAGE_ATTACH_FILES}</li>
-     *         </ul>
-     * @throws java.lang.UnsupportedOperationException
-     *         If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
-     *         and both the currently logged in account and the target user are bots.
-     *
+     * @param data     The InputStream data to upload to the {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel}.
+     * @param fileName The name that should be sent to discord
+     *                 <br>Refer to the documentation for {@link #sendFile(java.io.File, String, Message)} for information about this parameter.
      * @return {@link net.dv8tion.jda.core.requests.restaction.MessageAction MessageAction}
-     *         <br>The {@link net.dv8tion.jda.core.entities.Message Message} created from this upload.
+     * <br>The {@link net.dv8tion.jda.core.entities.Message Message} created from this upload.
+     * @throws java.lang.IllegalArgumentException                  If the provided filename is {@code null} or {@code empty}.
+     * @throws net.dv8tion.jda.core.exceptions.PermissionException If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
+     *                                                             <ul>
+     *                                                             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
+     *                                                             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE}</li>
+     *                                                             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_ATTACH_FILES Permission.MESSAGE_ATTACH_FILES}</li>
+     *                                                             </ul>
+     * @throws java.lang.UnsupportedOperationException             If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
+     *                                                             and both the currently logged in account and the target user are bots.
      */
     @CheckReturnValue
-    default MessageAction sendFile(InputStream data, String fileName)
-    {
+    default MessageAction sendFile(InputStream data, String fileName) {
         return sendFile(data, fileName, null);
     }
 
@@ -510,36 +443,28 @@ public interface MessageChannel extends ISnowflake, Formattable
      * <p>For information about the {@code fileName} parameter, Refer to the documentation for {@link #sendFile(java.io.File, String, Message)}.
      * <br>For {@link net.dv8tion.jda.core.requests.ErrorResponse} information, refer to the documentation for {@link #sendFile(java.io.File, String, Message)}.
      *
-     * @param  data
-     *         The {@code byte[]} data to upload to the {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel}.
-     * @param  fileName
-     *         The name that should be sent to discord.
-     *         <br>Refer to the documentation for {@link #sendFile(java.io.File, String, Message)} for information about this parameter.
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>If the provided filename is {@code null} or {@code empty} or the provided data is larger than 8MiB on normal or 50MiB on nitro accounts.</li>
-     *             <li>If the provided {@link net.dv8tion.jda.core.entities.Message Message}
-     *                 contains an {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed}
-     *                 that is not {@link net.dv8tion.jda.core.entities.MessageEmbed#isSendable(net.dv8tion.jda.core.AccountType) sendable}</li>
-     *         </ul>
-     * @throws net.dv8tion.jda.core.exceptions.PermissionException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_ATTACH_FILES Permission.MESSAGE_ATTACH_FILES}</li>
-     *         </ul>
-     * @throws java.lang.UnsupportedOperationException
-     *         If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
-     *         and both the currently logged in account and the target user are bots.
-     *
+     * @param data     The {@code byte[]} data to upload to the {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel}.
+     * @param fileName The name that should be sent to discord.
+     *                 <br>Refer to the documentation for {@link #sendFile(java.io.File, String, Message)} for information about this parameter.
      * @return {@link net.dv8tion.jda.core.requests.restaction.MessageAction MessageAction}
-     *         <br>The {@link net.dv8tion.jda.core.entities.Message Message} created from this upload.
+     * <br>The {@link net.dv8tion.jda.core.entities.Message Message} created from this upload.
+     * @throws java.lang.IllegalArgumentException                  <ul>
+     *                                                             <li>If the provided filename is {@code null} or {@code empty} or the provided data is larger than 8MiB on normal or 50MiB on nitro accounts.</li>
+     *                                                             <li>If the provided {@link net.dv8tion.jda.core.entities.Message Message}
+     *                                                             contains an {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed}
+     *                                                             that is not {@link net.dv8tion.jda.core.entities.MessageEmbed#isSendable(net.dv8tion.jda.core.AccountType) sendable}</li>
+     *                                                             </ul>
+     * @throws net.dv8tion.jda.core.exceptions.PermissionException If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
+     *                                                             <ul>
+     *                                                             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
+     *                                                             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE}</li>
+     *                                                             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_ATTACH_FILES Permission.MESSAGE_ATTACH_FILES}</li>
+     *                                                             </ul>
+     * @throws java.lang.UnsupportedOperationException             If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
+     *                                                             and both the currently logged in account and the target user are bots.
      */
     @CheckReturnValue
-    default MessageAction sendFile(byte[] data, String fileName)
-    {
+    default MessageAction sendFile(byte[] data, String fileName) {
         return sendFile(data, fileName, null);
     }
 
@@ -569,38 +494,30 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>For {@link net.dv8tion.jda.core.requests.ErrorResponse} information, refer to the documentation for {@link #sendFile(java.io.File, String, Message)}.
      *
-     * @param  file
-     *         The file to upload to the {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel}.
-     * @param  message
-     *         The message to be sent along with the uploaded file. This value can be {@code null}.
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>Provided {@code file} is null.</li>
-     *             <li>Provided {@code file} does not exist.</li>
-     *             <li>Provided {@code file} is unreadable.</li>
-     *             <li>Provided {@code file} is greater than 8 MiB on a normal or 50 MiB on a nitro account.</li>
-     *             <li>Provided {@link net.dv8tion.jda.core.entities.Message Message} is not {@code null} <b>and</b>
-     *                 contains a {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed} which
-     *                 is not {@link net.dv8tion.jda.core.entities.MessageEmbed#isSendable(net.dv8tion.jda.core.AccountType) sendable}</li>
-     *         </ul>
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_ATTACH_FILES Permission.MESSAGE_ATTACH_FILES}</li>
-     *         </ul>
-     * @throws java.lang.UnsupportedOperationException
-     *         If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
-     *         and both the currently logged in account and the target user are bots.
-     *
+     * @param file    The file to upload to the {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel}.
+     * @param message The message to be sent along with the uploaded file. This value can be {@code null}.
      * @return {@link net.dv8tion.jda.core.requests.restaction.MessageAction MessageAction}
-     *         <br>The {@link net.dv8tion.jda.core.entities.Message Message} created from this upload.
+     * <br>The {@link net.dv8tion.jda.core.entities.Message Message} created from this upload.
+     * @throws java.lang.IllegalArgumentException                              <ul>
+     *                                                                         <li>Provided {@code file} is null.</li>
+     *                                                                         <li>Provided {@code file} does not exist.</li>
+     *                                                                         <li>Provided {@code file} is unreadable.</li>
+     *                                                                         <li>Provided {@code file} is greater than 8 MiB on a normal or 50 MiB on a nitro account.</li>
+     *                                                                         <li>Provided {@link net.dv8tion.jda.core.entities.Message Message} is not {@code null} <b>and</b>
+     *                                                                         contains a {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed} which
+     *                                                                         is not {@link net.dv8tion.jda.core.entities.MessageEmbed#isSendable(net.dv8tion.jda.core.AccountType) sendable}</li>
+     *                                                                         </ul>
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
+     *                                                                         <ul>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_ATTACH_FILES Permission.MESSAGE_ATTACH_FILES}</li>
+     *                                                                         </ul>
+     * @throws java.lang.UnsupportedOperationException                         If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
+     *                                                                         and both the currently logged in account and the target user are bots.
      */
     @CheckReturnValue
-    default MessageAction sendFile(File file, Message message)
-    {
+    default MessageAction sendFile(File file, Message message) {
         Checks.notNull(file, "file");
 
         return sendFile(file, file.getName(), message);
@@ -614,14 +531,14 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The {@code fileName} parameter is used to inform Discord about what the file should be called. This is 2 fold:
      * <ol>
-     *     <li>The file name provided is the name that is found in {@link net.dv8tion.jda.core.entities.Message.Attachment#getFileName()}
-     *          after upload and it is the name that will show up in the client when the upload is displayed.
-     *     <br>Note: The fileName does not show up on the Desktop client for images. It does on mobile however.</li>
-     *     <li>The extension of the provided fileName also determines who Discord will treat the file. Discord currently only
-     *         has special handling for image file types, but the fileName's extension must indicate that it is an image file.
-     *         This means it has to end in something like .png, .jpg, .jpeg, .gif, etc. As a note, you can also not provide
-     *         a full name for the file and instead ONLY provide the extension like "png" or "gif" and Discord will generate
-     *         a name for the upload and append the fileName as the extension.</li>
+     * <li>The file name provided is the name that is found in {@link net.dv8tion.jda.core.entities.Message.Attachment#getFileName()}
+     * after upload and it is the name that will show up in the client when the upload is displayed.
+     * <br>Note: The fileName does not show up on the Desktop client for images. It does on mobile however.</li>
+     * <li>The extension of the provided fileName also determines who Discord will treat the file. Discord currently only
+     * has special handling for image file types, but the fileName's extension must indicate that it is an image file.
+     * This means it has to end in something like .png, .jpg, .jpeg, .gif, etc. As a note, you can also not provide
+     * a full name for the file and instead ONLY provide the extension like "png" or "gif" and Discord will generate
+     * a name for the upload and append the fileName as the extension.</li>
      * </ol>
      *
      * <p><b>Uploading images with Embeds</b>
@@ -641,61 +558,52 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The send request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The send request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The send request was attempted after the account lost {@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE} or
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_ATTACH_FILES Permission.MESSAGE_ATTACH_FILES}
-     *         in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The send request was attempted after the account lost {@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE} or
+     * {@link net.dv8tion.jda.core.Permission#MESSAGE_ATTACH_FILES Permission.MESSAGE_ATTACH_FILES}
+     * in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNAUTHORIZED UNAUTHORIZED}
-     *     <br>If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel} and the recipient User blocked you</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNAUTHORIZED UNAUTHORIZED}
+     * <br>If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel} and the recipient User blocked you</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#CANNOT_SEND_TO_USER CANNOT_SEND_TO_USER}
-     *     <br>If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel} and the currently logged in account
-     *         does not share any Guilds with the recipient User</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#CANNOT_SEND_TO_USER CANNOT_SEND_TO_USER}
+     * <br>If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel} and the currently logged in account
+     * does not share any Guilds with the recipient User</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The send request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The send request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param  file
-     *         The file to upload to the {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel}.
-     * @param  fileName
-     *         The name that should be sent to discord
-     * @param  message
-     *         The message to be sent along with the uploaded file. This value can be {@code null}.
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>Provided {@code file} is null.</li>
-     *             <li>Provided {@code file} does not exist.</li>
-     *             <li>Provided {@code file} is unreadable.</li>
-     *             <li>Provided {@code file} is greater than 8 MiB on a normal or 50 MiB on a nitro account.</li>
-     *             <li>Provided {@link net.dv8tion.jda.core.entities.Message Message} is not {@code null} <b>and</b>
-     *                 contains a {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed} which
-     *                 is not {@link net.dv8tion.jda.core.entities.MessageEmbed#isSendable(net.dv8tion.jda.core.AccountType) sendable}</li>
-     *         </ul>
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_ATTACH_FILES Permission.MESSAGE_ATTACH_FILES}</li>
-     *         </ul>
-     * @throws java.lang.UnsupportedOperationException
-     *         If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
-     *         and both the currently logged in account and the target user are bots.
-     *
+     * @param file     The file to upload to the {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel}.
+     * @param fileName The name that should be sent to discord
+     * @param message  The message to be sent along with the uploaded file. This value can be {@code null}.
      * @return {@link net.dv8tion.jda.core.requests.restaction.MessageAction MessageAction}
-     *         <br>The {@link net.dv8tion.jda.core.entities.Message Message} created from this upload.
+     * <br>The {@link net.dv8tion.jda.core.entities.Message Message} created from this upload.
+     * @throws java.lang.IllegalArgumentException                              <ul>
+     *                                                                         <li>Provided {@code file} is null.</li>
+     *                                                                         <li>Provided {@code file} does not exist.</li>
+     *                                                                         <li>Provided {@code file} is unreadable.</li>
+     *                                                                         <li>Provided {@code file} is greater than 8 MiB on a normal or 50 MiB on a nitro account.</li>
+     *                                                                         <li>Provided {@link net.dv8tion.jda.core.entities.Message Message} is not {@code null} <b>and</b>
+     *                                                                         contains a {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed} which
+     *                                                                         is not {@link net.dv8tion.jda.core.entities.MessageEmbed#isSendable(net.dv8tion.jda.core.AccountType) sendable}</li>
+     *                                                                         </ul>
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
+     *                                                                         <ul>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_ATTACH_FILES Permission.MESSAGE_ATTACH_FILES}</li>
+     *                                                                         </ul>
+     * @throws java.lang.UnsupportedOperationException                         If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
+     *                                                                         and both the currently logged in account and the target user are bots.
      */
     @CheckReturnValue
-    default MessageAction sendFile(File file, String fileName, Message message)
-    {
+    default MessageAction sendFile(File file, String fileName, Message message) {
         Checks.notNull(file, "file");
         Checks.check(file.exists() && file.canRead(),
             "Provided file is either null, doesn't exist or is not readable!");
@@ -703,12 +611,9 @@ public interface MessageChannel extends ISnowflake, Formattable
             "File is to big! Max file-size is 8 MiB for normal and 50 MiB for nitro users");
         Checks.notNull(fileName, "fileName");
 
-        try
-        {
+        try {
             return sendFile(new FileInputStream(file), fileName, message);
-        }
-        catch (FileNotFoundException ex)
-        {
+        } catch (FileNotFoundException ex) {
             throw new IllegalArgumentException(ex);
         }
     }
@@ -738,33 +643,24 @@ public interface MessageChannel extends ISnowflake, Formattable
      * channel.sendFile(file, "cat.png", message.build()).queue();
      * </code></pre>
      *
-     * @param  data
-     *         The InputStream data to upload to the {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel}.
-     * @param  fileName
-     *         The name that should be sent to discord
-     *         <br>Refer to the documentation for {@link #sendFile(java.io.File, String, Message)} for information about this parameter.
-     * @param  message
-     *         The message to be sent along with the uploaded file. This value can be {@code null}.
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided filename is {@code null} or {@code empty}.
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_ATTACH_FILES Permission.MESSAGE_ATTACH_FILES}</li>
-     *         </ul>
-     * @throws java.lang.UnsupportedOperationException
-     *         If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
-     *         and both the currently logged in account and the target user are bots.
-     *
+     * @param data     The InputStream data to upload to the {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel}.
+     * @param fileName The name that should be sent to discord
+     *                 <br>Refer to the documentation for {@link #sendFile(java.io.File, String, Message)} for information about this parameter.
+     * @param message  The message to be sent along with the uploaded file. This value can be {@code null}.
      * @return {@link net.dv8tion.jda.core.requests.restaction.MessageAction MessageAction}
-     *         <br>The {@link net.dv8tion.jda.core.entities.Message Message} created from this upload.
+     * <br>The {@link net.dv8tion.jda.core.entities.Message Message} created from this upload.
+     * @throws java.lang.IllegalArgumentException                              If the provided filename is {@code null} or {@code empty}.
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
+     *                                                                         <ul>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_ATTACH_FILES Permission.MESSAGE_ATTACH_FILES}</li>
+     *                                                                         </ul>
+     * @throws java.lang.UnsupportedOperationException                         If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
+     *                                                                         and both the currently logged in account and the target user are bots.
      */
     @CheckReturnValue
-    default MessageAction sendFile(InputStream data, String fileName, Message message)
-    {
+    default MessageAction sendFile(InputStream data, String fileName, Message message) {
         Checks.notNull(data, "data InputStream");
         Checks.notNull(fileName, "fileName");
 
@@ -797,38 +693,29 @@ public interface MessageChannel extends ISnowflake, Formattable
      * channel.sendFile(file, "cat.png", message.build()).queue();
      * </code></pre>
      *
-     * @param  data
-     *         The {@code byte[]} data to upload to the {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel}.
-     * @param  fileName
-     *         The name that should be sent to discord.
-     *         <br>Refer to the documentation for {@link #sendFile(java.io.File, String, Message)} for information about this parameter.
-     * @param  message
-     *         The message to be sent along with the uploaded file. This value can be {@code null}.
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>If the provided filename is {@code null} or {@code empty} or the provided data is larger than 8 MiB on a normal or 50 MiB on a nitro account.</li>
-     *             <li>If the provided {@link net.dv8tion.jda.core.entities.Message Message}
-     *                 contains an {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed}
-     *                 that is not {@link net.dv8tion.jda.core.entities.MessageEmbed#isSendable(net.dv8tion.jda.core.AccountType) sendable}</li>
-     *         </ul>
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_ATTACH_FILES Permission.MESSAGE_ATTACH_FILES}</li>
-     *         </ul>
-     * @throws java.lang.UnsupportedOperationException
-     *         If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
-     *         and both the currently logged in account and the target user are bots.
-     *
+     * @param data     The {@code byte[]} data to upload to the {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel}.
+     * @param fileName The name that should be sent to discord.
+     *                 <br>Refer to the documentation for {@link #sendFile(java.io.File, String, Message)} for information about this parameter.
+     * @param message  The message to be sent along with the uploaded file. This value can be {@code null}.
      * @return {@link net.dv8tion.jda.core.requests.restaction.MessageAction MessageAction}
-     *         <br>The {@link net.dv8tion.jda.core.entities.Message Message} created from this upload.
+     * <br>The {@link net.dv8tion.jda.core.entities.Message Message} created from this upload.
+     * @throws java.lang.IllegalArgumentException                              <ul>
+     *                                                                         <li>If the provided filename is {@code null} or {@code empty} or the provided data is larger than 8 MiB on a normal or 50 MiB on a nitro account.</li>
+     *                                                                         <li>If the provided {@link net.dv8tion.jda.core.entities.Message Message}
+     *                                                                         contains an {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed}
+     *                                                                         that is not {@link net.dv8tion.jda.core.entities.MessageEmbed#isSendable(net.dv8tion.jda.core.AccountType) sendable}</li>
+     *                                                                         </ul>
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
+     *                                                                         <ul>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_ATTACH_FILES Permission.MESSAGE_ATTACH_FILES}</li>
+     *                                                                         </ul>
+     * @throws java.lang.UnsupportedOperationException                         If this is a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
+     *                                                                         and both the currently logged in account and the target user are bots.
      */
     @CheckReturnValue
-    default MessageAction sendFile(byte[] data, String fileName, Message message)
-    {
+    default MessageAction sendFile(byte[] data, String fileName, Message message) {
         Checks.notNull(data, "data");
         Checks.notNull(fileName, "fileName");
         final long maxSize = getJDA().getSelfUser().getAllowedFileSize();
@@ -845,58 +732,47 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The request was attempted after the account lost {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}
-     *         in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The request was attempted after the account lost {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}
+     * in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code id} does not refer to a message sent in this channel or the message has already been deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code id} does not refer to a message sent in this channel or the message has already been deleted.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param  messageId
-     *         The id of the sought after Message
-     *
-     * @throws net.dv8tion.jda.core.exceptions.AccountTypeException
-     *         If the currently logged in account is not from {@link net.dv8tion.jda.core.AccountType#BOT AccountType.BOT}
-     * @throws IllegalArgumentException
-     *         if the provided {@code messageId} is null or empty.
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
-     *         </ul>
-     *
+     * @param messageId The id of the sought after Message
      * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type: Message
-     *         <br>The Message defined by the provided id.
+     * <br>The Message defined by the provided id.
+     * @throws net.dv8tion.jda.core.exceptions.AccountTypeException            If the currently logged in account is not from {@link net.dv8tion.jda.core.AccountType#BOT AccountType.BOT}
+     * @throws IllegalArgumentException                                        if the provided {@code messageId} is null or empty.
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
+     *                                                                         <ul>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
+     *                                                                         </ul>
      */
     @CheckReturnValue
-    default RestAction<Message> getMessageById(String messageId)
-    {
+    default RestAction<Message> getMessageById(String messageId) {
         AccountTypeException.check(getJDA().getAccountType(), AccountType.BOT);
         Checks.notEmpty(messageId, "Provided messageId");
 
         Route.CompiledRoute route = Route.Messages.GET_MESSAGE.compile(getId(), messageId);
-        return new RestAction<Message>(getJDA(), route)
-        {
+        return new RestAction<Message>(getJDA(), route) {
             @Override
-            protected void handleResponse(Response response, Request<Message> request)
-            {
-                if (response.isOk())
-                {
+            protected void handleResponse(Response response, Request<Message> request) {
+                if (response.isOk()) {
                     Message m = api.getEntityBuilder().createMessage(response.getObject(), MessageChannel.this, false);
                     request.onSuccess(m);
-                }
-                else
+                } else
                     request.onFailure(response);
 
             }
@@ -912,41 +788,35 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The request was attempted after the account lost {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}
-     *         in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The request was attempted after the account lost {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}
+     * in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code id} does not refer to a message sent in this channel or the message has already been deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code id} does not refer to a message sent in this channel or the message has already been deleted.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param  messageId
-     *         The id of the sought after Message
-     *
-     * @throws net.dv8tion.jda.core.exceptions.AccountTypeException
-     *         If the currently logged in account is not from {@link net.dv8tion.jda.core.AccountType#BOT AccountType.BOT}
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
-     *         </ul>
-     *
+     * @param messageId The id of the sought after Message
      * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type: Message
-     *         <br>The Message defined by the provided id.
+     * <br>The Message defined by the provided id.
+     * @throws net.dv8tion.jda.core.exceptions.AccountTypeException            If the currently logged in account is not from {@link net.dv8tion.jda.core.AccountType#BOT AccountType.BOT}
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
+     *                                                                         <ul>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
+     *                                                                         </ul>
      */
     @CheckReturnValue
-    default RestAction<Message> getMessageById(long messageId)
-    {
+    default RestAction<Message> getMessageById(long messageId) {
         return getMessageById(Long.toUnsignedString(messageId));
     }
 
@@ -956,48 +826,41 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The request attempted to delete a Message in a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
-     *         that was not sent by the currently logged in account.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The request attempted to delete a Message in a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
+     * that was not sent by the currently logged in account.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#INVALID_DM_ACTION INVALID_DM_ACTION}
-     *     <br>Attempted to delete a Message in a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel} or
-     *         {@link net.dv8tion.jda.client.entities.Group Group} that was not sent by the currently logged in account.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#INVALID_DM_ACTION INVALID_DM_ACTION}
+     * <br>Attempted to delete a Message in a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel} or
+     * {@link net.dv8tion.jda.client.entities.Group Group} that was not sent by the currently logged in account.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code id} does not refer to a message sent in this channel or the message has already been deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code id} does not refer to a message sent in this channel or the message has already been deleted.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param  messageId
-     *         The id of the Message that should be deleted
-     *
-     * @throws IllegalArgumentException
-     *         if the provided messageId is null
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}.
-     *
+     * @param messageId The id of the Message that should be deleted
      * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type: Void
+     * @throws IllegalArgumentException                                        if the provided messageId is null
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
+     *                                                                         {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}.
      */
     @CheckReturnValue
-    default AuditableRestAction<Void> deleteMessageById(String messageId)
-    {
+    default AuditableRestAction<Void> deleteMessageById(String messageId) {
         Checks.notEmpty(messageId, "messageId");
 
         Route.CompiledRoute route = Route.Messages.DELETE_MESSAGE.compile(getId(), messageId);
         return new AuditableRestAction<Void>(getJDA(), route) {
             @Override
-            protected void handleResponse(Response response, Request<Void> request)
-            {
+            protected void handleResponse(Response response, Request<Void> request) {
                 if (response.isOk())
                     request.onSuccess(null);
                 else
@@ -1012,41 +875,35 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The request attempted to delete a Message in a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
-     *         that was not sent by the currently logged in account.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The request attempted to delete a Message in a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
+     * that was not sent by the currently logged in account.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#INVALID_DM_ACTION INVALID_DM_ACTION}
-     *     <br>Attempted to delete a Message in a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel} or
-     *         {@link net.dv8tion.jda.client.entities.Group Group} that was not sent by the currently logged in account.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#INVALID_DM_ACTION INVALID_DM_ACTION}
+     * <br>Attempted to delete a Message in a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel} or
+     * {@link net.dv8tion.jda.client.entities.Group Group} that was not sent by the currently logged in account.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code id} does not refer to a message sent in this channel or the message has already been deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code id} does not refer to a message sent in this channel or the message has already been deleted.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param  messageId
-     *         The id of the Message that should be deleted
-     *
-     * @throws IllegalArgumentException
-     *         if the provided messageId is not positive
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}.
-     *
+     * @param messageId The id of the Message that should be deleted
      * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type: Void
+     * @throws IllegalArgumentException                                        if the provided messageId is not positive
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
+     *                                                                         {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}.
      */
     @CheckReturnValue
-    default AuditableRestAction<Void> deleteMessageById(long messageId)
-    {
+    default AuditableRestAction<Void> deleteMessageById(long messageId) {
         return deleteMessageById(Long.toUnsignedString(messageId));
     }
 
@@ -1054,14 +911,11 @@ public interface MessageChannel extends ISnowflake, Formattable
      * Creates a new {@link MessageHistory MessageHistory} object for each call of this method.
      * <br>MessageHistory is <b>NOT</b> an internal message cache, but rather it queries the Discord servers for previously sent messages.
      *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
-     *         and the currently logged in account does not have the permission {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY MESSAGE_HISTORY}
-     *
      * @return A {@link net.dv8tion.jda.core.entities.MessageHistory MessageHistory} related to this channel.
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
+     *                                                                         and the currently logged in account does not have the permission {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY MESSAGE_HISTORY}
      */
-    default MessageHistory getHistory()
-    {
+    default MessageHistory getHistory() {
         return new MessageHistory(this);
     }
 
@@ -1097,15 +951,12 @@ public interface MessageChannel extends ISnowflake, Formattable
      * }
      * </code></pre>
      *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
-     *         and the currently logged in account does not have the permission {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY MESSAGE_HISTORY}
-     *
      * @return {@link net.dv8tion.jda.core.requests.restaction.pagination.MessagePaginationAction MessagePaginationAction}
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
+     *                                                                         and the currently logged in account does not have the permission {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY MESSAGE_HISTORY}
      */
     @CheckReturnValue
-    default MessagePaginationAction getIterableHistory()
-    {
+    default MessagePaginationAction getIterableHistory() {
         return new MessagePaginationAction(this);
     }
 
@@ -1128,50 +979,42 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The request was attempted after the account lost
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY} in the
-     *         {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The request was attempted after the account lost
+     * {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY} in the
+     * {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
-     *         the message it referred to has already been deleted, thus could not be used as a marker.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
+     * the message it referred to has already been deleted, thus could not be used as a marker.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param messageId
-     *        The id of the message that will act as a marker.
-     * @param limit
-     *        The amount of message to be retrieved around the marker. Minimum: 1, Max: 100.
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>Provided {@code messageId} is {@code null} or empty.</li>
-     *             <li>Provided {@code limit} is less than {@code 1} or greater than {@code 100}.</li>
-     *         </ul>
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
-     *         </ul>
-     *
+     * @param messageId The id of the message that will act as a marker.
+     * @param limit     The amount of message to be retrieved around the marker. Minimum: 1, Max: 100.
      * @return {@link net.dv8tion.jda.core.entities.MessageHistory.MessageRetrieveAction MessageHistory.MessageRetrieveAction}
-     *         <br>Provides a MessageHistory object with message around the provided message loaded into it.
-     *
-     * @see    net.dv8tion.jda.core.entities.MessageHistory#getHistoryAround(MessageChannel, String) MessageHistory.getHistoryAround(MessageChannel, String)
+     * <br>Provides a MessageHistory object with message around the provided message loaded into it.
+     * @throws java.lang.IllegalArgumentException                              <ul>
+     *                                                                         <li>Provided {@code messageId} is {@code null} or empty.</li>
+     *                                                                         <li>Provided {@code limit} is less than {@code 1} or greater than {@code 100}.</li>
+     *                                                                         </ul>
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
+     *                                                                         <ul>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
+     *                                                                         </ul>
+     * @see net.dv8tion.jda.core.entities.MessageHistory#getHistoryAround(MessageChannel, String) MessageHistory.getHistoryAround(MessageChannel, String)
      */
     @CheckReturnValue
-    default MessageHistory.MessageRetrieveAction getHistoryAround(String messageId, int limit)
-    {
+    default MessageHistory.MessageRetrieveAction getHistoryAround(String messageId, int limit) {
         return MessageHistory.getHistoryAround(this, messageId).limit(limit);
     }
 
@@ -1194,51 +1037,43 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The request was attempted after the account lost
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY} in the
-     *         {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The request was attempted after the account lost
+     * {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY} in the
+     * {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
-     *         the message it referred to has already been deleted, thus could not be used as a marker.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
+     * the message it referred to has already been deleted, thus could not be used as a marker.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param messageId
-     *        The id of the message that will act as a marker. The id must refer to a message from this MessageChannel.
-     * @param limit
-     *        The amount of message to be retrieved around the marker. Minimum: 1, Max: 100.
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>Provided {@code messageId} is not positive.</li>
-     *             <li>Provided {@code limit} is less than {@code 1} or greater than {@code 100}.</li>
-     *         </ul>
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
-     *         </ul>
-     *
+     * @param messageId The id of the message that will act as a marker. The id must refer to a message from this MessageChannel.
+     * @param limit     The amount of message to be retrieved around the marker. Minimum: 1, Max: 100.
      * @return {@link net.dv8tion.jda.core.entities.MessageHistory.MessageRetrieveAction MessageHistory.MessageRetrieveAction}
-     *         <br>Provides a MessageHistory object with message around the provided message loaded into it.
-     *
-     * @see    net.dv8tion.jda.core.entities.MessageHistory#getHistoryAround(MessageChannel, String) MessageHistory.getHistoryAround(MessageChannel, String)
+     * <br>Provides a MessageHistory object with message around the provided message loaded into it.
+     * @throws java.lang.IllegalArgumentException                              <ul>
+     *                                                                         <li>Provided {@code messageId} is not positive.</li>
+     *                                                                         <li>Provided {@code limit} is less than {@code 1} or greater than {@code 100}.</li>
+     *                                                                         </ul>
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
+     *                                                                         <ul>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
+     *                                                                         </ul>
+     * @see net.dv8tion.jda.core.entities.MessageHistory#getHistoryAround(MessageChannel, String) MessageHistory.getHistoryAround(MessageChannel, String)
      */
     @CheckReturnValue
-    default MessageHistory.MessageRetrieveAction getHistoryAround(long messageId, int limit)
-    {
-        return getHistoryAround(Long.toUnsignedString(messageId), limit );
+    default MessageHistory.MessageRetrieveAction getHistoryAround(long messageId, int limit) {
+        return getHistoryAround(Long.toUnsignedString(messageId), limit);
     }
 
     /**
@@ -1260,50 +1095,42 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The request was attempted after the account lost
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY} in the
-     *         {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The request was attempted after the account lost
+     * {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY} in the
+     * {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code message} has already been deleted, thus could not be used as a marker.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code message} has already been deleted, thus could not be used as a marker.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param message
-     *        The {@link net.dv8tion.jda.core.entities.Message Message} that will act as a marker. The provided Message
-     *        must be from this MessageChannel.
-     * @param limit
-     *        The amount of message to be retrieved around the marker. Minimum: 1, Max: 100.
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>Provided {@code message} is {@code null}.</li>
-     *             <li>Provided {@code limit} is less than {@code 1} or greater than {@code 100}.</li>
-     *         </ul>
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
-     *         </ul>
-     *
+     * @param message The {@link net.dv8tion.jda.core.entities.Message Message} that will act as a marker. The provided Message
+     *                must be from this MessageChannel.
+     * @param limit   The amount of message to be retrieved around the marker. Minimum: 1, Max: 100.
      * @return {@link net.dv8tion.jda.core.entities.MessageHistory.MessageRetrieveAction MessageHistory.MessageRetrieveAction}
-     *         <br>Provides a MessageHistory object with message around the provided message loaded into it.
-     *
-     * @see    net.dv8tion.jda.core.entities.MessageHistory#getHistoryAround(MessageChannel, String) MessageHistory.getHistoryAround(MessageChannel, String)
+     * <br>Provides a MessageHistory object with message around the provided message loaded into it.
+     * @throws java.lang.IllegalArgumentException                              <ul>
+     *                                                                         <li>Provided {@code message} is {@code null}.</li>
+     *                                                                         <li>Provided {@code limit} is less than {@code 1} or greater than {@code 100}.</li>
+     *                                                                         </ul>
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
+     *                                                                         <ul>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
+     *                                                                         </ul>
+     * @see net.dv8tion.jda.core.entities.MessageHistory#getHistoryAround(MessageChannel, String) MessageHistory.getHistoryAround(MessageChannel, String)
      */
     @CheckReturnValue
-    default MessageHistory.MessageRetrieveAction getHistoryAround(Message message, int limit)
-    {
+    default MessageHistory.MessageRetrieveAction getHistoryAround(Message message, int limit) {
         Checks.notNull(message, "Provided target message");
         return getHistoryAround(message.getId(), limit);
     }
@@ -1319,50 +1146,42 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The request was attempted after the account lost
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY} in the
-     *         {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The request was attempted after the account lost
+     * {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY} in the
+     * {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
-     *         the message it referred to has already been deleted, thus could not be used as a marker.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
+     * the message it referred to has already been deleted, thus could not be used as a marker.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param messageId
-     *        The id of the message that will act as a marker.
-     * @param limit
-     *        The amount of message to be retrieved after the marker. Minimum: 1, Max: 100.
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>Provided {@code messageId} is {@code null} or empty.</li>
-     *             <li>Provided {@code limit} is less than {@code 1} or greater than {@code 100}.</li>
-     *         </ul>
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
-     *         </ul>
-     *
+     * @param messageId The id of the message that will act as a marker.
+     * @param limit     The amount of message to be retrieved after the marker. Minimum: 1, Max: 100.
      * @return {@link net.dv8tion.jda.core.entities.MessageHistory.MessageRetrieveAction MessageHistory.MessageRetrieveAction}
-     *         <br>Provides a MessageHistory object with message after the provided message loaded into it.
-     *
-     * @see    net.dv8tion.jda.core.entities.MessageHistory#getHistoryAfter(MessageChannel, String) MessageHistory.getHistoryAfter(MessageChannel, String)
+     * <br>Provides a MessageHistory object with message after the provided message loaded into it.
+     * @throws java.lang.IllegalArgumentException                              <ul>
+     *                                                                         <li>Provided {@code messageId} is {@code null} or empty.</li>
+     *                                                                         <li>Provided {@code limit} is less than {@code 1} or greater than {@code 100}.</li>
+     *                                                                         </ul>
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
+     *                                                                         <ul>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
+     *                                                                         </ul>
+     * @see net.dv8tion.jda.core.entities.MessageHistory#getHistoryAfter(MessageChannel, String) MessageHistory.getHistoryAfter(MessageChannel, String)
      */
     @CheckReturnValue
-    default MessageHistory.MessageRetrieveAction getHistoryAfter(String messageId, int limit)
-    {
+    default MessageHistory.MessageRetrieveAction getHistoryAfter(String messageId, int limit) {
         return MessageHistory.getHistoryAfter(this, messageId).limit(limit);
     }
 
@@ -1377,47 +1196,39 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The request was attempted after the account lost
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY} in the
-     *         {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The request was attempted after the account lost
+     * {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY} in the
+     * {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
-     *         the message it referred to has already been deleted, thus could not be used as a marker.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
+     * the message it referred to has already been deleted, thus could not be used as a marker.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param messageId
-     *        The id of the message that will act as a marker.
-     * @param limit
-     *        The amount of message to be retrieved after the marker. Minimum: 1, Max: 100.
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         Provided {@code limit} is less than {@code 1} or greater than {@code 100}.
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
-     *         </ul>
-     *
+     * @param messageId The id of the message that will act as a marker.
+     * @param limit     The amount of message to be retrieved after the marker. Minimum: 1, Max: 100.
      * @return {@link net.dv8tion.jda.core.entities.MessageHistory.MessageRetrieveAction MessageHistory.MessageRetrieveAction}
-     *         <br>Provides a MessageHistory object with message after the provided message loaded into it.
-     *
-     * @see    net.dv8tion.jda.core.entities.MessageHistory#getHistoryAfter(MessageChannel, String) MessageHistory.getHistoryAfter(MessageChannel, String)
+     * <br>Provides a MessageHistory object with message after the provided message loaded into it.
+     * @throws java.lang.IllegalArgumentException                              Provided {@code limit} is less than {@code 1} or greater than {@code 100}.
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
+     *                                                                         <ul>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
+     *                                                                         </ul>
+     * @see net.dv8tion.jda.core.entities.MessageHistory#getHistoryAfter(MessageChannel, String) MessageHistory.getHistoryAfter(MessageChannel, String)
      */
     @CheckReturnValue
-    default MessageHistory.MessageRetrieveAction getHistoryAfter(long messageId, int limit)
-    {
+    default MessageHistory.MessageRetrieveAction getHistoryAfter(long messageId, int limit) {
         return getHistoryAfter(Long.toUnsignedString(messageId), limit);
     }
 
@@ -1432,50 +1243,42 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The request was attempted after the account lost
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY} in the
-     *         {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The request was attempted after the account lost
+     * {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY} in the
+     * {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
-     *         the message it referred to has already been deleted, thus could not be used as a marker.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
+     * the message it referred to has already been deleted, thus could not be used as a marker.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param message
-     *        The message that will act as a marker.
-     * @param limit
-     *        The amount of message to be retrieved after the marker. Minimum: 1, Max: 100.
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>Provided {@code message} is {@code null}.</li>
-     *             <li>Provided {@code limit} is less than {@code 1} or greater than {@code 100}.</li>
-     *         </ul>
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
-     *         </ul>
-     *
+     * @param message The message that will act as a marker.
+     * @param limit   The amount of message to be retrieved after the marker. Minimum: 1, Max: 100.
      * @return {@link net.dv8tion.jda.core.entities.MessageHistory.MessageRetrieveAction MessageHistory.MessageRetrieveAction}
-     *         <br>Provides a MessageHistory object with message after the provided message loaded into it.
-     *
-     * @see    net.dv8tion.jda.core.entities.MessageHistory#getHistoryAfter(MessageChannel, String) MessageHistory.getHistoryAfter(MessageChannel, String)
+     * <br>Provides a MessageHistory object with message after the provided message loaded into it.
+     * @throws java.lang.IllegalArgumentException                              <ul>
+     *                                                                         <li>Provided {@code message} is {@code null}.</li>
+     *                                                                         <li>Provided {@code limit} is less than {@code 1} or greater than {@code 100}.</li>
+     *                                                                         </ul>
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
+     *                                                                         <ul>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
+     *                                                                         </ul>
+     * @see net.dv8tion.jda.core.entities.MessageHistory#getHistoryAfter(MessageChannel, String) MessageHistory.getHistoryAfter(MessageChannel, String)
      */
     @CheckReturnValue
-    default MessageHistory.MessageRetrieveAction getHistoryAfter(Message message, int limit)
-    {
+    default MessageHistory.MessageRetrieveAction getHistoryAfter(Message message, int limit) {
         Checks.notNull(message, "Message");
         return getHistoryAfter(message.getId(), limit);
     }
@@ -1491,50 +1294,42 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The request was attempted after the account lost
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY} in the
-     *         {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The request was attempted after the account lost
+     * {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY} in the
+     * {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
-     *         the message it referred to has already been deleted, thus could not be used as a marker.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
+     * the message it referred to has already been deleted, thus could not be used as a marker.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param messageId
-     *        The id of the message that will act as a marker.
-     * @param limit
-     *        The amount of message to be retrieved after the marker. Minimum: 1, Max: 100.
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>Provided {@code messageId} is {@code null} or empty.</li>
-     *             <li>Provided {@code limit} is less than {@code 1} or greater than {@code 100}.</li>
-     *         </ul>
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
-     *         </ul>
-     *
+     * @param messageId The id of the message that will act as a marker.
+     * @param limit     The amount of message to be retrieved after the marker. Minimum: 1, Max: 100.
      * @return {@link net.dv8tion.jda.core.entities.MessageHistory.MessageRetrieveAction MessageHistory.MessageRetrieveAction}
-     *         <br>Provides a MessageHistory object with message before the provided message loaded into it.
-     *
-     * @see    net.dv8tion.jda.core.entities.MessageHistory#getHistoryBefore(MessageChannel, String) MessageHistory.getHistoryBefore(MessageChannel, String)
+     * <br>Provides a MessageHistory object with message before the provided message loaded into it.
+     * @throws java.lang.IllegalArgumentException                              <ul>
+     *                                                                         <li>Provided {@code messageId} is {@code null} or empty.</li>
+     *                                                                         <li>Provided {@code limit} is less than {@code 1} or greater than {@code 100}.</li>
+     *                                                                         </ul>
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
+     *                                                                         <ul>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
+     *                                                                         </ul>
+     * @see net.dv8tion.jda.core.entities.MessageHistory#getHistoryBefore(MessageChannel, String) MessageHistory.getHistoryBefore(MessageChannel, String)
      */
     @CheckReturnValue
-    default MessageHistory.MessageRetrieveAction getHistoryBefore(String messageId, int limit)
-    {
+    default MessageHistory.MessageRetrieveAction getHistoryBefore(String messageId, int limit) {
         return MessageHistory.getHistoryBefore(this, messageId).limit(limit);
     }
 
@@ -1549,50 +1344,42 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The request was attempted after the account lost
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY} in the
-     *         {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The request was attempted after the account lost
+     * {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY} in the
+     * {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
-     *         the message it referred to has already been deleted, thus could not be used as a marker.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
+     * the message it referred to has already been deleted, thus could not be used as a marker.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param messageId
-     *        The id of the message that will act as a marker.
-     * @param limit
-     *        The amount of message to be retrieved after the marker. Minimum: 1, Max: 100.
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>Provided {@code messageId} is {@code null} or empty.</li>
-     *             <li>Provided {@code limit} is less than {@code 1} or greater than {@code 100}.</li>
-     *         </ul>
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
-     *         </ul>
-     *
+     * @param messageId The id of the message that will act as a marker.
+     * @param limit     The amount of message to be retrieved after the marker. Minimum: 1, Max: 100.
      * @return {@link net.dv8tion.jda.core.entities.MessageHistory.MessageRetrieveAction MessageHistory.MessageRetrieveAction}
-     *         <br>Provides a MessageHistory object with message before the provided message loaded into it.
-     *
-     * @see    net.dv8tion.jda.core.entities.MessageHistory#getHistoryBefore(MessageChannel, String) MessageHistory.getHistoryBefore(MessageChannel, String)
+     * <br>Provides a MessageHistory object with message before the provided message loaded into it.
+     * @throws java.lang.IllegalArgumentException                              <ul>
+     *                                                                         <li>Provided {@code messageId} is {@code null} or empty.</li>
+     *                                                                         <li>Provided {@code limit} is less than {@code 1} or greater than {@code 100}.</li>
+     *                                                                         </ul>
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
+     *                                                                         <ul>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
+     *                                                                         </ul>
+     * @see net.dv8tion.jda.core.entities.MessageHistory#getHistoryBefore(MessageChannel, String) MessageHistory.getHistoryBefore(MessageChannel, String)
      */
     @CheckReturnValue
-    default MessageHistory.MessageRetrieveAction getHistoryBefore(long messageId, int limit)
-    {
+    default MessageHistory.MessageRetrieveAction getHistoryBefore(long messageId, int limit) {
         return getHistoryBefore(Long.toUnsignedString(messageId), limit);
     }
 
@@ -1607,50 +1394,42 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The request was attempted after the account lost
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY} in the
-     *         {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The request was attempted after the account lost
+     * {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY} in the
+     * {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
-     *         the message it referred to has already been deleted, thus could not be used as a marker.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
+     * the message it referred to has already been deleted, thus could not be used as a marker.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param message
-     *        The message that will act as a marker.
-     * @param limit
-     *        The amount of message to be retrieved after the marker. Minimum: 1, Max: 100.
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>Provided {@code message} is {@code null}.</li>
-     *             <li>Provided {@code limit} is less than {@code 1} or greater than {@code 100}.</li>
-     *         </ul>
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
-     *         </ul>
-     *
+     * @param message The message that will act as a marker.
+     * @param limit   The amount of message to be retrieved after the marker. Minimum: 1, Max: 100.
      * @return {@link net.dv8tion.jda.core.entities.MessageHistory.MessageRetrieveAction MessageHistory.MessageRetrieveAction}
-     *         <br>Provides a MessageHistory object with message before the provided message loaded into it.
-     *
-     * @see    net.dv8tion.jda.core.entities.MessageHistory#getHistoryBefore(MessageChannel, String) MessageHistory.getHistoryBefore(MessageChannel, String)
+     * <br>Provides a MessageHistory object with message before the provided message loaded into it.
+     * @throws java.lang.IllegalArgumentException                              <ul>
+     *                                                                         <li>Provided {@code message} is {@code null}.</li>
+     *                                                                         <li>Provided {@code limit} is less than {@code 1} or greater than {@code 100}.</li>
+     *                                                                         </ul>
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
+     *                                                                         <ul>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
+     *                                                                         </ul>
+     * @see net.dv8tion.jda.core.entities.MessageHistory#getHistoryBefore(MessageChannel, String) MessageHistory.getHistoryBefore(MessageChannel, String)
      */
     @CheckReturnValue
-    default MessageHistory.MessageRetrieveAction getHistoryBefore(Message message, int limit)
-    {
+    default MessageHistory.MessageRetrieveAction getHistoryBefore(Message message, int limit) {
         Checks.notNull(message, "Message");
         return getHistoryBefore(message.getId(), limit);
     }
@@ -1664,35 +1443,30 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         or {@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * or {@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE}</li>
-     *         </ul>
-     *
      * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type: Void
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
+     *                                                                         <ul>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE}</li>
+     *                                                                         </ul>
      */
     @CheckReturnValue
-    default RestAction<Void> sendTyping()
-    {
+    default RestAction<Void> sendTyping() {
         Route.CompiledRoute route = Route.Channels.SEND_TYPING.compile(getId());
-        return new RestAction<Void>(getJDA(), route)
-        {
+        return new RestAction<Void>(getJDA(), route) {
             @Override
-            protected void handleResponse(Response response, Request<Void> request)
-            {
+            protected void handleResponse(Response response, Request<Void> request) {
                 if (response.isOk())
                     request.onSuccess(null);
                 else
@@ -1716,66 +1490,57 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
-     *     <br>Also can happen if the account lost the {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
+     * <br>Also can happen if the account lost the {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
      *
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The request was attempted after the account lost
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_ADD_REACTION Permission.MESSAGE_ADD_REACTION} in the
-     *         {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The request was attempted after the account lost
+     * {@link net.dv8tion.jda.core.Permission#MESSAGE_ADD_REACTION Permission.MESSAGE_ADD_REACTION} in the
+     * {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_EMOJI}
-     *     <br>The provided unicode character does not refer to a known emoji unicode character.
-     *     <br>Proper unicode characters for emojis can be found at
-     *         <a href="http://unicode.org/emoji/charts/full-emoji-list.html" target="_blank">http://unicode.org/emoji/charts/full-emoji-list.html</a></li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_EMOJI}
+     * <br>The provided unicode character does not refer to a known emoji unicode character.
+     * <br>Proper unicode characters for emojis can be found at
+     * <a href="http://unicode.org/emoji/charts/full-emoji-list.html" target="_blank">http://unicode.org/emoji/charts/full-emoji-list.html</a></li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
-     *         the message it referred to has already been deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
+     * the message it referred to has already been deleted.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param  messageId
-     *         The messageId to attach the reaction to
-     * @param  unicode
-     *         The unicode characters to react with
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>If provided {@code messageId} is {@code null} or empty.</li>
-     *             <li>If provided {@code unicode} is {@code null} or empty.</li>
-     *         </ul>
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If the MessageChannel this message was sent in was a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
-     *         and the logged in account does not have
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_ADD_REACTION Permission.MESSAGE_ADD_REACTION}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
-     *         </ul>
-     *
+     * @param messageId The messageId to attach the reaction to
+     * @param unicode   The unicode characters to react with
      * @return {@link net.dv8tion.jda.core.requests.RestAction}
+     * @throws java.lang.IllegalArgumentException                              <ul>
+     *                                                                         <li>If provided {@code messageId} is {@code null} or empty.</li>
+     *                                                                         <li>If provided {@code unicode} is {@code null} or empty.</li>
+     *                                                                         </ul>
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If the MessageChannel this message was sent in was a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
+     *                                                                         and the logged in account does not have
+     *                                                                         <ul>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_ADD_REACTION Permission.MESSAGE_ADD_REACTION}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
+     *                                                                         </ul>
      */
     @CheckReturnValue
-    default RestAction<Void> addReactionById(String messageId, String unicode)
-    {
+    default RestAction<Void> addReactionById(String messageId, String unicode) {
         Checks.notEmpty(messageId, "MessageId");
         Checks.notEmpty(unicode, "Provided Unicode");
         Checks.noWhitespace(unicode, "Provided Unicode");
 
         String encoded = MiscUtil.encodeUTF8(unicode);
         Route.CompiledRoute route = Route.Messages.ADD_REACTION.compile(getId(), messageId, encoded);
-        return new RestAction<Void>(getJDA(), route)
-        {
+        return new RestAction<Void>(getJDA(), route) {
             @Override
-            protected void handleResponse(Response response, Request<Void> request)
-            {
+            protected void handleResponse(Response response, Request<Void> request) {
                 if (response.isOk())
                     request.onSuccess(null);
                 else
@@ -1799,54 +1564,47 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
-     *     <br>Also can happen if the account lost the {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
+     * <br>Also can happen if the account lost the {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
      *
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The request was attempted after the account lost
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_ADD_REACTION Permission.MESSAGE_ADD_REACTION} in the
-     *         {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The request was attempted after the account lost
+     * {@link net.dv8tion.jda.core.Permission#MESSAGE_ADD_REACTION Permission.MESSAGE_ADD_REACTION} in the
+     * {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_EMOJI}
-     *     <br>The provided unicode character does not refer to a known emoji unicode character.
-     *     <br>Proper unicode characters for emojis can be found at
-     *         <a href="http://unicode.org/emoji/charts/full-emoji-list.html" target="_blank">http://unicode.org/emoji/charts/full-emoji-list.html</a></li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_EMOJI}
+     * <br>The provided unicode character does not refer to a known emoji unicode character.
+     * <br>Proper unicode characters for emojis can be found at
+     * <a href="http://unicode.org/emoji/charts/full-emoji-list.html" target="_blank">http://unicode.org/emoji/charts/full-emoji-list.html</a></li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
-     *         the message it referred to has already been deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
+     * the message it referred to has already been deleted.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param  messageId
-     *         The messageId to attach the reaction to
-     * @param  unicode
-     *         The unicode characters to react with
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>If provided {@code unicode} is {@code null} or empty.</li>
-     *         </ul>
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If the MessageChannel this message was sent in was a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
-     *         and the logged in account does not have
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_ADD_REACTION Permission.MESSAGE_ADD_REACTION}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
-     *         </ul>
-     *
+     * @param messageId The messageId to attach the reaction to
+     * @param unicode   The unicode characters to react with
      * @return {@link net.dv8tion.jda.core.requests.RestAction}
+     * @throws java.lang.IllegalArgumentException                              <ul>
+     *                                                                         <li>If provided {@code unicode} is {@code null} or empty.</li>
+     *                                                                         </ul>
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If the MessageChannel this message was sent in was a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
+     *                                                                         and the logged in account does not have
+     *                                                                         <ul>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_ADD_REACTION Permission.MESSAGE_ADD_REACTION}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
+     *                                                                         </ul>
      */
     @CheckReturnValue
-    default RestAction<Void> addReactionById(long messageId, String unicode)
-    {
+    default RestAction<Void> addReactionById(long messageId, String unicode) {
         return addReactionById(Long.toUnsignedString(messageId), unicode);
     }
 
@@ -1861,64 +1619,55 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
-     *     <br>Also can happen if the account lost the {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
+     * <br>Also can happen if the account lost the {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
      *
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The request was attempted after the account lost
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_ADD_REACTION Permission.MESSAGE_ADD_REACTION} in the
-     *         {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The request was attempted after the account lost
+     * {@link net.dv8tion.jda.core.Permission#MESSAGE_ADD_REACTION Permission.MESSAGE_ADD_REACTION} in the
+     * {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_EMOJI}
-     *     <br>The provided unicode character does not refer to a known emoji unicode character.
-     *     <br>Proper unicode characters for emojis can be found at
-     *         <a href="http://unicode.org/emoji/charts/full-emoji-list.html" target="_blank">http://unicode.org/emoji/charts/full-emoji-list.html</a></li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_EMOJI}
+     * <br>The provided unicode character does not refer to a known emoji unicode character.
+     * <br>Proper unicode characters for emojis can be found at
+     * <a href="http://unicode.org/emoji/charts/full-emoji-list.html" target="_blank">http://unicode.org/emoji/charts/full-emoji-list.html</a></li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
-     *         the message it referred to has already been deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
+     * the message it referred to has already been deleted.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param  messageId
-     *         The messageId to attach the reaction to
-     * @param  emote
-     *         The not-null {@link net.dv8tion.jda.core.entities.Emote} to react with
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>If provided {@code messageId} is {@code null} or empty.</li>
-     *             <li>If provided {@code emote} is {@code null}.</li>
-     *         </ul>
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If the MessageChannel this message was sent in was a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
-     *         and the logged in account does not have
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_ADD_REACTION Permission.MESSAGE_ADD_REACTION}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
-     *         </ul>
-     *
+     * @param messageId The messageId to attach the reaction to
+     * @param emote     The not-null {@link net.dv8tion.jda.core.entities.Emote} to react with
      * @return {@link net.dv8tion.jda.core.requests.RestAction}
+     * @throws java.lang.IllegalArgumentException                              <ul>
+     *                                                                         <li>If provided {@code messageId} is {@code null} or empty.</li>
+     *                                                                         <li>If provided {@code emote} is {@code null}.</li>
+     *                                                                         </ul>
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If the MessageChannel this message was sent in was a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
+     *                                                                         and the logged in account does not have
+     *                                                                         <ul>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_ADD_REACTION Permission.MESSAGE_ADD_REACTION}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
+     *                                                                         </ul>
      */
     @CheckReturnValue
-    default RestAction<Void> addReactionById(String messageId, Emote emote)
-    {
+    default RestAction<Void> addReactionById(String messageId, Emote emote) {
         Checks.notEmpty(messageId, "MessageId");
         Checks.notNull(emote, "Emote");
 
         Route.CompiledRoute route = Route.Messages.ADD_REACTION.compile(getId(), messageId, String.format("%s:%s", emote.getName(), emote.getId()));
-        return new RestAction<Void>(getJDA(), route)
-        {
+        return new RestAction<Void>(getJDA(), route) {
             @Override
-            protected void handleResponse(Response response, Request<Void> request)
-            {
+            protected void handleResponse(Response response, Request<Void> request) {
                 if (response.isOk())
                     request.onSuccess(null);
                 else
@@ -1938,54 +1687,47 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
-     *     <br>Also can happen if the account lost the {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
+     * <br>Also can happen if the account lost the {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
      *
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The request was attempted after the account lost
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_ADD_REACTION Permission.MESSAGE_ADD_REACTION} in the
-     *         {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The request was attempted after the account lost
+     * {@link net.dv8tion.jda.core.Permission#MESSAGE_ADD_REACTION Permission.MESSAGE_ADD_REACTION} in the
+     * {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_EMOJI}
-     *     <br>The request was attempted after the provided {@link net.dv8tion.jda.core.entities.Emote Emote}
-     *         was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_EMOJI}
+     * <br>The request was attempted after the provided {@link net.dv8tion.jda.core.entities.Emote Emote}
+     * was deleted.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
-     *         the message it referred to has already been deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
+     * the message it referred to has already been deleted.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param  messageId
-     *         The messageId to attach the reaction to
-     * @param  emote
-     *         The not-null {@link net.dv8tion.jda.core.entities.Emote} to react with
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>If provided {@code messageId} is not positive.</li>
-     *             <li>If provided {@code emote} is {@code null}</li>
-     *         </ul>
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If the MessageChannel this message was sent in was a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
-     *         and the logged in account does not have
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_ADD_REACTION Permission.MESSAGE_ADD_REACTION}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
-     *         </ul>
-     *
+     * @param messageId The messageId to attach the reaction to
+     * @param emote     The not-null {@link net.dv8tion.jda.core.entities.Emote} to react with
      * @return {@link net.dv8tion.jda.core.requests.RestAction}
+     * @throws java.lang.IllegalArgumentException                              <ul>
+     *                                                                         <li>If provided {@code messageId} is not positive.</li>
+     *                                                                         <li>If provided {@code emote} is {@code null}</li>
+     *                                                                         </ul>
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If the MessageChannel this message was sent in was a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
+     *                                                                         and the logged in account does not have
+     *                                                                         <ul>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_ADD_REACTION Permission.MESSAGE_ADD_REACTION}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
+     *                                                                         </ul>
      */
     @CheckReturnValue
-    default RestAction<Void> addReactionById(long messageId, Emote emote)
-    {
+    default RestAction<Void> addReactionById(long messageId, Emote emote) {
         return addReactionById(Long.toUnsignedString(messageId), emote);
     }
 
@@ -2004,58 +1746,50 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
-     *     <br>Also can happen if the account lost the {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
+     * <br>Also can happen if the account lost the {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
      *
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The request was attempted after the account lost
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_ADD_REACTION Permission.MESSAGE_ADD_REACTION} in the
-     *         {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The request was attempted after the account lost
+     * {@link net.dv8tion.jda.core.Permission#MESSAGE_ADD_REACTION Permission.MESSAGE_ADD_REACTION} in the
+     * {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_EMOJI}
-     *     <br>The provided unicode character does not refer to a known emoji unicode character.
-     *     <br>Proper unicode characters for emojis can be found at
-     *         <a href="http://unicode.org/emoji/charts/full-emoji-list.html" target="_blank">http://unicode.org/emoji/charts/full-emoji-list.html</a></li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_EMOJI}
+     * <br>The provided unicode character does not refer to a known emoji unicode character.
+     * <br>Proper unicode characters for emojis can be found at
+     * <a href="http://unicode.org/emoji/charts/full-emoji-list.html" target="_blank">http://unicode.org/emoji/charts/full-emoji-list.html</a></li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
-     *         the message it referred to has already been deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
+     * the message it referred to has already been deleted.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param  messageId
-     *         The messageId to remove the reaction from
-     * @param  unicode
-     *         The unicode characters of the emoji
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>If provided {@code messageId} is {@code null} or empty.</li>
-     *             <li>If provided {@code unicode} is {@code null} or empty.</li>
-     *         </ul>
-     *
+     * @param messageId The messageId to remove the reaction from
+     * @param unicode   The unicode characters of the emoji
      * @return {@link net.dv8tion.jda.core.requests.RestAction}
+     * @throws java.lang.IllegalArgumentException <ul>
+     *                                            <li>If provided {@code messageId} is {@code null} or empty.</li>
+     *                                            <li>If provided {@code unicode} is {@code null} or empty.</li>
+     *                                            </ul>
      */
     @CheckReturnValue
-    default RestAction<Void> removeReactionById(String messageId, String unicode)
-    {
+    default RestAction<Void> removeReactionById(String messageId, String unicode) {
         Checks.noWhitespace(messageId, "Message ID");
         Checks.noWhitespace(unicode, "Emoji");
 
         final String code = MiscUtil.encodeUTF8(unicode);
         final Route.CompiledRoute route = Route.Messages.REMOVE_OWN_REACTION.compile(getId(), messageId, code);
-        return new RestAction<Void>(getJDA(), route)
-        {
+        return new RestAction<Void>(getJDA(), route) {
             @Override
-            protected void handleResponse(Response response, Request<Void> request)
-            {
+            protected void handleResponse(Response response, Request<Void> request) {
                 if (!response.isOk())
                     request.onFailure(response);
                 else
@@ -2079,48 +1813,42 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
-     *     <br>Also can happen if the account lost the {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
+     * <br>Also can happen if the account lost the {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
      *
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The request was attempted after the account lost
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_ADD_REACTION Permission.MESSAGE_ADD_REACTION} in the
-     *         {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The request was attempted after the account lost
+     * {@link net.dv8tion.jda.core.Permission#MESSAGE_ADD_REACTION Permission.MESSAGE_ADD_REACTION} in the
+     * {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_EMOJI}
-     *     <br>The provided unicode character does not refer to a known emoji unicode character.
-     *     <br>Proper unicode characters for emojis can be found at
-     *         <a href="http://unicode.org/emoji/charts/full-emoji-list.html" target="_blank">http://unicode.org/emoji/charts/full-emoji-list.html</a></li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_EMOJI}
+     * <br>The provided unicode character does not refer to a known emoji unicode character.
+     * <br>Proper unicode characters for emojis can be found at
+     * <a href="http://unicode.org/emoji/charts/full-emoji-list.html" target="_blank">http://unicode.org/emoji/charts/full-emoji-list.html</a></li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
-     *         the message it referred to has already been deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
+     * the message it referred to has already been deleted.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param  messageId
-     *         The messageId to remove the reaction from
-     * @param  unicode
-     *         The unicode characters of the emoji
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>If provided {@code messageId} is {@code null} or empty.</li>
-     *             <li>If provided {@code unicode} is {@code null} or empty.</li>
-     *         </ul>
-     *
+     * @param messageId The messageId to remove the reaction from
+     * @param unicode   The unicode characters of the emoji
      * @return {@link net.dv8tion.jda.core.requests.RestAction}
+     * @throws java.lang.IllegalArgumentException <ul>
+     *                                            <li>If provided {@code messageId} is {@code null} or empty.</li>
+     *                                            <li>If provided {@code unicode} is {@code null} or empty.</li>
+     *                                            </ul>
      */
     @CheckReturnValue
-    default RestAction<Void> removeReactionById(long messageId, String unicode)
-    {
+    default RestAction<Void> removeReactionById(long messageId, String unicode) {
         return removeReactionById(Long.toUnsignedString(messageId), unicode);
     }
 
@@ -2133,48 +1861,42 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
-     *     <br>Also can happen if the account lost the {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
+     * <br>Also can happen if the account lost the {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
      *
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The request was attempted after the account lost
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_ADD_REACTION Permission.MESSAGE_ADD_REACTION} in the
-     *         {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The request was attempted after the account lost
+     * {@link net.dv8tion.jda.core.Permission#MESSAGE_ADD_REACTION Permission.MESSAGE_ADD_REACTION} in the
+     * {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_EMOJI}
-     *     <br>The provided unicode character does not refer to a known emoji unicode character.
-     *     <br>Proper unicode characters for emojis can be found at
-     *         <a href="http://unicode.org/emoji/charts/full-emoji-list.html" target="_blank">http://unicode.org/emoji/charts/full-emoji-list.html</a></li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_EMOJI}
+     * <br>The provided unicode character does not refer to a known emoji unicode character.
+     * <br>Proper unicode characters for emojis can be found at
+     * <a href="http://unicode.org/emoji/charts/full-emoji-list.html" target="_blank">http://unicode.org/emoji/charts/full-emoji-list.html</a></li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
-     *         the message it referred to has already been deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
+     * the message it referred to has already been deleted.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param  messageId
-     *         The messageId to remove the reaction from
-     * @param  emote
-     *         The emote to remove
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>If provided {@code messageId} is {@code null} or empty.</li>
-     *             <li>If provided {@code emote} is {@code null}.</li>
-     *         </ul>
-     *
+     * @param messageId The messageId to remove the reaction from
+     * @param emote     The emote to remove
      * @return {@link net.dv8tion.jda.core.requests.RestAction}
+     * @throws java.lang.IllegalArgumentException <ul>
+     *                                            <li>If provided {@code messageId} is {@code null} or empty.</li>
+     *                                            <li>If provided {@code emote} is {@code null}.</li>
+     *                                            </ul>
      */
     @CheckReturnValue
-    default RestAction<Void> removeReactionById(String messageId, Emote emote)
-    {
+    default RestAction<Void> removeReactionById(String messageId, Emote emote) {
         Checks.notNull(emote, "Emote");
         return removeReactionById(messageId, emote.getName() + ":" + emote.getId());
     }
@@ -2188,48 +1910,42 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
-     *     <br>Also can happen if the account lost the {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
+     * <br>Also can happen if the account lost the {@link net.dv8tion.jda.core.Permission#MESSAGE_HISTORY Permission.MESSAGE_HISTORY}</li>
      *
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The request was attempted after the account lost
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_ADD_REACTION Permission.MESSAGE_ADD_REACTION} in the
-     *         {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The request was attempted after the account lost
+     * {@link net.dv8tion.jda.core.Permission#MESSAGE_ADD_REACTION Permission.MESSAGE_ADD_REACTION} in the
+     * {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_EMOJI}
-     *     <br>The provided unicode character does not refer to a known emoji unicode character.
-     *     <br>Proper unicode characters for emojis can be found at
-     *         <a href="http://unicode.org/emoji/charts/full-emoji-list.html" target="_blank">http://unicode.org/emoji/charts/full-emoji-list.html</a></li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_EMOJI}
+     * <br>The provided unicode character does not refer to a known emoji unicode character.
+     * <br>Proper unicode characters for emojis can be found at
+     * <a href="http://unicode.org/emoji/charts/full-emoji-list.html" target="_blank">http://unicode.org/emoji/charts/full-emoji-list.html</a></li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
-     *         the message it referred to has already been deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
+     * the message it referred to has already been deleted.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param  messageId
-     *         The messageId to remove the reaction from
-     * @param  emote
-     *         The emote to remove
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>If provided {@code messageId} is {@code null} or empty.</li>
-     *             <li>If provided {@code emote} is {@code null}.</li>
-     *         </ul>
-     *
+     * @param messageId The messageId to remove the reaction from
+     * @param emote     The emote to remove
      * @return {@link net.dv8tion.jda.core.requests.RestAction}
+     * @throws java.lang.IllegalArgumentException <ul>
+     *                                            <li>If provided {@code messageId} is {@code null} or empty.</li>
+     *                                            <li>If provided {@code emote} is {@code null}.</li>
+     *                                            </ul>
      */
     @CheckReturnValue
-    default RestAction<Void> removeReactionById(long messageId, Emote emote)
-    {
+    default RestAction<Void> removeReactionById(long messageId, Emote emote) {
         Checks.notNull(emote, "Emote");
         return removeReactionById(messageId, emote.getName() + ":" + emote.getId());
     }
@@ -2239,50 +1955,42 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The request was attempted after the account lost
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_MANAGE Permission.MESSAGE_MANAGE} in the
-     *         {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The request was attempted after the account lost
+     * {@link net.dv8tion.jda.core.Permission#MESSAGE_MANAGE Permission.MESSAGE_MANAGE} in the
+     * {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
-     *         the message it referred to has already been deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
+     * the message it referred to has already been deleted.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param  messageId
-     *         The message to pin.
-     *
-     * @throws IllegalArgumentException
-     *         if the provided messageId is {@code null} or empty.
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_MANAGE Permission.MESSAGE_MANAGE}</li>
-     *         </ul>
-     *
+     * @param messageId The message to pin.
      * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction}
+     * @throws IllegalArgumentException                                        if the provided messageId is {@code null} or empty.
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
+     *                                                                         <ul>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_MANAGE Permission.MESSAGE_MANAGE}</li>
+     *                                                                         </ul>
      */
     @CheckReturnValue
-    default RestAction<Void> pinMessageById(String messageId)
-    {
+    default RestAction<Void> pinMessageById(String messageId) {
         Checks.notEmpty(messageId, "messageId");
 
         Route.CompiledRoute route = Route.Messages.ADD_PINNED_MESSAGE.compile(getId(), messageId);
-        return new RestAction<Void>(getJDA(), route)
-        {
+        return new RestAction<Void>(getJDA(), route) {
             @Override
-            protected void handleResponse(Response response, Request<Void> request)
-            {
+            protected void handleResponse(Response response, Request<Void> request) {
                 if (response.isOk())
                     request.onSuccess(null);
                 else
@@ -2296,42 +2004,36 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The request was attempted after the account lost
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_MANAGE Permission.MESSAGE_MANAGE} in the
-     *         {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The request was attempted after the account lost
+     * {@link net.dv8tion.jda.core.Permission#MESSAGE_MANAGE Permission.MESSAGE_MANAGE} in the
+     * {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
-     *         the message it referred to has already been deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
+     * the message it referred to has already been deleted.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param  messageId
-     *         The message to pin.
-     *
-     * @throws IllegalArgumentException
-     *         if the provided messageId is not positive.
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_MANAGE Permission.MESSAGE_MANAGE}</li>
-     *         </ul>
-     *
+     * @param messageId The message to pin.
      * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction}
+     * @throws IllegalArgumentException                                        if the provided messageId is not positive.
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
+     *                                                                         <ul>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_MANAGE Permission.MESSAGE_MANAGE}</li>
+     *                                                                         </ul>
      */
     @CheckReturnValue
-    default RestAction<Void> pinMessageById(long messageId)
-    {
+    default RestAction<Void> pinMessageById(long messageId) {
         return pinMessageById(Long.toUnsignedString(messageId));
     }
 
@@ -2340,50 +2042,42 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The request was attempted after the account lost
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_MANAGE Permission.MESSAGE_MANAGE} in the
-     *         {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The request was attempted after the account lost
+     * {@link net.dv8tion.jda.core.Permission#MESSAGE_MANAGE Permission.MESSAGE_MANAGE} in the
+     * {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
-     *         the message it referred to has already been deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
+     * the message it referred to has already been deleted.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param  messageId
-     *         The message to unpin.
-     *
-     * @throws IllegalArgumentException
-     *         if the provided messageId is {@code null} or empty.
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_MANAGE Permission.MESSAGE_MANAGE}</li>
-     *         </ul>
-     *
+     * @param messageId The message to unpin.
      * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction}
+     * @throws IllegalArgumentException                                        if the provided messageId is {@code null} or empty.
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
+     *                                                                         <ul>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_MANAGE Permission.MESSAGE_MANAGE}</li>
+     *                                                                         </ul>
      */
     @CheckReturnValue
-    default RestAction<Void> unpinMessageById(String messageId)
-    {
+    default RestAction<Void> unpinMessageById(String messageId) {
         Checks.notEmpty(messageId, "messageId");
 
         Route.CompiledRoute route = Route.Messages.REMOVE_PINNED_MESSAGE.compile(getId(), messageId);
-        return new RestAction<Void>(getJDA(), route)
-        {
+        return new RestAction<Void>(getJDA(), route) {
             @Override
-            protected void handleResponse(Response response, Request<Void> request)
-            {
+            protected void handleResponse(Response response, Request<Void> request) {
                 if (response.isOk())
                     request.onSuccess(null);
                 else
@@ -2397,42 +2091,36 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The request was attempted after the account lost
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_MANAGE Permission.MESSAGE_MANAGE} in the
-     *         {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The request was attempted after the account lost
+     * {@link net.dv8tion.jda.core.Permission#MESSAGE_MANAGE Permission.MESSAGE_MANAGE} in the
+     * {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
-     *         the message it referred to has already been deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
+     * the message it referred to has already been deleted.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param  messageId
-     *         The message to unpin.
-     *
-     * @throws IllegalArgumentException
-     *         if the provided messageId is not positive.
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
-     *             <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_MANAGE Permission.MESSAGE_MANAGE}</li>
-     *         </ul>
-     *
+     * @param messageId The message to unpin.
      * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction}
+     * @throws IllegalArgumentException                                        if the provided messageId is not positive.
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} and the logged in account does not have
+     *                                                                         <ul>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}</li>
+     *                                                                         <li>{@link net.dv8tion.jda.core.Permission#MESSAGE_MANAGE Permission.MESSAGE_MANAGE}</li>
+     *                                                                         </ul>
      */
     @CheckReturnValue
-    default RestAction<Void> unpinMessageById(long messageId)
-    {
+    default RestAction<Void> unpinMessageById(long messageId) {
         return unpinMessageById(Long.toUnsignedString(messageId));
     }
 
@@ -2442,47 +2130,38 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a TextChannel and this account does not have
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *
      * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type: List{@literal <}{@link net.dv8tion.jda.core.entities.Message}{@literal >}
-     *         <br>An immutable list of pinned messages
+     * <br>An immutable list of pinned messages
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a TextChannel and this account does not have
+     *                                                                         {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
      */
     @CheckReturnValue
-    default RestAction<List<Message>> getPinnedMessages()
-    {
+    default RestAction<List<Message>> getPinnedMessages() {
         Route.CompiledRoute route = Route.Messages.GET_PINNED_MESSAGES.compile(getId());
-        return new RestAction<List<Message>>(getJDA(), route)
-        {
+        return new RestAction<List<Message>>(getJDA(), route) {
             @Override
-            protected void handleResponse(Response response, Request<List<Message>> request)
-            {
-                if (response.isOk())
-                {
+            protected void handleResponse(Response response, Request<List<Message>> request) {
+                if (response.isOk()) {
                     LinkedList<Message> pinnedMessages = new LinkedList<>();
                     EntityBuilder builder = api.getEntityBuilder();
                     JSONArray pins = response.getArray();
 
-                    for (int i = 0; i < pins.length(); i++)
-                    {
+                    for (int i = 0; i < pins.length(); i++) {
                         pinnedMessages.add(builder.createMessage(pins.getJSONObject(i), MessageChannel.this, false));
                     }
 
                     request.onSuccess(Collections.unmodifiableList(pinnedMessages));
-                }
-                else
-                {
+                } else {
                     request.onFailure(response);
                 }
             }
@@ -2495,45 +2174,38 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#INVALID_AUTHOR_EDIT INVALID_AUTHOR_EDIT}
-     *     <br>Attempted to edit a message that was not sent by the currently logged in account.
-     *         Discord does not allow editing of other users' Messages!</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#INVALID_AUTHOR_EDIT INVALID_AUTHOR_EDIT}
+     * <br>Attempted to edit a message that was not sent by the currently logged in account.
+     * Discord does not allow editing of other users' Messages!</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
-     *         the message it referred to has already been deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
+     * the message it referred to has already been deleted.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param  messageId
-     *         The id referencing the Message that should be edited
-     * @param  newContent
-     *         The new content for the edited message
-     *
-     * @throws IllegalArgumentException
-     *         <ul>
-     *             <li>If provided {@code messageId} is {@code null} or empty.</li>
-     *             <li>If provided {@code newContent} is {@code null} or empty.</li>
-     *             <li>If provided {@code newContent} length is greater than {@code 2000} characters.</li>
-     *         </ul>
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a TextChannel and this account does not have
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *
+     * @param messageId  The id referencing the Message that should be edited
+     * @param newContent The new content for the edited message
      * @return {@link net.dv8tion.jda.core.requests.restaction.MessageAction MessageAction}
-     *         <br>The modified Message after it has been sent to Discord.
+     * <br>The modified Message after it has been sent to Discord.
+     * @throws IllegalArgumentException                                        <ul>
+     *                                                                         <li>If provided {@code messageId} is {@code null} or empty.</li>
+     *                                                                         <li>If provided {@code newContent} is {@code null} or empty.</li>
+     *                                                                         <li>If provided {@code newContent} length is greater than {@code 2000} characters.</li>
+     *                                                                         </ul>
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a TextChannel and this account does not have
+     *                                                                         {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
      */
     @CheckReturnValue
-    default MessageAction editMessageById(String messageId, CharSequence newContent)
-    {
+    default MessageAction editMessageById(String messageId, CharSequence newContent) {
         Checks.noWhitespace(messageId, "MessageId");
         Checks.notEmpty(newContent, "Provided message content");
         Checks.check(newContent.length() <= 2000, "Provided newContent length must be 2000 or less characters.");
@@ -2551,45 +2223,38 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#INVALID_AUTHOR_EDIT INVALID_AUTHOR_EDIT}
-     *     <br>Attempted to edit a message that was not sent by the currently logged in account.
-     *         Discord does not allow editing of other users' Messages!</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#INVALID_AUTHOR_EDIT INVALID_AUTHOR_EDIT}
+     * <br>Attempted to edit a message that was not sent by the currently logged in account.
+     * Discord does not allow editing of other users' Messages!</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
-     *         the message it referred to has already been deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
+     * the message it referred to has already been deleted.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param  messageId
-     *         The id referencing the Message that should be edited
-     * @param  newContent
-     *         The new content for the edited message
-     *
-     * @throws IllegalArgumentException
-     *         <ul>
-     *             <li>If provided {@code messageId} is {@code null} or empty.</li>
-     *             <li>If provided {@code newContent} is {@code null} or empty.</li>
-     *             <li>If provided {@code newContent} length is greater than {@code 2000} characters.</li>
-     *         </ul>
-     * @throws net.dv8tion.jda.core.exceptions.PermissionException
-     *         If this is a TextChannel and this account does not have
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *
+     * @param messageId  The id referencing the Message that should be edited
+     * @param newContent The new content for the edited message
      * @return {@link net.dv8tion.jda.core.requests.restaction.MessageAction MessageAction}
-     *         <br>The modified Message after it has been sent to Discord.
+     * <br>The modified Message after it has been sent to Discord.
+     * @throws IllegalArgumentException                            <ul>
+     *                                                             <li>If provided {@code messageId} is {@code null} or empty.</li>
+     *                                                             <li>If provided {@code newContent} is {@code null} or empty.</li>
+     *                                                             <li>If provided {@code newContent} length is greater than {@code 2000} characters.</li>
+     *                                                             </ul>
+     * @throws net.dv8tion.jda.core.exceptions.PermissionException If this is a TextChannel and this account does not have
+     *                                                             {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
      */
     @CheckReturnValue
-    default MessageAction editMessageById(long messageId, CharSequence newContent)
-    {
+    default MessageAction editMessageById(long messageId, CharSequence newContent) {
         return editMessageById(Long.toUnsignedString(messageId), newContent);
     }
 
@@ -2598,47 +2263,40 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#INVALID_AUTHOR_EDIT INVALID_AUTHOR_EDIT}
-     *     <br>Attempted to edit a message that was not sent by the currently logged in account.
-     *         Discord does not allow editing of other users' Messages!</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#INVALID_AUTHOR_EDIT INVALID_AUTHOR_EDIT}
+     * <br>Attempted to edit a message that was not sent by the currently logged in account.
+     * Discord does not allow editing of other users' Messages!</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
-     *         the message it referred to has already been deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
+     * the message it referred to has already been deleted.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param  messageId
-     *         The id referencing the Message that should be edited
-     * @param  newContent
-     *         The new content for the edited message
-     *
-     * @throws IllegalArgumentException
-     *         <ul>
-     *             <li>If provided {@code messageId} is {@code null} or empty.</li>
-     *             <li>If provided {@code newContent} is {@code null}.</li>
-     *             <li>If provided {@link net.dv8tion.jda.core.entities.Message Message}
-     *                 contains a {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed} which
-     *                 is not {@link net.dv8tion.jda.core.entities.MessageEmbed#isSendable(net.dv8tion.jda.core.AccountType) sendable}</li>
-     *         </ul>
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a TextChannel and this account does not have
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *
+     * @param messageId  The id referencing the Message that should be edited
+     * @param newContent The new content for the edited message
      * @return {@link net.dv8tion.jda.core.requests.restaction.MessageAction MessageAction}
-     *         <br>The modified Message after it has been sent to discord
+     * <br>The modified Message after it has been sent to discord
+     * @throws IllegalArgumentException                                        <ul>
+     *                                                                         <li>If provided {@code messageId} is {@code null} or empty.</li>
+     *                                                                         <li>If provided {@code newContent} is {@code null}.</li>
+     *                                                                         <li>If provided {@link net.dv8tion.jda.core.entities.Message Message}
+     *                                                                         contains a {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed} which
+     *                                                                         is not {@link net.dv8tion.jda.core.entities.MessageEmbed#isSendable(net.dv8tion.jda.core.AccountType) sendable}</li>
+     *                                                                         </ul>
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a TextChannel and this account does not have
+     *                                                                         {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
      */
     @CheckReturnValue
-    default MessageAction editMessageById(String messageId, Message newContent)
-    {
+    default MessageAction editMessageById(String messageId, Message newContent) {
         Checks.noWhitespace(messageId, "messageId");
         Checks.notNull(newContent, "message");
 
@@ -2651,47 +2309,40 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#INVALID_AUTHOR_EDIT INVALID_AUTHOR_EDIT}
-     *     <br>Attempted to edit a message that was not sent by the currently logged in account.
-     *         Discord does not allow editing of other users' Messages!</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#INVALID_AUTHOR_EDIT INVALID_AUTHOR_EDIT}
+     * <br>Attempted to edit a message that was not sent by the currently logged in account.
+     * Discord does not allow editing of other users' Messages!</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
-     *         the message it referred to has already been deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
+     * the message it referred to has already been deleted.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param  messageId
-     *         The id referencing the Message that should be edited
-     * @param  newContent
-     *         The new content for the edited message
-     *
-     * @throws IllegalArgumentException
-     *         <ul>
-     *             <li>If provided {@code messageId} is not positive.</li>
-     *             <li>If provided {@code newContent} is {@code null}.</li>
-     *             <li>If provided {@link net.dv8tion.jda.core.entities.Message Message}
-     *                 contains a {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed} which
-     *                 is not {@link net.dv8tion.jda.core.entities.MessageEmbed#isSendable(net.dv8tion.jda.core.AccountType) sendable}</li>
-     *         </ul>
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a TextChannel and this account does not have
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *
+     * @param messageId  The id referencing the Message that should be edited
+     * @param newContent The new content for the edited message
      * @return {@link net.dv8tion.jda.core.requests.restaction.MessageAction MessageAction}
-     *         <br>The modified Message after it has been sent to discord
+     * <br>The modified Message after it has been sent to discord
+     * @throws IllegalArgumentException                                        <ul>
+     *                                                                         <li>If provided {@code messageId} is not positive.</li>
+     *                                                                         <li>If provided {@code newContent} is {@code null}.</li>
+     *                                                                         <li>If provided {@link net.dv8tion.jda.core.entities.Message Message}
+     *                                                                         contains a {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed} which
+     *                                                                         is not {@link net.dv8tion.jda.core.entities.MessageEmbed#isSendable(net.dv8tion.jda.core.AccountType) sendable}</li>
+     *                                                                         </ul>
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a TextChannel and this account does not have
+     *                                                                         {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
      */
     @CheckReturnValue
-    default MessageAction editMessageById(long messageId, Message newContent)
-    {
+    default MessageAction editMessageById(long messageId, Message newContent) {
         return editMessageById(Long.toUnsignedString(messageId), newContent);
     }
 
@@ -2701,55 +2352,45 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#INVALID_AUTHOR_EDIT INVALID_AUTHOR_EDIT}
-     *     <br>Attempted to edit a message that was not sent by the currently logged in account.
-     *         Discord does not allow editing of other users' Messages!</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#INVALID_AUTHOR_EDIT INVALID_AUTHOR_EDIT}
+     * <br>Attempted to edit a message that was not sent by the currently logged in account.
+     * Discord does not allow editing of other users' Messages!</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
-     *         the message it referred to has already been deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
+     * the message it referred to has already been deleted.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param  messageId
-     *         The id referencing the Message that should be edited
-     * @param  format
-     *         Format String used to generate new Content
-     * @param  args
-     *         The arguments which should be used to format the given format String
-     *
-     * @throws IllegalArgumentException
-     *         <ul>
-     *             <li>If provided {@code messageId} is {@code null} or empty.</li>
-     *             <li>If provided {@code format} is {@code null} or blank.</li>
-     *         </ul>
-     * @throws IllegalStateException
-     *         If the resulting message is either empty or too long to be sent
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a TextChannel and this account does not have
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     * @throws java.util.IllegalFormatException
-     *         If a format string contains an illegal syntax,
-     *         a format specifier that is incompatible with the given arguments,
-     *         insufficient arguments given the format string, or other illegal conditions.
-     *         For specification of all possible formatting errors,
-     *         see the <a href="../util/Formatter.html#detail">Details</a>
-     *         section of the formatter class specification.
-     *
+     * @param messageId The id referencing the Message that should be edited
+     * @param format    Format String used to generate new Content
+     * @param args      The arguments which should be used to format the given format String
      * @return {@link net.dv8tion.jda.core.requests.restaction.MessageAction MessageAction}
-     *         <br>The modified Message after it has been sent to discord
+     * <br>The modified Message after it has been sent to discord
+     * @throws IllegalArgumentException                                        <ul>
+     *                                                                         <li>If provided {@code messageId} is {@code null} or empty.</li>
+     *                                                                         <li>If provided {@code format} is {@code null} or blank.</li>
+     *                                                                         </ul>
+     * @throws IllegalStateException                                           If the resulting message is either empty or too long to be sent
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a TextChannel and this account does not have
+     *                                                                         {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * @throws java.util.IllegalFormatException                                If a format string contains an illegal syntax,
+     *                                                                         a format specifier that is incompatible with the given arguments,
+     *                                                                         insufficient arguments given the format string, or other illegal conditions.
+     *                                                                         For specification of all possible formatting errors,
+     *                                                                         see the <a href="../util/Formatter.html#detail">Details</a>
+     *                                                                         section of the formatter class specification.
      */
     @CheckReturnValue
-    default MessageAction editMessageFormatById(String messageId, String format, Object... args)
-    {
+    default MessageAction editMessageFormatById(String messageId, String format, Object... args) {
         Checks.notBlank(format, "Format String");
         return editMessageById(messageId, String.format(format, args));
     }
@@ -2760,55 +2401,45 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#INVALID_AUTHOR_EDIT INVALID_AUTHOR_EDIT}
-     *     <br>Attempted to edit a message that was not sent by the currently logged in account.
-     *         Discord does not allow editing of other users' Messages!</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#INVALID_AUTHOR_EDIT INVALID_AUTHOR_EDIT}
+     * <br>Attempted to edit a message that was not sent by the currently logged in account.
+     * Discord does not allow editing of other users' Messages!</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
-     *         the message it referred to has already been deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
+     * the message it referred to has already been deleted.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param  messageId
-     *         The id referencing the Message that should be edited
-     * @param  format
-     *         Format String used to generate new Content
-     * @param  args
-     *         The arguments which should be used to format the given format String
-     *
-     * @throws IllegalArgumentException
-     *         <ul>
-     *             <li>If provided {@code messageId} is not positive.</li>
-     *             <li>If provided {@code format} is {@code null} or blank.</li>
-     *         </ul>
-     * @throws IllegalStateException
-     *         If the resulting message is either empty or too long to be sent
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a TextChannel and this account does not have
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     * @throws java.util.IllegalFormatException
-     *         If a format string contains an illegal syntax,
-     *         a format specifier that is incompatible with the given arguments,
-     *         insufficient arguments given the format string, or other illegal conditions.
-     *         For specification of all possible formatting errors,
-     *         see the <a href="../util/Formatter.html#detail">Details</a>
-     *         section of the formatter class specification.
-     *
+     * @param messageId The id referencing the Message that should be edited
+     * @param format    Format String used to generate new Content
+     * @param args      The arguments which should be used to format the given format String
      * @return {@link net.dv8tion.jda.core.requests.restaction.MessageAction MessageAction}
-     *         <br>The modified Message after it has been sent to discord
+     * <br>The modified Message after it has been sent to discord
+     * @throws IllegalArgumentException                                        <ul>
+     *                                                                         <li>If provided {@code messageId} is not positive.</li>
+     *                                                                         <li>If provided {@code format} is {@code null} or blank.</li>
+     *                                                                         </ul>
+     * @throws IllegalStateException                                           If the resulting message is either empty or too long to be sent
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a TextChannel and this account does not have
+     *                                                                         {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * @throws java.util.IllegalFormatException                                If a format string contains an illegal syntax,
+     *                                                                         a format specifier that is incompatible with the given arguments,
+     *                                                                         insufficient arguments given the format string, or other illegal conditions.
+     *                                                                         For specification of all possible formatting errors,
+     *                                                                         see the <a href="../util/Formatter.html#detail">Details</a>
+     *                                                                         section of the formatter class specification.
      */
     @CheckReturnValue
-    default MessageAction editMessageFormatById(long messageId, String format, Object... args)
-    {
+    default MessageAction editMessageFormatById(long messageId, String format, Object... args) {
         Checks.notBlank(format, "Format String");
         return editMessageById(messageId, String.format(format, args));
     }
@@ -2818,48 +2449,40 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#INVALID_AUTHOR_EDIT INVALID_AUTHOR_EDIT}
-     *     <br>Attempted to edit a message that was not sent by the currently logged in account.
-     *         Discord does not allow editing of other users' Messages!</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#INVALID_AUTHOR_EDIT INVALID_AUTHOR_EDIT}
+     * <br>Attempted to edit a message that was not sent by the currently logged in account.
+     * Discord does not allow editing of other users' Messages!</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
-     *         the message it referred to has already been deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
+     * the message it referred to has already been deleted.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param  messageId
-     *         The id referencing the Message that should be edited
-     * @param  newEmbed
-     *         The new {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed} for the edited message
-     *
-     * @throws IllegalArgumentException
-     *         <ul>
-     *             <li>If provided {@code messageId} is {@code null} or empty.</li>
-     *             <li>If provided {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed}
-     *                 is not {@link net.dv8tion.jda.core.entities.MessageEmbed#isSendable(net.dv8tion.jda.core.AccountType) sendable}</li>
-     *         </ul>
-     * @throws IllegalStateException
-     *         If the provided MessageEmbed is {@code null}
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a TextChannel and this account does not have
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         or {@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE}
-     *
+     * @param messageId The id referencing the Message that should be edited
+     * @param newEmbed  The new {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed} for the edited message
      * @return {@link net.dv8tion.jda.core.requests.restaction.MessageAction MessageAction}
-     *         <br>The modified Message after it has been sent to discord
+     * <br>The modified Message after it has been sent to discord
+     * @throws IllegalArgumentException                                        <ul>
+     *                                                                         <li>If provided {@code messageId} is {@code null} or empty.</li>
+     *                                                                         <li>If provided {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed}
+     *                                                                         is not {@link net.dv8tion.jda.core.entities.MessageEmbed#isSendable(net.dv8tion.jda.core.AccountType) sendable}</li>
+     *                                                                         </ul>
+     * @throws IllegalStateException                                           If the provided MessageEmbed is {@code null}
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a TextChannel and this account does not have
+     *                                                                         {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     *                                                                         or {@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE}
      */
     @CheckReturnValue
-    default MessageAction editMessageById(String messageId, MessageEmbed newEmbed)
-    {
+    default MessageAction editMessageById(String messageId, MessageEmbed newEmbed) {
         Checks.noWhitespace(messageId, "Message ID");
         Checks.notNull(newEmbed, "MessageEmbed");
 
@@ -2872,60 +2495,51 @@ public interface MessageChannel extends ISnowflake, Formattable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#INVALID_AUTHOR_EDIT INVALID_AUTHOR_EDIT}
-     *     <br>Attempted to edit a message that was not sent by the currently logged in account.
-     *         Discord does not allow editing of other users' Messages!</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#INVALID_AUTHOR_EDIT INVALID_AUTHOR_EDIT}
+     * <br>Attempted to edit a message that was not sent by the currently logged in account.
+     * Discord does not allow editing of other users' Messages!</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>The request was attempted after the account lost access to the
-     *         {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
-     *         typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>The request was attempted after the account lost access to the
+     * {@link net.dv8tion.jda.core.entities.Guild Guild} or {@link net.dv8tion.jda.client.entities.Group Group}
+     * typically due to being kicked or removed, or after {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     * was revoked in the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
-     *     <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
-     *         the message it referred to has already been deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_MESSAGE UNKNOWN_MESSAGE}
+     * <br>The provided {@code messageId} is unknown in this MessageChannel, either due to the id being invalid, or
+     * the message it referred to has already been deleted.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>The request was attempted after the channel was deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>The request was attempted after the channel was deleted.</li>
      * </ul>
      *
-     * @param  messageId
-     *         The id referencing the Message that should be edited
-     * @param  newEmbed
-     *         The new {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed} for the edited message
-     *
-     * @throws IllegalArgumentException
-     *         <ul>
-     *             <li>If provided {@code messageId} is not positive.</li>
-     *             <li>If provided {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed}
-     *                 is not {@link net.dv8tion.jda.core.entities.MessageEmbed#isSendable(net.dv8tion.jda.core.AccountType) sendable}</li>
-     *         </ul>
-     * @throws IllegalStateException
-     *         If the provided MessageEmbed is {@code null}
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is a TextChannel and this account does not have
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
-     *         or {@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE}
-     *
+     * @param messageId The id referencing the Message that should be edited
+     * @param newEmbed  The new {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed} for the edited message
      * @return {@link net.dv8tion.jda.core.requests.restaction.MessageAction MessageAction}
-     *         <br>The modified Message after it has been sent to discord
+     * <br>The modified Message after it has been sent to discord
+     * @throws IllegalArgumentException                                        <ul>
+     *                                                                         <li>If provided {@code messageId} is not positive.</li>
+     *                                                                         <li>If provided {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed}
+     *                                                                         is not {@link net.dv8tion.jda.core.entities.MessageEmbed#isSendable(net.dv8tion.jda.core.AccountType) sendable}</li>
+     *                                                                         </ul>
+     * @throws IllegalStateException                                           If the provided MessageEmbed is {@code null}
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is a TextChannel and this account does not have
+     *                                                                         {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ}
+     *                                                                         or {@link net.dv8tion.jda.core.Permission#MESSAGE_WRITE Permission.MESSAGE_WRITE}
      */
     @CheckReturnValue
-    default MessageAction editMessageById(long messageId, MessageEmbed newEmbed)
-    {
+    default MessageAction editMessageById(long messageId, MessageEmbed newEmbed) {
         return editMessageById(Long.toUnsignedString(messageId), newEmbed);
     }
 
     @Override
-    default void formatTo(Formatter formatter, int flags, int width, int precision)
-    {
+    default void formatTo(Formatter formatter, int flags, int width, int precision) {
         boolean leftJustified = (flags & FormattableFlags.LEFT_JUSTIFY) == FormattableFlags.LEFT_JUSTIFY;
         boolean upper = (flags & FormattableFlags.UPPERCASE) == FormattableFlags.UPPERCASE;
         boolean alt = (flags & FormattableFlags.ALTERNATE) == FormattableFlags.ALTERNATE;
         String out;
 
-        out = upper ?  getName().toUpperCase(formatter.locale()) : getName();
+        out = upper ? getName().toUpperCase(formatter.locale()) : getName();
         if (alt)
             out = "#" + out;
 

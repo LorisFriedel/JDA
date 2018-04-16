@@ -22,15 +22,13 @@ import net.dv8tion.jda.core.entities.*;
  * Indicates that a Message was received in a {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel}.
  * <br>This includes {@link net.dv8tion.jda.core.entities.TextChannel TextChannel},
  * {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel} and {@link net.dv8tion.jda.client.entities.Group Group}!
- * 
+ *
  * <p>Can be used to detect that a Message is received in either a guild, private channel or group. Providing a MessageChannel and Message.
  */
-public class MessageReceivedEvent extends GenericMessageEvent
-{
+public class MessageReceivedEvent extends GenericMessageEvent {
     private final Message message;
 
-    public MessageReceivedEvent(JDA api, long responseNumber, Message message)
-    {
+    public MessageReceivedEvent(JDA api, long responseNumber, Message message) {
         super(api, responseNumber, message.getIdLong(), message.getChannel());
         this.message = message;
     }
@@ -40,8 +38,7 @@ public class MessageReceivedEvent extends GenericMessageEvent
      *
      * @return The received {@link net.dv8tion.jda.core.entities.Message Message} object.
      */
-    public Message getMessage()
-    {
+    public Message getMessage() {
         return message;
     }
 
@@ -50,12 +47,10 @@ public class MessageReceivedEvent extends GenericMessageEvent
      * <br>This will be never-null but might be a fake user if Message was sent via Webhook (Guild only).
      *
      * @return The Author of the Message.
-     *
      * @see #isWebhookMessage()
      * @see net.dv8tion.jda.core.entities.User#isFake()
      */
-    public User getAuthor()
-    {
+    public User getAuthor() {
         return message.getAuthor();
     }
 
@@ -67,11 +62,9 @@ public class MessageReceivedEvent extends GenericMessageEvent
      * or {@link #isWebhookMessage() isWebhookMessage()} returning {@code true}.
      *
      * @return The Author of the Message as null-able Member object.
-     *
      * @see #isWebhookMessage()
      */
-    public Member getMember()
-    {
+    public Member getMember() {
         return isFromType(ChannelType.TEXT) && !isWebhookMessage() ? getGuild().getMember(getAuthor()) : null;
     }
 
@@ -81,8 +74,7 @@ public class MessageReceivedEvent extends GenericMessageEvent
      *
      * @return True, if the Message was sent via Webhook
      */
-    public boolean isWebhookMessage()
-    {
+    public boolean isWebhookMessage() {
         return getMessage().isWebhookMessage();
     }
 }

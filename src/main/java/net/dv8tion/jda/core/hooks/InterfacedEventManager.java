@@ -37,54 +37,42 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @see net.dv8tion.jda.core.hooks.AnnotatedEventManager
  * @see net.dv8tion.jda.core.hooks.IEventManager
  */
-public class InterfacedEventManager implements IEventManager
-{
+public class InterfacedEventManager implements IEventManager {
     private final CopyOnWriteArrayList<EventListener> listeners = new CopyOnWriteArrayList<>();
 
-    public InterfacedEventManager()
-    {
+    public InterfacedEventManager() {
 
     }
 
     /**
      * {@inheritDoc}
      *
-     * @throws IllegalArgumentException
-     *         If the provided listener does not implement {@link net.dv8tion.jda.core.hooks.EventListener EventListener}
+     * @throws IllegalArgumentException If the provided listener does not implement {@link net.dv8tion.jda.core.hooks.EventListener EventListener}
      */
     @Override
-    public void register(Object listener)
-    {
-        if (!(listener instanceof EventListener))
-        {
+    public void register(Object listener) {
+        if (!(listener instanceof EventListener)) {
             throw new IllegalArgumentException("Listener must implement EventListener");
         }
         listeners.add(((EventListener) listener));
     }
 
     @Override
-    public void unregister(Object listener)
-    {
+    public void unregister(Object listener) {
         listeners.remove(listener);
     }
 
     @Override
-    public List<Object> getRegisteredListeners()
-    {
+    public List<Object> getRegisteredListeners() {
         return Collections.unmodifiableList(new LinkedList<>(listeners));
     }
 
     @Override
-    public void handle(Event event)
-    {
-        for (EventListener listener : listeners)
-        {
-            try
-            {
+    public void handle(Event event) {
+        for (EventListener listener : listeners) {
+            try {
                 listener.onEvent(event);
-            }
-            catch (Throwable throwable)
-            {
+            } catch (Throwable throwable) {
                 JDAImpl.LOG.error("One of the EventListeners had an uncaught exception", throwable);
             }
         }

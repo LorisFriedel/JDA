@@ -25,15 +25,13 @@ import java.time.OffsetDateTime;
  *
  * @since 3.0
  */
-public interface ISnowflake
-{
+public interface ISnowflake {
     /**
      * The Snowflake id of this entity. This is unique to every entity and will never change.
      *
      * @return Never-null String containing the Id.
      */
-    default String getId()
-    {
+    default String getId() {
         return Long.toUnsignedString(getIdLong());
     }
 
@@ -48,11 +46,9 @@ public interface ISnowflake
      * The time this entity was created. Calculated through the Snowflake in {@link #getIdLong}.
      *
      * @return OffsetDateTime - Time this entity was created at.
-     *
-     * @see    net.dv8tion.jda.core.utils.MiscUtil#getCreationTime(long)
+     * @see net.dv8tion.jda.core.utils.MiscUtil#getCreationTime(long)
      */
-    default OffsetDateTime getCreationTime()
-    {
+    default OffsetDateTime getCreationTime() {
         return MiscUtil.getCreationTime(getIdLong());
     }
 

@@ -18,7 +18,6 @@ package net.dv8tion.jda.core.utils;
 
 import java.io.IOException;
 
-public interface IOFunction<T, R>
-{
+public interface IOFunction<T, R> {
     R apply(T t) throws IOException;
 }

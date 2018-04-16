@@ -23,25 +23,21 @@ import net.dv8tion.jda.core.JDA;
 import java.util.Collections;
 import java.util.List;
 
-public class CallUpdateRingingUsersEvent extends GenericCallUpdateEvent
-{
+public class CallUpdateRingingUsersEvent extends GenericCallUpdateEvent {
     protected final List<CallUser> usersStoppedRinging;
     protected final List<CallUser> usersStartedRinging;
 
-    public CallUpdateRingingUsersEvent(JDA api, long responseNumber, Call call, List<CallUser> usersStoppedRinging, List<CallUser> usersStartedRinging)
-    {
+    public CallUpdateRingingUsersEvent(JDA api, long responseNumber, Call call, List<CallUser> usersStoppedRinging, List<CallUser> usersStartedRinging) {
         super(api, responseNumber, call);
         this.usersStoppedRinging = Collections.unmodifiableList(usersStoppedRinging);
         this.usersStartedRinging = Collections.unmodifiableList(usersStartedRinging);
     }
 
-    public List<CallUser> getUsersStoppedRinging()
-    {
+    public List<CallUser> getUsersStoppedRinging() {
         return usersStoppedRinging;
     }
 
-    public List<CallUser> getUsersStartedRinging()
-    {
+    public List<CallUser> getUsersStartedRinging() {
         return usersStartedRinging;
     }
 }

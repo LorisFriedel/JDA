@@ -35,8 +35,7 @@ import java.util.Objects;
  * <a href="http://imgur.com/a/yOb5n" target="_blank">http://imgur.com/a/yOb5n</a>
  * <br>This class has many possibilities for null values, so be careful!
  */
-public class MessageEmbed
-{
+public class MessageEmbed {
     /**
      * The maximum length an embed title can have
      *
@@ -113,8 +112,7 @@ public class MessageEmbed
     protected MessageEmbed(
         String url, String title, String description, EmbedType type, OffsetDateTime timestamp,
         int color, Thumbnail thumbnail, Provider siteProvider, AuthorInfo author,
-        VideoInfo videoInfo, Footer footer, ImageInfo image, List<Field> fields)
-    {
+        VideoInfo videoInfo, Footer footer, ImageInfo image, List<Field> fields) {
         this.url = url;
         this.title = title;
         this.description = description;
@@ -136,8 +134,7 @@ public class MessageEmbed
      *
      * @return Never-null String containing the original message url.
      */
-    public String getUrl()
-    {
+    public String getUrl() {
         return url;
     }
 
@@ -148,8 +145,7 @@ public class MessageEmbed
      *
      * @return Possibly-null String containing the title of the embedded resource.
      */
-    public String getTitle()
-    {
+    public String getTitle() {
         return title;
     }
 
@@ -160,8 +156,7 @@ public class MessageEmbed
      *
      * @return Possibly-null String containing a description of the embedded resource.
      */
-    public String getDescription()
-    {
+    public String getDescription() {
         return description;
     }
 
@@ -170,8 +165,7 @@ public class MessageEmbed
      *
      * @return The {@link net.dv8tion.jda.core.entities.EmbedType EmbedType} of this embed.
      */
-    public EmbedType getType()
-    {
+    public EmbedType getType() {
         return type;
     }
 
@@ -180,10 +174,9 @@ public class MessageEmbed
      * <br>If a {@link net.dv8tion.jda.core.entities.MessageEmbed.Thumbnail Thumbnail} was not part of this embed, this returns null.
      *
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.MessageEmbed.Thumbnail Thumbnail} instance
-     *         containing general information on the displayable thumbnail.
+     * containing general information on the displayable thumbnail.
      */
-    public Thumbnail getThumbnail()
-    {
+    public Thumbnail getThumbnail() {
         return thumbnail;
     }
 
@@ -192,10 +185,9 @@ public class MessageEmbed
      * <br>If Discord did not generate any deliverable information about the site, this returns null.
      *
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.MessageEmbed.Provider Provider}
-     *         containing site information.
+     * containing site information.
      */
-    public Provider getSiteProvider()
-    {
+    public Provider getSiteProvider() {
         return siteProvider;
     }
 
@@ -204,10 +196,9 @@ public class MessageEmbed
      * <br>This is typically used to represent the account on the providing site.
      *
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.MessageEmbed.AuthorInfo AuthorInfo}
-     *         containing author information.
+     * containing author information.
      */
-    public AuthorInfo getAuthor()
-    {
+    public AuthorInfo getAuthor() {
         return author;
     }
 
@@ -218,36 +209,33 @@ public class MessageEmbed
      * this will always return null.
      *
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.MessageEmbed.VideoInfo VideoInfo}
-     *         containing the information about the video which should be embedded.
+     * containing the information about the video which should be embedded.
      */
-    public VideoInfo getVideoInfo()
-    {
+    public VideoInfo getVideoInfo() {
         return videoInfo;
     }
-    
+
     /**
      * The footer (bottom) of the embedded content.
      * <br>This is typically used for timestamps or site icons.
      *
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.MessageEmbed.Footer Footer}
-     *         containing the embed footer content.
+     * containing the embed footer content.
      */
-    public Footer getFooter()
-    {
+    public Footer getFooter() {
         return footer;
     }
-    
+
     /**
      * The information about the image in the message embed
      *
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.MessageEmbed.ImageInfo ImageInfo}
-     *         containing image information.
+     * containing image information.
      */
-    public ImageInfo getImage()
-    {
+    public ImageInfo getImage() {
         return image;
     }
-    
+
     /**
      * The fields in a message embed.
      * <br>Message embeds can contain multiple fields, each with a name, value, and a boolean
@@ -255,21 +243,19 @@ public class MessageEmbed
      * fields, an empty list will be returned.
      *
      * @return Never-null (but possibly empty) List of {@link net.dv8tion.jda.core.entities.MessageEmbed.Field Field} objects
-     *         containing field information.
+     * containing field information.
      */
-    public List<Field> getFields()
-    {
+    public List<Field> getFields() {
         return fields;
     }
-    
+
     /**
      * The color of the stripe on the side of the embed.
      * <br>If the color is 0 (no color), this will return null.
      *
      * @return Possibly-null Color.
      */
-    public Color getColor()
-    {
+    public Color getColor() {
         return color != Role.DEFAULT_COLOR_RAW ? new Color(color) : null;
     }
 
@@ -279,18 +265,16 @@ public class MessageEmbed
      *
      * @return The raw RGB color value or default
      */
-    public int getColorRaw()
-    {
+    public int getColorRaw() {
         return color;
     }
-    
+
     /**
      * The timestamp of the embed.
      *
      * @return Possibly-null OffsetDateTime object representing the timestamp.
      */
-    public OffsetDateTime getTimestamp()
-    {
+    public OffsetDateTime getTimestamp() {
         return timestamp;
     }
 
@@ -299,8 +283,7 @@ public class MessageEmbed
      *
      * @return True, if this embed has no content
      */
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return getLength() == 0
             && getImage() == null
             && getThumbnail() == null;
@@ -317,12 +300,10 @@ public class MessageEmbed
      *
      * @return A never-negative sum of all displayed text characters.
      */
-    public int getLength()
-    {
+    public int getLength() {
         if (length > -1)
             return length;
-        synchronized (mutex)
-        {
+        synchronized (mutex) {
             if (length > -1)
                 return length;
             length = 0;
@@ -335,8 +316,7 @@ public class MessageEmbed
                 length += author.getName().length();
             if (footer != null)
                 length += footer.getText().length();
-            if (fields != null)
-            {
+            if (fields != null) {
                 for (Field f : fields)
                     length += f.getName().length() + f.getValue().length();
             }
@@ -351,38 +331,33 @@ public class MessageEmbed
      *
      * <p>Total Character Limits
      * <ul>
-     *     <li>Bot: {@value #EMBED_MAX_LENGTH_BOT}</li>
-     *     <li>Client: {@value #EMBED_MAX_LENGTH_CLIENT}</li>
+     * <li>Bot: {@value #EMBED_MAX_LENGTH_BOT}</li>
+     * <li>Client: {@value #EMBED_MAX_LENGTH_CLIENT}</li>
      * </ul>
      *
-     * @param  type
-     *         The {@link net.dv8tion.jda.core.AccountType AccountType} to inspect
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided AccountType is {@code null} or not supported by this operation
-     *
+     * @param type The {@link net.dv8tion.jda.core.AccountType AccountType} to inspect
      * @return True, if this MessageEmbed can be used to send messages for this specified AccountType
-     *
-     * @see    #getLength()
+     * @throws java.lang.IllegalArgumentException If the provided AccountType is {@code null} or not supported by this operation
+     * @see #getLength()
      */
-    public boolean isSendable(AccountType type)
-    {
+    public boolean isSendable(AccountType type) {
         Checks.notNull(type, "AccountType");
         final int length = getLength();
         if (isEmpty())
             return false;
 
-        switch (type)
-        {
-            case BOT: return length <= EMBED_MAX_LENGTH_BOT;
-            case CLIENT: return length <= EMBED_MAX_LENGTH_CLIENT;
-            default: throw new IllegalArgumentException(String.format("Cannot check against AccountType '%s'!", type));
+        switch (type) {
+            case BOT:
+                return length <= EMBED_MAX_LENGTH_BOT;
+            case CLIENT:
+                return length <= EMBED_MAX_LENGTH_CLIENT;
+            default:
+                throw new IllegalArgumentException(String.format("Cannot check against AccountType '%s'!", type));
         }
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         if (!(obj instanceof MessageEmbed))
             return false;
         if (obj == this)
@@ -409,12 +384,10 @@ public class MessageEmbed
      *
      * @return JSONObject for this embed
      */
-    public JSONObject toJSONObject()
-    {
+    public JSONObject toJSONObject() {
         if (json != null)
             return json;
-        synchronized (mutex)
-        {
+        synchronized (mutex) {
             if (json != null)
                 return json;
             JSONObject obj = new JSONObject();
@@ -430,8 +403,7 @@ public class MessageEmbed
                 obj.put("color", color & 0xFFFFFF);
             if (thumbnail != null)
                 obj.put("thumbnail", new JSONObject().put("url", thumbnail.getUrl()));
-            if (siteProvider != null)
-            {
+            if (siteProvider != null) {
                 JSONObject siteProviderObj = new JSONObject();
                 if (siteProvider.getName() != null)
                     siteProviderObj.put("name", siteProvider.getName());
@@ -439,8 +411,7 @@ public class MessageEmbed
                     siteProviderObj.put("url", siteProvider.getUrl());
                 obj.put("provider", siteProviderObj);
             }
-            if (author != null)
-            {
+            if (author != null) {
                 JSONObject authorObj = new JSONObject();
                 if (author.getName() != null)
                     authorObj.put("name", author.getName());
@@ -452,8 +423,7 @@ public class MessageEmbed
             }
             if (videoInfo != null)
                 obj.put("video", new JSONObject().put("url", videoInfo.getUrl()));
-            if (footer != null)
-            {
+            if (footer != null) {
                 JSONObject footerObj = new JSONObject();
                 if (footer.getText() != null)
                     footerObj.put("text", footer.getText());
@@ -463,11 +433,9 @@ public class MessageEmbed
             }
             if (image != null)
                 obj.put("image", new JSONObject().put("url", image.getUrl()));
-            if (!fields.isEmpty())
-            {
+            if (!fields.isEmpty()) {
                 JSONArray fieldsArray = new JSONArray();
-                for (Field field : fields)
-                {
+                for (Field field : fields) {
                     fieldsArray
                         .put(new JSONObject()
                             .put("name", field.getName())
@@ -484,15 +452,13 @@ public class MessageEmbed
      * Represents the information Discord provided about a thumbnail image that should be
      * displayed with an embed message.
      */
-    public static class Thumbnail
-    {
+    public static class Thumbnail {
         protected final String url;
         protected final String proxyUrl;
         protected final int width;
         protected final int height;
 
-        public Thumbnail(String url, String proxyUrl, int width, int height)
-        {
+        public Thumbnail(String url, String proxyUrl, int width, int height) {
             this.url = url;
             this.proxyUrl = proxyUrl;
             this.width = width;
@@ -504,8 +470,7 @@ public class MessageEmbed
          *
          * @return Never-null String containing the url of the displayed image.
          */
-        public String getUrl()
-        {
+        public String getUrl() {
             return url;
         }
 
@@ -515,8 +480,7 @@ public class MessageEmbed
          *
          * @return Never-null String containing the proxied url of this image.
          */
-        public String getProxyUrl()
-        {
+        public String getProxyUrl() {
             return proxyUrl;
         }
 
@@ -525,8 +489,7 @@ public class MessageEmbed
          *
          * @return Never-negative, Never-zero int containing the width of the image.
          */
-        public int getWidth()
-        {
+        public int getWidth() {
             return width;
         }
 
@@ -535,14 +498,12 @@ public class MessageEmbed
          *
          * @return Never-negative, Never-zero int containing the height of the image.
          */
-        public int getHeight()
-        {
+        public int getHeight() {
             return height;
         }
 
         @Override
-        public boolean equals(Object obj)
-        {
+        public boolean equals(Object obj) {
             if (!(obj instanceof Thumbnail))
                 return false;
             Thumbnail thumbnail = (Thumbnail) obj;
@@ -557,13 +518,11 @@ public class MessageEmbed
      * Multipurpose class that represents a provider of content,
      * whether directly through creation or indirectly through hosting.
      */
-    public static class Provider
-    {
+    public static class Provider {
         protected final String name;
         protected final String url;
 
-        public Provider(String name, String url)
-        {
+        public Provider(String name, String url) {
             this.name = name;
             this.url = url;
         }
@@ -575,8 +534,7 @@ public class MessageEmbed
          *
          * @return Never-null String containing the name of the provider.
          */
-        public String getName()
-        {
+        public String getName() {
             return name;
         }
 
@@ -585,14 +543,12 @@ public class MessageEmbed
          *
          * @return Possibly-null String containing the url of the provider.
          */
-        public String getUrl()
-        {
+        public String getUrl() {
             return url;
         }
 
         @Override
-        public boolean equals(Object obj)
-        {
+        public boolean equals(Object obj) {
             if (!(obj instanceof Provider))
                 return false;
             Provider provider = (Provider) obj;
@@ -606,14 +562,12 @@ public class MessageEmbed
      * <br>The videos represented are expected to be played using an HTML5 player from the
      * site which the url belongs to.
      */
-    public static class VideoInfo
-    {
+    public static class VideoInfo {
         protected final String url;
         protected final int width;
         protected final int height;
 
-        public VideoInfo(String url, int width, int height)
-        {
+        public VideoInfo(String url, int width, int height) {
             this.url = url;
             this.width = width;
             this.height = height;
@@ -624,8 +578,7 @@ public class MessageEmbed
          *
          * @return Never-null String containing the video url.
          */
-        public String getUrl()
-        {
+        public String getUrl() {
             return url;
         }
 
@@ -637,8 +590,7 @@ public class MessageEmbed
          *
          * @return Non-negative, Non-zero int containing the width of the embedded video.
          */
-        public int getWidth()
-        {
+        public int getWidth() {
             return width;
         }
 
@@ -648,17 +600,14 @@ public class MessageEmbed
          *
          * <p>Basically: Don't rely on this to represent the actual video's quality or size.
          *
-         * @return
-         *      Non-negative, Non-zero int containing the height of the embedded video.
+         * @return Non-negative, Non-zero int containing the height of the embedded video.
          */
-        public int getHeight()
-        {
+        public int getHeight() {
             return height;
         }
 
         @Override
-        public boolean equals(Object obj)
-        {
+        public boolean equals(Object obj) {
             if (!(obj instanceof VideoInfo))
                 return false;
             VideoInfo video = (VideoInfo) obj;
@@ -667,19 +616,17 @@ public class MessageEmbed
                 && video.height == height);
         }
     }
-    
+
     /**
      * Represents the information provided to embed an image.
      */
-    public static class ImageInfo
-    {
+    public static class ImageInfo {
         protected final String url;
         protected final String proxyUrl;
         protected final int width;
         protected final int height;
 
-        public ImageInfo(String url, String proxyUrl, int width, int height)
-        {
+        public ImageInfo(String url, String proxyUrl, int width, int height) {
             this.url = url;
             this.proxyUrl = proxyUrl;
             this.width = width;
@@ -691,19 +638,17 @@ public class MessageEmbed
          *
          * @return Never-null String containing the image url.
          */
-        public String getUrl()
-        {
+        public String getUrl() {
             return url;
         }
-        
+
         /**
          * The url of the image, proxied by Discord
          * <br>This url is used to access the image through Discord instead of directly to prevent ip scraping.
          *
          * @return Never-null String containing the proxied image url.
          */
-        public String getProxyUrl()
-        {
+        public String getProxyUrl() {
             return proxyUrl;
         }
 
@@ -712,8 +657,7 @@ public class MessageEmbed
          *
          * @return Non-negative, Non-zero int containing the width of the embedded image.
          */
-        public int getWidth()
-        {
+        public int getWidth() {
             return width;
         }
 
@@ -722,14 +666,12 @@ public class MessageEmbed
          *
          * @return Non-negative, Non-zero int containing the height of the embedded image.
          */
-        public int getHeight()
-        {
+        public int getHeight() {
             return height;
         }
 
         @Override
-        public boolean equals(Object obj)
-        {
+        public boolean equals(Object obj) {
             if (!(obj instanceof ImageInfo))
                 return false;
             ImageInfo image = (ImageInfo) obj;
@@ -739,20 +681,18 @@ public class MessageEmbed
                 && image.height == height);
         }
     }
-    
+
     /**
      * Class that represents the author of content, possibly including an icon
      * that Discord proxies.
      */
-    public static class AuthorInfo
-    {
+    public static class AuthorInfo {
         protected final String name;
         protected final String url;
         protected final String iconUrl;
         protected final String proxyIconUrl;
 
-        public AuthorInfo(String name, String url, String iconUrl, String proxyIconUrl)
-        {
+        public AuthorInfo(String name, String url, String iconUrl, String proxyIconUrl) {
             this.name = name;
             this.url = url;
             this.iconUrl = iconUrl;
@@ -765,8 +705,7 @@ public class MessageEmbed
          *
          * @return Possibly-null String containing the name of the author.
          */
-        public String getName()
-        {
+        public String getName() {
             return name;
         }
 
@@ -775,35 +714,31 @@ public class MessageEmbed
          *
          * @return Possibly-null String containing the url of the author.
          */
-        public String getUrl()
-        {
+        public String getUrl() {
             return url;
         }
-        
+
         /**
          * The url of the author's icon.
          *
          * @return Possibly-null String containing the author's icon url.
          */
-        public String getIconUrl()
-        {
+        public String getIconUrl() {
             return iconUrl;
         }
-        
+
         /**
          * The url of the author's icon, proxied by Discord
          * <br>This url is used to access the image through Discord instead of directly to prevent ip scraping.
          *
          * @return Possibly-null String containing the proxied icon url.
          */
-        public String getProxyIconUrl()
-        {
+        public String getProxyIconUrl() {
             return proxyIconUrl;
         }
 
         @Override
-        public boolean equals(Object obj)
-        {
+        public boolean equals(Object obj) {
             if (!(obj instanceof AuthorInfo))
                 return false;
             AuthorInfo author = (AuthorInfo) obj;
@@ -813,18 +748,16 @@ public class MessageEmbed
                 && Objects.equals(author.proxyIconUrl, proxyIconUrl));
         }
     }
-    
+
     /**
      * Class that represents a footer at the bottom of an embed
      */
-    public static class Footer
-    {
+    public static class Footer {
         protected final String text;
         protected final String iconUrl;
         protected final String proxyIconUrl;
 
-        public Footer(String text, String iconUrl, String proxyIconUrl)
-        {
+        public Footer(String text, String iconUrl, String proxyIconUrl) {
             this.text = text;
             this.iconUrl = iconUrl;
             this.proxyIconUrl = proxyIconUrl;
@@ -835,35 +768,31 @@ public class MessageEmbed
          *
          * @return Possibly-null String containing the text in the footer.
          */
-        public String getText()
-        {
+        public String getText() {
             return text;
         }
-        
+
         /**
          * The url of the footer's icon.
          *
          * @return Possibly-null String containing the footer's icon url.
          */
-        public String getIconUrl()
-        {
+        public String getIconUrl() {
             return iconUrl;
         }
-        
+
         /**
          * The url of the footer's icon, proxied by Discord
          * <br>This url is used to access the image through Discord instead of directly to prevent ip scraping.
          *
          * @return Possibly-null String containing the proxied icon url.
          */
-        public String getProxyIconUrl()
-        {
+        public String getProxyIconUrl() {
             return proxyIconUrl;
         }
 
         @Override
-        public boolean equals(Object obj)
-        {
+        public boolean equals(Object obj) {
             if (!(obj instanceof Footer))
                 return false;
             Footer footer = (Footer) obj;
@@ -872,26 +801,23 @@ public class MessageEmbed
                 && Objects.equals(footer.proxyIconUrl, proxyIconUrl));
         }
     }
-    
+
     /**
      * Represents a field in an embed. A single embed contains an array of
      * embed fields, each with a name and value, and a boolean determining if
      * the field can display on the same line as previous fields if there is
      * enough space horizontally.
      *
-     * @since  3.0
      * @author John A. Grosh
+     * @since 3.0
      */
-    public static class Field
-    {
+    public static class Field {
         protected final String name;
         protected final String value;
         protected final boolean inline;
 
-        protected Field(String name, String value, boolean inline, boolean checked)
-        {
-            if (checked)
-            {
+        protected Field(String name, String value, boolean inline, boolean checked) {
+            if (checked) {
                 if (name == null || value == null)
                     throw new IllegalArgumentException("Both Name and Value must be set!");
                 else if (name.length() > TITLE_MAX_LENGTH)
@@ -907,17 +833,14 @@ public class MessageEmbed
                 else
                     this.value = value;
                 this.inline = inline;
-            }
-            else
-            {
+            } else {
                 this.name = name;
                 this.value = value;
                 this.inline = inline;
             }
         }
-        
-        public Field(String name, String value, boolean inline)
-        {
+
+        public Field(String name, String value, boolean inline) {
             this(name, value, inline, true);
         }
 
@@ -926,8 +849,7 @@ public class MessageEmbed
          *
          * @return Possibly-null String containing the name of the field.
          */
-        public String getName()
-        {
+        public String getName() {
             return name;
         }
 
@@ -936,24 +858,21 @@ public class MessageEmbed
          *
          * @return Possibly-null String containing the value (contents) of the field.
          */
-        public String getValue()
-        {
+        public String getValue() {
             return value;
         }
-        
+
         /**
          * If the field is in line.
          *
          * @return true if the field can be in line with other fields, false otherwise.
          */
-        public boolean isInline()
-        {
+        public boolean isInline() {
             return inline;
         }
 
         @Override
-        public boolean equals(Object obj)
-        {
+        public boolean equals(Object obj) {
             if (!(obj instanceof Field))
                 return false;
             final Field field = (Field) obj;

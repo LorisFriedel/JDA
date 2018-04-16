@@ -27,9 +27,10 @@ import java.awt.Color;
 /**
  * Represents a {@link net.dv8tion.jda.core.entities.Guild Guild}'s Role. Used to control permissions for Members.
  */
-public interface Role extends ISnowflake, IMentionable, IPermissionHolder, Comparable<Role>
-{
-    /** Used to keep consistency between color values used in the API */
+public interface Role extends ISnowflake, IMentionable, IPermissionHolder, Comparable<Role> {
+    /**
+     * Used to keep consistency between color values used in the API
+     */
     int DEFAULT_COLOR_RAW = 0x1FFFFFFF; // java.awt.Color fills the MSB with FF, we just use 1F to provide better consistency
 
     /**
@@ -94,8 +95,7 @@ public interface Role extends ISnowflake, IMentionable, IPermissionHolder, Compa
      * The color this {@link net.dv8tion.jda.core.entities.Role Role} is displayed in.
      *
      * @return Color value of Role-color
-     *
-     * @see    #getColorRaw()
+     * @see #getColorRaw()
      */
     Color getColor();
 
@@ -113,7 +113,6 @@ public interface Role extends ISnowflake, IMentionable, IPermissionHolder, Compa
      *
      * @return True, if and only if this {@link net.dv8tion.jda.core.entities.Role Role} is the public role
      * for the {@link net.dv8tion.jda.core.entities.Guild Guild} provided by {@link #getGuild()}.
-     *
      * @see net.dv8tion.jda.core.entities.Guild#getPublicRole()
      */
     boolean isPublicRole();
@@ -122,15 +121,10 @@ public interface Role extends ISnowflake, IMentionable, IPermissionHolder, Compa
      * Whether this Role can interact with the specified Role.
      * (move/manage/etc.)
      *
-     * @param  role
-     *         The not-null role to compare to
-     *
-     * @throws IllegalArgumentException
-     *         if the provided Role is null or not from the same {@link net.dv8tion.jda.core.entities.Guild Guild}
-     *
+     * @param role The not-null role to compare to
      * @return True, if this role can interact with the specified role
-     *
-     * @see    net.dv8tion.jda.core.utils.PermissionUtil#canInteract(Role, Role)
+     * @throws IllegalArgumentException if the provided Role is null or not from the same {@link net.dv8tion.jda.core.entities.Guild Guild}
+     * @see net.dv8tion.jda.core.utils.PermissionUtil#canInteract(Role, Role)
      */
     boolean canInteract(Role role);
 
@@ -153,28 +147,22 @@ public interface Role extends ISnowflake, IMentionable, IPermissionHolder, Compa
      * <p>Possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} caused by
      * the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} include the following:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The role could not be created due to a permission discrepancy</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The role could not be created due to a permission discrepancy</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>We were removed from the Guild before finishing the task</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>We were removed from the Guild before finishing the task</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MAX_ROLES_PER_GUILD MAX_ROLES_PER_GUILD}
-     *     <br>There are too many roles in this Guild</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MAX_ROLES_PER_GUILD MAX_ROLES_PER_GUILD}
+     * <br>There are too many roles in this Guild</li>
      * </ul>
      *
-     * @param  guild
-     *         The {@link net.dv8tion.jda.core.entities.Role Role} that should be copied
-     *
-     * @throws net.dv8tion.jda.core.exceptions.PermissionException
-     *         If the logged in account does not have the {@link net.dv8tion.jda.core.Permission#MANAGE_ROLES} Permission and every Permission the provided Role has
-     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException
-     *         If the guild is temporarily not {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
-     * @throws java.lang.IllegalArgumentException
-     *         If the specified guild is {@code null}
-     *
+     * @param guild The {@link net.dv8tion.jda.core.entities.Role Role} that should be copied
      * @return {@link net.dv8tion.jda.core.requests.restaction.RoleAction RoleAction}
-     *         <br>RoleAction with already copied values from the specified {@link net.dv8tion.jda.core.entities.Role Role}
+     * <br>RoleAction with already copied values from the specified {@link net.dv8tion.jda.core.entities.Role Role}
+     * @throws net.dv8tion.jda.core.exceptions.PermissionException       If the logged in account does not have the {@link net.dv8tion.jda.core.Permission#MANAGE_ROLES} Permission and every Permission the provided Role has
+     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException If the guild is temporarily not {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
+     * @throws java.lang.IllegalArgumentException                        If the specified guild is {@code null}
      */
     @CheckReturnValue
     RoleAction createCopy(Guild guild);
@@ -191,27 +179,23 @@ public interface Role extends ISnowflake, IMentionable, IPermissionHolder, Compa
      * <p>Possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} caused by
      * the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} include the following:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The role could not be created due to a permission discrepancy</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The role could not be created due to a permission discrepancy</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>We were removed from the Guild before finishing the task</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>We were removed from the Guild before finishing the task</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MAX_ROLES_PER_GUILD MAX_ROLES_PER_GUILD}
-     *     <br>There are too many roles in this Guild</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MAX_ROLES_PER_GUILD MAX_ROLES_PER_GUILD}
+     * <br>There are too many roles in this Guild</li>
      * </ul>
      *
-     * @throws net.dv8tion.jda.core.exceptions.PermissionException
-     *         If the logged in account does not have the {@link net.dv8tion.jda.core.Permission#MANAGE_ROLES} Permission and every Permission the provided Role has
-     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException
-     *         If the guild is temporarily not {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
-     *
      * @return {@link net.dv8tion.jda.core.requests.restaction.RoleAction RoleAction}
-     *         <br>RoleAction with already copied values from the specified {@link net.dv8tion.jda.core.entities.Role Role}
+     * <br>RoleAction with already copied values from the specified {@link net.dv8tion.jda.core.entities.Role Role}
+     * @throws net.dv8tion.jda.core.exceptions.PermissionException       If the logged in account does not have the {@link net.dv8tion.jda.core.Permission#MANAGE_ROLES} Permission and every Permission the provided Role has
+     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException If the guild is temporarily not {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
      */
     @CheckReturnValue
-    default RoleAction createCopy()
-    {
+    default RoleAction createCopy() {
         return createCopy(getGuild());
     }
 
@@ -220,12 +204,9 @@ public interface Role extends ISnowflake, IMentionable, IPermissionHolder, Compa
      * In the RoleManager, you can modify all its values.
      * <br>You modify multiple fields in one request by chaining setters before calling {@link net.dv8tion.jda.core.requests.RestAction#queue() RestAction.queue()}.
      *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If the currently logged in account does not have {@link net.dv8tion.jda.core.Permission#MANAGE_ROLES Permission.MANAGE_ROLES}
-     * @throws net.dv8tion.jda.core.exceptions.HierarchyException
-     *         If the currently logged in account does not have the required position to modify this role
-     *
      * @return The RoleManager of this Role
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If the currently logged in account does not have {@link net.dv8tion.jda.core.Permission#MANAGE_ROLES Permission.MANAGE_ROLES}
+     * @throws net.dv8tion.jda.core.exceptions.HierarchyException              If the currently logged in account does not have the required position to modify this role
      */
     RoleManager getManager();
 
@@ -237,9 +218,7 @@ public interface Role extends ISnowflake, IMentionable, IPermissionHolder, Compa
      * It requires to call an {@code update()} method.
      *
      * @return The {@link net.dv8tion.jda.core.managers.RoleManagerUpdatable RoleManagerUpdatable} for this Role
-     *
-     * @deprecated
-     *         Use {@link #getManager()} instead
+     * @deprecated Use {@link #getManager()} instead
      */
     @Deprecated
     RoleManagerUpdatable getManagerUpdatable();
@@ -249,23 +228,20 @@ public interface Role extends ISnowflake, IMentionable, IPermissionHolder, Compa
      *
      * <p>Possible ErrorResponses include:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_ROLE}
-     *     <br>If the the role was already deleted.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_ROLE}
+     * <br>If the the role was already deleted.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The send request was attempted after the account lost
-     *         {@link net.dv8tion.jda.core.Permission#MANAGE_ROLES Permission.MANAGE_ROLES} in the channel.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The send request was attempted after the account lost
+     * {@link net.dv8tion.jda.core.Permission#MANAGE_ROLES Permission.MANAGE_ROLES} in the channel.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>If we were removed from the Guild</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>If we were removed from the Guild</li>
      * </ul>
      *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If we don't have the permission to {@link net.dv8tion.jda.core.Permission#MANAGE_ROLES MANAGE_ROLES}
-     * @throws net.dv8tion.jda.core.exceptions.HierarchyException
-     *         If the role is too high in the role hierarchy to be deleted
-     *
      * @return {@link net.dv8tion.jda.core.requests.RestAction}
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If we don't have the permission to {@link net.dv8tion.jda.core.Permission#MANAGE_ROLES MANAGE_ROLES}
+     * @throws net.dv8tion.jda.core.exceptions.HierarchyException              If the role is too high in the role hierarchy to be deleted
      */
     @CheckReturnValue
     AuditableRestAction<Void> delete();

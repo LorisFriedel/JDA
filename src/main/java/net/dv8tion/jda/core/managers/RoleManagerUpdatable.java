@@ -51,8 +51,7 @@ import java.awt.Color;
  * must be more powerful according to Discord hierarchy rules (positional strength). [ee {@link Role#canInteract(net.dv8tion.jda.core.entities.Role) Role.canInteract(Role)}]
  */
 @Deprecated
-public class RoleManagerUpdatable
-{
+public class RoleManagerUpdatable {
     protected final Role role;
 
     protected RoleField<String> name;
@@ -64,11 +63,9 @@ public class RoleManagerUpdatable
     /**
      * Creates a new RoleManagerUpdatable instance
      *
-     * @param role
-     *        The {@link net.dv8tion.jda.core.entities.Role Role} to manage
+     * @param role The {@link net.dv8tion.jda.core.entities.Role Role} to manage
      */
-    public RoleManagerUpdatable(Role role)
-    {
+    public RoleManagerUpdatable(Role role) {
         this.role = role;
         setupFields();
     }
@@ -78,8 +75,7 @@ public class RoleManagerUpdatable
      *
      * @return the corresponding JDA instance
      */
-    public JDA getJDA()
-    {
+    public JDA getJDA() {
         return role.getJDA();
     }
 
@@ -90,8 +86,7 @@ public class RoleManagerUpdatable
      *
      * @return The parent {@link net.dv8tion.jda.core.entities.Guild Guild}
      */
-    public Guild getGuild()
-    {
+    public Guild getGuild() {
         return role.getGuild();
     }
 
@@ -101,8 +96,7 @@ public class RoleManagerUpdatable
      *
      * @return The target Role
      */
-    public Role getRole()
-    {
+    public Role getRole() {
         return role;
     }
 
@@ -119,8 +113,7 @@ public class RoleManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.RoleField RoleField} - Type: {@code String}
      */
-    public RoleField<String> getNameField()
-    {
+    public RoleField<String> getNameField() {
         return name;
     }
 
@@ -134,8 +127,7 @@ public class RoleManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.RoleField RoleField} - Type: {@link java.awt.Color Color}
      */
-    public RoleField<Color> getColorField()
-    {
+    public RoleField<Color> getColorField() {
         return color;
     }
 
@@ -152,8 +144,7 @@ public class RoleManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.RoleField RoleField} - Type: {@code Boolean}
      */
-    public RoleField<Boolean> getHoistedField()
-    {
+    public RoleField<Boolean> getHoistedField() {
         return hoisted;
     }
 
@@ -170,8 +161,7 @@ public class RoleManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.RoleField RoleField} - Type: {@code Boolean}
      */
-    public RoleField<Boolean> getMentionableField()
-    {
+    public RoleField<Boolean> getMentionableField() {
         return mentionable;
     }
 
@@ -188,8 +178,7 @@ public class RoleManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.PermissionField PermissionField}
      */
-    public PermissionField getPermissionField()
-    {
+    public PermissionField getPermissionField() {
         return permissions;
     }
 
@@ -217,29 +206,25 @@ public class RoleManagerUpdatable
      * <p>Possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} for this
      * update include the following:
      * <ul>
-     *      <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_ROLE UNKNOWN_ROLE}
-     *      <br>If the Role was deleted before finishing the task</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_ROLE UNKNOWN_ROLE}
+     * <br>If the Role was deleted before finishing the task</li>
      *
-     *      <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *      <br>If the currently logged in account was removed from the Guild before finishing the task</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>If the currently logged in account was removed from the Guild before finishing the task</li>
      *
-     *      <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *      <br>If the currently logged in account loses the {@link net.dv8tion.jda.core.Permission#MANAGE_ROLES MANAGE_ROLES Permission} or lost
-     *          positional power before finishing the task</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>If the currently logged in account loses the {@link net.dv8tion.jda.core.Permission#MANAGE_ROLES MANAGE_ROLES Permission} or lost
+     * positional power before finishing the task</li>
      * </ul>
      *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If the currently logged in account does not have the Permission {@link net.dv8tion.jda.core.Permission#MANAGE_ROLES MANAGE_ROLES}
-     * @throws net.dv8tion.jda.core.exceptions.HierarchyException
-     *         If the currently logged in account does not meet the required hierarchy position
-     *         to {@link Role#canInteract(net.dv8tion.jda.core.entities.Role) interact} with this Role
-     *
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
-     *         <br>Applies all changes that have been made in a single api-call.
+     * <br>Applies all changes that have been made in a single api-call.
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If the currently logged in account does not have the Permission {@link net.dv8tion.jda.core.Permission#MANAGE_ROLES MANAGE_ROLES}
+     * @throws net.dv8tion.jda.core.exceptions.HierarchyException              If the currently logged in account does not meet the required hierarchy position
+     *                                                                         to {@link Role#canInteract(net.dv8tion.jda.core.entities.Role) interact} with this Role
      */
     @CheckReturnValue
-    public AuditableRestAction<Void> update()
-    {
+    public AuditableRestAction<Void> update() {
         checkPermission(Permission.MANAGE_ROLES);
         checkPosition();
 
@@ -249,24 +234,22 @@ public class RoleManagerUpdatable
         //TODO: check if all of this is *actually* needed.
         JSONObject body = new JSONObject().put("name", role.getName());
 
-        if(name.shouldUpdate())
+        if (name.shouldUpdate())
             body.put("name", name.getValue());
-        if(color.shouldUpdate())
+        if (color.shouldUpdate())
             body.put("color", color.getValue() == null ? 0 : color.getValue().getRGB() & 0xFFFFFF);
-        if(hoisted.shouldUpdate())
+        if (hoisted.shouldUpdate())
             body.put("hoist", hoisted.getValue().booleanValue());
-        if(mentionable.shouldUpdate())
+        if (mentionable.shouldUpdate())
             body.put("mentionable", mentionable.getValue().booleanValue());
         if (permissions.shouldUpdate())
             body.put("permissions", permissions.getValue());
 
         reset();
         Route.CompiledRoute route = Route.Roles.MODIFY_ROLE.compile(getGuild().getId(), role.getId());
-        return new AuditableRestAction<Void>(getJDA(), route, body)
-        {
+        return new AuditableRestAction<Void>(getJDA(), route, body) {
             @Override
-            protected void handleResponse(Response response, Request<Void> request)
-            {
+            protected void handleResponse(Response response, Request<Void> request) {
                 if (response.isOk())
                     request.onSuccess(null);
                 else
@@ -275,45 +258,37 @@ public class RoleManagerUpdatable
         };
     }
 
-    protected boolean needsUpdate()
-    {
+    protected boolean needsUpdate() {
         return name.shouldUpdate()
-                || color.shouldUpdate()
-                || hoisted.shouldUpdate()
-                || mentionable.shouldUpdate()
-                || permissions.shouldUpdate();
+            || color.shouldUpdate()
+            || hoisted.shouldUpdate()
+            || mentionable.shouldUpdate()
+            || permissions.shouldUpdate();
     }
 
-    protected void checkPermission(Permission perm)
-    {
+    protected void checkPermission(Permission perm) {
         if (!getGuild().getSelfMember().hasPermission(perm))
             throw new InsufficientPermissionException(perm);
     }
 
-    protected void checkPosition()
-    {
-        if(!getGuild().getSelfMember().canInteract(role))
+    protected void checkPosition() {
+        if (!getGuild().getSelfMember().canInteract(role))
             throw new HierarchyException("Can't modify role >= highest self-role");
     }
 
-    protected void setupFields()
-    {
-        this.name = new RoleField<String>(this, role::getName)
-        {
+    protected void setupFields() {
+        this.name = new RoleField<String>(this, role::getName) {
             @Override
-            public void checkValue(String value)
-            {
+            public void checkValue(String value) {
                 Checks.notNull(value, "name");
                 if (value.isEmpty() || value.length() > 32)
                     throw new IllegalArgumentException("Provided role name must be 1 to 32 characters in length");
             }
         };
 
-        this.color = new RoleField<Color>(this, role::getColor)
-        {
+        this.color = new RoleField<Color>(this, role::getColor) {
             @Override
-            public RoleManagerUpdatable setValue(Color color)
-            {
+            public RoleManagerUpdatable setValue(Color color) {
                 if (color != null && color.getRGB() == 0)
                     color = null;
 
@@ -322,23 +297,20 @@ public class RoleManagerUpdatable
             }
 
             @Override
-            public void checkValue(Color value) {}
+            public void checkValue(Color value) {
+            }
         };
 
-        this.hoisted = new RoleField<Boolean>(this, role::isHoisted)
-        {
+        this.hoisted = new RoleField<Boolean>(this, role::isHoisted) {
             @Override
-            public void checkValue(Boolean value)
-            {
+            public void checkValue(Boolean value) {
                 Checks.notNull(value, "hoisted Boolean");
             }
         };
 
-        this.mentionable = new RoleField<Boolean>(this, role::isMentionable)
-        {
+        this.mentionable = new RoleField<Boolean>(this, role::isMentionable) {
             @Override
-            public void checkValue(Boolean value)
-            {
+            public void checkValue(Boolean value) {
                 Checks.notNull(value, "mentionable Boolean");
             }
         };

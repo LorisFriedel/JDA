@@ -26,12 +26,10 @@ import net.dv8tion.jda.core.entities.Guild;
  *
  * <p>Identifier: {@code verification_level}
  */
-public class GuildUpdateVerificationLevelEvent extends GenericGuildUpdateEvent<Guild.VerificationLevel>
-{
+public class GuildUpdateVerificationLevelEvent extends GenericGuildUpdateEvent<Guild.VerificationLevel> {
     public static final String IDENTIFIER = "verification_level";
 
-    public GuildUpdateVerificationLevelEvent(JDA api, long responseNumber, Guild guild, Guild.VerificationLevel oldVerificationLevel)
-    {
+    public GuildUpdateVerificationLevelEvent(JDA api, long responseNumber, Guild guild, Guild.VerificationLevel oldVerificationLevel) {
         super(api, responseNumber, guild, oldVerificationLevel, guild.getVerificationLevel(), IDENTIFIER);
     }
 
@@ -40,8 +38,7 @@ public class GuildUpdateVerificationLevelEvent extends GenericGuildUpdateEvent<G
      *
      * @return The old VerificationLevel
      */
-    public Guild.VerificationLevel getOldVerificationLevel()
-    {
+    public Guild.VerificationLevel getOldVerificationLevel() {
         return getOldValue();
     }
 
@@ -50,8 +47,7 @@ public class GuildUpdateVerificationLevelEvent extends GenericGuildUpdateEvent<G
      *
      * @return The new VerificationLevel
      */
-    public Guild.VerificationLevel getNewVerificationLevel()
-    {
+    public Guild.VerificationLevel getNewVerificationLevel() {
         return getNewValue();
     }
 }

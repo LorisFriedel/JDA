@@ -26,13 +26,11 @@ import java.time.OffsetDateTime;
  *
  * <p>Can be used to retrieve the User who started typing and when and in which MessageChannel they started typing.
  */
-public class UserTypingEvent extends GenericUserEvent
-{
+public class UserTypingEvent extends GenericUserEvent {
     private final MessageChannel channel;
     private final OffsetDateTime timestamp;
 
-    public UserTypingEvent(JDA api, long responseNumber, User user, MessageChannel channel, OffsetDateTime timestamp)
-    {
+    public UserTypingEvent(JDA api, long responseNumber, User user, MessageChannel channel, OffsetDateTime timestamp) {
         super(api, responseNumber, user);
         this.channel = channel;
         this.timestamp = timestamp;
@@ -43,8 +41,7 @@ public class UserTypingEvent extends GenericUserEvent
      *
      * @return The time when the typing started
      */
-    public OffsetDateTime getTimestamp()
-    {
+    public OffsetDateTime getTimestamp() {
         return timestamp;
     }
 
@@ -53,8 +50,7 @@ public class UserTypingEvent extends GenericUserEvent
      *
      * @return The channel
      */
-    public MessageChannel getChannel()
-    {
+    public MessageChannel getChannel() {
         return channel;
     }
 
@@ -62,26 +58,20 @@ public class UserTypingEvent extends GenericUserEvent
      * Whether this was in a private channel
      *
      * @return True, if this was in a private channel
-     *
-     * @deprecated
-     *         Use {@link #isFromType(net.dv8tion.jda.core.entities.ChannelType)} instead
+     * @deprecated Use {@link #isFromType(net.dv8tion.jda.core.entities.ChannelType)} instead
      */
     @Deprecated
-    public boolean isPrivate()
-    {
+    public boolean isPrivate() {
         return isFromType(ChannelType.PRIVATE);
     }
 
     /**
      * Whether the user started typing in a channel of the specified type.
      *
-     * @param  type
-     *         {@link net.dv8tion.jda.core.entities.ChannelType ChannelType}
-     *
+     * @param type {@link net.dv8tion.jda.core.entities.ChannelType ChannelType}
      * @return True, if the user started typing in a channel of the specified type
      */
-    public boolean isFromType(ChannelType type)
-    {
+    public boolean isFromType(ChannelType type) {
         return channel.getType() == type;
     }
 
@@ -90,8 +80,7 @@ public class UserTypingEvent extends GenericUserEvent
      *
      * @return The {@link net.dv8tion.jda.core.entities.ChannelType ChannelType}
      */
-    public ChannelType getType()
-    {
+    public ChannelType getType() {
         return channel.getType();
     }
 
@@ -101,8 +90,7 @@ public class UserTypingEvent extends GenericUserEvent
      *
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
      */
-    public PrivateChannel getPrivateChannel()
-    {
+    public PrivateChannel getPrivateChannel() {
         return isFromType(ChannelType.PRIVATE) ? (PrivateChannel) channel : null;
     }
 
@@ -112,8 +100,7 @@ public class UserTypingEvent extends GenericUserEvent
      *
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
      */
-    public TextChannel getTextChannel()
-    {
+    public TextChannel getTextChannel() {
         return isFromType(ChannelType.TEXT) ? (TextChannel) channel : null;
     }
 
@@ -123,8 +110,7 @@ public class UserTypingEvent extends GenericUserEvent
      *
      * @return Possibly-null {@link net.dv8tion.jda.client.entities.Group Group}
      */
-    public Group getGroup()
-    {
+    public Group getGroup() {
         return isFromType(ChannelType.GROUP) ? (Group) channel : null;
     }
 
@@ -134,8 +120,7 @@ public class UserTypingEvent extends GenericUserEvent
      *
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.Guild Guild}
      */
-    public Guild getGuild()
-    {
+    public Guild getGuild() {
         return isFromType(ChannelType.TEXT) ? getTextChannel().getGuild() : null;
     }
 
@@ -144,8 +129,7 @@ public class UserTypingEvent extends GenericUserEvent
      *
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.Member Member}
      */
-    public Member getMember()
-    {
+    public Member getMember() {
         return isFromType(ChannelType.TEXT) ? getGuild().getMember(getUser()) : null;
     }
 }

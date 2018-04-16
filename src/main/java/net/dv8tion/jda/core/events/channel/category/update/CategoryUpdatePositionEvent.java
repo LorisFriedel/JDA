@@ -26,12 +26,10 @@ import net.dv8tion.jda.core.entities.Category;
  *
  * <p>Identifier: {@code position}
  */
-public class CategoryUpdatePositionEvent extends GenericCategoryUpdateEvent<Integer>
-{
+public class CategoryUpdatePositionEvent extends GenericCategoryUpdateEvent<Integer> {
     public static final String IDENTIFIER = "position";
 
-    public CategoryUpdatePositionEvent(JDA api, long responseNumber, Category category, int oldPosition)
-    {
+    public CategoryUpdatePositionEvent(JDA api, long responseNumber, Category category, int oldPosition) {
         super(api, responseNumber, category, oldPosition, category.getPositionRaw(), IDENTIFIER);
     }
 
@@ -40,8 +38,7 @@ public class CategoryUpdatePositionEvent extends GenericCategoryUpdateEvent<Inte
      *
      * @return The previous position
      */
-    public int getOldPosition()
-    {
+    public int getOldPosition() {
         return getOldValue();
     }
 
@@ -50,8 +47,7 @@ public class CategoryUpdatePositionEvent extends GenericCategoryUpdateEvent<Inte
      *
      * @return The new position
      */
-    public int getNewPosition()
-    {
+    public int getNewPosition() {
         return getNewValue();
     }
 }

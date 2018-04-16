@@ -29,12 +29,10 @@ import net.dv8tion.jda.core.entities.VoiceChannel;
  *
  * @see net.dv8tion.jda.core.events.guild.voice.GuildVoiceUpdateEvent GuildVoiceUpdateEvent
  */
-public class GuildVoiceMoveEvent extends GuildVoiceUpdateEvent
-{
+public class GuildVoiceMoveEvent extends GuildVoiceUpdateEvent {
     protected final VoiceChannel channelJoined;
 
-    public GuildVoiceMoveEvent(JDA api, long responseNumber, Member member, VoiceChannel channelLeft)
-    {
+    public GuildVoiceMoveEvent(JDA api, long responseNumber, Member member, VoiceChannel channelLeft) {
         super(api, responseNumber, member, channelLeft);
         this.channelJoined = member.getVoiceState().getChannel();
     }
@@ -44,8 +42,7 @@ public class GuildVoiceMoveEvent extends GuildVoiceUpdateEvent
      *
      * @return the {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel}
      */
-    public VoiceChannel getChannelJoined()
-    {
+    public VoiceChannel getChannelJoined() {
         return channelJoined;
     }
 }

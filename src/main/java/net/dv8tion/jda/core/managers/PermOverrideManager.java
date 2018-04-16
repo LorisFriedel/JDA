@@ -46,13 +46,18 @@ import java.util.Collection;
  *
  * @see net.dv8tion.jda.core.entities.PermissionOverride#getManager()
  */
-public class PermOverrideManager extends ManagerBase
-{
-    /** Used to reset the denied field */
-    public static final long DENIED      = 0x1;
-    /** Used to reset the granted field */
-    public static final long ALLOWED     = 0x2;
-    /** Used to reset <b>all</b> permissions to their original value */
+public class PermOverrideManager extends ManagerBase {
+    /**
+     * Used to reset the denied field
+     */
+    public static final long DENIED = 0x1;
+    /**
+     * Used to reset the granted field
+     */
+    public static final long ALLOWED = 0x2;
+    /**
+     * Used to reset <b>all</b> permissions to their original value
+     */
     public static final long PERMISSIONS = 0x3;
 
     protected final PermissionOverride override;
@@ -63,16 +68,14 @@ public class PermOverrideManager extends ManagerBase
     /**
      * Creates a new PermOverrideManager instance
      *
-     * @param override
-     *        The {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride} to manage
+     * @param override The {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride} to manage
      */
-    public PermOverrideManager(PermissionOverride override)
-    {
+    public PermOverrideManager(PermissionOverride override) {
         super(override.getJDA(),
-              Route.Channels.MODIFY_PERM_OVERRIDE.compile(
-                  override.getChannel().getId(),
-                  override.isMemberOverride() ? override.getMember().getUser().getId()
-                                              : override.getRole().getId()));
+            Route.Channels.MODIFY_PERM_OVERRIDE.compile(
+                override.getChannel().getId(),
+                override.isMemberOverride() ? override.getMember().getUser().getId()
+                    : override.getRole().getId()));
         this.override = override;
         this.allowed = override.getAllowedRaw();
         this.denied = override.getDeniedRaw();
@@ -80,8 +83,7 @@ public class PermOverrideManager extends ManagerBase
             checkPermissions();
     }
 
-    private void setupValues()
-    {
+    private void setupValues() {
         if (!shouldUpdate(ALLOWED))
             this.allowed = override.getAllowedRaw();
         if (!shouldUpdate(DENIED))
@@ -95,8 +97,7 @@ public class PermOverrideManager extends ManagerBase
      *
      * @return The parent {@link net.dv8tion.jda.core.entities.Guild Guild}
      */
-    public Guild getGuild()
-    {
+    public Guild getGuild() {
         return override.getGuild();
     }
 
@@ -107,8 +108,7 @@ public class PermOverrideManager extends ManagerBase
      *
      * @return The parent {@link net.dv8tion.jda.core.entities.Channel Channel}
      */
-    public Channel getChannel()
-    {
+    public Channel getChannel() {
         return override.getChannel();
     }
 
@@ -118,8 +118,7 @@ public class PermOverrideManager extends ManagerBase
      *
      * @return The target {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
      */
-    public PermissionOverride getPermissionOverride()
-    {
+    public PermissionOverride getPermissionOverride() {
         return override;
     }
 
@@ -130,20 +129,17 @@ public class PermOverrideManager extends ManagerBase
      *
      * <p><b>Flag Constants:</b>
      * <ul>
-     *     <li>{@link #DENIED}</li>
-     *     <li>{@link #ALLOWED}</li>
-     *     <li>{@link #PERMISSIONS}</li>
+     * <li>{@link #DENIED}</li>
+     * <li>{@link #ALLOWED}</li>
+     * <li>{@link #PERMISSIONS}</li>
      * </ul>
      *
-     * @param  fields
-     *         Integer value containing the flags to reset.
-     *
+     * @param fields Integer value containing the flags to reset.
      * @return PermOverrideManager for chaining convenience
      */
     @Override
     @CheckReturnValue
-    public PermOverrideManager reset(long fields)
-    {
+    public PermOverrideManager reset(long fields) {
         super.reset(fields);
         return this;
     }
@@ -155,20 +151,17 @@ public class PermOverrideManager extends ManagerBase
      *
      * <p><b>Flag Constants:</b>
      * <ul>
-     *     <li>{@link #DENIED}</li>
-     *     <li>{@link #ALLOWED}</li>
-     *     <li>{@link #PERMISSIONS}</li>
+     * <li>{@link #DENIED}</li>
+     * <li>{@link #ALLOWED}</li>
+     * <li>{@link #PERMISSIONS}</li>
      * </ul>
      *
-     * @param  fields
-     *         Integer values containing the flags to reset.
-     *
+     * @param fields Integer values containing the flags to reset.
      * @return PermOverrideManager for chaining convenience
      */
     @Override
     @CheckReturnValue
-    public PermOverrideManager reset(long... fields)
-    {
+    public PermOverrideManager reset(long... fields) {
         super.reset(fields);
         return this;
     }
@@ -180,8 +173,7 @@ public class PermOverrideManager extends ManagerBase
      */
     @Override
     @CheckReturnValue
-    public PermOverrideManager reset()
-    {
+    public PermOverrideManager reset() {
         super.reset();
         return this;
     }
@@ -190,14 +182,11 @@ public class PermOverrideManager extends ManagerBase
      * Grants the provided {@link net.dv8tion.jda.core.Permission Permissions} bits
      * to the selected {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}.
      *
-     * @param  permissions
-     *         The permissions to grant to the selected {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
-     *
+     * @param permissions The permissions to grant to the selected {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
      * @return PermOverrideManager for chaining convenience
      */
     @CheckReturnValue
-    public PermOverrideManager grant(long permissions)
-    {
+    public PermOverrideManager grant(long permissions) {
         if (permissions == 0)
             return this;
         setupValues();
@@ -211,19 +200,13 @@ public class PermOverrideManager extends ManagerBase
      * Grants the provided {@link net.dv8tion.jda.core.Permission Permissions}
      * to the selected {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}.
      *
-     * @param  permissions
-     *         The permissions to grant to the selected {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
-     *
-     * @throws IllegalArgumentException
-     *         If any of the provided Permissions is {@code null}
-     *
+     * @param permissions The permissions to grant to the selected {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
      * @return PermOverrideManager for chaining convenience
-     *
-     * @see    net.dv8tion.jda.core.Permission#getRaw(net.dv8tion.jda.core.Permission...) Permission.getRaw(Permission...)
+     * @throws IllegalArgumentException If any of the provided Permissions is {@code null}
+     * @see net.dv8tion.jda.core.Permission#getRaw(net.dv8tion.jda.core.Permission...) Permission.getRaw(Permission...)
      */
     @CheckReturnValue
-    public PermOverrideManager grant(Permission... permissions)
-    {
+    public PermOverrideManager grant(Permission... permissions) {
         Checks.notNull(permissions, "Permissions");
         return grant(Permission.getRaw(permissions));
     }
@@ -232,20 +215,14 @@ public class PermOverrideManager extends ManagerBase
      * Grants the provided {@link net.dv8tion.jda.core.Permission Permissions}
      * to the selected {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}.
      *
-     * @param  permissions
-     *         The permissions to grant to the selected {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
-     *
-     * @throws IllegalArgumentException
-     *         If any of the provided Permissions is {@code null}
-     *
+     * @param permissions The permissions to grant to the selected {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
      * @return PermOverrideManager for chaining convenience
-     *
-     * @see    java.util.EnumSet EnumSet
-     * @see    net.dv8tion.jda.core.Permission#getRaw(java.util.Collection) Permission.getRaw(Collection)
+     * @throws IllegalArgumentException If any of the provided Permissions is {@code null}
+     * @see java.util.EnumSet EnumSet
+     * @see net.dv8tion.jda.core.Permission#getRaw(java.util.Collection) Permission.getRaw(Collection)
      */
     @CheckReturnValue
-    public PermOverrideManager grant(Collection<Permission> permissions)
-    {
+    public PermOverrideManager grant(Collection<Permission> permissions) {
         return grant(Permission.getRaw(permissions));
     }
 
@@ -253,14 +230,11 @@ public class PermOverrideManager extends ManagerBase
      * Denies the provided {@link net.dv8tion.jda.core.Permission Permissions} bits
      * from the selected {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}.
      *
-     * @param  permissions
-     *         The permissions to deny from the selected {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
-     *
+     * @param permissions The permissions to deny from the selected {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
      * @return PermOverrideManager for chaining convenience
      */
     @CheckReturnValue
-    public PermOverrideManager deny(long permissions)
-    {
+    public PermOverrideManager deny(long permissions) {
         if (permissions == 0)
             return this;
         setupValues();
@@ -274,19 +248,13 @@ public class PermOverrideManager extends ManagerBase
      * Denies the provided {@link net.dv8tion.jda.core.Permission Permissions}
      * from the selected {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}.
      *
-     * @param  permissions
-     *         The permissions to deny from the selected {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
-     *
-     * @throws IllegalArgumentException
-     *         If any of the provided Permissions is {@code null}
-     *
+     * @param permissions The permissions to deny from the selected {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
      * @return PermOverrideManager for chaining convenience
-     *
-     * @see    net.dv8tion.jda.core.Permission#getRaw(net.dv8tion.jda.core.Permission...) Permission.getRaw(Permission...)
+     * @throws IllegalArgumentException If any of the provided Permissions is {@code null}
+     * @see net.dv8tion.jda.core.Permission#getRaw(net.dv8tion.jda.core.Permission...) Permission.getRaw(Permission...)
      */
     @CheckReturnValue
-    public PermOverrideManager deny(Permission... permissions)
-    {
+    public PermOverrideManager deny(Permission... permissions) {
         Checks.notNull(permissions, "Permissions");
         return deny(Permission.getRaw(permissions));
     }
@@ -295,20 +263,14 @@ public class PermOverrideManager extends ManagerBase
      * Denies the provided {@link net.dv8tion.jda.core.Permission Permissions}
      * from the selected {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}.
      *
-     * @param  permissions
-     *         The permissions to deny from the selected {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
-     *
-     * @throws IllegalArgumentException
-     *         If any of the provided Permissions is {@code null}
-     *
+     * @param permissions The permissions to deny from the selected {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
      * @return PermOverrideManager for chaining convenience
-     *
-     * @see    java.util.EnumSet EnumSet
-     * @see    net.dv8tion.jda.core.Permission#getRaw(java.util.Collection) Permission.getRaw(Collection)
+     * @throws IllegalArgumentException If any of the provided Permissions is {@code null}
+     * @see java.util.EnumSet EnumSet
+     * @see net.dv8tion.jda.core.Permission#getRaw(java.util.Collection) Permission.getRaw(Collection)
      */
     @CheckReturnValue
-    public PermOverrideManager deny(Collection<Permission> permissions)
-    {
+    public PermOverrideManager deny(Collection<Permission> permissions) {
         return deny(Permission.getRaw(permissions));
     }
 
@@ -317,23 +279,18 @@ public class PermOverrideManager extends ManagerBase
      * from the selected {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}.
      * <br>This will cause the provided Permissions to be inherited
      *
-     * @param  permissions
-     *         The permissions to clear from the selected {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
-     *
+     * @param permissions The permissions to clear from the selected {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
      * @return PermOverrideManager for chaining convenience
      */
     @CheckReturnValue
-    public PermOverrideManager clear(long permissions)
-    {
+    public PermOverrideManager clear(long permissions) {
         setupValues();
-        if ((allowed & permissions) != 0)
-        {
+        if ((allowed & permissions) != 0) {
             this.allowed &= ~permissions;
             this.set |= ALLOWED;
         }
 
-        if ((denied & permissions) != 0)
-        {
+        if ((denied & permissions) != 0) {
             this.denied &= ~permissions;
             this.set |= DENIED;
         }
@@ -346,17 +303,12 @@ public class PermOverrideManager extends ManagerBase
      * from the selected {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}.
      * <br>This will cause the provided Permissions to be inherited
      *
-     * @param  permissions
-     *         The permissions to clear from the selected {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
-     *
-     * @throws IllegalArgumentException
-     *         If any of the provided Permissions is {@code null}
-     *
+     * @param permissions The permissions to clear from the selected {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
      * @return PermOverrideManager for chaining convenience
+     * @throws IllegalArgumentException If any of the provided Permissions is {@code null}
      */
     @CheckReturnValue
-    public PermOverrideManager clear(Permission... permissions)
-    {
+    public PermOverrideManager clear(Permission... permissions) {
         Checks.notNull(permissions, "Permissions");
         return clear(Permission.getRaw(permissions));
     }
@@ -366,26 +318,19 @@ public class PermOverrideManager extends ManagerBase
      * from the selected {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}.
      * <br>This will cause the provided Permissions to be inherited
      *
-     * @param  permissions
-     *         The permissions to clear from the selected {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
-     *
-     * @throws IllegalArgumentException
-     *         If any of the provided Permissions is {@code null}
-     *
+     * @param permissions The permissions to clear from the selected {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
      * @return PermOverrideManager for chaining convenience
-     *
-     * @see    java.util.EnumSet EnumSet
-     * @see    net.dv8tion.jda.core.Permission#getRaw(java.util.Collection) Permission.getRaw(Collection)
+     * @throws IllegalArgumentException If any of the provided Permissions is {@code null}
+     * @see java.util.EnumSet EnumSet
+     * @see net.dv8tion.jda.core.Permission#getRaw(java.util.Collection) Permission.getRaw(Collection)
      */
     @CheckReturnValue
-    public PermOverrideManager clear(Collection<Permission> permissions)
-    {
+    public PermOverrideManager clear(Collection<Permission> permissions) {
         return clear(Permission.getRaw(permissions));
     }
 
     @Override
-    protected RequestBody finalizeData()
-    {
+    protected RequestBody finalizeData() {
         String targetId = override.isMemberOverride() ? override.getMember().getUser().getId() : override.getRole().getId();
         // setup missing values here
         setupValues();
@@ -394,14 +339,13 @@ public class PermOverrideManager extends ManagerBase
                 .put("id", targetId)
                 .put("type", override.isMemberOverride() ? "member" : "role")
                 .put("allow", this.allowed)
-                .put("deny",  this.denied));
+                .put("deny", this.denied));
         reset();
         return data;
     }
 
     @Override
-    protected boolean checkPermissions()
-    {
+    protected boolean checkPermissions() {
         if (!getGuild().getSelfMember().hasPermission(getChannel(), Permission.MANAGE_PERMISSIONS))
             throw new InsufficientPermissionException(Permission.MANAGE_PERMISSIONS);
         return super.checkPermissions();

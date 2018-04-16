@@ -25,16 +25,13 @@ import net.dv8tion.jda.core.requests.WebSocketClient;
 import net.dv8tion.jda.core.utils.MiscUtil;
 import org.json.JSONObject;
 
-public class VoiceServerUpdateHandler extends SocketHandler
-{
-    public VoiceServerUpdateHandler(JDAImpl api)
-    {
+public class VoiceServerUpdateHandler extends SocketHandler {
+    public VoiceServerUpdateHandler(JDAImpl api) {
         super(api);
     }
 
     @Override
-    protected Long handleInternally(JSONObject content)
-    {
+    protected Long handleInternally(JSONObject content) {
         final long guildId = content.getLong("guild_id");
         Guild guild = api.getGuildMap().get(guildId);
         if (guild == null)
@@ -45,8 +42,7 @@ public class VoiceServerUpdateHandler extends SocketHandler
         if (api.getGuildLock().isLocked(guildId))
             return guildId;
 
-        if (content.isNull("endpoint"))
-        {
+        if (content.isNull("endpoint")) {
             //Discord did not provide an endpoint yet, we are to wait until discord has resources to provide
             // an endpoint, which will result in them sending another VOICE_SERVER_UPDATE which we will handle
             // to actually connect to the audio server.
@@ -66,12 +62,11 @@ public class VoiceServerUpdateHandler extends SocketHandler
             //Synchronized to prevent attempts to close while setting up initial objects.
             if (audioManager.isConnected())
                 audioManager.prepareForRegionChange();
-            if (!audioManager.isAttemptingToConnect())
-            {
+            if (!audioManager.isAttemptingToConnect()) {
                 WebSocketClient.LOG.debug(
                     "Received a VOICE_SERVER_UPDATE but JDA is not currently connected nor attempted to connect " +
-                    "to a VoiceChannel. Assuming that this is caused by another client running on this account. " +
-                    "Ignoring the event.");
+                        "to a VoiceChannel. Assuming that this is caused by another client running on this account. " +
+                        "Ignoring the event.");
                 return;
             }
 

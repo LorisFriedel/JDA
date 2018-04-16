@@ -23,10 +23,8 @@ import net.dv8tion.jda.core.entities.Member;
  *
  * <p>Can be used to retrieve members who join a guild.
  */
-public class GuildMemberJoinEvent extends GenericGuildMemberEvent
-{
-    public GuildMemberJoinEvent(JDA api, long responseNumber, Member member)
-    {
+public class GuildMemberJoinEvent extends GenericGuildMemberEvent {
+    public GuildMemberJoinEvent(JDA api, long responseNumber, Member member) {
         super(api, responseNumber, member);
     }
 }

@@ -17,8 +17,7 @@ package net.dv8tion.jda.core.entities;
 
 import net.dv8tion.jda.core.JDA;
 
-public interface VoiceState
-{
+public interface VoiceState {
     /**
      * Returns whether the {@link net.dv8tion.jda.core.entities.Member Member}/{@link net.dv8tion.jda.core.entities.User User}
      * muted themselves.

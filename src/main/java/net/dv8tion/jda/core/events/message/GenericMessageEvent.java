@@ -27,16 +27,14 @@ import net.dv8tion.jda.core.events.Event;
 /**
  * Indicates that a {@link net.dv8tion.jda.core.entities.Message Message} was created/deleted/changed.
  * <br>Every MessageEvent is an instance of this event and can be casted.
- * 
+ *
  * <p>Can be used to detect any MessageEvent.
  */
-public abstract class GenericMessageEvent extends Event
-{
+public abstract class GenericMessageEvent extends Event {
     protected final long messageId;
     protected final MessageChannel channel;
 
-    public GenericMessageEvent(JDA api, long responseNumber, long messageId, MessageChannel channel)
-    {
+    public GenericMessageEvent(JDA api, long responseNumber, long messageId, MessageChannel channel) {
         super(api, responseNumber);
         this.messageId = messageId;
         this.channel = channel;
@@ -47,8 +45,7 @@ public abstract class GenericMessageEvent extends Event
      *
      * @return The MessageChannel
      */
-    public MessageChannel getChannel()
-    {
+    public MessageChannel getChannel() {
         return channel;
     }
 
@@ -57,8 +54,7 @@ public abstract class GenericMessageEvent extends Event
      *
      * @return The id for this message
      */
-    public String getMessageId()
-    {
+    public String getMessageId() {
         return Long.toUnsignedString(messageId);
     }
 
@@ -67,21 +63,17 @@ public abstract class GenericMessageEvent extends Event
      *
      * @return The id for this message
      */
-    public long getMessageIdLong()
-    {
+    public long getMessageIdLong() {
         return messageId;
     }
 
     /**
      * Indicates whether the message is from the specified {@link net.dv8tion.jda.core.entities.ChannelType ChannelType}
      *
-     * @param  type
-     *         The ChannelType
-     *
+     * @param type The ChannelType
      * @return True, if the message is from the specified channel type
      */
-    public boolean isFromType(ChannelType type)
-    {
+    public boolean isFromType(ChannelType type) {
         return channel.getType() == type;
     }
 
@@ -90,8 +82,7 @@ public abstract class GenericMessageEvent extends Event
      *
      * @return The ChannelType
      */
-    public ChannelType getChannelType()
-    {
+    public ChannelType getChannelType() {
         return channel.getType();
     }
 
@@ -101,11 +92,9 @@ public abstract class GenericMessageEvent extends Event
      * this will return {@code null}.
      *
      * @return The Guild the Message was received in or null if not from a TextChannel
-     *
-     * @see    net.dv8tion.jda.core.events.message.GenericMessageEvent#isFromType(ChannelType)
+     * @see net.dv8tion.jda.core.events.message.GenericMessageEvent#isFromType(ChannelType)
      */
-    public Guild getGuild()
-    {
+    public Guild getGuild() {
         return isFromType(ChannelType.TEXT) ? getTextChannel().getGuild() : null;
     }
 
@@ -115,11 +104,9 @@ public abstract class GenericMessageEvent extends Event
      * this will return {@code null}.
      *
      * @return The TextChannel the Message was received in or null if not from a TextChannel
-     *
-     * @see    net.dv8tion.jda.core.events.message.GenericMessageEvent#isFromType(ChannelType)
+     * @see net.dv8tion.jda.core.events.message.GenericMessageEvent#isFromType(ChannelType)
      */
-    public TextChannel getTextChannel()
-    {
+    public TextChannel getTextChannel() {
         return isFromType(ChannelType.TEXT) ? (TextChannel) channel : null;
     }
 
@@ -129,11 +116,9 @@ public abstract class GenericMessageEvent extends Event
      * this will return {@code null}.
      *
      * @return The PrivateChannel the Message was received in or null if not from a PrivateChannel
-     *
-     * @see    net.dv8tion.jda.core.events.message.GenericMessageEvent#isFromType(ChannelType)
+     * @see net.dv8tion.jda.core.events.message.GenericMessageEvent#isFromType(ChannelType)
      */
-    public PrivateChannel getPrivateChannel()
-    {
+    public PrivateChannel getPrivateChannel() {
         return isFromType(ChannelType.PRIVATE) ? (PrivateChannel) channel : null;
     }
 
@@ -143,11 +128,9 @@ public abstract class GenericMessageEvent extends Event
      * this will return {@code null}.
      *
      * @return The Group the Message was received in or null if not from a Group
-     *
-     * @see    net.dv8tion.jda.core.events.message.GenericMessageEvent#isFromType(ChannelType)
+     * @see net.dv8tion.jda.core.events.message.GenericMessageEvent#isFromType(ChannelType)
      */
-    public Group getGroup()
-    {
+    public Group getGroup() {
         return isFromType(ChannelType.GROUP) ? (Group) channel : null;
     }
 }

@@ -23,14 +23,11 @@ import net.dv8tion.jda.core.utils.cache.CacheView;
  * <br>This can be useful to check information such as size without creating
  * an immutable snapshot first.
  */
-public interface ShardCacheView extends CacheView<JDA>
-{
+public interface ShardCacheView extends CacheView<JDA> {
     /**
      * Retrieves the JDA instance represented by the provided shard ID.
      *
-     * @param  id
-     *         The ID of the entity
-     *
+     * @param id The ID of the entity
      * @return Possibly-null entity for the specified shard ID
      */
     JDA getElementById(int id);
@@ -39,17 +36,12 @@ public interface ShardCacheView extends CacheView<JDA>
      * Retrieves the JDA instance represented by the provided shard ID
      * or {@code null} if none of the connected shards match the provided id.
      *
-     * @param  id
-     *         The ID of the shard
-     *
-     * @throws java.lang.NumberFormatException
-     *         If the provided String is {@code null} or
-     *         cannot be resolved to an unsigned int id
-     *
+     * @param id The ID of the shard
      * @return Possibly-null entity for the specified shard ID
+     * @throws java.lang.NumberFormatException If the provided String is {@code null} or
+     *                                         cannot be resolved to an unsigned int id
      */
-    default JDA getElementById(String id)
-    {
+    default JDA getElementById(String id) {
         return getElementById(Integer.parseUnsignedInt(id));
     }
 }

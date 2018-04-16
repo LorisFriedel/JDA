@@ -25,10 +25,8 @@ import net.dv8tion.jda.core.events.message.GenericMessageEvent;
  *
  * <p>Can be used to detect when the reactions of a message are removed by a moderator
  */
-public class MessageReactionRemoveAllEvent extends GenericMessageEvent
-{
-    public MessageReactionRemoveAllEvent(JDA api, long responseNumber, long messageId, MessageChannel channel)
-    {
+public class MessageReactionRemoveAllEvent extends GenericMessageEvent {
+    public MessageReactionRemoveAllEvent(JDA api, long responseNumber, long messageId, MessageChannel channel) {
         super(api, responseNumber, messageId, channel);
     }
 }

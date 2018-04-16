@@ -30,42 +30,32 @@ import net.dv8tion.jda.core.hooks.IEventManager;
 import net.dv8tion.jda.core.requests.WebSocketClient;
 import org.json.JSONObject;
 
-public class MessageCreateHandler extends SocketHandler
-{
-    public MessageCreateHandler(JDAImpl api)
-    {
+public class MessageCreateHandler extends SocketHandler {
+    public MessageCreateHandler(JDAImpl api) {
         super(api);
     }
 
     @Override
-    protected Long handleInternally(JSONObject content)
-    {
+    protected Long handleInternally(JSONObject content) {
         MessageType type = MessageType.fromId(content.getInt("type"));
 
-        if (type == MessageType.UNKNOWN)
-        {
+        if (type == MessageType.UNKNOWN) {
             WebSocketClient.LOG.debug("JDA received a message of unknown type. Type: {}  JSON: {}", type, content);
             return null;
         }
 
         Message message;
-        try
-        {
+        try {
             message = api.getEntityBuilder().createMessage(content, true);
-        }
-        catch (IllegalArgumentException e)
-        {
-            switch (e.getMessage())
-            {
-                case EntityBuilder.MISSING_CHANNEL:
-                {
+        } catch (IllegalArgumentException e) {
+            switch (e.getMessage()) {
+                case EntityBuilder.MISSING_CHANNEL: {
                     final long channelId = content.getLong("channel_id");
                     api.getEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
                     EventCache.LOG.debug("Received a message for a channel that JDA does not currently have cached");
                     return null;
                 }
-                case EntityBuilder.MISSING_USER:
-                {
+                case EntityBuilder.MISSING_USER: {
                     final long authorId = content.getJSONObject("author").getLong("id");
                     api.getEventCache().cache(EventCache.Type.USER, authorId, () -> handle(responseNumber, allContent));
                     EventCache.LOG.debug("Received a message for a user that JDA does not currently have cached");
@@ -77,13 +67,10 @@ public class MessageCreateHandler extends SocketHandler
         }
 
         final IEventManager manager = api.getEventManager();
-        switch (message.getChannelType())
-        {
-            case TEXT:
-            {
+        switch (message.getChannelType()) {
+            case TEXT: {
                 TextChannelImpl channel = (TextChannelImpl) message.getTextChannel();
-                if (api.getGuildLock().isLocked(channel.getGuild().getIdLong()))
-                {
+                if (api.getGuildLock().isLocked(channel.getGuild().getIdLong())) {
                     return channel.getGuild().getIdLong();
                 }
                 channel.setLastMessageId(message.getIdLong());
@@ -93,8 +80,7 @@ public class MessageCreateHandler extends SocketHandler
                         message));
                 break;
             }
-            case PRIVATE:
-            {
+            case PRIVATE: {
                 PrivateChannelImpl channel = (PrivateChannelImpl) message.getPrivateChannel();
                 channel.setLastMessageId(message.getIdLong());
                 manager.handle(
@@ -103,8 +89,7 @@ public class MessageCreateHandler extends SocketHandler
                         message));
                 break;
             }
-            case GROUP:
-            {
+            case GROUP: {
                 GroupImpl channel = (GroupImpl) message.getGroup();
                 channel.setLastMessageId(message.getIdLong());
                 manager.handle(

@@ -22,14 +22,12 @@ import net.dv8tion.jda.core.entities.User;
  * Used to monitor an audio connection, ping, and speaking users.
  * <br>This provides functionality similar to the functionalities present in the Discord client related to an audio connection.
  */
-public interface ConnectionListener
-{
+public interface ConnectionListener {
     /**
      * Called when JDA send a heartbeat packet to Discord and Discord sends an acknowledgement. The time difference
      * between sending and receiving the acknowledgement is calculated as the ping.
      *
-     * @param  ping
-     *         The time, in milliseconds, for round-trip packet travel to discord.
+     * @param ping The time, in milliseconds, for round-trip packet travel to discord.
      */
     void onPing(long ping);
 
@@ -37,8 +35,7 @@ public interface ConnectionListener
      * Called when the status of the audio channel changes. Used to track the connection state of the audio connection
      * for easy debug and status display for clients.
      *
-     * @param  status
-     *         The new {@link net.dv8tion.jda.core.audio.hooks.ConnectionStatus ConnectionStatus} of the audio connection.
+     * @param status The new {@link net.dv8tion.jda.core.audio.hooks.ConnectionStatus ConnectionStatus} of the audio connection.
      */
     void onStatusChange(ConnectionStatus status);
 
@@ -59,10 +56,8 @@ public interface ConnectionListener
      * and once after 3 minutes when they stop talking even though the {@link net.dv8tion.jda.core.audio.AudioReceiveHandler#handleUserAudio(net.dv8tion.jda.core.audio.UserAudio)
      * AudioReceiveHandler.handleUserAudio(UserAudio)} method was fired thousands of times over the course of the 3 minutes.
      *
-     * @param  user
-     *         Never-null {@link net.dv8tion.jda.core.entities.User User} who's talking status has changed.
-     * @param  speaking
-     *         If true, the user has begun transmitting audio.
+     * @param user     Never-null {@link net.dv8tion.jda.core.entities.User User} who's talking status has changed.
+     * @param speaking If true, the user has begun transmitting audio.
      */
     void onUserSpeaking(User user, boolean speaking);
 }

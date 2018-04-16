@@ -25,15 +25,13 @@ import net.dv8tion.jda.core.JDA;
  *
  * <p>Identifier: {@code name}
  */
-public class SelfUpdateNameEvent extends GenericSelfUpdateEvent<String>
-{
+public class SelfUpdateNameEvent extends GenericSelfUpdateEvent<String> {
     public static final String IDENTIFIER = "name";
 
     @Deprecated
     private final String oldDiscriminator;
 
-    public SelfUpdateNameEvent(JDA api, long responseNumber, String oldName, String oldDiscriminator)
-    {
+    public SelfUpdateNameEvent(JDA api, long responseNumber, String oldName, String oldDiscriminator) {
         super(api, responseNumber, oldName, api.getSelfUser().getName(), IDENTIFIER);
         this.oldDiscriminator = oldDiscriminator;
     }
@@ -43,8 +41,7 @@ public class SelfUpdateNameEvent extends GenericSelfUpdateEvent<String>
      *
      * @return The old name
      */
-    public String getOldName()
-    {
+    public String getOldName() {
         return getOldValue();
     }
 
@@ -53,8 +50,7 @@ public class SelfUpdateNameEvent extends GenericSelfUpdateEvent<String>
      *
      * @return The new name
      */
-    public String getNewName()
-    {
+    public String getNewName() {
         return getNewValue();
     }
 
@@ -62,13 +58,10 @@ public class SelfUpdateNameEvent extends GenericSelfUpdateEvent<String>
      * The old discriminator
      *
      * @return The old discriminator
-     *
-     * @deprecated
-     *         Use {@link net.dv8tion.jda.core.events.self.SelfUpdateDiscriminatorEvent SelfUpdateDiscriminatorEvent}
+     * @deprecated Use {@link net.dv8tion.jda.core.events.self.SelfUpdateDiscriminatorEvent SelfUpdateDiscriminatorEvent}
      */
     @Deprecated
-    public String getOldDiscriminator()
-    {
+    public String getOldDiscriminator() {
         return oldDiscriminator;
     }
 }

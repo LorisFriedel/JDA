@@ -25,13 +25,11 @@ import net.dv8tion.jda.core.events.message.guild.GenericGuildMessageEvent;
  *
  * <p>Can be used to detect when a reaction is added or removed in a TextChannel.
  */
-public abstract class GenericGuildMessageReactionEvent extends GenericGuildMessageEvent
-{
+public abstract class GenericGuildMessageReactionEvent extends GenericGuildMessageEvent {
     protected final User issuer;
     protected final MessageReaction reaction;
 
-    public GenericGuildMessageReactionEvent(JDA api, long responseNumber, User user, MessageReaction reaction)
-    {
+    public GenericGuildMessageReactionEvent(JDA api, long responseNumber, User user, MessageReaction reaction) {
         super(api, responseNumber, reaction.getMessageIdLong(), (TextChannel) reaction.getChannel());
         this.issuer = user;
         this.reaction = reaction;
@@ -42,8 +40,7 @@ public abstract class GenericGuildMessageReactionEvent extends GenericGuildMessa
      *
      * @return The reacting user
      */
-    public User getUser()
-    {
+    public User getUser() {
         return issuer;
     }
 
@@ -52,8 +49,7 @@ public abstract class GenericGuildMessageReactionEvent extends GenericGuildMessa
      *
      * @return The member instance for the reacting user
      */
-    public Member getMember()
-    {
+    public Member getMember() {
         return getGuild().getMember(getUser());
     }
 
@@ -62,8 +58,7 @@ public abstract class GenericGuildMessageReactionEvent extends GenericGuildMessa
      *
      * @return The message reaction
      */
-    public MessageReaction getReaction()
-    {
+    public MessageReaction getReaction() {
         return reaction;
     }
 
@@ -73,8 +68,7 @@ public abstract class GenericGuildMessageReactionEvent extends GenericGuildMessa
      *
      * @return The reaction emote
      */
-    public MessageReaction.ReactionEmote getReactionEmote()
-    {
+    public MessageReaction.ReactionEmote getReactionEmote() {
         return reaction.getReactionEmote();
     }
 }

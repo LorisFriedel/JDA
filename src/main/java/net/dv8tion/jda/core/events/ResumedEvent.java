@@ -23,10 +23,8 @@ import net.dv8tion.jda.core.JDA;
  *
  * <p>Can be used to marks the continuation of event flow stopped by the {@link net.dv8tion.jda.core.events.DisconnectEvent DisconnectEvent}.
  */
-public class ResumedEvent extends Event
-{
-    public ResumedEvent(JDA api, long responseNumber)
-    {
+public class ResumedEvent extends Event {
+    public ResumedEvent(JDA api, long responseNumber) {
         super(api, responseNumber);
     }
 }

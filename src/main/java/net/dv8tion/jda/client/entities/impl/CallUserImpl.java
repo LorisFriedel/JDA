@@ -21,54 +21,46 @@ import net.dv8tion.jda.client.entities.CallUser;
 import net.dv8tion.jda.client.entities.CallVoiceState;
 import net.dv8tion.jda.core.entities.User;
 
-public class CallUserImpl implements CallUser
-{
+public class CallUserImpl implements CallUser {
     protected final Call call;
     protected final User user;
     protected final CallVoiceState voiceState;
 
     protected boolean ringing;
 
-    public CallUserImpl(Call call, User user)
-    {
+    public CallUserImpl(Call call, User user) {
         this.call = call;
         this.user = user;
         this.voiceState = new CallVoiceStateImpl(this);
     }
 
     @Override
-    public Call getCall()
-    {
+    public Call getCall() {
         return call;
     }
 
     @Override
-    public User getUser()
-    {
+    public User getUser() {
         return user;
     }
 
     @Override
-    public CallVoiceState getVoiceState()
-    {
+    public CallVoiceState getVoiceState() {
         return voiceState;
     }
 
     @Override
-    public boolean isRinging()
-    {
+    public boolean isRinging() {
         return ringing;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "CallUser:(" + user.toString() + " | " + call.toString() + ")";
     }
 
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         if (!(o instanceof CallUser))
             return false;
 
@@ -78,13 +70,11 @@ public class CallUserImpl implements CallUser
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return ("CallUser " + user.getId() + call.getId()).hashCode();
     }
 
-    public CallUserImpl setRinging(boolean ringing)
-    {
+    public CallUserImpl setRinging(boolean ringing) {
         this.ringing = ringing;
         return this;
     }

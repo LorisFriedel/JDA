@@ -30,10 +30,9 @@ import java.util.List;
  *
  * <p><b>This does not represent unicode emojis like they are used in the official client! (:smiley: is not a custom emoji)</b>
  *
- * @since  2.2
+ * @since 2.2
  */
-public interface Emote extends ISnowflake, IMentionable, IFakeable
-{
+public interface Emote extends ISnowflake, IMentionable, IFakeable {
 
     /**
      * The {@link net.dv8tion.jda.core.entities.Guild Guild} this emote is attached to.
@@ -48,10 +47,8 @@ public interface Emote extends ISnowflake, IMentionable, IFakeable
      * Roles this emote is active for
      * <br><a href="https://discordapp.com/developers/docs/resources/guild#emoji-object" target="_blank">Learn More</a>
      *
-     * @throws IllegalStateException
-     *         If this Emote is fake ({@link #isFake()})
-     *
      * @return An immutable list of the roles this emote is active for (all roles if empty)
+     * @throws IllegalStateException If this Emote is fake ({@link #isFake()})
      */
     List<Role> getRoles();
 
@@ -83,25 +80,21 @@ public interface Emote extends ISnowflake, IMentionable, IFakeable
      *
      * <p>Possible ErrorResponses include:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_EMOJI UNKNOWN_EMOTE}
-     *     <br>If this Emote was already removed</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_EMOJI UNKNOWN_EMOTE}
+     * <br>If this Emote was already removed</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_GUILD UNKNOWN_GUILD}
-     *     <br>If the Guild of this Emote was deleted</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_GUILD UNKNOWN_GUILD}
+     * <br>If the Guild of this Emote was deleted</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>If we were removed from the Guild</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>If we were removed from the Guild</li>
      * </ul>
      *
-     * @throws IllegalStateException
-     *         if this Emote is fake ({@link #isFake()})
-     * @throws java.lang.UnsupportedOperationException
-     *         If this emote is managed by discord ({@link #isManaged()})
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         if the Permission {@link net.dv8tion.jda.core.Permission#MANAGE_EMOTES MANAGE_EMOTES} is not given
-     *
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
-     *         The RestAction to delete this Emote.
+     * The RestAction to delete this Emote.
+     * @throws IllegalStateException                                           if this Emote is fake ({@link #isFake()})
+     * @throws java.lang.UnsupportedOperationException                         If this emote is managed by discord ({@link #isManaged()})
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException if the Permission {@link net.dv8tion.jda.core.Permission#MANAGE_EMOTES MANAGE_EMOTES} is not given
      */
     @CheckReturnValue
     AuditableRestAction<Void> delete();
@@ -111,12 +104,9 @@ public interface Emote extends ISnowflake, IMentionable, IFakeable
      * properties of the emote like name and role restrictions.
      * <br>You modify multiple fields in one request by chaining setters before calling {@link net.dv8tion.jda.core.requests.RestAction#queue() RestAction.queue()}.
      *
-     * @throws IllegalStateException
-     *         if this emote is fake
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If the currently logged in account does not have {@link net.dv8tion.jda.core.Permission#MANAGE_EMOTES Permission.MANAGE_EMOTES}
-     *
      * @return The EmoteManager for this Emote
+     * @throws IllegalStateException                                           if this emote is fake
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If the currently logged in account does not have {@link net.dv8tion.jda.core.Permission#MANAGE_EMOTES Permission.MANAGE_EMOTES}
      */
     EmoteManager getManager();
 
@@ -128,13 +118,9 @@ public interface Emote extends ISnowflake, IMentionable, IFakeable
      * <p>This specific Manager is used to modify multiple properties at once
      * by setting the property and calling {@link EmoteManagerUpdatable#update()}
      *
-     * @throws IllegalStateException
-     *         if this emote is fake
-     *
      * @return The EmoteManagerUpdatable for this Emote
-     *
-     * @deprecated
-     *         Use {@link #getManager()} instead
+     * @throws IllegalStateException if this emote is fake
+     * @deprecated Use {@link #getManager()} instead
      */
     @Deprecated
     EmoteManagerUpdatable getManagerUpdatable();
@@ -154,8 +140,7 @@ public interface Emote extends ISnowflake, IMentionable, IFakeable
      *
      * @return Discord CDN link to the Emote's image
      */
-    default String getImageUrl()
-    {
+    default String getImageUrl() {
         return "https://cdn.discordapp.com/emojis/" + getId() + (isAnimated() ? ".gif" : ".png");
     }
 
@@ -164,28 +149,22 @@ public interface Emote extends ISnowflake, IMentionable, IFakeable
      * <br>Emotes are used with the format <code>&lt;:{@link #getName getName()}:{@link #getId getId()}&gt;</code>
      *
      * @return A usable String representation for this Emote
-     *
-     * @see    <a href="https://discordapp.com/developers/docs/resources/channel#message-formatting">Message Formatting</a>
+     * @see <a href="https://discordapp.com/developers/docs/resources/channel#message-formatting">Message Formatting</a>
      */
     @Override
-    default String getAsMention()
-    {
+    default String getAsMention() {
         return (isAnimated() ? "<a:" : "<:") + getName() + ":" + getIdLong() + ">";
     }
 
     /**
      * Whether the specified Member can interact with this Emote
      *
-     * @param  issuer
-     *         The User to test
-     *
+     * @param issuer The User to test
      * @return True, if the provided Member can use this Emote
-     *
-     * @see    net.dv8tion.jda.core.utils.PermissionUtil#canInteract(Member, Emote)
-     * @see    net.dv8tion.jda.core.utils.PermissionUtil#canInteract(User, Emote, MessageChannel)
+     * @see net.dv8tion.jda.core.utils.PermissionUtil#canInteract(Member, Emote)
+     * @see net.dv8tion.jda.core.utils.PermissionUtil#canInteract(User, Emote, MessageChannel)
      */
-    default boolean canInteract(Member issuer)
-    {
+    default boolean canInteract(Member issuer) {
         return PermissionUtil.canInteract(issuer, this);
     }
 
@@ -193,18 +172,13 @@ public interface Emote extends ISnowflake, IMentionable, IFakeable
      * Whether the specified Member can interact with this Emote within the provided MessageChannel
      * <br>Same logic as {@link #canInteract(User, MessageChannel, boolean) canInteract(issuer, channel, true)}!
      *
-     * @param  issuer
-     *         The User to test
-     * @param  channel
-     *         The MessageChannel to test
-     *
+     * @param issuer  The User to test
+     * @param channel The MessageChannel to test
      * @return True, if the provided Member can use this Emote
-     *
-     * @see    net.dv8tion.jda.core.utils.PermissionUtil#canInteract(Member, Emote)
-     * @see    net.dv8tion.jda.core.utils.PermissionUtil#canInteract(User, Emote, MessageChannel)
+     * @see net.dv8tion.jda.core.utils.PermissionUtil#canInteract(Member, Emote)
+     * @see net.dv8tion.jda.core.utils.PermissionUtil#canInteract(User, Emote, MessageChannel)
      */
-    default boolean canInteract(User issuer, MessageChannel channel)
-    {
+    default boolean canInteract(User issuer, MessageChannel channel) {
         return PermissionUtil.canInteract(issuer, this, channel);
     }
 
@@ -212,20 +186,14 @@ public interface Emote extends ISnowflake, IMentionable, IFakeable
      * Whether the specified Member can interact with this Emote within the provided MessageChannel
      * <br>Special override to exclude elevated bot permissions in case of (for instance) reacting to messages.
      *
-     * @param  issuer
-     *         The User to test
-     * @param  channel
-     *         The MessageChannel to test
-     * @param  botOverride
-     *         Whether bots can use non-managed emotes in other guilds
-     *
+     * @param issuer      The User to test
+     * @param channel     The MessageChannel to test
+     * @param botOverride Whether bots can use non-managed emotes in other guilds
      * @return True, if the provided Member can use this Emote
-     *
-     * @see    net.dv8tion.jda.core.utils.PermissionUtil#canInteract(Member, Emote)
-     * @see    net.dv8tion.jda.core.utils.PermissionUtil#canInteract(User, Emote, MessageChannel, boolean)
+     * @see net.dv8tion.jda.core.utils.PermissionUtil#canInteract(Member, Emote)
+     * @see net.dv8tion.jda.core.utils.PermissionUtil#canInteract(User, Emote, MessageChannel, boolean)
      */
-    default boolean canInteract(User issuer, MessageChannel channel, boolean botOverride)
-    {
+    default boolean canInteract(User issuer, MessageChannel channel, boolean botOverride) {
         return PermissionUtil.canInteract(issuer, this, channel, botOverride);
     }
 }

@@ -25,64 +25,54 @@ import net.dv8tion.jda.core.requests.RestAction;
 
 import java.time.OffsetDateTime;
 
-public class FriendImpl implements Friend
-{
+public class FriendImpl implements Friend {
     private final User user;
 
     private OnlineStatus onlineStatus = OnlineStatus.OFFLINE;
     private OffsetDateTime lastModifiedTime;
     private Game game;
 
-    public FriendImpl(User user)
-    {
+    public FriendImpl(User user) {
         this.user = user;
     }
 
     @Override
-    public RelationshipType getType()
-    {
+    public RelationshipType getType() {
         return RelationshipType.FRIEND;
     }
 
     @Override
-    public User getUser()
-    {
+    public User getUser() {
         return user;
     }
 
     @Override
-    public OnlineStatus getOnlineStatus()
-    {
+    public OnlineStatus getOnlineStatus() {
         return onlineStatus;
     }
 
     @Override
-    public OffsetDateTime getOnlineStatusModifiedTime()
-    {
+    public OffsetDateTime getOnlineStatusModifiedTime() {
         return lastModifiedTime;
     }
 
     @Override
-    public RestAction removeFriend()
-    {
+    public RestAction removeFriend() {
         return null;
     }
 
     @Override
-    public Game getGame()
-    {
+    public Game getGame() {
         return game;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "Friend(" + user.toString() + ")";
     }
 
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         if (!(o instanceof Friend))
             return false;
 
@@ -91,25 +81,21 @@ public class FriendImpl implements Friend
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return ("Friend " + user.getId()).hashCode();
     }
 
-    public FriendImpl setOnlineStatus(OnlineStatus onlineStatus)
-    {
+    public FriendImpl setOnlineStatus(OnlineStatus onlineStatus) {
         this.onlineStatus = onlineStatus;
         return this;
     }
 
-    public FriendImpl setGame(Game game)
-    {
+    public FriendImpl setGame(Game game) {
         this.game = game;
         return this;
     }
 
-    public FriendImpl setOnlineStatusModifiedTime(OffsetDateTime lastModifiedTime)
-    {
+    public FriendImpl setOnlineStatusModifiedTime(OffsetDateTime lastModifiedTime) {
         this.lastModifiedTime = lastModifiedTime;
         return this;
     }

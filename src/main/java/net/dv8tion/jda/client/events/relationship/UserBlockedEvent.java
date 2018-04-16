@@ -20,15 +20,12 @@ import net.dv8tion.jda.client.entities.BlockedUser;
 import net.dv8tion.jda.client.entities.Relationship;
 import net.dv8tion.jda.core.JDA;
 
-public class UserBlockedEvent extends GenericRelationshipAddEvent
-{
-    public UserBlockedEvent(JDA api, long responseNumber, Relationship relationship)
-    {
+public class UserBlockedEvent extends GenericRelationshipAddEvent {
+    public UserBlockedEvent(JDA api, long responseNumber, Relationship relationship) {
         super(api, responseNumber, relationship);
     }
 
-    public BlockedUser getBlockedUser()
-    {
+    public BlockedUser getBlockedUser() {
         return (BlockedUser) getRelationship();
     }
 }

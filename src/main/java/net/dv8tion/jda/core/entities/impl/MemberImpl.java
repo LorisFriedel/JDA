@@ -28,8 +28,7 @@ import java.awt.Color;
 import java.time.OffsetDateTime;
 import java.util.*;
 
-public class MemberImpl implements Member
-{
+public class MemberImpl implements Member {
     private final GuildImpl guild;
     private final User user;
     private final HashSet<Role> roles = new HashSet<>();
@@ -40,70 +39,59 @@ public class MemberImpl implements Member
     private Game game;
     private OnlineStatus onlineStatus = OnlineStatus.OFFLINE;
 
-    public MemberImpl(GuildImpl guild, User user)
-    {
+    public MemberImpl(GuildImpl guild, User user) {
         this.guild = guild;
         this.user = user;
         this.voiceState = new GuildVoiceStateImpl(guild, this);
     }
 
     @Override
-    public User getUser()
-    {
+    public User getUser() {
         return user;
     }
 
     @Override
-    public Guild getGuild()
-    {
+    public Guild getGuild() {
         return guild;
     }
 
     @Override
-    public JDA getJDA()
-    {
+    public JDA getJDA() {
         return user.getJDA();
     }
 
     @Override
-    public OffsetDateTime getJoinDate()
-    {
+    public OffsetDateTime getJoinDate() {
         return joinDate;
     }
 
     @Override
-    public GuildVoiceState getVoiceState()
-    {
+    public GuildVoiceState getVoiceState() {
         return voiceState;
     }
 
     @Override
-    public Game getGame()
-    {
+    public Game getGame() {
         return game;
     }
 
     @Override
-    public OnlineStatus getOnlineStatus()
-    {
+    public OnlineStatus getOnlineStatus() {
         return onlineStatus;
     }
 
     @Override
-    public String getNickname()
-    {
+    public String getNickname() {
         return nickname;
     }
 
     @Override
-    public String getEffectiveName()
-    {
+    public String getEffectiveName() {
         return nickname != null ? nickname : user.getName();
     }
 
     @Override
-    public List<Role> getRoles()
-    {
+    public List<Role> getRoles() {
         List<Role> roleList = new ArrayList<>(roles);
         roleList.sort(Comparator.reverseOrder());
 
@@ -111,17 +99,14 @@ public class MemberImpl implements Member
     }
 
     @Override
-    public Color getColor()
-    {
+    public Color getColor() {
         final int raw = getColorRaw();
         return raw != Role.DEFAULT_COLOR_RAW ? new Color(raw) : null;
     }
 
     @Override
-    public int getColorRaw()
-    {
-        for (Role r : getRoles())
-        {
+    public int getColorRaw() {
+        for (Role r : getRoles()) {
             final int colorRaw = r.getColorRaw();
             if (colorRaw != Role.DEFAULT_COLOR_RAW)
                 return colorRaw;
@@ -130,67 +115,58 @@ public class MemberImpl implements Member
     }
 
     @Override
-    public List<Permission> getPermissions()
-    {
+    public List<Permission> getPermissions() {
         return Collections.unmodifiableList(
-                Permission.getPermissions(
-                        PermissionUtil.getEffectivePermission(this)));
+            Permission.getPermissions(
+                PermissionUtil.getEffectivePermission(this)));
     }
 
     @Override
-    public List<Permission> getPermissions(Channel channel)
-    {
+    public List<Permission> getPermissions(Channel channel) {
         if (!guild.equals(channel.getGuild()))
             throw new IllegalArgumentException("Provided channel is not in the same guild as this member!");
 
         return Collections.unmodifiableList(
-                Permission.getPermissions(
-                        PermissionUtil.getEffectivePermission(channel, this)));
+            Permission.getPermissions(
+                PermissionUtil.getEffectivePermission(channel, this)));
     }
 
     @Override
-    public boolean hasPermission(Permission... permissions)
-    {
+    public boolean hasPermission(Permission... permissions) {
         return PermissionUtil.checkPermission(this, permissions);
     }
 
     @Override
-    public boolean hasPermission(Collection<Permission> permissions)
-    {
+    public boolean hasPermission(Collection<Permission> permissions) {
         Checks.notNull(permissions, "Permission Collection");
 
         return hasPermission(permissions.toArray(Permission.EMPTY_PERMISSIONS));
     }
 
     @Override
-    public boolean hasPermission(Channel channel, Permission... permissions)
-    {
+    public boolean hasPermission(Channel channel, Permission... permissions) {
         return PermissionUtil.checkPermission(channel, this, permissions);
     }
 
     @Override
-    public boolean hasPermission(Channel channel, Collection<Permission> permissions)
-    {
+    public boolean hasPermission(Channel channel, Collection<Permission> permissions) {
         Checks.notNull(permissions, "Permission Collection");
 
         return hasPermission(channel, permissions.toArray(Permission.EMPTY_PERMISSIONS));
     }
 
     @Override
-    public boolean canInteract(Member member)
-    {
+    public boolean canInteract(Member member) {
         return PermissionUtil.canInteract(this, member);
     }
 
     @Override
-    public boolean canInteract(Role role)
-    {
+    public boolean canInteract(Role role) {
         return PermissionUtil.canInteract(this, role);
     }
 
     @Override
-    public boolean canInteract(Emote emote)
-    {
+    public boolean canInteract(Emote emote) {
         return PermissionUtil.canInteract(this, emote);
     }
 
@@ -199,38 +175,32 @@ public class MemberImpl implements Member
         return this.equals(guild.getOwner());
     }
 
-    public MemberImpl setNickname(String nickname)
-    {
+    public MemberImpl setNickname(String nickname) {
         this.nickname = nickname;
         return this;
     }
 
-    public MemberImpl setJoinDate(OffsetDateTime joinDate)
-    {
+    public MemberImpl setJoinDate(OffsetDateTime joinDate) {
         this.joinDate = joinDate;
         return this;
     }
 
-    public MemberImpl setGame(Game game)
-    {
+    public MemberImpl setGame(Game game) {
         this.game = game;
         return this;
     }
 
-    public MemberImpl setOnlineStatus(OnlineStatus onlineStatus)
-    {
+    public MemberImpl setOnlineStatus(OnlineStatus onlineStatus) {
         this.onlineStatus = onlineStatus;
         return this;
     }
 
-    public Set<Role> getRoleSet()
-    {
+    public Set<Role> getRoleSet() {
         return roles;
     }
 
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         if (!(o instanceof Member))
             return false;
 
@@ -239,30 +209,26 @@ public class MemberImpl implements Member
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return (guild.getId() + user.getId()).hashCode();
     }
 
     @Override
-    public String toString()
-    {
-        return "MB:" + getEffectiveName() + '(' + user.toString() + " / " + guild.toString() +')';
+    public String toString() {
+        return "MB:" + getEffectiveName() + '(' + user.toString() + " / " + guild.toString() + ')';
     }
 
     @Override
-    public String getAsMention()
-    {
+    public String getAsMention() {
         return nickname == null ? user.getAsMention() : "<@!" + user.getIdLong() + '>';
     }
 
     @Nullable
     @Override
-    public TextChannel getDefaultChannel()
-    {
+    public TextChannel getDefaultChannel() {
         return guild.getTextChannelsMap().valueCollection().stream()
-                .sorted(Comparator.reverseOrder())
-                .filter(c -> hasPermission(c, Permission.MESSAGE_READ))
-                .findFirst().orElse(null);
+            .sorted(Comparator.reverseOrder())
+            .filter(c -> hasPermission(c, Permission.MESSAGE_READ))
+            .findFirst().orElse(null);
     }
 }

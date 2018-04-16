@@ -26,13 +26,11 @@ import net.dv8tion.jda.core.entities.User;
  * @deprecated Use {@link net.dv8tion.jda.core.events.user.update.UserUpdateNameEvent UserUpdateNameEvent} and {@link net.dv8tion.jda.core.events.user.update.UserUpdateDiscriminatorEvent UserUpdateDiscriminatorEvent}
  */
 @Deprecated
-public class UserNameUpdateEvent extends GenericUserEvent
-{
+public class UserNameUpdateEvent extends GenericUserEvent {
     private final String oldName;
     private final String oldDiscriminator;
 
-    public UserNameUpdateEvent(JDA api, long responseNumber, User user, String oldName, String oldDiscriminator)
-    {
+    public UserNameUpdateEvent(JDA api, long responseNumber, User user, String oldName, String oldDiscriminator) {
         super(api, responseNumber, user);
         this.oldName = oldName;
         this.oldDiscriminator = oldDiscriminator;
@@ -43,8 +41,7 @@ public class UserNameUpdateEvent extends GenericUserEvent
      *
      * @return The old username
      */
-    public String getOldName()
-    {
+    public String getOldName() {
         return oldName;
     }
 
@@ -53,8 +50,7 @@ public class UserNameUpdateEvent extends GenericUserEvent
      *
      * @return The old discriminator
      */
-    public String getOldDiscriminator()
-    {
+    public String getOldDiscriminator() {
         return oldDiscriminator;
     }
 }

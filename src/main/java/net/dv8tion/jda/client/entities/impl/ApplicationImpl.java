@@ -29,8 +29,7 @@ import org.json.JSONObject;
 
 import java.util.*;
 
-public class ApplicationImpl implements Application
-{
+public class ApplicationImpl implements Application {
     private final JDA api;
     private final Object mngLock = new Object();
     private ApplicationManager manager;
@@ -49,24 +48,20 @@ public class ApplicationImpl implements Application
     private int rpcApplicationState;
     private String secret;
 
-    public ApplicationImpl(final JDA api, final JSONObject object)
-    {
+    public ApplicationImpl(final JDA api, final JSONObject object) {
         this.api = api;
 
         this.updateFromJson(object);
     }
 
     @Override
-    public RestAction<Application.Bot> createBot()
-    {
+    public RestAction<Application.Bot> createBot() {
         if (this.hasBot())
             return new RestAction.EmptyRestAction<>(getJDA(), this.bot);
 
-        return new RestAction<Application.Bot>(this.api, Route.Applications.CREATE_BOT.compile(getId()))
-        {
+        return new RestAction<Application.Bot>(this.api, Route.Applications.CREATE_BOT.compile(getId())) {
             @Override
-            protected void handleResponse(final Response response, final Request<Application.Bot> request)
-            {
+            protected void handleResponse(final Response response, final Request<Application.Bot> request) {
                 if (response.isOk())
                     request.onSuccess(ApplicationImpl.this.bot = new BotImpl(response.getObject()));
                 else
@@ -76,13 +71,10 @@ public class ApplicationImpl implements Application
     }
 
     @Override
-    public RestAction<Void> delete()
-    {
-        return new RestAction<Void>(this.api, Route.Applications.DELETE_APPLICATION.compile(getId()))
-        {
+    public RestAction<Void> delete() {
+        return new RestAction<Void>(this.api, Route.Applications.DELETE_APPLICATION.compile(getId())) {
             @Override
-            protected void handleResponse(final Response response, final Request<Void> request)
-            {
+            protected void handleResponse(final Response response, final Request<Void> request) {
                 if (response.isOk())
                     request.onSuccess(null);
                 else
@@ -92,68 +84,56 @@ public class ApplicationImpl implements Application
     }
 
     @Override
-    public boolean doesBotRequireCodeGrant()
-    {
+    public boolean doesBotRequireCodeGrant() {
         return this.doesBotRequireCodeGrant;
     }
 
     @Override
-    public boolean equals(final Object obj)
-    {
+    public boolean equals(final Object obj) {
         return obj instanceof ApplicationImpl && this.id == ((ApplicationImpl) obj).id;
     }
 
     @Override
-    public Bot getBot()
-    {
+    public Bot getBot() {
         return this.bot;
     }
 
     @Override
-    public String getDescription()
-    {
+    public String getDescription() {
         return this.description;
     }
 
     @Override
-    public int getFlags()
-    {
+    public int getFlags() {
         return this.flags;
     }
 
     @Override
-    public String getIconId()
-    {
+    public String getIconId() {
         return this.iconId;
     }
 
     @Override
-    public String getIconUrl()
-    {
+    public String getIconUrl() {
         return this.iconId == null ? null
-                : "https://cdn.discordapp.com/app-icons/" + this.id + '/' + this.iconId + ".jpg";
+            : "https://cdn.discordapp.com/app-icons/" + this.id + '/' + this.iconId + ".jpg";
     }
 
     @Override
-    public long getIdLong()
-    {
+    public long getIdLong() {
         return this.id;
     }
 
     @Override
-    public JDA getJDA()
-    {
+    public JDA getJDA() {
         return this.api;
     }
 
     @Override
-    public ApplicationManager getManager()
-    {
+    public ApplicationManager getManager() {
         ApplicationManager mng = manager;
-        if (mng == null)
-        {
-            synchronized (mngLock)
-            {
+        if (mng == null) {
+            synchronized (mngLock) {
                 mng = manager;
                 if (mng == null)
                     mng = manager = new ApplicationManager(this);
@@ -164,13 +144,10 @@ public class ApplicationImpl implements Application
 
     @Override
     @Deprecated
-    public net.dv8tion.jda.client.managers.ApplicationManagerUpdatable getManagerUpdatable()
-    {
+    public net.dv8tion.jda.client.managers.ApplicationManagerUpdatable getManagerUpdatable() {
         net.dv8tion.jda.client.managers.ApplicationManagerUpdatable mng = managerUpdatable;
-        if (mng == null)
-        {
-            synchronized (mngLock)
-            {
+        if (mng == null) {
+            synchronized (mngLock) {
                 mng = managerUpdatable;
                 if (mng == null)
                     mng = managerUpdatable = new net.dv8tion.jda.client.managers.ApplicationManagerUpdatable(this);
@@ -178,52 +155,43 @@ public class ApplicationImpl implements Application
         }
         return mng;
     }
-    
+
     @Override
-    public String getName()
-    {
+    public String getName() {
         return this.name;
     }
 
     @Override
-    public List<String> getRedirectUris()
-    {
+    public List<String> getRedirectUris() {
         return Collections.unmodifiableList(this.redirectUris);
     }
 
     @Override
-    public int getRpcApplicationState()
-    {
+    public int getRpcApplicationState() {
         return this.rpcApplicationState;
     }
 
     @Override
-    public String getSecret()
-    {
+    public String getSecret() {
         return this.secret;
     }
 
     @Override
-    public boolean hasBot()
-    {
+    public boolean hasBot() {
         return this.bot != null;
     }
 
     @Override
-    public boolean isBotPublic()
-    {
+    public boolean isBotPublic() {
         return this.isBotPublic;
     }
 
     @Override
-    public RestAction<Application> resetSecret()
-    {
+    public RestAction<Application> resetSecret() {
         Route.CompiledRoute route = Route.Applications.RESET_BOT_TOKEN.compile(getId());
-        return new RestAction<Application>(this.api, route)
-        {
+        return new RestAction<Application>(this.api, route) {
             @Override
-            protected void handleResponse(final Response response, final Request<Application> request)
-            {
+            protected void handleResponse(final Response response, final Request<Application> request) {
                 if (response.isOk())
                     request.onSuccess(ApplicationImpl.this.updateFromJson(response.getObject()));
                 else
@@ -233,24 +201,19 @@ public class ApplicationImpl implements Application
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "Application(" + this.id + ")";
     }
 
-    public ApplicationImpl updateFromJson(final JSONObject object)
-    {
-        if (object.has("bot"))
-        {
+    public ApplicationImpl updateFromJson(final JSONObject object) {
+        if (object.has("bot")) {
             final JSONObject botObject = object.getJSONObject("bot");
 
             if (this.bot == null)
                 this.bot = new BotImpl(botObject);
             else
                 this.bot.updateFromJson(botObject);
-        }
-        else
-        {
+        } else {
             this.bot = null;
         }
 
@@ -278,81 +241,68 @@ public class ApplicationImpl implements Application
         return this;
     }
 
-    public class BotImpl implements Application.Bot
-    {
+    public class BotImpl implements Application.Bot {
         private long id;
         private String avatarId;
         private String discriminator;
         private String name;
         private String token;
 
-        private BotImpl(final JSONObject object)
-        {
+        private BotImpl(final JSONObject object) {
             this.updateFromJson(object);
         }
 
         @Override
-        public boolean equals(final Object obj)
-        {
+        public boolean equals(final Object obj) {
             return obj instanceof BotImpl && this.id == ((BotImpl) obj).id;
         }
 
         @Override
-        public Application getApplication()
-        {
+        public Application getApplication() {
             return ApplicationImpl.this;
         }
 
         @Override
-        public String getAvatarId()
-        {
+        public String getAvatarId() {
             return this.avatarId;
         }
 
         @Override
-        public String getAvatarUrl()
-        {
+        public String getAvatarUrl() {
             return this.avatarId == null ? null
-                    : "https://cdn.discordapp.com/avatars/" + this.id + "/" + this.avatarId + ".jpg";
+                : "https://cdn.discordapp.com/avatars/" + this.id + "/" + this.avatarId + ".jpg";
         }
 
         @Override
-        public String getDiscriminator()
-        {
+        public String getDiscriminator() {
             return this.discriminator;
         }
 
         @Override
-        public long getIdLong()
-        {
+        public long getIdLong() {
             return this.id;
         }
 
         @Override
-        public String getInviteUrl(final Collection<Permission> permissions)
-        {
+        public String getInviteUrl(final Collection<Permission> permissions) {
             return this.getInviteUrl(null, permissions);
         }
 
         @Override
-        public String getInviteUrl(final Permission... permissions)
-        {
+        public String getInviteUrl(final Permission... permissions) {
             return this.getInviteUrl(null, permissions);
         }
 
         @Override
-        public String getInviteUrl(final String guildId, final Collection<Permission> permissions)
-        {
+        public String getInviteUrl(final String guildId, final Collection<Permission> permissions) {
             StringBuilder builder = new StringBuilder("https://discordapp.com/oauth2/authorize?client_id=");
             builder.append(this.getId());
             builder.append("&scope=bot");
-            if (permissions != null && !permissions.isEmpty())
-            {
+            if (permissions != null && !permissions.isEmpty()) {
                 builder.append("&permissions=");
                 builder.append(Permission.getRaw(permissions));
             }
-            if (guildId != null)
-            {
+            if (guildId != null) {
                 builder.append("&guild_id=");
                 builder.append(guildId);
             }
@@ -360,43 +310,35 @@ public class ApplicationImpl implements Application
         }
 
         @Override
-        public String getInviteUrl(final String guildId, final Permission... permissions)
-        {
+        public String getInviteUrl(final String guildId, final Permission... permissions) {
             return this.getInviteUrl(guildId, permissions == null ? null : Arrays.asList(permissions));
         }
 
-        public JDA getJDA()
-        {
+        public JDA getJDA() {
             return ApplicationImpl.this.getJDA();
         }
 
         @Override
-        public String getName()
-        {
+        public String getName() {
             return this.name;
         }
 
         @Override
-        public String getToken()
-        {
+        public String getToken() {
             return this.token;
         }
 
         @Override
-        public int hashCode()
-        {
+        public int hashCode() {
             return Long.hashCode(this.id);
         }
 
         @Override
-        public RestAction<Bot> resetToken()
-        {
+        public RestAction<Bot> resetToken() {
             Route.CompiledRoute route = Route.Applications.RESET_BOT_TOKEN.compile(getId());
-            return new RestAction<Bot>(getJDA(), route)
-            {
+            return new RestAction<Bot>(getJDA(), route) {
                 @Override
-                protected void handleResponse(final Response response, final Request<Bot> request)
-                {
+                protected void handleResponse(final Response response, final Request<Bot> request) {
                     if (response.isOk())
                         request.onSuccess(BotImpl.this.updateFromJson(response.getObject()));
                     else
@@ -406,13 +348,11 @@ public class ApplicationImpl implements Application
         }
 
         @Override
-        public String toString()
-        {
+        public String toString() {
             return "Application.Bot(" + this.id + ")";
         }
 
-        public BotImpl updateFromJson(final JSONObject object)
-        {
+        public BotImpl updateFromJson(final JSONObject object) {
             this.name = object.getString("username");
             this.discriminator = object.getString("discriminator");
             this.token = object.getString("token");

@@ -34,64 +34,89 @@ import java.util.List;
 /**
  * The core of JDA. Acts as a registry system of JDA. All parts of the the API can be accessed starting from this class.
  */
-public interface JDA
-{
+public interface JDA {
 
     /**
      * Represents the connection status of JDA and its Main WebSocket.
      */
-    enum Status
-    {
-        /**JDA is currently setting up supporting systems like the AudioSystem.*/
+    enum Status {
+        /**
+         * JDA is currently setting up supporting systems like the AudioSystem.
+         */
         INITIALIZING(true),
-        /**JDA has finished setting up supporting systems and is ready to log in.*/
+        /**
+         * JDA has finished setting up supporting systems and is ready to log in.
+         */
         INITIALIZED(true),
-        /**JDA is currently attempting to log in.*/
+        /**
+         * JDA is currently attempting to log in.
+         */
         LOGGING_IN(true),
-        /**JDA is currently attempting to connect it's websocket to Discord.*/
+        /**
+         * JDA is currently attempting to connect it's websocket to Discord.
+         */
         CONNECTING_TO_WEBSOCKET(true),
-        /**JDA has successfully connected it's websocket to Discord and is sending authentication*/
+        /**
+         * JDA has successfully connected it's websocket to Discord and is sending authentication
+         */
         IDENTIFYING_SESSION(true),
-        /**JDA has sent authentication to discord and is awaiting confirmation*/
+        /**
+         * JDA has sent authentication to discord and is awaiting confirmation
+         */
         AWAITING_LOGIN_CONFIRMATION(true),
-        /**JDA is populating internal objects.
-         * This process often takes the longest of all Statuses (besides CONNECTED)*/
+        /**
+         * JDA is populating internal objects.
+         * This process often takes the longest of all Statuses (besides CONNECTED)
+         */
         LOADING_SUBSYSTEMS(true),
-        /**JDA has finished loading everything, is receiving information from Discord and is firing events.*/
+        /**
+         * JDA has finished loading everything, is receiving information from Discord and is firing events.
+         */
         CONNECTED(true),
-        /**JDA's main websocket has been disconnected. This <b>DOES NOT</b> mean JDA has shutdown permanently.
-         * This is an in-between status. Most likely ATTEMPTING_TO_RECONNECT or SHUTTING_DOWN/SHUTDOWN will soon follow.*/
+        /**
+         * JDA's main websocket has been disconnected. This <b>DOES NOT</b> mean JDA has shutdown permanently.
+         * This is an in-between status. Most likely ATTEMPTING_TO_RECONNECT or SHUTTING_DOWN/SHUTDOWN will soon follow.
+         */
         DISCONNECTED,
-        /** JDA session has been added to {@link net.dv8tion.jda.core.utils.SessionController SessionController}
-         * and is awaiting to be dequeued for reconnecting.*/
+        /**
+         * JDA session has been added to {@link net.dv8tion.jda.core.utils.SessionController SessionController}
+         * and is awaiting to be dequeued for reconnecting.
+         */
         RECONNECT_QUEUED,
-        /**When trying to reconnect to Discord JDA encountered an issue, most likely related to a lack of internet connection,
-         * and is waiting to try reconnecting again.*/
+        /**
+         * When trying to reconnect to Discord JDA encountered an issue, most likely related to a lack of internet connection,
+         * and is waiting to try reconnecting again.
+         */
         WAITING_TO_RECONNECT,
-        /**JDA has been disconnected from Discord and is currently trying to reestablish the connection.*/
+        /**
+         * JDA has been disconnected from Discord and is currently trying to reestablish the connection.
+         */
         ATTEMPTING_TO_RECONNECT,
-        /**JDA has received a shutdown request or has been disconnected from Discord and reconnect is disabled, thus,
-         * JDA is in the process of shutting down*/
+        /**
+         * JDA has received a shutdown request or has been disconnected from Discord and reconnect is disabled, thus,
+         * JDA is in the process of shutting down
+         */
         SHUTTING_DOWN,
-        /**JDA has finished shutting down and this instance can no longer be used to communicate with the Discord servers.*/
+        /**
+         * JDA has finished shutting down and this instance can no longer be used to communicate with the Discord servers.
+         */
         SHUTDOWN,
-        /**While attempting to authenticate, Discord reported that the provided authentication information was invalid.*/
+        /**
+         * While attempting to authenticate, Discord reported that the provided authentication information was invalid.
+         */
         FAILED_TO_LOGIN;
 
         private final boolean isInit;
 
-        Status(boolean isInit)
-        {
+        Status(boolean isInit) {
             this.isInit = isInit;
         }
 
-        Status()
-        {
+        Status() {
             this.isInit = false;
         }
 
-        public boolean isInit()
-        {
+        public boolean isInit() {
             return isInit;
         }
     }
@@ -99,13 +124,11 @@ public interface JDA
     /**
      * Represents the information used to create this shard.
      */
-    class ShardInfo
-    {
+    class ShardInfo {
         int shardId;
         int shardTotal;
 
-        public ShardInfo(int shardId, int shardTotal)
-        {
+        public ShardInfo(int shardId, int shardTotal) {
             this.shardId = shardId;
             this.shardTotal = shardTotal;
         }
@@ -116,8 +139,7 @@ public interface JDA
          *
          * @return The id of the currently logged in shard.
          */
-        public int getShardId()
-        {
+        public int getShardId() {
             return shardId;
         }
 
@@ -132,8 +154,7 @@ public interface JDA
          *
          * @return The total of shards based on the total provided by the developer during JDA initialization.
          */
-        public int getShardTotal()
-        {
+        public int getShardTotal() {
             return shardTotal;
         }
 
@@ -144,20 +165,17 @@ public interface JDA
          *
          * @return A String representing the information used to build this shard.
          */
-        public String getShardString()
-        {
+        public String getShardString() {
             return "[" + shardId + " / " + shardTotal + "]";
         }
 
         @Override
-        public String toString()
-        {
+        public String toString() {
             return "Shard " + getShardString();
         }
 
         @Override
-        public boolean equals(Object o)
-        {
+        public boolean equals(Object o) {
             if (!(o instanceof ShardInfo))
                 return false;
 
@@ -210,8 +228,7 @@ public interface JDA
      * <p>The default EventManager is {@link net.dv8tion.jda.core.hooks.InterfacedEventManager InterfacedEventListener}.
      * <br>There is also an {@link net.dv8tion.jda.core.hooks.AnnotatedEventManager AnnotatedEventManager} available.
      *
-     * @param  manager
-     *         The new EventManager to use
+     * @param manager The new EventManager to use
      */
     void setEventManager(IEventManager manager);
 
@@ -219,26 +236,20 @@ public interface JDA
      * Adds all provided listeners to the event-listeners that will be used to handle events.
      * This uses the {@link net.dv8tion.jda.core.hooks.InterfacedEventManager InterfacedEventListener} by default.
      * To switch to the {@link net.dv8tion.jda.core.hooks.AnnotatedEventManager AnnotatedEventManager}, use {@link #setEventManager(IEventManager)}.
-     *
+     * <p>
      * Note: when using the {@link net.dv8tion.jda.core.hooks.InterfacedEventManager InterfacedEventListener} (default),
      * given listener <b>must</b> be instance of {@link net.dv8tion.jda.core.hooks.EventListener EventListener}!
      *
-     * @param  listeners
-     *         The listener(s) which will react to events.
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If either listeners or one of it's objects is {@code null}.
+     * @param listeners The listener(s) which will react to events.
+     * @throws java.lang.IllegalArgumentException If either listeners or one of it's objects is {@code null}.
      */
     void addEventListener(Object... listeners);
 
     /**
      * Removes all provided listeners from the event-listeners and no longer uses them to handle events.
      *
-     * @param  listeners
-     *         The listener(s) to be removed.
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If either listeners or one of it's objects is {@code null}.
+     * @param listeners The listener(s) to be removed.
+     * @throws java.lang.IllegalArgumentException If either listeners or one of it's objects is {@code null}.
      */
     void removeEventListener(Object... listeners);
 
@@ -257,20 +268,15 @@ public interface JDA
      * <p>This RestAction does not provide the resulting Guild!
      * It will be in a following {@link net.dv8tion.jda.core.events.guild.GuildJoinEvent GuildJoinEvent}.
      *
-     * @param  name
-     *         The name of the resulting guild
-     *
-     * @throws java.lang.IllegalStateException
-     *         If the currently logged in account is from
-     *         <ul>
-     *             <li>{@link net.dv8tion.jda.core.AccountType#CLIENT AccountType.CLIENT} and the account is in 100 or more guilds</li>
-     *             <li>{@link net.dv8tion.jda.core.AccountType#BOT AccountType.BOT} and the account is in 10 or more guilds</li>
-     *         </ul>
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided name is empty, {@code null} or not between 2-100 characters
-     *
+     * @param name The name of the resulting guild
      * @return {@link net.dv8tion.jda.core.requests.restaction.GuildAction GuildAction}
-     *         <br>Allows for setting various details for the resulting Guild
+     * <br>Allows for setting various details for the resulting Guild
+     * @throws java.lang.IllegalStateException    If the currently logged in account is from
+     *                                            <ul>
+     *                                            <li>{@link net.dv8tion.jda.core.AccountType#CLIENT AccountType.CLIENT} and the account is in 100 or more guilds</li>
+     *                                            <li>{@link net.dv8tion.jda.core.AccountType#BOT AccountType.BOT} and the account is in 10 or more guilds</li>
+     *                                            </ul>
+     * @throws java.lang.IllegalArgumentException If the provided name is empty, {@code null} or not between 2-100 characters
      */
     GuildAction createGuild(String name);
 
@@ -291,8 +297,7 @@ public interface JDA
      *
      * @return Immutable list of all created AudioManager instances
      */
-    default List<AudioManager> getAudioManagers()
-    {
+    default List<AudioManager> getAudioManagers() {
         return getAudioManagerCache().asList();
     }
 
@@ -316,8 +321,7 @@ public interface JDA
      *
      * @return List of all {@link net.dv8tion.jda.core.entities.User Users} that are visible to JDA.
      */
-    default List<User> getUsers()
-    {
+    default List<User> getUsers() {
         return getUserCache().asList();
     }
 
@@ -325,16 +329,11 @@ public interface JDA
      * This returns the {@link net.dv8tion.jda.core.entities.User User} which has the same id as the one provided.
      * <br>If there is no visible user with an id that matches the provided one, this returns {@code null}.
      *
-     * @param  id
-     *         The id of the requested {@link net.dv8tion.jda.core.entities.User User}.
-     *
-     * @throws java.lang.NumberFormatException
-     *         If the provided {@code id} cannot be parsed by {@link Long#parseLong(String)}
-     *
+     * @param id The id of the requested {@link net.dv8tion.jda.core.entities.User User}.
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.User User} with matching id.
+     * @throws java.lang.NumberFormatException If the provided {@code id} cannot be parsed by {@link Long#parseLong(String)}
      */
-    default User getUserById(String id)
-    {
+    default User getUserById(String id) {
         return getUserCache().getElementById(id);
     }
 
@@ -342,13 +341,10 @@ public interface JDA
      * This returns the {@link net.dv8tion.jda.core.entities.User User} which has the same id as the one provided.
      * <br>If there is no visible user with an id that matches the provided one, this returns {@code null}.
      *
-     * @param  id
-     *         The id of the requested {@link net.dv8tion.jda.core.entities.User User}.
-     *
+     * @param id The id of the requested {@link net.dv8tion.jda.core.entities.User User}.
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.User User} with matching id.
      */
-    default User getUserById(long id)
-    {
+    default User getUserById(long id) {
         return getUserCache().getElementById(id);
     }
 
@@ -358,24 +354,18 @@ public interface JDA
      *
      * <p><b>Note: </b> This does **not** consider nicknames, it only considers {@link net.dv8tion.jda.core.entities.User#getName()}
      *
-     * @param  name
-     *         The name of the requested {@link net.dv8tion.jda.core.entities.User Users}.
-     * @param  ignoreCase
-     *         Whether to ignore case or not when comparing the provided name to each {@link net.dv8tion.jda.core.entities.User#getName()}.
-     *
+     * @param name       The name of the requested {@link net.dv8tion.jda.core.entities.User Users}.
+     * @param ignoreCase Whether to ignore case or not when comparing the provided name to each {@link net.dv8tion.jda.core.entities.User#getName()}.
      * @return Possibly-empty list of {@link net.dv8tion.jda.core.entities.User Users} that all have the same name as the provided name.
      */
-    default List<User> getUsersByName(String name, boolean ignoreCase)
-    {
+    default List<User> getUsersByName(String name, boolean ignoreCase) {
         return getUserCache().getElementsByName(name, ignoreCase);
     }
 
     /**
      * Gets all {@link net.dv8tion.jda.core.entities.Guild Guilds} that contain all given users as their members.
      *
-     * @param  users
-     *         The users which all the returned {@link net.dv8tion.jda.core.entities.Guild Guilds} must contain.
-     *
+     * @param users The users which all the returned {@link net.dv8tion.jda.core.entities.Guild Guilds} must contain.
      * @return Unmodifiable list of all {@link net.dv8tion.jda.core.entities.Guild Guild} instances which have all {@link net.dv8tion.jda.core.entities.User Users} in them.
      */
     List<Guild> getMutualGuilds(User... users);
@@ -383,9 +373,7 @@ public interface JDA
     /**
      * Gets all {@link net.dv8tion.jda.core.entities.Guild Guilds} that contain all given users as their members.
      *
-     * @param users
-     *        The users which all the returned {@link net.dv8tion.jda.core.entities.Guild Guilds} must contain.
-     *
+     * @param users The users which all the returned {@link net.dv8tion.jda.core.entities.Guild Guilds} must contain.
      * @return Unmodifiable list of all {@link net.dv8tion.jda.core.entities.Guild Guild} instances which have all {@link net.dv8tion.jda.core.entities.User Users} in them.
      */
     List<Guild> getMutualGuilds(Collection<User> users);
@@ -397,27 +385,20 @@ public interface JDA
      *
      * <p>The returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} can encounter the following Discord errors:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_USER ErrorResponse.UNKNOWN_USER}
-     *     <br>Occurs when the provided id does not refer to a {@link net.dv8tion.jda.core.entities.User User}
-     *     known by Discord. Typically occurs when developers provide an incomplete id (cut short).</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_USER ErrorResponse.UNKNOWN_USER}
+     * <br>Occurs when the provided id does not refer to a {@link net.dv8tion.jda.core.entities.User User}
+     * known by Discord. Typically occurs when developers provide an incomplete id (cut short).</li>
      * </ul>
      *
-     * @param  id
-     *         The id of the requested {@link net.dv8tion.jda.core.entities.User User}.
-     *
-     * @throws net.dv8tion.jda.core.exceptions.AccountTypeException
-     *         This endpoint is {@link AccountType#BOT} only.
-     *
-     * @throws java.lang.NumberFormatException
-     *         If the provided {@code id} cannot be parsed by {@link Long#parseLong(String)}
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>If the provided id String is null.</li>
-     *             <li>If the provided id String is empty.</li>
-     *         </ul>
-     *
+     * @param id The id of the requested {@link net.dv8tion.jda.core.entities.User User}.
      * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type: {@link net.dv8tion.jda.core.entities.User User}
-     *         <br>On request, gets the User with id matching provided id from Discord.
+     * <br>On request, gets the User with id matching provided id from Discord.
+     * @throws net.dv8tion.jda.core.exceptions.AccountTypeException This endpoint is {@link AccountType#BOT} only.
+     * @throws java.lang.NumberFormatException                      If the provided {@code id} cannot be parsed by {@link Long#parseLong(String)}
+     * @throws java.lang.IllegalArgumentException                   <ul>
+     *                                                              <li>If the provided id String is null.</li>
+     *                                                              <li>If the provided id String is empty.</li>
+     *                                                              </ul>
      */
     @CheckReturnValue
     RestAction<User> retrieveUserById(String id);
@@ -429,19 +410,15 @@ public interface JDA
      *
      * <p>The returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} can encounter the following Discord errors:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_USER ErrorResponse.UNKNOWN_USER}
-     *     <br>Occurs when the provided id does not refer to a {@link net.dv8tion.jda.core.entities.User User}
-     *     known by Discord. Typically occurs when developers provide an incomplete id (cut short).</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_USER ErrorResponse.UNKNOWN_USER}
+     * <br>Occurs when the provided id does not refer to a {@link net.dv8tion.jda.core.entities.User User}
+     * known by Discord. Typically occurs when developers provide an incomplete id (cut short).</li>
      * </ul>
      *
-     * @param  id
-     *         The id of the requested {@link net.dv8tion.jda.core.entities.User User}.
-     *
-     * @throws net.dv8tion.jda.core.exceptions.AccountTypeException
-     *         This endpoint is {@link AccountType#BOT} only.
-     *
+     * @param id The id of the requested {@link net.dv8tion.jda.core.entities.User User}.
      * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type: {@link net.dv8tion.jda.core.entities.User User}
-     *         <br>On request, gets the User with id matching provided id from Discord.
+     * <br>On request, gets the User with id matching provided id from Discord.
+     * @throws net.dv8tion.jda.core.exceptions.AccountTypeException This endpoint is {@link AccountType#BOT} only.
      */
     @CheckReturnValue
     RestAction<User> retrieveUserById(long id);
@@ -466,8 +443,7 @@ public interface JDA
      *
      * @return Possibly-empty list of all the {@link net.dv8tion.jda.core.entities.Guild Guilds} that this account is connected to.
      */
-    default List<Guild> getGuilds()
-    {
+    default List<Guild> getGuilds() {
         return getGuildCache().asList();
     }
 
@@ -475,16 +451,11 @@ public interface JDA
      * This returns the {@link net.dv8tion.jda.core.entities.Guild Guild} which has the same id as the one provided.
      * <br>If there is no connected guild with an id that matches the provided one, then this returns {@code null}.
      *
-     * @param  id
-     *         The id of the {@link net.dv8tion.jda.core.entities.Guild Guild}.
-     *
-     * @throws java.lang.NumberFormatException
-     *         If the provided {@code id} cannot be parsed by {@link Long#parseLong(String)}
-     *
+     * @param id The id of the {@link net.dv8tion.jda.core.entities.Guild Guild}.
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.Guild Guild} with matching id.
+     * @throws java.lang.NumberFormatException If the provided {@code id} cannot be parsed by {@link Long#parseLong(String)}
      */
-    default Guild getGuildById(String id)
-    {
+    default Guild getGuildById(String id) {
         return getGuildCache().getElementById(id);
     }
 
@@ -492,13 +463,10 @@ public interface JDA
      * This returns the {@link net.dv8tion.jda.core.entities.Guild Guild} which has the same id as the one provided.
      * <br>If there is no connected guild with an id that matches the provided one, then this returns {@code null}.
      *
-     * @param  id
-     *         The id of the {@link net.dv8tion.jda.core.entities.Guild Guild}.
-     *
+     * @param id The id of the {@link net.dv8tion.jda.core.entities.Guild Guild}.
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.Guild Guild} with matching id.
      */
-    default Guild getGuildById(long id)
-    {
+    default Guild getGuildById(long id) {
         return getGuildCache().getElementById(id);
     }
 
@@ -506,15 +474,11 @@ public interface JDA
      * An unmodifiable list of all {@link net.dv8tion.jda.core.entities.Guild Guilds} that have the same name as the one provided.
      * <br>If there are no {@link net.dv8tion.jda.core.entities.Guild Guilds} with the provided name, then this returns an empty list.
      *
-     * @param  name
-     *         The name of the requested {@link net.dv8tion.jda.core.entities.Guild Guilds}.
-     * @param  ignoreCase
-     *         Whether to ignore case or not when comparing the provided name to each {@link net.dv8tion.jda.core.entities.Guild#getName()}.
-     *
+     * @param name       The name of the requested {@link net.dv8tion.jda.core.entities.Guild Guilds}.
+     * @param ignoreCase Whether to ignore case or not when comparing the provided name to each {@link net.dv8tion.jda.core.entities.Guild#getName()}.
      * @return Possibly-empty list of all the {@link net.dv8tion.jda.core.entities.Guild Guilds} that all have the same name as the provided name.
      */
-    default List<Guild> getGuildsByName(String name, boolean ignoreCase)
-    {
+    default List<Guild> getGuildsByName(String name, boolean ignoreCase) {
         return getGuildCache().getElementsByName(name, ignoreCase);
     }
 
@@ -523,8 +487,7 @@ public interface JDA
      * all cached {@link net.dv8tion.jda.core.entities.Role Roles} visible to this JDA session.
      *
      * @return Unified {@link net.dv8tion.jda.core.utils.cache.SnowflakeCacheView SnowflakeCacheView}
-     *
-     * @see    net.dv8tion.jda.core.utils.cache.CacheView#allSnowflakes(java.util.function.Supplier) CacheView.allSnowflakes(...)
+     * @see net.dv8tion.jda.core.utils.cache.CacheView#allSnowflakes(java.util.function.Supplier) CacheView.allSnowflakes(...)
      */
     SnowflakeCacheView<Role> getRoleCache();
 
@@ -535,8 +498,7 @@ public interface JDA
      *
      * @return Immutable List of all visible Roles
      */
-    default List<Role> getRoles()
-    {
+    default List<Role> getRoles() {
         return getRoleCache().asList();
     }
 
@@ -545,14 +507,11 @@ public interface JDA
      * over all {@link net.dv8tion.jda.core.entities.Guild Guilds} and check whether a Role from that Guild is assigned
      * to the specified ID and will return the first that can be found.
      *
-     * @param id
-     *         The id of the searched Role
+     * @param id The id of the searched Role
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.Role Role} for the specified ID
-     * @throws java.lang.NumberFormatException
-     *         If the provided {@code id} cannot be parsed by {@link Long#parseLong(String)}
+     * @throws java.lang.NumberFormatException If the provided {@code id} cannot be parsed by {@link Long#parseLong(String)}
      */
-    default Role getRoleById(String id)
-    {
+    default Role getRoleById(String id) {
         return getRoleCache().getElementById(id);
     }
 
@@ -561,12 +520,10 @@ public interface JDA
      * over all {@link net.dv8tion.jda.core.entities.Guild Guilds} and check whether a Role from that Guild is assigned
      * to the specified ID and will return the first that can be found.
      *
-     * @param id
-     *         The id of the searched Role
+     * @param id The id of the searched Role
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.Role Role} for the specified ID
      */
-    default Role getRoleById(long id)
-    {
+    default Role getRoleById(long id) {
         return getRoleCache().getElementById(id);
     }
 
@@ -575,14 +532,11 @@ public interface JDA
      * <br>This simply filters the Roles returned by {@link #getRoles()} with the provided name, either using
      * {@link String#equals(Object)} or {@link String#equalsIgnoreCase(String)} on {@link net.dv8tion.jda.core.entities.Role#getName()}.
      *
-     * @param  name
-     *         The name for the Roles
-     * @param  ignoreCase
-     *         Whether to use {@link String#equalsIgnoreCase(String)}
+     * @param name       The name for the Roles
+     * @param ignoreCase Whether to use {@link String#equalsIgnoreCase(String)}
      * @return Immutable List of all Roles matching the parameters provided.
      */
-    default List<Role> getRolesByName(String name, boolean ignoreCase)
-    {
+    default List<Role> getRolesByName(String name, boolean ignoreCase) {
         return getRoleCache().getElementsByName(name, ignoreCase);
     }
 
@@ -598,14 +552,11 @@ public interface JDA
      * Gets the {@link net.dv8tion.jda.core.entities.Category Category} that matches the provided id. <br>If there is no
      * matching {@link net.dv8tion.jda.core.entities.Category Category} this returns {@code null}.
      *
-     * @param id
-     *         The snowflake ID of the wanted Category
+     * @param id The snowflake ID of the wanted Category
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.Category Category} for the provided ID.
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided ID is not a valid {@code long}
+     * @throws java.lang.IllegalArgumentException If the provided ID is not a valid {@code long}
      */
-    default Category getCategoryById(String id)
-    {
+    default Category getCategoryById(String id) {
         return getCategoryCache().getElementById(id);
     }
 
@@ -613,12 +564,10 @@ public interface JDA
      * Gets the {@link net.dv8tion.jda.core.entities.Category Category} that matches the provided id. <br>If there is no
      * matching {@link net.dv8tion.jda.core.entities.Category Category} this returns {@code null}.
      *
-     * @param id
-     *         The snowflake ID of the wanted Category
+     * @param id The snowflake ID of the wanted Category
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.Category Category} for the provided ID.
      */
-    default Category getCategoryById(long id)
-    {
+    default Category getCategoryById(long id) {
         return getCategoryCache().getElementById(id);
     }
 
@@ -627,8 +576,7 @@ public interface JDA
      *
      * @return An immutable list of all visible {@link net.dv8tion.jda.core.entities.Category Categories}.
      */
-    default List<Category> getCategories()
-    {
+    default List<Category> getCategories() {
         return getCategoryCache().asList();
     }
 
@@ -636,16 +584,12 @@ public interface JDA
      * Gets a list of all {@link net.dv8tion.jda.core.entities.Category Categories} that have the same name as the one
      * provided. <br>If there are no matching categories this will return an empty list.
      *
-     * @param name
-     *         The name to check
-     * @param ignoreCase
-     *         Whether to ignore case on name checking
+     * @param name       The name to check
+     * @param ignoreCase Whether to ignore case on name checking
      * @return Immutable list of all categories matching the provided name
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided name is {@code null}
+     * @throws java.lang.IllegalArgumentException If the provided name is {@code null}
      */
-    default List<Category> getCategoriesByName(String name, boolean ignoreCase)
-    {
+    default List<Category> getCategoriesByName(String name, boolean ignoreCase) {
         return getCategoryCache().getElementsByName(name, ignoreCase);
     }
 
@@ -669,8 +613,7 @@ public interface JDA
      *
      * @return Possibly-empty list of all known {@link net.dv8tion.jda.core.entities.TextChannel TextChannels}.
      */
-    default List<TextChannel> getTextChannels()
-    {
+    default List<TextChannel> getTextChannels() {
         return getTextChannelCache().asList();
     }
 
@@ -685,15 +628,11 @@ public interface JDA
      * hides any {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} that you don't have the
      * {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ} permission in.
      *
-     * @param  id
-     *         The id of the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.
-     * @throws java.lang.NumberFormatException
-     *         If the provided {@code id} cannot be parsed by {@link Long#parseLong(String)}
-     *
+     * @param id The id of the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} with matching id.
+     * @throws java.lang.NumberFormatException If the provided {@code id} cannot be parsed by {@link Long#parseLong(String)}
      */
-    default TextChannel getTextChannelById(String id)
-    {
+    default TextChannel getTextChannelById(String id) {
         return getTextChannelCache().getElementById(id);
     }
 
@@ -708,13 +647,10 @@ public interface JDA
      * hides any {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} that you don't have the
      * {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ} permission in.
      *
-     * @param  id
-     *         The id of the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.
-     *
+     * @param id The id of the {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} with matching id.
      */
-    default TextChannel getTextChannelById(long id)
-    {
+    default TextChannel getTextChannelById(long id) {
         return getTextChannelCache().getElementById(id);
     }
 
@@ -728,16 +664,12 @@ public interface JDA
      * hides any {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} that you don't have the
      * {@link net.dv8tion.jda.core.Permission#MESSAGE_READ Permission.MESSAGE_READ} permission in.
      *
-     * @param  name
-     *         The name of the requested {@link net.dv8tion.jda.core.entities.TextChannel TextChannels}.
-     * @param  ignoreCase
-     *         Whether to ignore case or not when comparing the provided name to each {@link net.dv8tion.jda.core.entities.TextChannel#getName()}.
-     *
+     * @param name       The name of the requested {@link net.dv8tion.jda.core.entities.TextChannel TextChannels}.
+     * @param ignoreCase Whether to ignore case or not when comparing the provided name to each {@link net.dv8tion.jda.core.entities.TextChannel#getName()}.
      * @return Possibly-empty list of all the {@link net.dv8tion.jda.core.entities.TextChannel TextChannels} that all have the
-     *         same name as the provided name.
+     * same name as the provided name.
      */
-    default List<TextChannel> getTextChannelsByName(String name, boolean ignoreCase)
-    {
+    default List<TextChannel> getTextChannelsByName(String name, boolean ignoreCase) {
         return getTextChannelCache().getElementsByName(name, ignoreCase);
     }
 
@@ -755,8 +687,7 @@ public interface JDA
      *
      * @return Possible-empty list of all known {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannels}.
      */
-    default List<VoiceChannel> getVoiceChannels()
-    {
+    default List<VoiceChannel> getVoiceChannels() {
         return getVoiceChannelCache().asList();
     }
 
@@ -765,15 +696,11 @@ public interface JDA
      * <br>If there is no known {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel} with an id that matches the provided
      * one, then this returns {@code null}.
      *
-     * @param  id
-     *         The id of the {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel}.
-     * @throws java.lang.NumberFormatException
-     *         If the provided {@code id} cannot be parsed by {@link Long#parseLong(String)}
-     *
+     * @param id The id of the {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel}.
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel} with matching id.
+     * @throws java.lang.NumberFormatException If the provided {@code id} cannot be parsed by {@link Long#parseLong(String)}
      */
-    default VoiceChannel getVoiceChannelById(String id)
-    {
+    default VoiceChannel getVoiceChannelById(String id) {
         return getVoiceChannelCache().getElementById(id);
     }
 
@@ -782,13 +709,10 @@ public interface JDA
      * <br>If there is no known {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel} with an id that matches the provided
      * one, then this returns {@code null}.
      *
-     * @param  id
-     *         The id of the {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel}.
-     *
+     * @param id The id of the {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel}.
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel} with matching id.
      */
-    default VoiceChannel getVoiceChannelById(long id)
-    {
+    default VoiceChannel getVoiceChannelById(long id) {
         return getVoiceChannelCache().getElementById(id);
     }
 
@@ -796,16 +720,12 @@ public interface JDA
      * An unmodifiable list of all {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannels} that have the same name as the one provided.
      * <br>If there are no {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannels} with the provided name, then this returns an empty list.
      *
-     * @param  name
-     *         The name of the requested {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannels}.
-     * @param  ignoreCase
-     *         Whether to ignore case or not when comparing the provided name to each {@link net.dv8tion.jda.core.entities.VoiceChannel#getName()}.
-     *
+     * @param name       The name of the requested {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannels}.
+     * @param ignoreCase Whether to ignore case or not when comparing the provided name to each {@link net.dv8tion.jda.core.entities.VoiceChannel#getName()}.
      * @return Possibly-empty list of all the {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannels} that all have the
-     *         same name as the provided name.
+     * same name as the provided name.
      */
-    default List<VoiceChannel> getVoiceChannelByName(String name, boolean ignoreCase)
-    {
+    default List<VoiceChannel> getVoiceChannelByName(String name, boolean ignoreCase) {
         return getVoiceChannelCache().getElementsByName(name, ignoreCase);
     }
 
@@ -822,8 +742,7 @@ public interface JDA
      *
      * @return Possibly-empty list of all {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannels}.
      */
-    default List<PrivateChannel> getPrivateChannels()
-    {
+    default List<PrivateChannel> getPrivateChannels() {
         return getPrivateChannelCache().asList();
     }
 
@@ -832,15 +751,11 @@ public interface JDA
      * <br>If there is no known {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel} with an id that matches the provided
      * one, then this returns {@code null}.
      *
-     * @param  id
-     *         The id of the {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}.
-     * @throws java.lang.NumberFormatException
-     *         If the provided {@code id} cannot be parsed by {@link Long#parseLong(String)}
-     *
+     * @param id The id of the {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}.
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel} with matching id.
+     * @throws java.lang.NumberFormatException If the provided {@code id} cannot be parsed by {@link Long#parseLong(String)}
      */
-    default PrivateChannel getPrivateChannelById(String id)
-    {
+    default PrivateChannel getPrivateChannelById(String id) {
         return getPrivateChannelCache().getElementById(id);
     }
 
@@ -849,13 +764,10 @@ public interface JDA
      * <br>If there is no known {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel} with an id that matches the provided
      * one, then this returns {@code null}.
      *
-     * @param  id
-     *         The id of the {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}.
-     *
+     * @param id The id of the {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}.
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel} with matching id.
      */
-    default PrivateChannel getPrivateChannelById(long id)
-    {
+    default PrivateChannel getPrivateChannelById(long id) {
         return getPrivateChannelCache().getElementById(id);
     }
 
@@ -864,8 +776,7 @@ public interface JDA
      * all cached {@link net.dv8tion.jda.core.entities.Emote Emotes} visible to this JDA session.
      *
      * @return Unified {@link net.dv8tion.jda.core.utils.cache.SnowflakeCacheView SnowflakeCacheView}
-     *
-     * @see    net.dv8tion.jda.core.utils.cache.CacheView#allSnowflakes(java.util.function.Supplier) CacheView.allSnowflakes(...)
+     * @see net.dv8tion.jda.core.utils.cache.CacheView#allSnowflakes(java.util.function.Supplier) CacheView.allSnowflakes(...)
      */
     SnowflakeCacheView<Emote> getEmoteCache();
 
@@ -880,8 +791,7 @@ public interface JDA
      *
      * @return An immutable list of Emotes (which may or may not be available to usage).
      */
-    default List<Emote> getEmotes()
-    {
+    default List<Emote> getEmotes() {
         return getEmoteCache().asList();
     }
 
@@ -890,15 +800,12 @@ public interface JDA
      *
      * <p><b>Unicode emojis are not included as {@link net.dv8tion.jda.core.entities.Emote Emote}!</b>
      *
-     * @param id
-     *         The id of the requested {@link net.dv8tion.jda.core.entities.Emote}.
+     * @param id The id of the requested {@link net.dv8tion.jda.core.entities.Emote}.
      * @return An {@link net.dv8tion.jda.core.entities.Emote Emote} represented by this id or null if none is found in
-     *         our cache.
-     * @throws java.lang.NumberFormatException
-     *         If the provided {@code id} cannot be parsed by {@link Long#parseLong(String)}
+     * our cache.
+     * @throws java.lang.NumberFormatException If the provided {@code id} cannot be parsed by {@link Long#parseLong(String)}
      */
-    default Emote getEmoteById(String id)
-    {
+    default Emote getEmoteById(String id) {
         return getEmoteCache().getElementById(id);
     }
 
@@ -907,13 +814,11 @@ public interface JDA
      *
      * <p><b>Unicode emojis are not included as {@link net.dv8tion.jda.core.entities.Emote Emote}!</b>
      *
-     * @param id
-     *         The id of the requested {@link net.dv8tion.jda.core.entities.Emote}.
+     * @param id The id of the requested {@link net.dv8tion.jda.core.entities.Emote}.
      * @return An {@link net.dv8tion.jda.core.entities.Emote Emote} represented by this id or null if none is found in
-     *         our cache.
+     * our cache.
      */
-    default Emote getEmoteById(long id)
-    {
+    default Emote getEmoteById(long id) {
         return getEmoteCache().getElementById(id);
     }
 
@@ -924,16 +829,13 @@ public interface JDA
      *
      * <p><b>Unicode emojis are not included as {@link net.dv8tion.jda.core.entities.Emote Emote}!</b>
      *
-     * @param name
-     *         The name of the requested {@link net.dv8tion.jda.core.entities.Emote Emotes}.
-     * @param ignoreCase
-     *         Whether to ignore case or not when comparing the provided name to each {@link
-     *         net.dv8tion.jda.core.entities.Emote#getName()}.
+     * @param name       The name of the requested {@link net.dv8tion.jda.core.entities.Emote Emotes}.
+     * @param ignoreCase Whether to ignore case or not when comparing the provided name to each {@link
+     *                   net.dv8tion.jda.core.entities.Emote#getName()}.
      * @return Possibly-empty list of all the {@link net.dv8tion.jda.core.entities.Emote Emotes} that all have the same
-     *         name as the provided name.
+     * name as the provided name.
      */
-    default List<Emote> getEmotesByName(String name, boolean ignoreCase)
-    {
+    default List<Emote> getEmotesByName(String name, boolean ignoreCase) {
         return getEmoteCache().getElementsByName(name, ignoreCase);
     }
 
@@ -991,7 +893,7 @@ public interface JDA
      *
      * <p>Default is <b>true</b>.
      *
-     * @param  reconnect If true - enables autoReconnect
+     * @param reconnect If true - enables autoReconnect
      */
     void setAutoReconnect(boolean reconnect);
 
@@ -999,8 +901,7 @@ public interface JDA
      * Whether the Requester should retry when
      * a {@link java.net.SocketTimeoutException SocketTimeoutException} occurs.
      *
-     * @param  retryOnTimeout
-     *         True, if the Request should retry once on a socket timeout
+     * @param retryOnTimeout True, if the Request should retry once on a socket timeout
      */
     void setRequestTimeoutRetry(boolean retryOnTimeout);
 
@@ -1075,20 +976,16 @@ public interface JDA
     /**
      * Used to access Client specific functions like Groups, Calls, and Friends.
      *
-     * @throws net.dv8tion.jda.core.exceptions.AccountTypeException
-     *         Thrown if the currently logged in account is {@link net.dv8tion.jda.core.AccountType#BOT}
-     *
      * @return The {@link net.dv8tion.jda.client.JDAClient} registry for this instance of JDA.
+     * @throws net.dv8tion.jda.core.exceptions.AccountTypeException Thrown if the currently logged in account is {@link net.dv8tion.jda.core.AccountType#BOT}
      */
     JDAClient asClient();
 
     /**
      * Used to access Bot specific functions like OAuth information.
      *
-     * @throws net.dv8tion.jda.core.exceptions.AccountTypeException
-     *         Thrown if the currently logged in account is {@link net.dv8tion.jda.core.AccountType#CLIENT}
-     *
      * @return The {@link net.dv8tion.jda.bot.JDABot} registry for this instance of JDA.
+     * @throws net.dv8tion.jda.core.exceptions.AccountTypeException Thrown if the currently logged in account is {@link net.dv8tion.jda.core.AccountType#CLIENT}
      */
     JDABot asBot();
 }

@@ -26,12 +26,10 @@ import net.dv8tion.jda.core.entities.Guild;
  *
  * <p>Identifier: {@code notification_level}
  */
-public class GuildUpdateNotificationLevelEvent extends GenericGuildUpdateEvent<Guild.NotificationLevel>
-{
+public class GuildUpdateNotificationLevelEvent extends GenericGuildUpdateEvent<Guild.NotificationLevel> {
     public static final String IDENTIFIER = "notification_level";
 
-    public GuildUpdateNotificationLevelEvent(JDA api, long responseNumber, Guild guild, Guild.NotificationLevel oldNotificationLevel)
-    {
+    public GuildUpdateNotificationLevelEvent(JDA api, long responseNumber, Guild guild, Guild.NotificationLevel oldNotificationLevel) {
         super(api, responseNumber, guild, oldNotificationLevel, guild.getDefaultNotificationLevel(), IDENTIFIER);
     }
 
@@ -40,8 +38,7 @@ public class GuildUpdateNotificationLevelEvent extends GenericGuildUpdateEvent<G
      *
      * @return The old NotificationLevel
      */
-    public Guild.NotificationLevel getOldNotificationLevel()
-    {
+    public Guild.NotificationLevel getOldNotificationLevel() {
         return getOldValue();
     }
 
@@ -50,8 +47,7 @@ public class GuildUpdateNotificationLevelEvent extends GenericGuildUpdateEvent<G
      *
      * @return The new NotificationLevel
      */
-    public Guild.NotificationLevel getNewNotificationLevel()
-    {
+    public Guild.NotificationLevel getNewNotificationLevel() {
         return getNewValue();
     }
 }

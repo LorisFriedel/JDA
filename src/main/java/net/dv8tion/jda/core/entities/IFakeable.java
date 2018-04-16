@@ -33,8 +33,7 @@ package net.dv8tion.jda.core.entities;
  *
  * @since 3.0
  */
-public interface IFakeable
-{
+public interface IFakeable {
     /**
      * Describes whether an entity is fake or not.
      *

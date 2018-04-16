@@ -37,10 +37,9 @@ import java.util.function.BooleanSupplier;
  * designed to create a {@link net.dv8tion.jda.core.entities.Channel Channel}.
  * This extension allows setting properties before executing the action.
  *
- * @since  3.0
+ * @since 3.0
  */
-public class ChannelAction extends AuditableRestAction<Channel>
-{
+public class ChannelAction extends AuditableRestAction<Channel> {
     protected final Set<PermOverrideData> overrides = new HashSet<>();
     protected final Guild guild;
     protected final ChannelType type;
@@ -58,18 +57,13 @@ public class ChannelAction extends AuditableRestAction<Channel>
     /**
      * Creates a new ChannelAction instance
      *
-     * @param  route
-     *         The {@link net.dv8tion.jda.core.requests.Route.CompiledRoute CompileRoute}
-     *         to use for this action
-     * @param  name
-     *         The name for the new {@link net.dv8tion.jda.core.entities.Channel Channel}
-     * @param  guild
-     *         The {@link net.dv8tion.jda.core.entities.Guild Guild} the channel should be created in
-     * @param  type
-     *         What kind of channel should be created
+     * @param route The {@link net.dv8tion.jda.core.requests.Route.CompiledRoute CompileRoute}
+     *              to use for this action
+     * @param name  The name for the new {@link net.dv8tion.jda.core.entities.Channel Channel}
+     * @param guild The {@link net.dv8tion.jda.core.entities.Guild Guild} the channel should be created in
+     * @param type  What kind of channel should be created
      */
-    public ChannelAction(Route.CompiledRoute route, String name, Guild guild, ChannelType type)
-    {
+    public ChannelAction(Route.CompiledRoute route, String name, Guild guild, ChannelType type) {
         super(guild.getJDA(), route);
         this.guild = guild;
         this.type = type;
@@ -77,25 +71,19 @@ public class ChannelAction extends AuditableRestAction<Channel>
     }
 
     @Override
-    public ChannelAction setCheck(BooleanSupplier checks)
-    {
+    public ChannelAction setCheck(BooleanSupplier checks) {
         return (ChannelAction) super.setCheck(checks);
     }
 
     /**
      * Sets the name for the new Channel
      *
-     * @param  name
-     *         The not-null name for the new Channel (2-100 chars long)
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided name is null or not between 2-100 chars long
-     *
+     * @param name The not-null name for the new Channel (2-100 chars long)
      * @return The current ChannelAction, for chaining convenience
+     * @throws java.lang.IllegalArgumentException If the provided name is null or not between 2-100 chars long
      */
     @CheckReturnValue
-    public ChannelAction setName(String name)
-    {
+    public ChannelAction setName(String name) {
         Checks.notNull(name, "Channel name");
         if (name.length() < 2 || name.length() > 100)
             throw new IllegalArgumentException("Provided channel name must be 2 to 100 characters in length");
@@ -107,20 +95,14 @@ public class ChannelAction extends AuditableRestAction<Channel>
     /**
      * Sets the {@link net.dv8tion.jda.core.entities.Category Category} for the new Channel
      *
-     * @param  category
-     *         The parent for the new Channel
-     *
-     * @throws UnsupportedOperationException
-     *         If this ChannelAction is for a Category
-     * @throws IllegalArgumentException
-     *         If the provided category is {@code null}
-     *         or not from this Guild
-     *
+     * @param category The parent for the new Channel
      * @return The current ChannelAction, for chaining convenience
+     * @throws UnsupportedOperationException If this ChannelAction is for a Category
+     * @throws IllegalArgumentException      If the provided category is {@code null}
+     *                                       or not from this Guild
      */
     @CheckReturnValue
-    public ChannelAction setParent(Category category)
-    {
+    public ChannelAction setParent(Category category) {
         Checks.check(category == null || category.getGuild().equals(guild), "Category is not from same guild!");
         this.parent = category;
         return this;
@@ -129,19 +111,13 @@ public class ChannelAction extends AuditableRestAction<Channel>
     /**
      * Sets the topic for the new TextChannel
      *
-     * @param  topic
-     *         The topic for the new Channel (max 1024 chars)
-     *
-     * @throws UnsupportedOperationException
-     *         If this ChannelAction is not for a TextChannel
-     * @throws IllegalArgumentException
-     *         If the provided topic is longer than 1024 chars
-     *
+     * @param topic The topic for the new Channel (max 1024 chars)
      * @return The current ChannelAction, for chaining convenience
+     * @throws UnsupportedOperationException If this ChannelAction is not for a TextChannel
+     * @throws IllegalArgumentException      If the provided topic is longer than 1024 chars
      */
     @CheckReturnValue
-    public ChannelAction setTopic(String topic)
-    {
+    public ChannelAction setTopic(String topic) {
         if (type != ChannelType.TEXT)
             throw new UnsupportedOperationException("Can only set the topic for a TextChannel!");
         if (topic != null && topic.length() > 1024)
@@ -153,17 +129,12 @@ public class ChannelAction extends AuditableRestAction<Channel>
     /**
      * Sets the NSFW flag for the new TextChannel
      *
-     * @param  nsfw
-     *         The NSFW flag for the new Channel
-     *
-     * @throws UnsupportedOperationException
-     *         If this ChannelAction is not for a TextChannel
-     *
+     * @param nsfw The NSFW flag for the new Channel
      * @return The current ChannelAction, for chaining convenience
+     * @throws UnsupportedOperationException If this ChannelAction is not for a TextChannel
      */
     @CheckReturnValue
-    public ChannelAction setNSFW(boolean nsfw)
-    {
+    public ChannelAction setNSFW(boolean nsfw) {
         if (type != ChannelType.TEXT)
             throw new UnsupportedOperationException("Can only set nsfw for a TextChannel!");
         this.nsfw = nsfw;
@@ -174,22 +145,15 @@ public class ChannelAction extends AuditableRestAction<Channel>
      * Adds a new Role-{@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
      * for the new Channel.
      *
-     * @param  target
-     *         The not-null {@link net.dv8tion.jda.core.entities.Role Role} or {@link net.dv8tion.jda.core.entities.Member Member} for the override
-     * @param  allow
-     *         The granted {@link net.dv8tion.jda.core.Permission Permissions} for the override or null
-     * @param  deny
-     *         The denied {@link net.dv8tion.jda.core.Permission Permissions} for the override or null
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the specified {@link net.dv8tion.jda.core.entities.Role Role} is null
-     *         or not within the same guild.
-     *
+     * @param target The not-null {@link net.dv8tion.jda.core.entities.Role Role} or {@link net.dv8tion.jda.core.entities.Member Member} for the override
+     * @param allow  The granted {@link net.dv8tion.jda.core.Permission Permissions} for the override or null
+     * @param deny   The denied {@link net.dv8tion.jda.core.Permission Permissions} for the override or null
      * @return The current ChannelAction, for chaining convenience
+     * @throws java.lang.IllegalArgumentException If the specified {@link net.dv8tion.jda.core.entities.Role Role} is null
+     *                                            or not within the same guild.
      */
     @CheckReturnValue
-    public ChannelAction addPermissionOverride(IPermissionHolder target, Collection<Permission> allow, Collection<Permission> deny)
-    {
+    public ChannelAction addPermissionOverride(IPermissionHolder target, Collection<Permission> allow, Collection<Permission> deny) {
         checkPermissions(allow);
         checkPermissions(deny);
         final long allowRaw = allow != null ? Permission.getRaw(allow) : 0;
@@ -202,46 +166,35 @@ public class ChannelAction extends AuditableRestAction<Channel>
      * Adds a new Role-{@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
      * for the new Channel.
      *
-     * @param  target
-     *         The not-null {@link net.dv8tion.jda.core.entities.Role Role} for the override
-     * @param  allow
-     *         The granted {@link net.dv8tion.jda.core.Permission Permissions} for the override
-     *         Use {@link net.dv8tion.jda.core.Permission#getRawValue()} to retrieve these Permissions.
-     * @param  deny
-     *         The denied {@link net.dv8tion.jda.core.Permission Permissions} for the override
-     *         Use {@link net.dv8tion.jda.core.Permission#getRawValue()} to retrieve these Permissions.
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>If the specified {@link net.dv8tion.jda.core.entities.Role Role} is null
-     *                 or not within the same guild.</li>
-     *             <li>If one of the provided Permission values is invalid</li>
-     *         </ul>
-     *
+     * @param target The not-null {@link net.dv8tion.jda.core.entities.Role Role} for the override
+     * @param allow  The granted {@link net.dv8tion.jda.core.Permission Permissions} for the override
+     *               Use {@link net.dv8tion.jda.core.Permission#getRawValue()} to retrieve these Permissions.
+     * @param deny   The denied {@link net.dv8tion.jda.core.Permission Permissions} for the override
+     *               Use {@link net.dv8tion.jda.core.Permission#getRawValue()} to retrieve these Permissions.
      * @return The current ChannelAction, for chaining convenience
-     *
-     * @see    net.dv8tion.jda.core.Permission#getRawValue()
-     * @see    net.dv8tion.jda.core.Permission#getRaw(java.util.Collection)
-     * @see    net.dv8tion.jda.core.Permission#getRaw(net.dv8tion.jda.core.Permission...)
+     * @throws java.lang.IllegalArgumentException <ul>
+     *                                            <li>If the specified {@link net.dv8tion.jda.core.entities.Role Role} is null
+     *                                            or not within the same guild.</li>
+     *                                            <li>If one of the provided Permission values is invalid</li>
+     *                                            </ul>
+     * @see net.dv8tion.jda.core.Permission#getRawValue()
+     * @see net.dv8tion.jda.core.Permission#getRaw(java.util.Collection)
+     * @see net.dv8tion.jda.core.Permission#getRaw(net.dv8tion.jda.core.Permission...)
      */
     @CheckReturnValue
-    public ChannelAction addPermissionOverride(IPermissionHolder target, long allow, long deny)
-    {
+    public ChannelAction addPermissionOverride(IPermissionHolder target, long allow, long deny) {
         Checks.notNull(target, "Override Role");
         Checks.notNegative(allow, "Granted permissions value");
         Checks.notNegative(deny, "Denied permissions value");
         Checks.check(allow <= Permission.ALL_PERMISSIONS, "Specified allow value may not be greater than a full permission set");
-        Checks.check(deny <= Permission.ALL_PERMISSIONS,  "Specified deny value may not be greater than a full permission set");
+        Checks.check(deny <= Permission.ALL_PERMISSIONS, "Specified deny value may not be greater than a full permission set");
         Checks.check(target.getGuild().equals(guild), "Specified Role is not in the same Guild!");
 
-        if (target instanceof Role)
-        {
+        if (target instanceof Role) {
             Role r = (Role) target;
             long id = r.getIdLong();
             overrides.add(new PermOverrideData(PermOverrideData.ROLE_TYPE, id, allow, deny));
-        }
-        else
-        {
+        } else {
             Member m = (Member) target;
             long id = m.getUser().getIdLong();
             overrides.add(new PermOverrideData(PermOverrideData.MEMBER_TYPE, id, allow, deny));
@@ -250,27 +203,21 @@ public class ChannelAction extends AuditableRestAction<Channel>
     }
 
     // --voice only--
+
     /**
      * Sets the bitrate for the new VoiceChannel
      *
-     * @param  bitrate
-     *         The bitrate for the new Channel (min {@code 8000}; max {@code 96000}/{@code 128000}
-     *         (for {@link net.dv8tion.jda.core.entities.Guild#getFeatures() VIP Guilds})) or null to use default ({@code 64000})
-     *
-     * @throws UnsupportedOperationException
-     *         If this ChannelAction is not for a VoiceChannel
-     * @throws IllegalArgumentException
-     *         If the provided bitrate is less than 8000 or greater than 128000
-     *
+     * @param bitrate The bitrate for the new Channel (min {@code 8000}; max {@code 96000}/{@code 128000}
+     *                (for {@link net.dv8tion.jda.core.entities.Guild#getFeatures() VIP Guilds})) or null to use default ({@code 64000})
      * @return The current ChannelAction, for chaining convenience
+     * @throws UnsupportedOperationException If this ChannelAction is not for a VoiceChannel
+     * @throws IllegalArgumentException      If the provided bitrate is less than 8000 or greater than 128000
      */
     @CheckReturnValue
-    public ChannelAction setBitrate(Integer bitrate)
-    {
+    public ChannelAction setBitrate(Integer bitrate) {
         if (type != ChannelType.VOICE)
             throw new UnsupportedOperationException("Can only set the bitrate for a VoiceChannel!");
-        if (bitrate != null)
-        {
+        if (bitrate != null) {
             int maxBitrate = guild.getFeatures().contains("VIP_REGIONS") ? 128000 : 96000;
             if (bitrate < 8000)
                 throw new IllegalArgumentException("Bitrate must be greater than 8000.");
@@ -285,19 +232,13 @@ public class ChannelAction extends AuditableRestAction<Channel>
     /**
      * Sets the userlimit for the new VoiceChannel
      *
-     * @param  userlimit
-     *         The userlimit for the new VoiceChannel or {@code null}/{@code 0} to use no limit,
-     *
-     * @throws UnsupportedOperationException
-     *         If this ChannelAction is not for a VoiceChannel
-     * @throws IllegalArgumentException
-     *         If the provided userlimit is negative or above {@code 99}
-     *
+     * @param userlimit The userlimit for the new VoiceChannel or {@code null}/{@code 0} to use no limit,
      * @return The current ChannelAction, for chaining convenience
+     * @throws UnsupportedOperationException If this ChannelAction is not for a VoiceChannel
+     * @throws IllegalArgumentException      If the provided userlimit is negative or above {@code 99}
      */
     @CheckReturnValue
-    public ChannelAction setUserlimit(Integer userlimit)
-    {
+    public ChannelAction setUserlimit(Integer userlimit) {
         if (type != ChannelType.VOICE)
             throw new UnsupportedOperationException("Can only set the userlimit for a VoiceChannel!");
         if (userlimit != null && (userlimit < 0 || userlimit > 99))
@@ -307,14 +248,12 @@ public class ChannelAction extends AuditableRestAction<Channel>
     }
 
     @Override
-    protected RequestBody finalizeData()
-    {
+    protected RequestBody finalizeData() {
         JSONObject object = new JSONObject();
         object.put("name", name);
         object.put("type", type.getId());
         object.put("permission_overwrites", new JSONArray(overrides));
-        switch (type)
-        {
+        switch (type) {
             case VOICE:
                 if (bitrate != null)
                     object.put("bitrate", bitrate.intValue());
@@ -334,18 +273,16 @@ public class ChannelAction extends AuditableRestAction<Channel>
     }
 
     @Override
-    protected void handleResponse(Response response, Request<Channel> request)
-    {
-        if (!response.isOk())
-        {
+    protected void handleResponse(Response response, Request<Channel> request) {
+        if (!response.isOk()) {
             request.onFailure(response);
             return;
         }
 
-        EntityBuilder builder = api.getEntityBuilder();;
+        EntityBuilder builder = api.getEntityBuilder();
+        ;
         Channel channel;
-        switch (type)
-        {
+        switch (type) {
             case VOICE:
                 channel = builder.createVoiceChannel(response.getObject(), guild.getIdLong());
                 break;
@@ -362,16 +299,14 @@ public class ChannelAction extends AuditableRestAction<Channel>
         request.onSuccess(channel);
     }
 
-    protected void checkPermissions(Permission... permissions)
-    {
+    protected void checkPermissions(Permission... permissions) {
         if (permissions == null)
             return;
         for (Permission p : permissions)
             Checks.notNull(p, "Permissions");
     }
 
-    protected void checkPermissions(Collection<Permission> permissions)
-    {
+    protected void checkPermissions(Collection<Permission> permissions) {
         if (permissions == null)
             return;
         for (Permission p : permissions)

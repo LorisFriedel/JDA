@@ -27,8 +27,7 @@ import java.util.Arrays;
  * Represents the contents of a audio packet that was either received from Discord or
  * will be sent to discord.
  */
-public class AudioPacket
-{
+public class AudioPacket {
     public static final int RTP_HEADER_BYTE_LENGTH = 12;
     public static final int XSALSA20_NONCE_LENGTH = 24;
 
@@ -37,7 +36,7 @@ public class AudioPacket
      * Bit index 2 represents whether or not we pad. Opus uses an internal padding system, so RTP padding is not used.<br>
      * Bit index 3 represents if we use extensions. Discord does not use RTP extensions.<br>
      * Bit index 4 to 7 represent the CC or CSRC count. CSRC is Combined SSRC. Discord doesn't combine audio streams,
-     *      so the Combined count will always be 0 (binary: 0000).<br>
+     * so the Combined count will always be 0 (binary: 0000).<br>
      * This byte should always be the same, no matter the library implementation.
      */
     public static final byte RTP_VERSION_PAD_EXTEND = (byte) 0x80;  //Binary: 1000 0000
@@ -49,25 +48,24 @@ public class AudioPacket
      */
     public static final byte RTP_PAYLOAD_TYPE = (byte) 0x78;        //Binary: 0100 1000
 
-    public static final int RTP_VERSION_PAD_EXTEND_INDEX =  0;
-    public static final int RTP_PAYLOAD_INDEX =             1;
-    public static final int SEQ_INDEX =                     2;
-    public static final int TIMESTAMP_INDEX =               4;
-    public static final int SSRC_INDEX =                    8;
+    public static final int RTP_VERSION_PAD_EXTEND_INDEX = 0;
+    public static final int RTP_PAYLOAD_INDEX = 1;
+    public static final int SEQ_INDEX = 2;
+    public static final int TIMESTAMP_INDEX = 4;
+    public static final int SSRC_INDEX = 8;
 
     private final char seq;
     private final int timestamp;
     private final int ssrc;
     private final byte[] encodedAudio;
     private final byte[] rawPacket;
+//    private final byte[] nonce;
 
-    public AudioPacket(DatagramPacket packet)
-    {
-        this(Arrays.copyOf(packet.getData(), packet.getLength()));
+    public AudioPacket(DatagramPacket packet) {
+        this(Arrays.copyOf(packet.getData(), packet.getLength())); // this(packet.getData());
     }
 
-    public AudioPacket(byte[] rawPacket)
-    {
+    public AudioPacket(byte[] rawPacket) {
         this.rawPacket = rawPacket;
 
         ByteBuffer buffer = ByteBuffer.wrap(rawPacket);
@@ -78,29 +76,26 @@ public class AudioPacket
         final byte versionPad = buffer.get(0);
         final byte[] data = buffer.array();
         if ((versionPad & 0b0001_0000) != 0
-            && data[RTP_HEADER_BYTE_LENGTH] == (byte) 0xBE && data[RTP_HEADER_BYTE_LENGTH + 1] == (byte) 0xDE)
-        {
+            && data[RTP_HEADER_BYTE_LENGTH] == (byte) 0xBE && data[RTP_HEADER_BYTE_LENGTH + 1] == (byte) 0xDE) {
             final short headerLength = (short) (data[RTP_HEADER_BYTE_LENGTH + 2] << 8 | data[RTP_HEADER_BYTE_LENGTH + 3]);
             int i = RTP_HEADER_BYTE_LENGTH + 4;
-            for (; i < headerLength + RTP_HEADER_BYTE_LENGTH + 4; i++)
-            {
+            for (; i < headerLength + RTP_HEADER_BYTE_LENGTH + 4; i++) {
                 byte len = (byte) ((data[i] & 0x0F) + 1);
                 i += len;
             }
-            while (data[i] == 0)
+            while (data[i] == 0) {
                 i++;
+            }
             this.encodedAudio = new byte[data.length - i];
             System.arraycopy(data, i, encodedAudio, 0, encodedAudio.length);
-        }
-        else
-        {
+        } else {
             this.encodedAudio = new byte[buffer.array().length - RTP_HEADER_BYTE_LENGTH];
             System.arraycopy(buffer.array(), RTP_HEADER_BYTE_LENGTH, this.encodedAudio, 0, this.encodedAudio.length);
         }
+//        this.nonce = Arrays.copyOf(rawPacket, RTP_HEADER_BYTE_LENGTH);
     }
 
-    public AudioPacket(char seq, int timestamp, int ssrc, byte[] encodedAudio)
-    {
+    public AudioPacket(char seq, int timestamp, int ssrc, byte[] encodedAudio) {
         this.seq = seq;
         this.ssrc = ssrc;
         this.timestamp = timestamp;
@@ -114,49 +109,44 @@ public class AudioPacket
         buffer.putInt(SSRC_INDEX, ssrc);                                    //8 - 11
         System.arraycopy(encodedAudio, 0, buffer.array(), RTP_HEADER_BYTE_LENGTH, encodedAudio.length);//12 - n
         this.rawPacket = buffer.array();
+//        this.nonce = Arrays.copyOf(rawPacket, RTP_HEADER_BYTE_LENGTH);
 
     }
 
-    public byte[] getNonce()
-    {
+    // TODO optimize array copy
+
+    public byte[] getNonce() {
         //The first 12 bytes are the rawPacket are the RTP Discord Nonce.
         return Arrays.copyOf(rawPacket, RTP_HEADER_BYTE_LENGTH);
     }
 
-    public byte[] getRawPacket()
-    {
+    public byte[] getRawPacket() {
         return Arrays.copyOf(rawPacket, rawPacket.length);
     }
 
-    public byte[] getEncodedAudio()
-    {
+    public byte[] getEncodedAudio() {
         return Arrays.copyOf(encodedAudio, encodedAudio.length);
     }
 
-    public char getSequence()
-    {
+    public char getSequence() {
         return seq;
     }
 
-    public int getSSRC()
-    {
+    public int getSSRC() {
         return ssrc;
     }
 
-    public int getTimestamp()
-    {
+    public int getTimestamp() {
         return timestamp;
     }
 
-    public DatagramPacket asUdpPacket(InetSocketAddress address)
-    {
+    public DatagramPacket asUdpPacket(InetSocketAddress address) {
         //We use getRawPacket() instead of the rawPacket variable so that we get a copy of the array instead of the
         //actual array. We want AudioPacket to be immutable.
         return new DatagramPacket(getRawPacket(), rawPacket.length, address);
     }
 
-    public DatagramPacket asEncryptedUdpPacket(InetSocketAddress address, byte[] secretKey)
-    {
+    public DatagramPacket asEncryptedUdpPacket(InetSocketAddress address, byte[] secretKey) {
         //Xsalsa20's Nonce is 24 bytes long, however RTP (and consequently Discord)'s nonce is
         // only 12 bytes long, so we need to create a 24 byte array, and copy the 12 byte nonce into it.
         // we will leave the extra bytes as nulls. (Java sets non-populated bytes as 0).
@@ -176,8 +166,7 @@ public class AudioPacket
         return new AudioPacket(seq, timestamp, ssrc, encryptedAudio).asUdpPacket(address);
     }
 
-    public static AudioPacket createEchoPacket(DatagramPacket packet, int ssrc)
-    {
+    public static AudioPacket createEchoPacket(DatagramPacket packet, int ssrc) {
         ByteBuffer buffer = ByteBuffer.wrap(Arrays.copyOf(packet.getData(), packet.getLength()));
         buffer.put(RTP_VERSION_PAD_EXTEND_INDEX, RTP_VERSION_PAD_EXTEND);
         buffer.put(RTP_PAYLOAD_INDEX, RTP_PAYLOAD_TYPE);
@@ -185,8 +174,7 @@ public class AudioPacket
         return new AudioPacket(buffer.array());
     }
 
-    public static AudioPacket decryptAudioPacket(DatagramPacket packet, byte[] secretKey)
-    {
+    public static AudioPacket decryptAudioPacket(DatagramPacket packet, byte[] secretKey) {
         TweetNaclFast.SecretBox boxer = new TweetNaclFast.SecretBox(secretKey);
         AudioPacket encryptedPacket = new AudioPacket(packet);
 
@@ -194,8 +182,7 @@ public class AudioPacket
         System.arraycopy(encryptedPacket.getNonce(), 0, extendedNonce, 0, RTP_HEADER_BYTE_LENGTH);
 
         byte[] decryptedAudio = boxer.open(encryptedPacket.getEncodedAudio(), extendedNonce);
-        if (decryptedAudio == null)
-        {
+        if (decryptedAudio == null) {
             AudioConnection.LOG.debug("Failed to decrypt audio packet");
             return null;
         }

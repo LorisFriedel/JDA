@@ -23,10 +23,8 @@ import net.dv8tion.jda.core.entities.Guild;
  *
  * <p>Cane bse used to detect when you leave a Guild.
  */
-public class GuildLeaveEvent extends GenericGuildEvent
-{
-    public GuildLeaveEvent(JDA api, long responseNumber, Guild guild)
-    {
+public class GuildLeaveEvent extends GenericGuildEvent {
+    public GuildLeaveEvent(JDA api, long responseNumber, Guild guild) {
         super(api, responseNumber, guild);
     }
 }

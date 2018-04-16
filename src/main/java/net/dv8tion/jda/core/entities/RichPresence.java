@@ -28,10 +28,9 @@ import java.util.Objects;
  * Used to hold additional information about a users {@link net.dv8tion.jda.core.entities.Game Game}
  * relevant to <a href="https://discordapp.com/developers/docs/rich-presence/best-practices" target="_blank">Rich Presence</a>.
  *
- * @since  3.4.0
+ * @since 3.4.0
  */
-public class RichPresence extends Game
-{
+public class RichPresence extends Game {
     protected final long applicationId;
 
     protected final Party party;
@@ -46,8 +45,7 @@ public class RichPresence extends Game
     protected RichPresence(
         GameType type, String name, String url, long applicationId,
         Party party, String details, String state, Timestamps timestamps, String syncId, String sessionId, int flags,
-        String largeImageKey, String largeImageText, String smallImageKey, String smallImageText)
-    {
+        String largeImageKey, String largeImageText, String smallImageKey, String smallImageText) {
         super(name, url, type, timestamps);
         this.applicationId = applicationId;
         this.party = party;
@@ -61,14 +59,12 @@ public class RichPresence extends Game
     }
 
     @Override
-    public boolean isRich()
-    {
+    public boolean isRich() {
         return true;
     }
 
     @Override
-    public RichPresence asRichPresence()
-    {
+    public RichPresence asRichPresence() {
         return this;
     }
 
@@ -77,8 +73,7 @@ public class RichPresence extends Game
      *
      * @return The ID for the application
      */
-    public long getApplicationIdLong()
-    {
+    public long getApplicationIdLong() {
         return applicationId;
     }
 
@@ -88,8 +83,7 @@ public class RichPresence extends Game
      * @return The ID for the application
      */
     @Nonnull
-    public String getApplicationId()
-    {
+    public String getApplicationId() {
         return Long.toUnsignedString(applicationId);
     }
 
@@ -100,8 +94,7 @@ public class RichPresence extends Game
      * @return Session ID
      */
     @Nullable
-    public String getSessionId()
-    {
+    public String getSessionId() {
         return sessionId;
     }
 
@@ -112,8 +105,7 @@ public class RichPresence extends Game
      * @return Sync ID
      */
     @Nullable
-    public String getSyncId()
-    {
+    public String getSyncId() {
         return syncId;
     }
 
@@ -122,8 +114,7 @@ public class RichPresence extends Game
      *
      * @return The flags for this presence
      */
-    public int getFlags()
-    {
+    public int getFlags() {
         return flags;
     }
 
@@ -134,8 +125,7 @@ public class RichPresence extends Game
      * @return The user's current party status
      */
     @Nullable
-    public String getState()
-    {
+    public String getState() {
         return state;
     }
 
@@ -146,8 +136,7 @@ public class RichPresence extends Game
      * @return What the player is currently doing
      */
     @Nullable
-    public String getDetails()
-    {
+    public String getDetails() {
         return details;
     }
 
@@ -157,8 +146,7 @@ public class RichPresence extends Game
      * @return {@link net.dv8tion.jda.core.entities.RichPresence.Party Party} wrapper or {@code null} if unset
      */
     @Nullable
-    public Party getParty()
-    {
+    public Party getParty() {
         return party;
     }
 
@@ -168,8 +156,7 @@ public class RichPresence extends Game
      * @return {@link net.dv8tion.jda.core.entities.RichPresence.Image Image} wrapper or {@code null} if unset
      */
     @Nullable
-    public Image getLargeImage()
-    {
+    public Image getLargeImage() {
         return largeImage;
     }
 
@@ -179,26 +166,22 @@ public class RichPresence extends Game
      * @return {@link net.dv8tion.jda.core.entities.RichPresence.Image Image} wrapper or {@code null} if unset
      */
     @Nullable
-    public Image getSmallImage()
-    {
+    public Image getSmallImage() {
         return smallImage;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return String.format("RichPresence(%s / %s)", name, getApplicationId());
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return Objects.hash(applicationId, state, details, party, sessionId, syncId, flags, timestamps, largeImage, smallImage);
     }
 
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         if (this == o)
             return true;
         if (!(o instanceof RichPresence))
@@ -222,13 +205,11 @@ public class RichPresence extends Game
     /**
      * Used to hold information on images within a Rich Presence profile
      */
-    public class Image
-    {
+    public class Image {
         protected final String key;
         protected final String text;
 
-        public Image(String key, String text)
-        {
+        public Image(String key, String text) {
             this.key = key;
             this.text = text;
         }
@@ -239,8 +220,7 @@ public class RichPresence extends Game
          * @return The key for this image
          */
         @Nonnull
-        public String getKey()
-        {
+        public String getKey() {
             return key;
         }
 
@@ -250,8 +230,7 @@ public class RichPresence extends Game
          * @return Hover text for this image, or {@code null}
          */
         @Nullable
-        public String getText()
-        {
+        public String getText() {
             return text;
         }
 
@@ -261,8 +240,7 @@ public class RichPresence extends Game
          * @return URL for this image
          */
         @Nonnull
-        public String getUrl()
-        {
+        public String getUrl() {
             if (key.startsWith("spotify:"))
                 return "https://i.scdn.co/image/" + key.substring("spotify:".length());
             if (key.startsWith("twitch:"))
@@ -271,14 +249,12 @@ public class RichPresence extends Game
         }
 
         @Override
-        public String toString()
-        {
+        public String toString() {
             return String.format("RichPresenceImage(%s | %s)", key, text);
         }
 
         @Override
-        public boolean equals(Object obj)
-        {
+        public boolean equals(Object obj) {
             if (!(obj instanceof Image))
                 return false;
             Image i = (Image) obj;
@@ -286,8 +262,7 @@ public class RichPresence extends Game
         }
 
         @Override
-        public int hashCode()
-        {
+        public int hashCode() {
             return Objects.hash(key, text);
         }
     }
@@ -295,14 +270,12 @@ public class RichPresence extends Game
     /**
      * Represents the start and end timestamps for a running match
      */
-    public static class Timestamps
-    {
+    public static class Timestamps {
         protected final long start;
 
         protected final long end;
 
-        public Timestamps(long start, long end)
-        {
+        public Timestamps(long start, long end) {
             this.start = start;
             this.end = end;
         }
@@ -312,8 +285,7 @@ public class RichPresence extends Game
          *
          * @return Epoch second timestamp of match start, or {@code 0} of unset.
          */
-        public long getStart()
-        {
+        public long getStart() {
             return start;
         }
 
@@ -323,8 +295,7 @@ public class RichPresence extends Game
          * @return Instant of match start, or {@code null} if unset
          */
         @Nullable
-        public Instant getStartTime()
-        {
+        public Instant getStartTime() {
             return start <= 0 ? null : Instant.ofEpochMilli(start);
         }
 
@@ -333,8 +304,7 @@ public class RichPresence extends Game
          *
          * @return Epoch second timestamp of match end, or {@code 0} of unset.
          */
-        public long getEnd()
-        {
+        public long getEnd() {
             return end;
         }
 
@@ -344,8 +314,7 @@ public class RichPresence extends Game
          * @return Instant of match start, or {@code null} if unset
          */
         @Nullable
-        public Instant getEndTime()
-        {
+        public Instant getEndTime() {
             return end <= 0 ? null : Instant.ofEpochMilli(end);
         }
 
@@ -353,25 +322,16 @@ public class RichPresence extends Game
          * Calculates the amount of time until {@link #getEndTime()} in terms of the specified unit.
          * <br>If {@link #getEndTime()} is {@code null} this will be negative.
          *
-         * @param  unit
-         *         The {@link java.time.temporal.TemporalUnit TemporalUnit} to return
-         *
-         * @throws IllegalArgumentException
-         *         If the provided unit is {@code null}
-         * @throws ArithmeticException
-         *         If a numeric overflow occurs
-         * @throws java.time.DateTimeException
-         *         If the amount cannot be calculated
-         * @throws java.time.temporal.UnsupportedTemporalTypeException
-         *         If the provided unit is not supported
-         *
+         * @param unit The {@link java.time.temporal.TemporalUnit TemporalUnit} to return
          * @return Remaining time in the provided {@link java.time.temporal.TemporalUnit TemporalUnit} or {@code -1} if unset
-         *
-         * @see    java.time.Instant#until(java.time.temporal.Temporal, java.time.temporal.TemporalUnit) Instant.until(Temporal, TemporalUnit)
-         * @see    java.time.temporal.TemporalUnit
+         * @throws IllegalArgumentException                            If the provided unit is {@code null}
+         * @throws ArithmeticException                                 If a numeric overflow occurs
+         * @throws java.time.DateTimeException                         If the amount cannot be calculated
+         * @throws java.time.temporal.UnsupportedTemporalTypeException If the provided unit is not supported
+         * @see java.time.Instant#until(java.time.temporal.Temporal, java.time.temporal.TemporalUnit) Instant.until(Temporal, TemporalUnit)
+         * @see java.time.temporal.TemporalUnit
          */
-        public long getRemainingTime(TemporalUnit unit)
-        {
+        public long getRemainingTime(TemporalUnit unit) {
             Checks.notNull(unit, "TemporalUnit");
             Instant end = getEndTime();
             return end != null ? Instant.now().until(end, unit) : -1;
@@ -381,39 +341,28 @@ public class RichPresence extends Game
          * Calculates the elapsed time from {@link #getStartTime()} to now in terms of the specified unit.
          * <br>If {@link #getStartTime()} is {@code null} this will be negative.
          *
-         * @param  unit
-         *         The {@link java.time.temporal.TemporalUnit TemporalUnit} to return
-         *
-         * @throws IllegalArgumentException
-         *         If the provided unit is {@code null}
-         * @throws ArithmeticException
-         *         If a numeric overflow occurs
-         * @throws java.time.DateTimeException
-         *         If the amount cannot be calculated
-         * @throws java.time.temporal.UnsupportedTemporalTypeException
-         *         If the provided unit is not supported
-         *
+         * @param unit The {@link java.time.temporal.TemporalUnit TemporalUnit} to return
          * @return Elapsed time in the provided {@link java.time.temporal.TemporalUnit TemporalUnit} or {@code -1} if unset
-         *
-         * @see    java.time.Instant#until(java.time.temporal.Temporal, java.time.temporal.TemporalUnit) Instant.until(Temporal, TemporalUnit)
-         * @see    java.time.temporal.TemporalUnit
+         * @throws IllegalArgumentException                            If the provided unit is {@code null}
+         * @throws ArithmeticException                                 If a numeric overflow occurs
+         * @throws java.time.DateTimeException                         If the amount cannot be calculated
+         * @throws java.time.temporal.UnsupportedTemporalTypeException If the provided unit is not supported
+         * @see java.time.Instant#until(java.time.temporal.Temporal, java.time.temporal.TemporalUnit) Instant.until(Temporal, TemporalUnit)
+         * @see java.time.temporal.TemporalUnit
          */
-        public long getElapsedTime(TemporalUnit unit)
-        {
+        public long getElapsedTime(TemporalUnit unit) {
             Checks.notNull(unit, "TemporalUnit");
             Instant start = getStartTime();
             return start != null ? start.until(Instant.now(), unit) : -1;
         }
 
         @Override
-        public String toString()
-        {
+        public String toString() {
             return String.format("RichPresenceTimestamp(%d-%d)", start, end);
         }
 
         @Override
-        public boolean equals(Object obj)
-        {
+        public boolean equals(Object obj) {
             if (!(obj instanceof Timestamps))
                 return false;
             Timestamps t = (Timestamps) obj;
@@ -421,8 +370,7 @@ public class RichPresence extends Game
         }
 
         @Override
-        public int hashCode()
-        {
+        public int hashCode() {
             return Objects.hash(start, end);
         }
     }
@@ -430,15 +378,13 @@ public class RichPresence extends Game
     /**
      * Holds information on a player's party
      */
-    public static class Party
-    {
+    public static class Party {
         protected final String id;
         protected final long size;
 
         protected final long max;
 
-        public Party(String id, long size, long max)
-        {
+        public Party(String id, long size, long max) {
             this.id = id;
             this.size = size;
             this.max = max;
@@ -450,8 +396,7 @@ public class RichPresence extends Game
          * @return The ID for this party, or {@code null} if unset
          */
         @Nullable
-        public String getId()
-        {
+        public String getId() {
             return id;
         }
 
@@ -460,9 +405,8 @@ public class RichPresence extends Game
          *
          * @return The current size of this party, or {@code 0} if unset
          */
-        public int getSize()
-        {
-            return (int)size;
+        public int getSize() {
+            return (int) size;
         }
 
         /**
@@ -470,8 +414,7 @@ public class RichPresence extends Game
          *
          * @return The current size of this party, or {@code 0} if unset
          */
-        public long getSizeAsLong()
-        {
+        public long getSizeAsLong() {
             return size;
         }
 
@@ -480,9 +423,8 @@ public class RichPresence extends Game
          *
          * @return The maximum size of this party, or {@code 0} if unset
          */
-        public int getMax()
-        {
-            return (int)max;
+        public int getMax() {
+            return (int) max;
         }
 
         /**
@@ -490,20 +432,17 @@ public class RichPresence extends Game
          *
          * @return The maximum size of this party, or {@code 0} if unset
          */
-        public long getMaxAsLong()
-        {
+        public long getMaxAsLong() {
             return max;
         }
 
         @Override
-        public String toString()
-        {
+        public String toString() {
             return String.format("RichPresenceParty(%s | [%d, %d])", id, size, max);
         }
 
         @Override
-        public boolean equals(Object obj)
-        {
+        public boolean equals(Object obj) {
             if (!(obj instanceof Party))
                 return false;
             Party p = (Party) obj;
@@ -511,8 +450,7 @@ public class RichPresence extends Game
         }
 
         @Override
-        public int hashCode()
-        {
+        public int hashCode() {
             return Objects.hash(id, size, max);
         }
     }

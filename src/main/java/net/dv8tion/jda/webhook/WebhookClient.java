@@ -52,8 +52,7 @@ import java.util.concurrent.*;
  *
  * <p>Instances of this class can be retrieved using {@link net.dv8tion.jda.webhook.WebhookClientBuilder WebhookClientBuilders}
  */
-public class WebhookClient implements AutoCloseable
-{
+public class WebhookClient implements AutoCloseable {
     public static final String WEBHOOK_URL = "https://discordapp.com/api/v6/webhooks/%s/%s";
     public static final String USER_AGENT = "JDA Webhook(https://github.com/DV8FromTheWorld/JDA | " + JDAInfo.VERSION + ")";
     public static final Logger LOG = JDALogger.getLog(WebhookClient.class);
@@ -67,8 +66,7 @@ public class WebhookClient implements AutoCloseable
     protected volatile boolean isQueued;
     protected boolean isShutdown;
 
-    protected WebhookClient(final long id, final String token, final OkHttpClient client, final ScheduledExecutorService pool)
-    {
+    protected WebhookClient(final long id, final String token, final OkHttpClient client, final ScheduledExecutorService pool) {
         this.client = client;
         this.id = id;
         this.url = String.format(WEBHOOK_URL, Long.toUnsignedString(id), token);
@@ -83,8 +81,7 @@ public class WebhookClient implements AutoCloseable
      *
      * @return id of the target Webhook
      */
-    public long getIdLong()
-    {
+    public long getIdLong() {
         return id;
     }
 
@@ -93,8 +90,7 @@ public class WebhookClient implements AutoCloseable
      *
      * @return id of the target Webhook
      */
-    public String getId()
-    {
+    public String getId() {
         return Long.toUnsignedString(id);
     }
 
@@ -103,8 +99,7 @@ public class WebhookClient implements AutoCloseable
      *
      * @return The URL of this client
      */
-    public String getUrl()
-    {
+    public String getUrl() {
         return url;
     }
 
@@ -115,17 +110,12 @@ public class WebhookClient implements AutoCloseable
      * <p>Hint: Use {@link net.dv8tion.jda.webhook.WebhookMessageBuilder WebhookMessageBuilder} to
      * create a {@link net.dv8tion.jda.webhook.WebhookMessage WebhookMessage} instance!
      *
-     * @param  message
-     *         The message to send
-     *
-     * @throws net.dv8tion.jda.core.exceptions.HttpException
-     *         If the HTTP request fails
-     *
+     * @param message The message to send
      * @return {@link net.dv8tion.jda.core.requests.RequestFuture RequestFuture} representing the execution task,
-     *         this will be completed once the message was sent.
+     * this will be completed once the message was sent.
+     * @throws net.dv8tion.jda.core.exceptions.HttpException If the HTTP request fails
      */
-    public RequestFuture<?> send(WebhookMessage message)
-    {
+    public RequestFuture<?> send(WebhookMessage message) {
         Checks.notNull(message, "WebhookMessage");
         return execute(message.getBody());
     }
@@ -133,90 +123,59 @@ public class WebhookClient implements AutoCloseable
     /**
      * Sends the provided {@link java.io.File File} to this webhook.
      *
-     * @param  file
-     *         The file to send
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided file is {@code null}, does not exist or is not readable
-     * @throws java.util.concurrent.RejectedExecutionException
-     *         If this client was closed
-     * @throws net.dv8tion.jda.core.exceptions.HttpException
-     *         If the HTTP request fails
-     *
+     * @param file The file to send
      * @return {@link net.dv8tion.jda.core.requests.RequestFuture RequestFuture} representing the execution task,
-     *         this will be completed once the message was sent.
+     * this will be completed once the message was sent.
+     * @throws java.lang.IllegalArgumentException              If the provided file is {@code null}, does not exist or is not readable
+     * @throws java.util.concurrent.RejectedExecutionException If this client was closed
+     * @throws net.dv8tion.jda.core.exceptions.HttpException   If the HTTP request fails
      */
-    public RequestFuture<?> send(File file)
-    {
+    public RequestFuture<?> send(File file) {
         return send(new WebhookMessageBuilder().setFile(file).build());
     }
 
     /**
      * Sends the provided {@link java.io.File File} to this webhook.
      *
-     * @param  file
-     *         The file to send
-     * @param  fileName
-     *         The name that should be used for this file
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided file is {@code null}, does not exist or is not readable
-     * @throws java.util.concurrent.RejectedExecutionException
-     *         If this client was closed
-     * @throws net.dv8tion.jda.core.exceptions.HttpException
-     *         If the HTTP request fails
-     *
+     * @param file     The file to send
+     * @param fileName The name that should be used for this file
      * @return {@link net.dv8tion.jda.core.requests.RequestFuture RequestFuture} representing the execution task,
-     *         this will be completed once the message was sent.
+     * this will be completed once the message was sent.
+     * @throws java.lang.IllegalArgumentException              If the provided file is {@code null}, does not exist or is not readable
+     * @throws java.util.concurrent.RejectedExecutionException If this client was closed
+     * @throws net.dv8tion.jda.core.exceptions.HttpException   If the HTTP request fails
      */
-    public RequestFuture<?> send(File file, String fileName)
-    {
+    public RequestFuture<?> send(File file, String fileName) {
         return send(new WebhookMessageBuilder().setFile(file, fileName).build());
     }
 
     /**
      * Sends the provided {@code byte[]} data to this webhook.
      *
-     * @param  data
-     *         The file data to send
-     * @param  fileName
-     *         The name that should be used for this file
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided data is {@code null} or exceeds the limit of 8MB
-     * @throws java.util.concurrent.RejectedExecutionException
-     *         If this client was closed
-     * @throws net.dv8tion.jda.core.exceptions.HttpException
-     *         If the HTTP request fails
-     *
+     * @param data     The file data to send
+     * @param fileName The name that should be used for this file
      * @return {@link net.dv8tion.jda.core.requests.RequestFuture RequestFuture} representing the execution task,
-     *         this will be completed once the message was sent.
+     * this will be completed once the message was sent.
+     * @throws java.lang.IllegalArgumentException              If the provided data is {@code null} or exceeds the limit of 8MB
+     * @throws java.util.concurrent.RejectedExecutionException If this client was closed
+     * @throws net.dv8tion.jda.core.exceptions.HttpException   If the HTTP request fails
      */
-    public RequestFuture<?> send(byte[] data, String fileName)
-    {
+    public RequestFuture<?> send(byte[] data, String fileName) {
         return send(new WebhookMessageBuilder().setFile(data, fileName).build());
     }
 
     /**
      * Sends the provided {@link java.io.InputStream InputStream} data to this webhook.
      *
-     * @param  data
-     *         The file data to send
-     * @param  fileName
-     *         The name that should be used for this file
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided data is {@code null}
-     * @throws java.util.concurrent.RejectedExecutionException
-     *         If this client was closed
-     * @throws net.dv8tion.jda.core.exceptions.HttpException
-     *         If the HTTP request fails
-     *
+     * @param data     The file data to send
+     * @param fileName The name that should be used for this file
      * @return {@link net.dv8tion.jda.core.requests.RequestFuture RequestFuture} representing the execution task,
-     *         this will be completed once the message was sent.
+     * this will be completed once the message was sent.
+     * @throws java.lang.IllegalArgumentException              If the provided data is {@code null}
+     * @throws java.util.concurrent.RejectedExecutionException If this client was closed
+     * @throws net.dv8tion.jda.core.exceptions.HttpException   If the HTTP request fails
      */
-    public RequestFuture<?> send(InputStream data, String fileName)
-    {
+    public RequestFuture<?> send(InputStream data, String fileName) {
         return send(new WebhookMessageBuilder().setFile(data, fileName).build());
     }
 
@@ -227,17 +186,12 @@ public class WebhookClient implements AutoCloseable
      * <p>Hint: Use {@link net.dv8tion.jda.core.MessageBuilder MessageBuilder} to
      * create a {@link net.dv8tion.jda.core.entities.Message Message} instance!
      *
-     * @param  message
-     *         The message to send
-     *
-     * @throws net.dv8tion.jda.core.exceptions.HttpException
-     *         If the HTTP request fails
-     *
+     * @param message The message to send
      * @return {@link net.dv8tion.jda.core.requests.RequestFuture RequestFuture} representing the execution task,
-     *         this will be completed once the message was sent.
+     * this will be completed once the message was sent.
+     * @throws net.dv8tion.jda.core.exceptions.HttpException If the HTTP request fails
      */
-    public RequestFuture<?> send(Message message)
-    {
+    public RequestFuture<?> send(Message message) {
         return send(WebhookMessage.from(message));
     }
 
@@ -250,21 +204,14 @@ public class WebhookClient implements AutoCloseable
      * <p>Hint: Use {@link net.dv8tion.jda.core.EmbedBuilder EmbedBuilder} to
      * create a {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed} instance!
      *
-     * @param  embeds
-     *         The embeds to send
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If any of the provided embeds is {@code null}
-     * @throws java.util.concurrent.RejectedExecutionException
-     *         If this client was closed
-     * @throws net.dv8tion.jda.core.exceptions.HttpException
-     *         If the HTTP request fails
-     *
+     * @param embeds The embeds to send
      * @return {@link net.dv8tion.jda.core.requests.RequestFuture RequestFuture} representing the execution task,
-     *         this will be completed once the message was sent.
+     * this will be completed once the message was sent.
+     * @throws java.lang.IllegalArgumentException              If any of the provided embeds is {@code null}
+     * @throws java.util.concurrent.RejectedExecutionException If this client was closed
+     * @throws net.dv8tion.jda.core.exceptions.HttpException   If the HTTP request fails
      */
-    public RequestFuture<?> send(MessageEmbed... embeds)
-    {
+    public RequestFuture<?> send(MessageEmbed... embeds) {
         return send(WebhookMessage.of(embeds));
     }
 
@@ -277,88 +224,67 @@ public class WebhookClient implements AutoCloseable
      * <p>Hint: Use {@link net.dv8tion.jda.core.EmbedBuilder EmbedBuilder} to
      * create a {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed} instance!
      *
-     * @param  embeds
-     *         The embeds to send
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If any of the provided embeds is {@code null}
-     * @throws java.util.concurrent.RejectedExecutionException
-     *         If this client was closed
-     * @throws net.dv8tion.jda.core.exceptions.HttpException
-     *         If the HTTP request fails
-     *
+     * @param embeds The embeds to send
      * @return {@link net.dv8tion.jda.core.requests.RequestFuture RequestFuture} representing the execution task,
-     *         this will be completed once the message was sent.
+     * this will be completed once the message was sent.
+     * @throws java.lang.IllegalArgumentException              If any of the provided embeds is {@code null}
+     * @throws java.util.concurrent.RejectedExecutionException If this client was closed
+     * @throws net.dv8tion.jda.core.exceptions.HttpException   If the HTTP request fails
      */
-    public RequestFuture<?> send(Collection<MessageEmbed> embeds)
-    {
+    public RequestFuture<?> send(Collection<MessageEmbed> embeds) {
         return send(WebhookMessage.of(embeds));
     }
 
     /**
      * Sends the provided text message to this webhook.
      *
-     * @param  content
-     *         The text message to send
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If any of the provided message is {@code null}, blank or exceeds 2000 characters in length
-     * @throws java.util.concurrent.RejectedExecutionException
-     *         If this client was closed
-     * @throws net.dv8tion.jda.core.exceptions.HttpException
-     *         If the HTTP request fails
-     *
+     * @param content The text message to send
      * @return {@link net.dv8tion.jda.core.requests.RequestFuture RequestFuture} representing the execution task,
-     *         this will be completed once the message was sent.
+     * this will be completed once the message was sent.
+     * @throws java.lang.IllegalArgumentException              If any of the provided message is {@code null}, blank or exceeds 2000 characters in length
+     * @throws java.util.concurrent.RejectedExecutionException If this client was closed
+     * @throws net.dv8tion.jda.core.exceptions.HttpException   If the HTTP request fails
      */
-    public RequestFuture<?> send(String content)
-    {
+    public RequestFuture<?> send(String content) {
         Checks.notBlank(content, "Content");
         Checks.check(content.length() <= 2000, "Content may not exceed 2000 characters!");
         return execute(newBody(new JSONObject().put("content", content).toString()));
     }
 
     @Override
-    public void close()
-    {
+    public void close() {
         isShutdown = true;
         pool.shutdown();
     }
 
     @Override
     @Deprecated
-    protected void finalize() throws Throwable
-    {
+    protected void finalize() throws Throwable {
         if (!isShutdown)
             LOG.warn("Detected unclosed WebhookClient! Did you forget to close it?");
     }
 
-    protected void checkShutdown()
-    {
+    protected void checkShutdown() {
         if (isShutdown)
             throw new RejectedExecutionException("Cannot send to closed client!");
     }
 
-    protected static RequestBody newBody(String object)
-    {
+    protected static RequestBody newBody(String object) {
         return RequestBody.create(Requester.MEDIA_TYPE_JSON, object);
     }
 
-    protected RequestFuture<?> execute(RequestBody body)
-    {
+    protected RequestFuture<?> execute(RequestBody body) {
         checkShutdown();
         return queueRequest(body);
     }
 
-    protected static HttpException failure(Response response) throws IOException
-    {
+    protected static HttpException failure(Response response) throws IOException {
         final InputStream stream = Requester.getBody(response);
         final String responseBody = new String(IOUtil.readFully(stream));
         return new HttpException("Request returned failure " + response.code() + ": " + responseBody);
     }
 
-    protected RequestFuture<?> queueRequest(RequestBody body)
-    {
+    protected RequestFuture<?> queueRequest(RequestBody body) {
         final boolean wasQueued = isQueued;
         isQueued = true;
         Promise<?> callback = new Promise<>();
@@ -368,57 +294,45 @@ public class WebhookClient implements AutoCloseable
         return callback;
     }
 
-    protected Request newRequest(RequestBody body)
-    {
+    protected Request newRequest(RequestBody body) {
         return new Request.Builder()
-                .url(url)
-                .method("POST", body)
-                .header("accept-encoding", "gzip")
-                .header("user-agent", USER_AGENT)
-                .build();
+            .url(url)
+            .method("POST", body)
+            .header("accept-encoding", "gzip")
+            .header("user-agent", USER_AGENT)
+            .build();
     }
 
-    protected void backoffQueue()
-    {
+    protected void backoffQueue() {
         pool.schedule(this::drainQueue, bucket.retryAfter(), TimeUnit.MILLISECONDS);
     }
 
-    protected void drainQueue()
-    {
-        while (!queue.isEmpty())
-        {
+    protected void drainQueue() {
+        while (!queue.isEmpty()) {
             final Pair<RequestBody, CompletableFuture<?>> pair = queue.peek();
-            if (pair.getRight().isCancelled())
-            {
+            if (pair.getRight().isCancelled()) {
                 queue.poll();
                 continue;
             }
 
             final Request request = newRequest(pair.getLeft());
-            try (Response response = client.newCall(request).execute())
-            {
+            try (Response response = client.newCall(request).execute()) {
                 bucket.update(response);
-                if (response.code() == Bucket.RATE_LIMIT_CODE)
-                {
+                if (response.code() == Bucket.RATE_LIMIT_CODE) {
                     backoffQueue();
                     return;
-                }
-                else if (!response.isSuccessful())
-                {
+                } else if (!response.isSuccessful()) {
                     final HttpException exception = failure(response);
                     LOG.error("Sending a webhook message failed with non-OK http response", exception);
                     queue.poll().getRight().completeExceptionally(exception);
                     continue;
                 }
                 queue.poll().getRight().complete(null);
-                if (bucket.isRateLimit())
-                {
+                if (bucket.isRateLimit()) {
                     backoffQueue();
                     return;
                 }
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 LOG.error("There was some error while sending a webhook message", e);
                 queue.poll().getRight().completeExceptionally(e);
             }
@@ -426,51 +340,40 @@ public class WebhookClient implements AutoCloseable
         isQueued = false;
     }
 
-    protected static final class Bucket
-    {
+    protected static final class Bucket {
         public static final int RATE_LIMIT_CODE = 429;
         public long resetTime;
         public int remainingUses;
         public int limit = Integer.MAX_VALUE;
 
-        public synchronized boolean isRateLimit()
-        {
+        public synchronized boolean isRateLimit() {
             if (retryAfter() <= 0)
                 remainingUses = limit;
             return remainingUses <= 0;
         }
 
-        public synchronized long retryAfter()
-        {
+        public synchronized long retryAfter() {
             return resetTime - System.currentTimeMillis();
         }
 
-        private synchronized void handleRatelimit(Response response, long current) throws IOException
-        {
+        private synchronized void handleRatelimit(Response response, long current) throws IOException {
             final String retryAfter = response.header("Retry-After");
             long delay;
-            if (retryAfter == null)
-            {
+            if (retryAfter == null) {
                 final JSONObject body = new JSONObject(new JSONTokener(Requester.getBody(response)));
                 delay = body.getLong("retry_after");
-            }
-            else
-            {
+            } else {
                 delay = Long.parseLong(retryAfter);
             }
             resetTime = current + delay;
         }
 
-        private synchronized void update0(Response response) throws IOException
-        {
+        private synchronized void update0(Response response) throws IOException {
             final long current = System.currentTimeMillis();
             final boolean is429 = response.code() == RATE_LIMIT_CODE;
-            if (is429)
-            {
+            if (is429) {
                 handleRatelimit(response, current);
-            }
-            else if (!response.isSuccessful())
-            {
+            } else if (!response.isSuccessful()) {
                 LOG.debug("Failed to update buckets due to unsuccessful response with code: {} and body: \n{}",
                     response.code(), JDALogger.getLazyString(() -> new String(IOUtil.readFully(Requester.getBody(response)))));
                 return;
@@ -479,8 +382,7 @@ public class WebhookClient implements AutoCloseable
             limit = Integer.parseInt(response.header("X-RateLimit-Limit"));
             final String date = response.header("Date");
 
-            if (date != null && !is429)
-            {
+            if (date != null && !is429) {
                 final long reset = Long.parseLong(response.header("X-RateLimit-Reset")); //epoch seconds
                 OffsetDateTime tDate = OffsetDateTime.parse(date, DateTimeFormatter.RFC_1123_DATE_TIME);
                 final long delay = tDate.toInstant().until(Instant.ofEpochSecond(reset), ChronoUnit.MILLIS);
@@ -488,14 +390,10 @@ public class WebhookClient implements AutoCloseable
             }
         }
 
-        public void update(Response response)
-        {
-            try
-            {
+        public void update(Response response) {
+            try {
                 update0(response);
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 LOG.error("Could not read http response", ex);
             }
         }

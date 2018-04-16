@@ -28,31 +28,26 @@ import java.time.OffsetDateTime;
  * Representation of a Discord Invite.
  * This class is immutable.
  *
- * @since  3.0
  * @author Aljoscha Grebe
+ * @since 3.0
  */
-public interface Invite
-{
+public interface Invite {
     /**
      * Retrieves a new {@link net.dv8tion.jda.core.entities.Invite Invite} instance for the given invite code.
      * <br><b>You cannot resolve invites if you were banned from the origin Guild!</b>
      *
      * <p>Possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} include:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_INVITE Unknown Invite}
-     *     <br>The Invite did not exist (possibly deleted) or the account is banned in the guild.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_INVITE Unknown Invite}
+     * <br>The Invite did not exist (possibly deleted) or the account is banned in the guild.</li>
      * </ul>
      *
-     * @param  api
-     *         The JDA instance
-     * @param  code
-     *         A valid invite code
-     *
+     * @param api  The JDA instance
+     * @param code A valid invite code
      * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type: {@link net.dv8tion.jda.core.entities.Invite Invite}
-     *         <br>The Invite object
+     * <br>The Invite object
      */
-    static RestAction<Invite> resolve(final JDA api, final String code)
-    {
+    static RestAction<Invite> resolve(final JDA api, final String code) {
         return InviteImpl.resolve(api, code);
     }
 
@@ -61,10 +56,8 @@ public interface Invite
      * <br>Requires {@link net.dv8tion.jda.core.Permission#MANAGE_CHANNEL MANAGE_CHANNEL} in the invite's channel.
      * Will throw a {@link net.dv8tion.jda.core.exceptions.InsufficientPermissionException InsufficientPermissionException} otherwise.
      *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         if the account does not have {@link net.dv8tion.jda.core.Permission#MANAGE_SERVER MANAGE_SERVER} in the invite's channel
-     *
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException if the account does not have {@link net.dv8tion.jda.core.Permission#MANAGE_SERVER MANAGE_SERVER} in the invite's channel
      */
     @CheckReturnValue
     AuditableRestAction<Void> delete();
@@ -75,14 +68,11 @@ public interface Invite
      * {@link net.dv8tion.jda.core.Permission#MANAGE_CHANNEL MANAGE_CHANNEL} in the invite's channel.
      * Will throw a {@link net.dv8tion.jda.core.exceptions.InsufficientPermissionException InsufficientPermissionException} otherwise.
      *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         if the account neither has {@link net.dv8tion.jda.core.Permission#MANAGE_SERVER MANAGE_SERVER} in the invite's guild nor
-     *         {@link net.dv8tion.jda.core.Permission#MANAGE_CHANNEL MANAGE_CHANNEL} in the invite's channel
-     *
      * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type: {@link net.dv8tion.jda.core.entities.Invite Invite}
-     *         <br>The expanded Invite object
-     *
-     * @see    #isExpanded()
+     * <br>The expanded Invite object
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException if the account neither has {@link net.dv8tion.jda.core.Permission#MANAGE_SERVER MANAGE_SERVER} in the invite's guild nor
+     *                                                                         {@link net.dv8tion.jda.core.Permission#MANAGE_CHANNEL MANAGE_CHANNEL} in the invite's channel
+     * @see #isExpanded()
      */
     @CheckReturnValue
     RestAction<Invite> expand();
@@ -92,8 +82,7 @@ public interface Invite
      * containing information about this invite's origin channel.
      *
      * @return Information about this invite's origin channel
-     * 
-     * @see    net.dv8tion.jda.core.entities.Invite.Channel
+     * @see net.dv8tion.jda.core.entities.Invite.Channel
      */
     Channel getChannel();
 
@@ -110,8 +99,7 @@ public interface Invite
      *
      * @return Invite URL for this Invite
      */
-    default String getURL()
-    {
+    default String getURL() {
         return "https://discord.gg/" + getCode();
     }
 
@@ -120,13 +108,10 @@ public interface Invite
      *
      * <p>This works only for expanded invites and will throw a {@link IllegalStateException} otherwise!
      *
-     * @throws IllegalStateException
-     *         if this invite is not expanded
-     *
      * @return The creation date of this invite
-     *
-     * @see    #expand()
-     * @see    #isExpanded()
+     * @throws IllegalStateException if this invite is not expanded
+     * @see #expand()
+     * @see #isExpanded()
      */
     OffsetDateTime getCreationTime();
 
@@ -135,8 +120,7 @@ public interface Invite
      * containing information about this invite's origin guild.
      *
      * @return Information about this invite's origin guild
-     * 
-     * @see    net.dv8tion.jda.core.entities.Invite.Guild
+     * @see net.dv8tion.jda.core.entities.Invite.Guild
      */
     Guild getGuild();
 
@@ -159,29 +143,23 @@ public interface Invite
      *
      * <p>This works only for expanded invites and will throw a {@link IllegalStateException} otherwise!
      *
-     * @throws IllegalStateException
-     *         if this invite is not expanded
-     *
      * @return The max age of this invite in seconds
-     *
-     * @see    #expand()
-     * @see    #isExpanded()
+     * @throws IllegalStateException if this invite is not expanded
+     * @see #expand()
+     * @see #isExpanded()
      */
     int getMaxAge();
 
     /**
-    * The max uses of this invite. If there is no limit thus will return {@code 0}.
-    *
-    * <p>This works only for expanded invites and will throw a {@link IllegalStateException} otherwise!
-    *
-    * @throws IllegalStateException
-     *        if this invite is not expanded
-    *
-    * @return The max uses of this invite or {@code 0} if there is no limit
-    *
-    * @see    #expand()
-    * @see    #isExpanded()
-    */
+     * The max uses of this invite. If there is no limit thus will return {@code 0}.
+     *
+     * <p>This works only for expanded invites and will throw a {@link IllegalStateException} otherwise!
+     *
+     * @return The max uses of this invite or {@code 0} if there is no limit
+     * @throws IllegalStateException if this invite is not expanded
+     * @see #expand()
+     * @see #isExpanded()
+     */
     int getMaxUses();
 
     /**
@@ -189,13 +167,10 @@ public interface Invite
      *
      * <p>This works only for expanded invites and will throw a {@link IllegalStateException} otherwise!
      *
-     * @throws IllegalStateException
-     *         if this invite is not expanded
-     *
      * @return The uses of this invite
-     *
-     * @see    #expand()
-     * @see    #isExpanded()
+     * @throws IllegalStateException if this invite is not expanded
+     * @see #expand()
+     * @see #isExpanded()
      */
     int getUses();
 
@@ -209,28 +184,24 @@ public interface Invite
      * <p>There is a convenience method {@link #expand()} to get the expanded invite for an unexpanded one.
      *
      * @return Whether is invite expanded or not
-     *
-     * @see    #expand()
+     * @see #expand()
      */
     boolean isExpanded();
 
     /**
      * Whether this Invite grants only temporary access or not
      *
-     * @throws IllegalStateException
-     *         if this invite is not expanded
-     *
      * @return Whether is invite expanded or not
+     * @throws IllegalStateException if this invite is not expanded
      */
     boolean isTemporary();
 
     /**
      * POJO for the channel information provided by an invite.
-     * 
+     *
      * @see #getChannel()
      */
-    interface Channel extends ISnowflake
-    {
+    interface Channel extends ISnowflake {
         /**
          * The name of this channel.
          *
@@ -249,17 +220,15 @@ public interface Invite
 
     /**
      * POJO for the guild information provided by an invite.
-     * 
+     *
      * @see #getGuild()
      */
-    interface Guild extends ISnowflake
-    {
+    interface Guild extends ISnowflake {
         /**
          * The icon id of this guild.
          *
          * @return The guild's icon id
-         *
-         * @see    #getIconUrl()
+         * @see #getIconUrl()
          */
         String getIconId();
 
@@ -267,8 +236,7 @@ public interface Invite
          * The icon url of this guild.
          *
          * @return The guild's icon url
-         *
-         * @see    #getIconId()
+         * @see #getIconId()
          */
         String getIconUrl();
 
@@ -283,8 +251,7 @@ public interface Invite
          * The splash image id of this guild.
          *
          * @return The guild's splash image id or {@code null} if the guild has no splash image
-         *
-         * @see    #getSplashUrl()
+         * @see #getSplashUrl()
          */
         String getSplashId();
 
@@ -292,8 +259,7 @@ public interface Invite
          * Returns the splash image url of this guild.
          *
          * @return The guild's splash image url or {@code null} if the guild has no splash image
-         *
-         * @see    #getSplashId()
+         * @see #getSplashId()
          */
         String getSplashUrl();
     }

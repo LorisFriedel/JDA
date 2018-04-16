@@ -24,26 +24,22 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public class SortedSnowflakeCacheView<T extends ISnowflake & Comparable<T>> extends SnowflakeCacheViewImpl<T>
-{
+public class SortedSnowflakeCacheView<T extends ISnowflake & Comparable<T>> extends SnowflakeCacheViewImpl<T> {
     protected static final int SPLIT_CHARACTERISTICS = Spliterator.IMMUTABLE | Spliterator.ORDERED | Spliterator.NONNULL;
 
     protected final Comparator<T> comparator;
 
-    public SortedSnowflakeCacheView(Class<T> type, Comparator<T> comparator)
-    {
+    public SortedSnowflakeCacheView(Class<T> type, Comparator<T> comparator) {
         this(type, null, comparator);
     }
 
-    public SortedSnowflakeCacheView(Class<T> type, Function<T, String> nameMapper, Comparator<T> comparator)
-    {
+    public SortedSnowflakeCacheView(Class<T> type, Function<T, String> nameMapper, Comparator<T> comparator) {
         super(type, nameMapper);
         this.comparator = comparator;
     }
 
     @Override
-    public List<T> asList()
-    {
+    public List<T> asList() {
         List<T> list = new ArrayList<>(elements.size());
         elements.forEachValue(list::add);
         list.sort(comparator);
@@ -51,36 +47,31 @@ public class SortedSnowflakeCacheView<T extends ISnowflake & Comparable<T>> exte
     }
 
     @Override
-    public SortedSet<T> asSet()
-    {
+    public SortedSet<T> asSet() {
         SortedSet<T> set = new TreeSet<>(comparator);
         elements.forEachValue(set::add);
         return Collections.unmodifiableSortedSet(set);
     }
 
     @Override
-    public Spliterator<T> spliterator()
-    {
+    public Spliterator<T> spliterator() {
         return Spliterators.spliterator(iterator(), elements.size(), SPLIT_CHARACTERISTICS);
     }
 
     @Override
-    public Stream<T> stream()
-    {
+    public Stream<T> stream() {
         return super.stream().sorted(comparator);
     }
 
     @Override
-    public Stream<T> parallelStream()
-    {
+    public Stream<T> parallelStream() {
         return super.parallelStream().sorted(comparator);
     }
 
     @Nonnull
     @Override
     @SuppressWarnings("unchecked")
-    public Iterator<T> iterator()
-    {
+    public Iterator<T> iterator() {
         T[] arr = elements.values(emptyArray);
         Arrays.sort(arr, comparator);
         return new ObjectArrayIterator<>(arr);

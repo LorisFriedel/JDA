@@ -46,14 +46,19 @@ import javax.annotation.CheckReturnValue;
  *
  * @see net.dv8tion.jda.core.entities.Webhook#getManager()
  */
-public class WebhookManager extends ManagerBase
-{
-    /** Used to reset the name field */
-    public static final long NAME    = 0x1;
-    /** Used to reset the channel field */
+public class WebhookManager extends ManagerBase {
+    /**
+     * Used to reset the name field
+     */
+    public static final long NAME = 0x1;
+    /**
+     * Used to reset the channel field
+     */
     public static final long CHANNEL = 0x2;
-    /** Used to reset the avatar field */
-    public static final long AVATAR  = 0x4;
+    /**
+     * Used to reset the avatar field
+     */
+    public static final long AVATAR = 0x4;
 
     protected final Webhook webhook;
 
@@ -64,11 +69,9 @@ public class WebhookManager extends ManagerBase
     /**
      * Creates a new WebhookManager instance
      *
-     * @param webhook
-     *        The target {@link net.dv8tion.jda.core.entities.Webhook Webhook} to modify
+     * @param webhook The target {@link net.dv8tion.jda.core.entities.Webhook Webhook} to modify
      */
-    public WebhookManager(Webhook webhook)
-    {
+    public WebhookManager(Webhook webhook) {
         super(webhook.getJDA(), Route.Webhooks.MODIFY_TOKEN_WEBHOOK.compile(webhook.getId(), webhook.getToken()));
         this.webhook = webhook;
         if (isPermissionChecksEnabled())
@@ -82,8 +85,7 @@ public class WebhookManager extends ManagerBase
      *
      * @return The parent {@link net.dv8tion.jda.core.entities.Guild Guild}
      */
-    public Guild getGuild()
-    {
+    public Guild getGuild() {
         return webhook.getGuild();
     }
 
@@ -94,8 +96,7 @@ public class WebhookManager extends ManagerBase
      *
      * @return The parent {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
      */
-    public TextChannel getChannel()
-    {
+    public TextChannel getChannel() {
         return webhook.getChannel();
     }
 
@@ -105,8 +106,7 @@ public class WebhookManager extends ManagerBase
      *
      * @return The target {@link net.dv8tion.jda.core.entities.Webhook Webhook}
      */
-    public Webhook getWebhook()
-    {
+    public Webhook getWebhook() {
         return webhook;
     }
 
@@ -117,20 +117,17 @@ public class WebhookManager extends ManagerBase
      *
      * <p><b>Flag Constants:</b>
      * <ul>
-     *     <li>{@link #NAME}</li>
-     *     <li>{@link #AVATAR}</li>
-     *     <li>{@link #CHANNEL}</li>
+     * <li>{@link #NAME}</li>
+     * <li>{@link #AVATAR}</li>
+     * <li>{@link #CHANNEL}</li>
      * </ul>
      *
-     * @param  fields
-     *         Integer value containing the flags to reset.
-     *
+     * @param fields Integer value containing the flags to reset.
      * @return WebhookManager for chaining convenience
      */
     @Override
     @CheckReturnValue
-    public WebhookManager reset(long fields)
-    {
+    public WebhookManager reset(long fields) {
         super.reset(fields);
         if ((fields & NAME) == NAME)
             this.name = null;
@@ -148,20 +145,17 @@ public class WebhookManager extends ManagerBase
      *
      * <p><b>Flag Constants:</b>
      * <ul>
-     *     <li>{@link #NAME}</li>
-     *     <li>{@link #AVATAR}</li>
-     *     <li>{@link #CHANNEL}</li>
+     * <li>{@link #NAME}</li>
+     * <li>{@link #AVATAR}</li>
+     * <li>{@link #CHANNEL}</li>
      * </ul>
      *
-     * @param  fields
-     *         Integer values containing the flags to reset.
-     *
+     * @param fields Integer values containing the flags to reset.
      * @return WebhookManager for chaining convenience
      */
     @Override
     @CheckReturnValue
-    public WebhookManager reset(long... fields)
-    {
+    public WebhookManager reset(long... fields) {
         super.reset(fields);
         return this;
     }
@@ -173,8 +167,7 @@ public class WebhookManager extends ManagerBase
      */
     @Override
     @CheckReturnValue
-    public WebhookManager reset()
-    {
+    public WebhookManager reset() {
         super.reset();
         this.name = null;
         this.channel = null;
@@ -187,17 +180,12 @@ public class WebhookManager extends ManagerBase
      *
      * <p>A webhook name <b>must not</b> be {@code null} or blank!
      *
-     * @param  name
-     *         The new default name for the selected {@link net.dv8tion.jda.core.entities.Webhook Webhook}
-     *
-     * @throws IllegalArgumentException
-     *         If the provided name is {@code null} or blank
-     *
+     * @param name The new default name for the selected {@link net.dv8tion.jda.core.entities.Webhook Webhook}
      * @return WebhookManager for chaining convenience
+     * @throws IllegalArgumentException If the provided name is {@code null} or blank
      */
     @CheckReturnValue
-    public WebhookManager setName(String name)
-    {
+    public WebhookManager setName(String name) {
         Checks.notBlank(name, "Name");
         this.name = name;
         set |= NAME;
@@ -207,16 +195,13 @@ public class WebhookManager extends ManagerBase
     /**
      * Sets the <b><u>default avatar</u></b> of the selected {@link net.dv8tion.jda.core.entities.Webhook Webhook}.
      *
-     * @param  icon
-     *         The new default avatar {@link net.dv8tion.jda.core.entities.Icon Icon}
-     *         for the selected {@link net.dv8tion.jda.core.entities.Webhook Webhook}
-     *         or {@code null} to reset
-     *
+     * @param icon The new default avatar {@link net.dv8tion.jda.core.entities.Icon Icon}
+     *             for the selected {@link net.dv8tion.jda.core.entities.Webhook Webhook}
+     *             or {@code null} to reset
      * @return WebhookManager for chaining convenience
      */
     @CheckReturnValue
-    public WebhookManager setAvatar(Icon icon)
-    {
+    public WebhookManager setAvatar(Icon icon) {
         this.avatar = icon;
         set |= AVATAR;
         return this;
@@ -227,21 +212,15 @@ public class WebhookManager extends ManagerBase
      *
      * <p>A webhook channel <b>must not</b> be {@code null} and <b>must</b> be in the same {@link net.dv8tion.jda.core.entities.Guild Guild}!
      *
-     * @param  channel
-     *         The new {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
-     *         for the selected {@link net.dv8tion.jda.core.entities.Webhook Webhook}
-     *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If the currently logged in account does not have the Permission {@link net.dv8tion.jda.core.Permission#MANAGE_WEBHOOKS MANAGE_WEBHOOKS}
-     *         in the specified TextChannel
-     * @throws IllegalArgumentException
-     *         If the provided channel is {@code null} or from a different Guild
-     *
+     * @param channel The new {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
+     *                for the selected {@link net.dv8tion.jda.core.entities.Webhook Webhook}
      * @return WebhookManager for chaining convenience
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If the currently logged in account does not have the Permission {@link net.dv8tion.jda.core.Permission#MANAGE_WEBHOOKS MANAGE_WEBHOOKS}
+     *                                                                         in the specified TextChannel
+     * @throws IllegalArgumentException                                        If the provided channel is {@code null} or from a different Guild
      */
     @CheckReturnValue
-    public WebhookManager setChannel(TextChannel channel)
-    {
+    public WebhookManager setChannel(TextChannel channel) {
         Checks.notNull(channel, "Channel");
         Checks.check(channel.getGuild().equals(getGuild()), "Channel is not from the same guild");
         this.channel = channel.getId();
@@ -250,8 +229,7 @@ public class WebhookManager extends ManagerBase
     }
 
     @Override
-    protected RequestBody finalizeData()
-    {
+    protected RequestBody finalizeData() {
         JSONObject data = new JSONObject();
         if (shouldUpdate(NAME))
             data.put("name", name);
@@ -264,8 +242,7 @@ public class WebhookManager extends ManagerBase
     }
 
     @Override
-    protected boolean checkPermissions()
-    {
+    protected boolean checkPermissions() {
         if (!getGuild().getSelfMember().hasPermission(getChannel(), Permission.MANAGE_WEBHOOKS))
             throw new InsufficientPermissionException(Permission.MANAGE_WEBHOOKS);
         return super.checkPermissions();

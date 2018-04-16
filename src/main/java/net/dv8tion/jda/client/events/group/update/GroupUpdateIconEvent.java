@@ -19,24 +19,20 @@ package net.dv8tion.jda.client.events.group.update;
 import net.dv8tion.jda.client.entities.Group;
 import net.dv8tion.jda.core.JDA;
 
-public class GroupUpdateIconEvent extends GenericGroupUpdateEvent
-{
+public class GroupUpdateIconEvent extends GenericGroupUpdateEvent {
     protected final String oldIconId;
 
-    public GroupUpdateIconEvent(JDA api, long responseNumber, Group group, String oldIconId)
-    {
+    public GroupUpdateIconEvent(JDA api, long responseNumber, Group group, String oldIconId) {
         super(api, responseNumber, group);
         this.oldIconId = oldIconId;
     }
 
-    public String getOldIconId()
-    {
+    public String getOldIconId() {
         return oldIconId;
     }
 
-    public String getOldIconUrl()
-    {
+    public String getOldIconUrl() {
         return oldIconId == null ? null :
-                "https://cdn.discordapp.com/channel-icons/" + group.getId() + "/" + oldIconId + ".jpg";
+            "https://cdn.discordapp.com/channel-icons/" + group.getId() + "/" + oldIconId + ".jpg";
     }
 }

@@ -45,58 +45,44 @@ import java.util.*;
  * @see net.dv8tion.jda.core.hooks.IEventManager
  * @see net.dv8tion.jda.core.hooks.SubscribeEvent
  */
-public class AnnotatedEventManager implements IEventManager
-{
+public class AnnotatedEventManager implements IEventManager {
     private final Set<Object> listeners = new HashSet<>();
     private final Map<Class<? extends Event>, Map<Object, List<Method>>> methods = new HashMap<>();
 
     @Override
-    public void register(Object listener)
-    {
-        if (listeners.add(listener))
-        {
+    public void register(Object listener) {
+        if (listeners.add(listener)) {
             updateMethods();
         }
     }
 
     @Override
-    public void unregister(Object listener)
-    {
-        if (listeners.remove(listener))
-        {
+    public void unregister(Object listener) {
+        if (listeners.remove(listener)) {
             updateMethods();
         }
     }
 
     @Override
-    public List<Object> getRegisteredListeners()
-    {
+    public List<Object> getRegisteredListeners() {
         return Collections.unmodifiableList(new LinkedList<>(listeners));
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public void handle(Event event)
-    {
+    public void handle(Event event) {
         Class<? extends Event> eventClass = event.getClass();
-        do
-        {
+        do {
             Map<Object, List<Method>> listeners = methods.get(eventClass);
-            if (listeners != null)
-            {
+            if (listeners != null) {
                 listeners.entrySet().forEach(e -> e.getValue().forEach(method ->
                 {
-                    try
-                    {
+                    try {
                         method.setAccessible(true);
                         method.invoke(e.getKey(), event);
-                    }
-                    catch (IllegalAccessException | InvocationTargetException e1)
-                    {
+                    } catch (IllegalAccessException | InvocationTargetException e1) {
                         JDAImpl.LOG.error("Couldn't access annotated eventlistener method", e1);
-                    }
-                    catch (Throwable throwable)
-                    {
+                    } catch (Throwable throwable) {
                         JDAImpl.LOG.error("One of the EventListeners had an uncaught exception", throwable);
                     }
                 }));
@@ -106,32 +92,25 @@ public class AnnotatedEventManager implements IEventManager
         while (eventClass != null);
     }
 
-    private void updateMethods()
-    {
+    private void updateMethods() {
         methods.clear();
-        for (Object listener : listeners)
-        {
+        for (Object listener : listeners) {
             boolean isClass = listener instanceof Class;
             Class<?> c = isClass ? (Class) listener : listener.getClass();
             Method[] allMethods = c.getDeclaredMethods();
-            for (Method m : allMethods)
-            {
-                if (!m.isAnnotationPresent(SubscribeEvent.class) || (isClass && !Modifier.isStatic(m.getModifiers())))
-                {
+            for (Method m : allMethods) {
+                if (!m.isAnnotationPresent(SubscribeEvent.class) || (isClass && !Modifier.isStatic(m.getModifiers()))) {
                     continue;
                 }
-                Class<?>[] pType  = m.getParameterTypes();
-                if (pType.length == 1 && Event.class.isAssignableFrom(pType[0]))
-                {
+                Class<?>[] pType = m.getParameterTypes();
+                if (pType.length == 1 && Event.class.isAssignableFrom(pType[0])) {
                     @SuppressWarnings("unchecked")
                     Class<? extends Event> eventClass = (Class<? extends Event>) pType[0];
-                    if (!methods.containsKey(eventClass))
-                    {
+                    if (!methods.containsKey(eventClass)) {
                         methods.put(eventClass, new HashMap<>());
                     }
 
-                    if (!methods.get(eventClass).containsKey(listener))
-                    {
+                    if (!methods.get(eventClass).containsKey(listener)) {
                         methods.get(eventClass).put(listener, new ArrayList<>());
                     }
 

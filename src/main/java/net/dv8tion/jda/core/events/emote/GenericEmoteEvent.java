@@ -24,12 +24,10 @@ import net.dv8tion.jda.core.events.Event;
 /**
  * Indicates that an {@link net.dv8tion.jda.core.entities.Emote Emote} was created/removed/updated.
  */
-public abstract class GenericEmoteEvent extends Event
-{
+public abstract class GenericEmoteEvent extends Event {
     protected final Emote emote;
 
-    public GenericEmoteEvent(JDA api, long responseNumber, Emote emote)
-    {
+    public GenericEmoteEvent(JDA api, long responseNumber, Emote emote) {
         super(api, responseNumber);
         this.emote = emote;
     }
@@ -39,8 +37,7 @@ public abstract class GenericEmoteEvent extends Event
      *
      * @return The origin Guild
      */
-    public Guild getGuild()
-    {
+    public Guild getGuild() {
         return emote.getGuild();
     }
 
@@ -49,8 +46,7 @@ public abstract class GenericEmoteEvent extends Event
      *
      * @return The emote
      */
-    public Emote getEmote()
-    {
+    public Emote getEmote() {
         return emote;
     }
 
@@ -59,8 +55,7 @@ public abstract class GenericEmoteEvent extends Event
      *
      * @return True, if this emote is managed by an integration
      */
-    public boolean isManaged()
-    {
+    public boolean isManaged() {
         return emote.isManaged();
     }
 }

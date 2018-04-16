@@ -27,19 +27,16 @@ import org.json.JSONObject;
 import java.util.LinkedList;
 import java.util.List;
 
-public class GuildMembersChunkHandler extends SocketHandler
-{
+public class GuildMembersChunkHandler extends SocketHandler {
     private final TLongIntMap expectedGuildMembers = new TLongIntHashMap();
     private final TLongObjectMap<List<JSONArray>> memberChunksCache = new TLongObjectHashMap<>();
 
-    public GuildMembersChunkHandler(JDAImpl api)
-    {
+    public GuildMembersChunkHandler(JDAImpl api) {
         super(api);
     }
 
     @Override
-    protected Long handleInternally(JSONObject content)
-    {
+    protected Long handleInternally(JSONObject content) {
         final long guildId = content.getLong("guild_id");
         List<JSONArray> memberChunks = memberChunksCache.get(guildId);
         int expectMemberCount = expectedGuildMembers.get(guildId);
@@ -52,8 +49,7 @@ public class GuildMembersChunkHandler extends SocketHandler
         for (JSONArray arr : memberChunks)
             currentTotal += arr.length();
 
-        if (currentTotal >= expectMemberCount)
-        {
+        if (currentTotal >= expectMemberCount) {
             JDAImpl.LOG.debug("Finished chunking for: {}", guildId);
             api.getEntityBuilder().createGuildSecondPass(guildId, memberChunks);
             memberChunksCache.remove(guildId);
@@ -62,8 +58,7 @@ public class GuildMembersChunkHandler extends SocketHandler
         return null;
     }
 
-    public void setExpectedGuildMembers(long guildId, int count)
-    {
+    public void setExpectedGuildMembers(long guildId, int count) {
         if (expectedGuildMembers.containsKey(guildId))
             JDAImpl.LOG.warn("Set the count of expected users from GuildMembersChunk even though a value already exists! GuildId: {}", guildId);
 
@@ -75,26 +70,23 @@ public class GuildMembersChunkHandler extends SocketHandler
         memberChunksCache.put(guildId, new LinkedList<>());
     }
 
-    public void modifyExpectedGuildMember(long guildId, int changeAmount)
-    {
-        try
-        {
+    public void modifyExpectedGuildMember(long guildId, int changeAmount) {
+        try {
             Integer i = expectedGuildMembers.get(guildId);
             i += changeAmount;
             expectedGuildMembers.put(guildId, i);
         }
         //Ignore. If one of the above things doesn't exist, causing an NPE, then we don't need to worry.
-        catch (NullPointerException ignored) {}
+        catch (NullPointerException ignored) {
+        }
     }
 
-    public void clearCache()
-    {
+    public void clearCache() {
         expectedGuildMembers.clear();
         memberChunksCache.clear();
     }
 
-    public void clearCache(long guildId)
-    {
+    public void clearCache(long guildId) {
         expectedGuildMembers.remove(guildId);
         if (memberChunksCache.remove(guildId) != null)
             JDAImpl.LOG.debug("Cleared expected member chunk. GuildId: {}", guildId);

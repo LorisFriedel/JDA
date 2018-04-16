@@ -31,8 +31,7 @@ import org.json.JSONObject;
 
 import java.time.OffsetDateTime;
 
-public class InviteImpl implements Invite
-{
+public class InviteImpl implements Invite {
     private final JDAImpl api;
     private final Channel channel;
     private final String code;
@@ -46,9 +45,8 @@ public class InviteImpl implements Invite
     private final int uses;
 
     public InviteImpl(final JDAImpl api, final String code, final boolean expanded, final User inviter,
-            final int maxAge, final int maxUses, final boolean temporary, final OffsetDateTime timeCreated,
-            final int uses, final Channel channel, final Guild guild)
-    {
+                      final int maxAge, final int maxUses, final boolean temporary, final OffsetDateTime timeCreated,
+                      final int uses, final Channel channel, final Guild guild) {
         this.api = api;
         this.code = code;
         this.expanded = expanded;
@@ -62,25 +60,19 @@ public class InviteImpl implements Invite
         this.guild = guild;
     }
 
-    public static RestAction<Invite> resolve(final JDA api, final String code)
-    {
+    public static RestAction<Invite> resolve(final JDA api, final String code) {
         Checks.notNull(code, "code");
         Checks.notNull(api, "api");
 
         final Route.CompiledRoute route = Route.Invites.GET_INVITE.compile(code);
 
-        return new RestAction<Invite>(api, route)
-        {
+        return new RestAction<Invite>(api, route) {
             @Override
-            protected void handleResponse(final Response response, final Request<Invite> request)
-            {
-                if (response.isOk())
-                {
+            protected void handleResponse(final Response response, final Request<Invite> request) {
+                if (response.isOk()) {
                     final Invite invite = this.api.getEntityBuilder().createInvite(response.getObject());
                     request.onSuccess(invite);
-                }
-                else
-                {
+                } else {
                     request.onFailure(response);
                 }
             }
@@ -88,15 +80,12 @@ public class InviteImpl implements Invite
     }
 
     @Override
-    public AuditableRestAction<Void> delete()
-    {
+    public AuditableRestAction<Void> delete() {
         final Route.CompiledRoute route = Route.Invites.DELETE_INVITE.compile(this.code);
 
-        return new AuditableRestAction<Void>(this.api, route)
-        {
+        return new AuditableRestAction<Void>(this.api, route) {
             @Override
-            protected void handleResponse(final Response response, final Request<Void> request)
-            {
+            protected void handleResponse(final Response response, final Request<Void> request) {
                 if (response.isOk())
                     request.onSuccess(null);
                 else
@@ -106,8 +95,7 @@ public class InviteImpl implements Invite
     }
 
     @Override
-    public RestAction<Invite> expand()
-    {
+    public RestAction<Invite> expand() {
         if (this.expanded)
             return new RestAction.EmptyRestAction<>(getJDA(), this);
 
@@ -121,44 +109,32 @@ public class InviteImpl implements Invite
         Route.CompiledRoute route;
 
         final net.dv8tion.jda.core.entities.Channel channel = this.channel.getType() == ChannelType.TEXT
-                ? guild.getTextChannelById(this.channel.getIdLong())
-                : guild.getVoiceChannelById(this.channel.getIdLong());
+            ? guild.getTextChannelById(this.channel.getIdLong())
+            : guild.getVoiceChannelById(this.channel.getIdLong());
 
-        if (member.hasPermission(channel, Permission.MANAGE_CHANNEL))
-        {
+        if (member.hasPermission(channel, Permission.MANAGE_CHANNEL)) {
             route = Route.Invites.GET_CHANNEL_INVITES.compile(channel.getId());
-        }
-        else if (member.hasPermission(Permission.MANAGE_SERVER))
-        {
+        } else if (member.hasPermission(Permission.MANAGE_SERVER)) {
             route = Route.Invites.GET_GUILD_INVITES.compile(guild.getId());
-        }
-        else
-        {
+        } else {
             throw new InsufficientPermissionException(Permission.MANAGE_CHANNEL, "You don't have the permission to view the full invite info");
         }
 
-        return new RestAction<Invite>(this.api, route)
-        {
+        return new RestAction<Invite>(this.api, route) {
             @Override
-            protected void handleResponse(final Response response, final Request<Invite> request)
-            {
-                if (response.isOk())
-                {
+            protected void handleResponse(final Response response, final Request<Invite> request) {
+                if (response.isOk()) {
                     final EntityBuilder entityBuilder = this.api.getEntityBuilder();
                     final JSONArray array = response.getArray();
-                    for (int i = 0; i < array.length(); i++)
-                    {
+                    for (int i = 0; i < array.length(); i++) {
                         final JSONObject object = array.getJSONObject(i);
-                        if (InviteImpl.this.code.equals(object.getString("code")))
-                        {
+                        if (InviteImpl.this.code.equals(object.getString("code"))) {
                             request.onSuccess(entityBuilder.createInvite(object));
                             return;
                         }
                     }
                     request.onFailure(new IllegalStateException("Missing the invite in the channel/guild invite list"));
-                }
-                else
-                {
+                } else {
                     request.onFailure(response);
                 }
             }
@@ -166,128 +142,109 @@ public class InviteImpl implements Invite
     }
 
     @Override
-    public Channel getChannel()
-    {
+    public Channel getChannel() {
         return this.channel;
     }
 
     @Override
-    public String getCode()
-    {
+    public String getCode() {
         return this.code;
     }
 
     @Override
-    public OffsetDateTime getCreationTime()
-    {
+    public OffsetDateTime getCreationTime() {
         if (!this.expanded)
             throw new IllegalStateException("Only valid for expanded invites");
         return this.timeCreated;
     }
 
     @Override
-    public Guild getGuild()
-    {
+    public Guild getGuild() {
         return this.guild;
     }
 
     @Override
-    public User getInviter()
-    {
+    public User getInviter() {
         return this.inviter;
     }
 
     @Override
-    public JDAImpl getJDA()
-    {
+    public JDAImpl getJDA() {
         return this.api;
     }
 
     @Override
-    public int getMaxAge()
-    {
+    public int getMaxAge() {
         if (!this.expanded)
             throw new IllegalStateException("Only valid for expanded invites");
         return this.maxAge;
     }
 
     @Override
-    public int getMaxUses()
-    {
+    public int getMaxUses() {
         if (!this.expanded)
             throw new IllegalStateException("Only valid for expanded invites");
         return this.maxUses;
     }
 
     @Override
-    public int getUses()
-    {
+    public int getUses() {
         if (!this.expanded)
             throw new IllegalStateException("Only valid for expanded invites");
         return this.uses;
     }
 
     @Override
-    public boolean isExpanded()
-    {
+    public boolean isExpanded() {
         return this.expanded;
     }
 
     @Override
-    public boolean isTemporary()
-    {
+    public boolean isTemporary() {
         if (!this.expanded)
             throw new IllegalStateException("Only valid for expanded invites");
         return this.temporary;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "Invite(" + this.code + ")";
     }
 
-    public static class ChannelImpl implements Channel
-    {
+    public static class ChannelImpl implements Channel {
         private final long id;
         private final String name;
         private final ChannelType type;
 
-        public ChannelImpl(final long id, final String name, final ChannelType type)
-        {
+        public ChannelImpl(final long id, final String name, final ChannelType type) {
             this.id = id;
             this.name = name;
             this.type = type;
         }
 
         @Override
-        public long getIdLong()
-        {
+        public long getIdLong() {
             return id;
         }
 
         @Override
-        public String getName()
-        {
+        public String getName() {
             return this.name;
         }
 
         @Override
-        public ChannelType getType()
-        {
+        public ChannelType getType() {
             return this.type;
         }
 
     }
 
-    public static class GuildImpl implements Guild
-    {
+    public static class GuildImpl implements Guild {
 
         private final String iconId, name, splashId;
         private final long id;
 
-        public GuildImpl(final long id, final String iconId, final String name, final String splashId)
-        {
+        public GuildImpl(final long id, final String iconId, final String name, final String splashId) {
             this.id = id;
             this.iconId = iconId;
             this.name = name;
@@ -295,41 +252,35 @@ public class InviteImpl implements Invite
         }
 
         @Override
-        public String getIconId()
-        {
+        public String getIconId() {
             return this.iconId;
         }
 
         @Override
-        public String getIconUrl()
-        {
+        public String getIconUrl() {
             return this.iconId == null ? null
-                    : "https://cdn.discordapp.com/icons/" + this.id + "/" + this.iconId + ".jpg";
+                : "https://cdn.discordapp.com/icons/" + this.id + "/" + this.iconId + ".jpg";
         }
 
         @Override
-        public long getIdLong()
-        {
+        public long getIdLong() {
             return id;
         }
 
         @Override
-        public String getName()
-        {
+        public String getName() {
             return this.name;
         }
 
         @Override
-        public String getSplashId()
-        {
+        public String getSplashId() {
             return this.splashId;
         }
 
         @Override
-        public String getSplashUrl()
-        {
+        public String getSplashUrl() {
             return this.splashId == null ? null
-                    : "https://cdn.discordapp.com/splashes/" + this.id + "/" + this.splashId + ".jpg";
+                : "https://cdn.discordapp.com/splashes/" + this.id + "/" + this.splashId + ".jpg";
         }
 
     }

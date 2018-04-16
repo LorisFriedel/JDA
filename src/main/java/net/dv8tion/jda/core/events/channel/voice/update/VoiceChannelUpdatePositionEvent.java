@@ -25,15 +25,13 @@ import net.dv8tion.jda.core.entities.VoiceChannel;
  *
  * <p>Identifier: {@code position}
  */
-public class VoiceChannelUpdatePositionEvent extends GenericVoiceChannelUpdateEvent<Integer>
-{
+public class VoiceChannelUpdatePositionEvent extends GenericVoiceChannelUpdateEvent<Integer> {
     public static final String IDENTIFIER = "position";
 
     private final int oldPosition;
     private final int newPosition;
 
-    public VoiceChannelUpdatePositionEvent(JDA api, long responseNumber, VoiceChannel channel, int oldPosition)
-    {
+    public VoiceChannelUpdatePositionEvent(JDA api, long responseNumber, VoiceChannel channel, int oldPosition) {
         super(api, responseNumber, channel);
         this.oldPosition = oldPosition;
         this.newPosition = channel.getPositionRaw();
@@ -44,8 +42,7 @@ public class VoiceChannelUpdatePositionEvent extends GenericVoiceChannelUpdateEv
      *
      * @return The old position
      */
-    public int getOldPosition()
-    {
+    public int getOldPosition() {
         return oldPosition;
     }
 
@@ -54,26 +51,22 @@ public class VoiceChannelUpdatePositionEvent extends GenericVoiceChannelUpdateEv
      *
      * @return The new position
      */
-    public int getNewPosition()
-    {
+    public int getNewPosition() {
         return newPosition;
     }
 
     @Override
-    public String getPropertyIdentifier()
-    {
+    public String getPropertyIdentifier() {
         return IDENTIFIER;
     }
 
     @Override
-    public Integer getOldValue()
-    {
+    public Integer getOldValue() {
         return oldPosition;
     }
 
     @Override
-    public Integer getNewValue()
-    {
+    public Integer getNewValue() {
         return newPosition;
     }
 }

@@ -27,12 +27,10 @@ import net.dv8tion.jda.core.events.Event;
  *
  * <p>Can be used to detect any RoleEvent.
  */
-public abstract class GenericRoleEvent extends Event
-{
+public abstract class GenericRoleEvent extends Event {
     protected final Role role;
 
-    public GenericRoleEvent(JDA api, long responseNumber, Role role)
-    {
+    public GenericRoleEvent(JDA api, long responseNumber, Role role) {
         super(api, responseNumber);
         this.role = role;
     }
@@ -42,8 +40,7 @@ public abstract class GenericRoleEvent extends Event
      *
      * @return The role for this event
      */
-    public Role getRole()
-    {
+    public Role getRole() {
         return role;
     }
 
@@ -52,8 +49,7 @@ public abstract class GenericRoleEvent extends Event
      *
      * @return The guild of the role
      */
-    public Guild getGuild()
-    {
+    public Guild getGuild() {
         return role.getGuild();
     }
 }

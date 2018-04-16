@@ -27,12 +27,10 @@ import net.dv8tion.jda.core.entities.User;
  *
  * @see net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent GuildMemberLeaveEvent
  */
-public class GuildBanEvent extends GenericGuildEvent
-{
+public class GuildBanEvent extends GenericGuildEvent {
     private final User user;
 
-    public GuildBanEvent(JDA api, long responseNumber, Guild guild, User user)
-    {
+    public GuildBanEvent(JDA api, long responseNumber, Guild guild, User user) {
         super(api, responseNumber, guild);
         this.user = user;
     }
@@ -43,8 +41,7 @@ public class GuildBanEvent extends GenericGuildEvent
      *
      * @return The banned user
      */
-    public User getUser()
-    {
+    public User getUser() {
         return user;
     }
 }

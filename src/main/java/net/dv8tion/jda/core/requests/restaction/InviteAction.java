@@ -33,27 +33,23 @@ import java.util.function.BooleanSupplier;
  * {@link net.dv8tion.jda.core.entities.Invite Invite} Builder system created as an extension of {@link net.dv8tion.jda.core.requests.RestAction}
  * <br>Provides an easy way to gather and deliver information to Discord to create {@link net.dv8tion.jda.core.entities.Invite Invites}.
  */
-public class InviteAction extends AuditableRestAction<Invite>
-{
+public class InviteAction extends AuditableRestAction<Invite> {
     private Integer maxAge = null;
     private Integer maxUses = null;
     private Boolean temporary = null;
     private Boolean unique = null;
 
-    public InviteAction(final JDA api, final String channelId)
-    {
+    public InviteAction(final JDA api, final String channelId) {
         super(api, Route.Invites.CREATE_INVITE.compile(channelId));
     }
 
     @Override
-    public InviteAction setCheck(BooleanSupplier checks)
-    {
+    public InviteAction setCheck(BooleanSupplier checks) {
         return (InviteAction) super.setCheck(checks);
     }
 
     @Override
-    protected RequestBody finalizeData()
-    {
+    protected RequestBody finalizeData() {
         final JSONObject object = new JSONObject();
 
         if (this.maxAge != null)
@@ -69,8 +65,7 @@ public class InviteAction extends AuditableRestAction<Invite>
     }
 
     @Override
-    protected void handleResponse(final Response response, final Request<Invite> request)
-    {
+    protected void handleResponse(final Response response, final Request<Invite> request) {
         if (response.isOk())
             request.onSuccess(this.api.getEntityBuilder().createInvite(response.getObject()));
         else
@@ -81,17 +76,12 @@ public class InviteAction extends AuditableRestAction<Invite>
      * Sets the max age in seconds for the invite. Set this to {@code 0} if the invite should never expire. Default is {@code 86400} (24 hours).
      * {@code null} will reset this to the default value.
      *
-     * @param  maxAge
-     *         The max age for this invite or {@code null} to use the default value.
-     *
-     * @throws IllegalArgumentException
-     *         If maxAge is negative.
-     *
+     * @param maxAge The max age for this invite or {@code null} to use the default value.
      * @return The current InviteAction for chaining.
+     * @throws IllegalArgumentException If maxAge is negative.
      */
     @CheckReturnValue
-    public final InviteAction setMaxAge(final Integer maxAge)
-    {
+    public final InviteAction setMaxAge(final Integer maxAge) {
         if (maxAge != null)
             Checks.notNegative(maxAge, "maxAge");
 
@@ -103,19 +93,13 @@ public class InviteAction extends AuditableRestAction<Invite>
      * Sets the max age for the invite. Set this to {@code 0} if the invite should never expire. Default is {@code 86400} (24 hours).
      * {@code null} will reset this to the default value.
      *
-     * @param  maxAge
-     *         The max age for this invite or {@code null} to use the default value.
-     * @param  timeUnit
-     *         The {@link java.util.concurrent.TimeUnit TimeUnit} type of {@code maxAge}.
-     *
-     * @throws IllegalArgumentException
-     *         If maxAge is negative or maxAge is positive and timeUnit is null.
-     *
+     * @param maxAge   The max age for this invite or {@code null} to use the default value.
+     * @param timeUnit The {@link java.util.concurrent.TimeUnit TimeUnit} type of {@code maxAge}.
      * @return The current InviteAction for chaining.
+     * @throws IllegalArgumentException If maxAge is negative or maxAge is positive and timeUnit is null.
      */
     @CheckReturnValue
-    public final InviteAction setMaxAge(final Long maxAge, final TimeUnit timeUnit)
-    {
+    public final InviteAction setMaxAge(final Long maxAge, final TimeUnit timeUnit) {
         if (maxAge == null)
             return this.setMaxAge(null);
 
@@ -129,17 +113,12 @@ public class InviteAction extends AuditableRestAction<Invite>
      * Sets the max uses for the invite. Set this to {@code 0} if the invite should have unlimited uses. Default is {@code 0}.
      * {@code null} will reset this to the default value.
      *
-     * @param  maxUses
-     *         The max uses for this invite or {@code null} to use the default value.
-     *
-     * @throws IllegalArgumentException
-     *         If maxUses is negative.
-     *
+     * @param maxUses The max uses for this invite or {@code null} to use the default value.
      * @return The current InviteAction for chaining.
+     * @throws IllegalArgumentException If maxUses is negative.
      */
     @CheckReturnValue
-    public final InviteAction setMaxUses(final Integer maxUses)
-    {
+    public final InviteAction setMaxUses(final Integer maxUses) {
         if (maxUses != null)
             Checks.notNegative(maxUses, "maxUses");
 
@@ -150,14 +129,11 @@ public class InviteAction extends AuditableRestAction<Invite>
     /**
      * Sets whether the invite should only grant temporary membership. Default is {@code false}.
      *
-     * @param  temporary
-     *         Whether the invite should only grant temporary membership or {@code null} to use the default value.
-     *
+     * @param temporary Whether the invite should only grant temporary membership or {@code null} to use the default value.
      * @return The current InviteAction for chaining.
      */
     @CheckReturnValue
-    public final InviteAction setTemporary(final Boolean temporary)
-    {
+    public final InviteAction setTemporary(final Boolean temporary) {
         this.temporary = temporary;
         return this;
     }
@@ -165,14 +141,11 @@ public class InviteAction extends AuditableRestAction<Invite>
     /**
      * Sets whether discord should reuse a similar invite. Default is {@code false}.
      *
-     * @param  unique
-     *         Whether discord should reuse a similar invite or {@code null} to use the default value.
-     *
+     * @param unique Whether discord should reuse a similar invite or {@code null} to use the default value.
      * @return The current InviteAction for chaining.
      */
     @CheckReturnValue
-    public final InviteAction setUnique(final Boolean unique)
-    {
+    public final InviteAction setUnique(final Boolean unique) {
         this.unique = unique;
         return this;
     }

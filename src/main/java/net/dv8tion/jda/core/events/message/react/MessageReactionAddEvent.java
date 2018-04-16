@@ -26,10 +26,8 @@ import net.dv8tion.jda.core.entities.User;
  *
  * <p>Can be used to track when a user adds a reaction to a message
  */
-public class MessageReactionAddEvent extends GenericMessageReactionEvent
-{
-    public MessageReactionAddEvent(JDA api, long responseNumber, User user, MessageReaction reaction)
-    {
+public class MessageReactionAddEvent extends GenericMessageReactionEvent {
+    public MessageReactionAddEvent(JDA api, long responseNumber, User user, MessageReaction reaction) {
         super(api, responseNumber, user, reaction);
     }
 }

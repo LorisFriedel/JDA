@@ -22,18 +22,26 @@ import net.dv8tion.jda.core.entities.PrivateChannel;
 
 import java.util.List;
 
-public interface Call extends AudioChannel
-{
+public interface Call extends AudioChannel {
     Region getRegion();
+
     boolean isGroupCall();
+
     CallableChannel getCallableChannel();
+
     Group getGroup();
+
     PrivateChannel getPrivateChannel();
+
     String getMessageId();
+
     long getMessageIdLong();
 
     List<CallUser> getRingingUsers();
+
     List<CallUser> getConnectedUsers();
+
     List<CallUser> getCallUserHistory();
+
     List<CallUser> getAllCallUsers();
 }

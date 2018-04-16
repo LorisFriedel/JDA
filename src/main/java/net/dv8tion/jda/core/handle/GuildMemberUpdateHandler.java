@@ -27,17 +27,14 @@ import org.json.JSONObject;
 
 import java.util.*;
 
-public class GuildMemberUpdateHandler extends SocketHandler
-{
+public class GuildMemberUpdateHandler extends SocketHandler {
 
-    public GuildMemberUpdateHandler(JDAImpl api)
-    {
+    public GuildMemberUpdateHandler(JDAImpl api) {
         super(api);
     }
 
     @Override
-    protected Long handleInternally(JSONObject content)
-    {
+    protected Long handleInternally(JSONObject content) {
         final long id = content.getLong("guild_id");
         if (api.getGuildLock().isLocked(id))
             return id;
@@ -45,8 +42,7 @@ public class GuildMemberUpdateHandler extends SocketHandler
         JSONObject userJson = content.getJSONObject("user");
         final long userId = userJson.getLong("id");
         GuildImpl guild = (GuildImpl) api.getGuildMap().get(id);
-        if (guild == null)
-        {
+        if (guild == null) {
             api.getEventCache().cache(EventCache.Type.GUILD, userId, () ->
             {
                 handle(responseNumber, allContent);
@@ -56,8 +52,7 @@ public class GuildMemberUpdateHandler extends SocketHandler
         }
 
         MemberImpl member = (MemberImpl) guild.getMembersMap().get(userId);
-        if (member == null)
-        {
+        if (member == null) {
             api.getEventCache().cache(EventCache.Type.USER, userId, () ->
             {
                 handle(responseNumber, allContent);
@@ -75,13 +70,11 @@ public class GuildMemberUpdateHandler extends SocketHandler
 
         //Find the roles removed.
         List<Role> removedRoles = new LinkedList<>();
-        each: for (Role role : currentRoles)
-        {
-            for (Iterator<Role> it = newRoles.iterator(); it.hasNext();)
-            {
+        each:
+        for (Role role : currentRoles) {
+            for (Iterator<Role> it = newRoles.iterator(); it.hasNext(); ) {
                 Role r = it.next();
-                if (role.equals(r))
-                {
+                if (role.equals(r)) {
                     it.remove();
                     continue each;
                 }
@@ -94,49 +87,40 @@ public class GuildMemberUpdateHandler extends SocketHandler
         if (newRoles.size() > 0)
             currentRoles.addAll(newRoles);
 
-        if (removedRoles.size() > 0)
-        {
+        if (removedRoles.size() > 0) {
             api.getEventManager().handle(
-                    new GuildMemberRoleRemoveEvent(
-                            api, responseNumber,
-                            member, removedRoles));
+                new GuildMemberRoleRemoveEvent(
+                    api, responseNumber,
+                    member, removedRoles));
         }
-        if (newRoles.size() > 0)
-        {
+        if (newRoles.size() > 0) {
             api.getEventManager().handle(
-                    new GuildMemberRoleAddEvent(
-                            api, responseNumber,
-                            member, newRoles));
+                new GuildMemberRoleAddEvent(
+                    api, responseNumber,
+                    member, newRoles));
         }
-        if (content.has("nick"))
-        {
+        if (content.has("nick")) {
             String prevNick = member.getNickname();
             String newNick = content.optString("nick", null);
-            if (!Objects.equals(prevNick, newNick))
-            {
+            if (!Objects.equals(prevNick, newNick)) {
                 member.setNickname(newNick);
                 api.getEventManager().handle(
-                        new GuildMemberNickChangeEvent(
-                                api, responseNumber,
-                                member, prevNick, newNick));
+                    new GuildMemberNickChangeEvent(
+                        api, responseNumber,
+                        member, prevNick, newNick));
             }
         }
         return null;
     }
 
-    private List<Role> toRolesList(GuildImpl guild, JSONArray array)
-    {
+    private List<Role> toRolesList(GuildImpl guild, JSONArray array) {
         LinkedList<Role> roles = new LinkedList<>();
-        for(int i = 0; i < array.length(); i++)
-        {
+        for (int i = 0; i < array.length(); i++) {
             final long id = array.getLong(i);
             Role r = guild.getRolesMap().get(id);
-            if (r != null)
-            {
+            if (r != null) {
                 roles.add(r);
-            }
-            else
-            {
+            } else {
                 api.getEventCache().cache(EventCache.Type.ROLE, id, () ->
                 {
                     handle(responseNumber, allContent);

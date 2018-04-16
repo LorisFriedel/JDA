@@ -18,6 +18,6 @@
  * Webhook services that can be used to send messages without a discord account.
  * <br>This API branch can be used with or without the {@link net.dv8tion.jda.core.entities.Webhook Webhook} entity.
  *
- * @since  3.3.0
+ * @since 3.3.0
  */
 package net.dv8tion.jda.webhook;

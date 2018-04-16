@@ -22,10 +22,8 @@ import net.dv8tion.jda.core.entities.Emote;
 /**
  * Indicates that an {@link net.dv8tion.jda.core.entities.Emote Emote} was removed from a Guild.
  */
-public class EmoteRemovedEvent extends GenericEmoteEvent
-{
-    public EmoteRemovedEvent(JDA api, long responseNumber, Emote emote)
-    {
+public class EmoteRemovedEvent extends GenericEmoteEvent {
+    public EmoteRemovedEvent(JDA api, long responseNumber, Emote emote) {
         super(api, responseNumber, emote);
     }
 }

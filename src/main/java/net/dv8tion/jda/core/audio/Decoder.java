@@ -25,48 +25,40 @@ import java.nio.ShortBuffer;
 /**
  * Class that wraps functionality around the Opus decoder.
  */
-public class Decoder
-{
+public class Decoder {
     protected int ssrc;
     protected char lastSeq;
     protected int lastTimestamp;
     protected PointerByReference opusDecoder;
 
-    protected Decoder(int ssrc)
-    {
+    protected Decoder(int ssrc) {
         this.ssrc = ssrc;
         this.lastSeq = (char) -1;
         this.lastTimestamp = -1;
 
         IntBuffer error = IntBuffer.allocate(4);
         opusDecoder = Opus.INSTANCE.opus_decoder_create(AudioConnection.OPUS_SAMPLE_RATE,
-                AudioConnection.OPUS_CHANNEL_COUNT, error);
+            AudioConnection.OPUS_CHANNEL_COUNT, error);
         //TODO: check `error` for an error flag.
     }
 
-    protected boolean isInOrder(char newSeq)
-    {
+    protected boolean isInOrder(char newSeq) {
         return lastSeq == -1 || newSeq > lastSeq || lastSeq - newSeq > 10;
     }
 
-    protected boolean wasPacketLost(char newSeq)
-    {
+    protected boolean wasPacketLost(char newSeq) {
         return newSeq > lastSeq + 1;
     }
 
-    protected short[] decodeFromOpus(AudioPacket decryptedPacket)
-    {
+    protected short[] decodeFromOpus(AudioPacket decryptedPacket) {
         int result;
         ShortBuffer decoded = ShortBuffer.allocate(4096);
-        if (decryptedPacket == null)    //Flag for packet-loss
-        {
+        if (decryptedPacket == null) { // Flag for packet-loss
             result = Opus.INSTANCE.opus_decode(opusDecoder, null, 0, decoded,
-                    AudioConnection.OPUS_FRAME_SIZE, 0);
+                AudioConnection.OPUS_FRAME_SIZE, 0);
             lastSeq = (char) -1;
             lastTimestamp = -1;
-        }
-        else
-        {
+        } else {
             char seq = decryptedPacket.getSequence();
             this.lastSeq = seq;
             this.lastTimestamp = decryptedPacket.getTimestamp();
@@ -74,12 +66,11 @@ public class Decoder
             byte[] encodedAudio = decryptedPacket.getEncodedAudio();
 
             result = Opus.INSTANCE.opus_decode(opusDecoder, encodedAudio, encodedAudio.length, decoded,
-                    AudioConnection.OPUS_FRAME_SIZE, 0);
+                AudioConnection.OPUS_FRAME_SIZE, 0);
         }
 
         //If we get a result that is less than 0, then there was an error. Return null as a signifier.
-        if (result < Opus.OPUS_OK)
-        {
+        if (result < Opus.OPUS_OK) {
             handleDecodeError(result);
             return null;
         }
@@ -89,11 +80,9 @@ public class Decoder
         return audio;
     }
 
-    private void handleDecodeError(int result)
-    {
+    private void handleDecodeError(int result) {
         StringBuilder b = new StringBuilder("Decoder failed to decode audio from user with code ");
-        switch (result)
-        {
+        switch (result) {
             case Opus.OPUS_BAD_ARG: //-1
                 b.append("OPUS_BAD_ARG");
                 break;
@@ -121,10 +110,8 @@ public class Decoder
         AudioConnection.LOG.debug("{}", b);
     }
 
-    protected synchronized void close()
-    {
-        if (opusDecoder != null)
-        {
+    protected synchronized void close() {
+        if (opusDecoder != null) {
             Opus.INSTANCE.opus_decoder_destroy(opusDecoder);
             opusDecoder = null;
         }
@@ -132,8 +119,7 @@ public class Decoder
 
     @Override
     @Deprecated
-    protected void finalize() throws Throwable
-    {
+    protected void finalize() throws Throwable {
         super.finalize();
         close();
     }

@@ -27,101 +27,85 @@ import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public abstract class RateLimiter
-{
+public abstract class RateLimiter {
     //Implementations of this class exist in the net.dv8tion.jda.core.requests.ratelimit package.
 
     protected final Requester requester;
     protected final ScheduledThreadPoolExecutor pool;
-    protected volatile boolean isShutdown = false; 
+    protected volatile boolean isShutdown = false;
     protected volatile ConcurrentHashMap<String, IBucket> buckets = new ConcurrentHashMap<>();
     protected volatile ConcurrentLinkedQueue<IBucket> submittedBuckets = new ConcurrentLinkedQueue<>();
 
-    protected RateLimiter(Requester requester, int poolSize)
-    {
+    protected RateLimiter(Requester requester, int poolSize) {
         this.requester = requester;
         this.pool = new ScheduledThreadPoolExecutor(poolSize, new RateLimitThreadFactory(requester.getJDA()));
     }
 
-    protected boolean isSkipped(Iterator<Request> it, Request request)
-    {
-        try
-        {
-            if (request.isCanceled() || !request.runChecks())
-            {
+    protected boolean isSkipped(Iterator<Request> it, Request request) {
+        try {
+            if (request.isCanceled() || !request.runChecks()) {
                 cancel(it, request, new CancellationException("RestAction has been cancelled"));
                 return true;
             }
-        }
-        catch (Throwable exception)
-        {
+        } catch (Throwable exception) {
             cancel(it, request, exception);
             return true;
         }
         return false;
     }
 
-    private void cancel(Iterator<Request> it, Request request, Throwable exception)
-    {
+    private void cancel(Iterator<Request> it, Request request, Throwable exception) {
         request.onFailure(exception);
         it.remove();
     }
 
     // -- Required Implementations --
     public abstract Long getRateLimit(Route.CompiledRoute route);
+
     protected abstract void queueRequest(Request request);
+
     protected abstract Long handleResponse(Route.CompiledRoute route, okhttp3.Response response);
 
 
     // --- Default Implementations --
 
-    public boolean isRateLimited(Route.CompiledRoute route)
-    {
+    public boolean isRateLimited(Route.CompiledRoute route) {
         return getRateLimit(route) != null;
     }
 
-    public List<IBucket> getRouteBuckets()
-    {
-        synchronized (buckets)
-        {
+    public List<IBucket> getRouteBuckets() {
+        synchronized (buckets) {
             return Collections.unmodifiableList(new ArrayList<>(buckets.values()));
         }
     }
 
-    public List<IBucket> getQueuedRouteBuckets()
-    {
-        synchronized (submittedBuckets)
-        {
+    public List<IBucket> getQueuedRouteBuckets() {
+        synchronized (submittedBuckets) {
             return Collections.unmodifiableList(new ArrayList<>(submittedBuckets));
         }
     }
 
-    protected void shutdown(long time, TimeUnit unit)
-    {
+    protected void shutdown(long time, TimeUnit unit) {
         isShutdown = true;
 
         pool.setKeepAliveTime(time, unit);
         pool.allowCoreThreadTimeOut(true);
     }
 
-    public void forceShutdown()
-    {
+    public void forceShutdown() {
         pool.shutdownNow();
     }
 
-    private class RateLimitThreadFactory implements ThreadFactory
-    {
+    private class RateLimitThreadFactory implements ThreadFactory {
         final String identifier;
         final AtomicInteger threadCount = new AtomicInteger(1);
 
-        public RateLimitThreadFactory(JDAImpl api)
-        {
+        public RateLimitThreadFactory(JDAImpl api) {
             identifier = api.getIdentifierString() + " RateLimit-Queue Pool";
         }
 
         @Override
-        public Thread newThread(Runnable r)
-        {
+        public Thread newThread(Runnable r) {
             Thread t = new Thread(() ->
             {
                 if (requester.api.getContextMap() != null)

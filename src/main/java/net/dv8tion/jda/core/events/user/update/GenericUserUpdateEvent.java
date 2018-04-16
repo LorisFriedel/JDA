@@ -21,16 +21,14 @@ import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.UpdateEvent;
 import net.dv8tion.jda.core.events.user.GenericUserEvent;
 
-public abstract class GenericUserUpdateEvent<T> extends GenericUserEvent implements UpdateEvent<User, T>
-{
+public abstract class GenericUserUpdateEvent<T> extends GenericUserEvent implements UpdateEvent<User, T> {
     protected final T previous;
     protected final T next;
     protected final String identifier;
 
     public GenericUserUpdateEvent(
         JDA api, long responseNumber, User user,
-        T previous, T next, String identifier)
-    {
+        T previous, T next, String identifier) {
         super(api, responseNumber, user);
         this.previous = previous;
         this.next = next;
@@ -38,32 +36,27 @@ public abstract class GenericUserUpdateEvent<T> extends GenericUserEvent impleme
     }
 
     @Override
-    public User getEntity()
-    {
+    public User getEntity() {
         return getUser();
     }
 
     @Override
-    public String getPropertyIdentifier()
-    {
+    public String getPropertyIdentifier() {
         return identifier;
     }
 
     @Override
-    public T getOldValue()
-    {
+    public T getOldValue() {
         return previous;
     }
 
     @Override
-    public T getNewValue()
-    {
+    public T getNewValue() {
         return next;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "UserUpdate[" + getPropertyIdentifier() + "](" + getOldValue() + "->" + getNewValue() + ')';
     }
 }

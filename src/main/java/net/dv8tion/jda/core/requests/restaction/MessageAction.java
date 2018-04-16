@@ -64,10 +64,9 @@ import java.util.Map;
  *  }
  * </code></pre>
  *
- * @since  3.4.0
+ * @since 3.4.0
  */
-public class MessageAction extends RestAction<Message> implements Appendable
-{
+public class MessageAction extends RestAction<Message> implements Appendable {
     private static final String CONTENT_TOO_BIG = String.format("A message may not exceed %d characters. Please limit your input!", Message.MAX_CONTENT_LENGTH);
     protected final Map<String, InputStream> files = new HashMap<>();
     protected final StringBuilder content;
@@ -76,15 +75,13 @@ public class MessageAction extends RestAction<Message> implements Appendable
     protected String nonce = null;
     protected boolean tts = false, override = false;
 
-    public MessageAction(JDA api, Route.CompiledRoute route, MessageChannel channel)
-    {
+    public MessageAction(JDA api, Route.CompiledRoute route, MessageChannel channel) {
         super(api, route);
         this.content = new StringBuilder();
         this.channel = channel;
     }
 
-    public MessageAction(JDA api, Route.CompiledRoute route, MessageChannel channel, StringBuilder contentBuilder)
-    {
+    public MessageAction(JDA api, Route.CompiledRoute route, MessageChannel channel, StringBuilder contentBuilder) {
         super(api, route);
         Checks.check(contentBuilder.length() <= Message.MAX_CONTENT_LENGTH,
             "Cannot build a Message with more than %d characters. Please limit your input.", Message.MAX_CONTENT_LENGTH);
@@ -100,8 +97,7 @@ public class MessageAction extends RestAction<Message> implements Appendable
      *
      * @return True, if no settings have been applied
      */
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return Helpers.isBlank(content)
             && (embed == null || embed.isEmpty() || !hasPermission(Permission.MESSAGE_EMBED_LINKS));
     }
@@ -111,8 +107,7 @@ public class MessageAction extends RestAction<Message> implements Appendable
      *
      * @return True, if this MessageAction targets an existing message
      */
-    public boolean isEdit()
-    {
+    public boolean isEdit() {
         return finalizeRoute().getMethod() == Method.PATCH;
     }
 
@@ -123,19 +118,14 @@ public class MessageAction extends RestAction<Message> implements Appendable
      *
      * <p><b>This does not copy files!</b>
      *
-     * @param  message
-     *         The nullable Message to apply settings from
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the message contains an {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed}
-     *         that exceeds the sendable character limit,
-     *         see {@link net.dv8tion.jda.core.entities.MessageEmbed#isSendable(net.dv8tion.jda.core.AccountType) MessageEmbed.isSendable(AccountType)}
-     *
+     * @param message The nullable Message to apply settings from
      * @return Updated MessageAction for chaining convenience
+     * @throws java.lang.IllegalArgumentException If the message contains an {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed}
+     *                                            that exceeds the sendable character limit,
+     *                                            see {@link net.dv8tion.jda.core.entities.MessageEmbed#isSendable(net.dv8tion.jda.core.AccountType) MessageEmbed.isSendable(AccountType)}
      */
     @CheckReturnValue
-    public MessageAction apply(final Message message)
-    {
+    public MessageAction apply(final Message message) {
         if (message == null || message.getType() != MessageType.DEFAULT)
             return this;
         final List<MessageEmbed> embeds = message.getEmbeds();
@@ -150,14 +140,11 @@ public class MessageAction extends RestAction<Message> implements Appendable
      * Enable/Disable Text-To-Speech for the resulting message.
      * <br>This is only relevant to MessageActions that are not {@code isEdit() == true}!
      *
-     * @param  isTTS
-     *         True, if this should cause a Text-To-Speech effect when sent to the channel
-     *
+     * @param isTTS True, if this should cause a Text-To-Speech effect when sent to the channel
      * @return Updated MessageAction for chaining convenience
      */
     @CheckReturnValue
-    public MessageAction tts(final boolean isTTS)
-    {
+    public MessageAction tts(final boolean isTTS) {
         this.tts = isTTS;
         return this;
     }
@@ -172,8 +159,7 @@ public class MessageAction extends RestAction<Message> implements Appendable
      * @return Updated MessageAction for chaining convenience
      */
     @CheckReturnValue
-    public MessageAction reset()
-    {
+    public MessageAction reset() {
         return content(null).nonce(null).embed(null).tts(false).override(false).clearFiles();
     }
 
@@ -183,18 +169,14 @@ public class MessageAction extends RestAction<Message> implements Appendable
      * <p>For more information see {@link net.dv8tion.jda.core.MessageBuilder#setNonce(String) MessageBuilder.setNonce(String)}
      * and {@link net.dv8tion.jda.core.entities.Message#getNonce() Message.getNonce()}
      *
-     * @param  nonce
-     *         The nonce that shall be used
-     *
+     * @param nonce The nonce that shall be used
      * @return Updated MessageAction for chaining convenience
-     *
-     * @see    net.dv8tion.jda.core.entities.Message#getNonce()
-     * @see    net.dv8tion.jda.core.MessageBuilder#setNonce(String)
-     * @see    <a href="https://en.wikipedia.org/wiki/Cryptographic_nonce" target="_blank">Cryptographic Nonce - Wikipedia</a>
+     * @see net.dv8tion.jda.core.entities.Message#getNonce()
+     * @see net.dv8tion.jda.core.MessageBuilder#setNonce(String)
+     * @see <a href="https://en.wikipedia.org/wiki/Cryptographic_nonce" target="_blank">Cryptographic Nonce - Wikipedia</a>
      */
     @CheckReturnValue
-    public MessageAction nonce(final String nonce)
-    {
+    public MessageAction nonce(final String nonce) {
         this.nonce = nonce;
         return this;
     }
@@ -203,18 +185,13 @@ public class MessageAction extends RestAction<Message> implements Appendable
      * Overrides existing content with the provided input
      * <br>The content of a Message may not exceed {@value Message#MAX_CONTENT_LENGTH}!
      *
-     * @param  content
-     *         Sets the specified content and overrides previous content
-     *         or {@code null} to reset content
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided content exceeds the {@value Message#MAX_CONTENT_LENGTH} character limit
-     *
+     * @param content Sets the specified content and overrides previous content
+     *                or {@code null} to reset content
      * @return Updated MessageAction for chaining convenience
+     * @throws java.lang.IllegalArgumentException If the provided content exceeds the {@value Message#MAX_CONTENT_LENGTH} character limit
      */
     @CheckReturnValue
-    public MessageAction content(final String content)
-    {
+    public MessageAction content(final String content) {
         if (content == null || content.isEmpty())
             this.content.setLength(0);
         else if (content.length() <= Message.MAX_CONTENT_LENGTH)
@@ -229,22 +206,16 @@ public class MessageAction extends RestAction<Message> implements Appendable
      * that should be used for this Message.
      * Refer to {@link net.dv8tion.jda.core.EmbedBuilder EmbedBuilder} for more information.
      *
-     * @param  embed
-     *         The {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed} that should
-     *         be attached to this message, {@code null} to use no embed.
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided MessageEmbed is not sendable according to
-     *         {@link net.dv8tion.jda.core.entities.MessageEmbed#isSendable(net.dv8tion.jda.core.AccountType) MessageEmbed.isSendable(AccountType)}!
-     *         If the provided MessageEmbed is an unknown implementation this operation will fail as we are unable to deserialize it.
-     *
+     * @param embed The {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed} that should
+     *              be attached to this message, {@code null} to use no embed.
      * @return Updated MessageAction for chaining convenience
+     * @throws java.lang.IllegalArgumentException If the provided MessageEmbed is not sendable according to
+     *                                            {@link net.dv8tion.jda.core.entities.MessageEmbed#isSendable(net.dv8tion.jda.core.AccountType) MessageEmbed.isSendable(AccountType)}!
+     *                                            If the provided MessageEmbed is an unknown implementation this operation will fail as we are unable to deserialize it.
      */
     @CheckReturnValue
-    public MessageAction embed(final MessageEmbed embed)
-    {
-        if (embed != null)
-        {
+    public MessageAction embed(final MessageEmbed embed) {
+        if (embed != null) {
             final AccountType type = getJDA().getAccountType();
             Checks.check(embed.isSendable(type),
                 "Provided Message contains an empty embed or an embed with a length greater than %d characters, which is the max for %s accounts!",
@@ -256,31 +227,27 @@ public class MessageAction extends RestAction<Message> implements Appendable
 
     /**
      * {@inheritDoc}
-     * @throws java.lang.IllegalArgumentException
-     *         If the appended CharSequence is too big and will cause the content to
-     *         exceed the {@value net.dv8tion.jda.core.entities.Message#MAX_CONTENT_LENGTH} character limit
      *
      * @return Updated MessageAction for chaining convenience
+     * @throws java.lang.IllegalArgumentException If the appended CharSequence is too big and will cause the content to
+     *                                            exceed the {@value net.dv8tion.jda.core.entities.Message#MAX_CONTENT_LENGTH} character limit
      */
     @Override
     @CheckReturnValue
-    public MessageAction append(final CharSequence csq)
-    {
+    public MessageAction append(final CharSequence csq) {
         return append(csq, 0, csq.length());
     }
 
     /**
      * {@inheritDoc}
-     * @throws java.lang.IllegalArgumentException
-     *         If the appended CharSequence is too big and will cause the content to
-     *         exceed the {@value net.dv8tion.jda.core.entities.Message#MAX_CONTENT_LENGTH} character limit
      *
      * @return Updated MessageAction for chaining convenience
+     * @throws java.lang.IllegalArgumentException If the appended CharSequence is too big and will cause the content to
+     *                                            exceed the {@value net.dv8tion.jda.core.entities.Message#MAX_CONTENT_LENGTH} character limit
      */
     @Override
     @CheckReturnValue
-    public MessageAction append(final CharSequence csq, final int start, final int end)
-    {
+    public MessageAction append(final CharSequence csq, final int start, final int end) {
         if (content.length() + end - start > Message.MAX_CONTENT_LENGTH)
             throw new IllegalArgumentException("A message may not exceed 2000 characters. Please limit your input!");
         content.append(csq, start, end);
@@ -289,16 +256,14 @@ public class MessageAction extends RestAction<Message> implements Appendable
 
     /**
      * {@inheritDoc}
-     * @throws java.lang.IllegalArgumentException
-     *         If the appended CharSequence is too big and will cause the content to
-     *         exceed the {@value net.dv8tion.jda.core.entities.Message#MAX_CONTENT_LENGTH} character limit
      *
      * @return Updated MessageAction for chaining convenience
+     * @throws java.lang.IllegalArgumentException If the appended CharSequence is too big and will cause the content to
+     *                                            exceed the {@value net.dv8tion.jda.core.entities.Message#MAX_CONTENT_LENGTH} character limit
      */
     @Override
     @CheckReturnValue
-    public MessageAction append(final char c)
-    {
+    public MessageAction append(final char c) {
         if (content.length() == Message.MAX_CONTENT_LENGTH)
             throw new IllegalArgumentException("A message may not exceed 2000 characters. Please limit your input!");
         content.append(c);
@@ -311,27 +276,20 @@ public class MessageAction extends RestAction<Message> implements Appendable
      *
      * <p>For more information of formatting review the {@link java.util.Formatter Formatter} documentation!
      *
-     * @param  format
-     *         The format String
-     * @param  args
-     *         The arguments that should be used for conversion
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the appended formatting is too big and will cause the content to
-     *         exceed the {@value net.dv8tion.jda.core.entities.Message#MAX_CONTENT_LENGTH} character limit
-     * @throws java.util.IllegalFormatException
-     *         If a format string contains an illegal syntax,
-     *         a format specifier that is incompatible with the given arguments,
-     *         insufficient arguments given the format string, or other illegal conditions.
-     *         For specification of all possible formatting errors,
-     *         see the <a href="../util/Formatter.html#detail">Details</a>
-     *         section of the formatter class specification.
-     *
+     * @param format The format String
+     * @param args   The arguments that should be used for conversion
      * @return Updated MessageAction for chaining convenience
+     * @throws java.lang.IllegalArgumentException If the appended formatting is too big and will cause the content to
+     *                                            exceed the {@value net.dv8tion.jda.core.entities.Message#MAX_CONTENT_LENGTH} character limit
+     * @throws java.util.IllegalFormatException   If a format string contains an illegal syntax,
+     *                                            a format specifier that is incompatible with the given arguments,
+     *                                            insufficient arguments given the format string, or other illegal conditions.
+     *                                            For specification of all possible formatting errors,
+     *                                            see the <a href="../util/Formatter.html#detail">Details</a>
+     *                                            section of the formatter class specification.
      */
     @CheckReturnValue
-    public MessageAction appendFormat(final String format, final Object... args)
-    {
+    public MessageAction appendFormat(final String format, final Object... args) {
         return append(String.format(format, args));
     }
 
@@ -340,27 +298,19 @@ public class MessageAction extends RestAction<Message> implements Appendable
      *
      * <p>To reset all files use {@link #clearFiles()}
      *
-     * @param  data
-     *         The InputStream that will be interpreted as file data
-     * @param  name
-     *         The file name that should be used to interpret the type of the given data
-     *         using the file-name extension. This name is similar to what will be visible
-     *         through {@link net.dv8tion.jda.core.entities.Message.Attachment#getFileName() Message.Attachment.getFileName()}
-     *
-     * @throws java.lang.IllegalStateException
-     *         If the file limit of {@value Message#MAX_FILE_AMOUNT} has been reached prior to calling this method,
-     *         or if this MessageAction will perform an edit operation on an existing Message (see {@link #isEdit()})
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided data is {@code null} or the provided name is blank or {@code null}
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is targeting a TextChannel and the currently logged in account does not have
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_ATTACH_FILES Permission.MESSAGE_ATTACH_FILES}
-     *
+     * @param data The InputStream that will be interpreted as file data
+     * @param name The file name that should be used to interpret the type of the given data
+     *             using the file-name extension. This name is similar to what will be visible
+     *             through {@link net.dv8tion.jda.core.entities.Message.Attachment#getFileName() Message.Attachment.getFileName()}
      * @return Updated MessageAction for chaining convenience
+     * @throws java.lang.IllegalStateException                                 If the file limit of {@value Message#MAX_FILE_AMOUNT} has been reached prior to calling this method,
+     *                                                                         or if this MessageAction will perform an edit operation on an existing Message (see {@link #isEdit()})
+     * @throws java.lang.IllegalArgumentException                              If the provided data is {@code null} or the provided name is blank or {@code null}
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is targeting a TextChannel and the currently logged in account does not have
+     *                                                                         {@link net.dv8tion.jda.core.Permission#MESSAGE_ATTACH_FILES Permission.MESSAGE_ATTACH_FILES}
      */
     @CheckReturnValue
-    public MessageAction addFile(final InputStream data, final String name)
-    {
+    public MessageAction addFile(final InputStream data, final String name) {
         checkEdit();
         Checks.notNull(data, "Data");
         Checks.notBlank(name, "Name");
@@ -375,30 +325,21 @@ public class MessageAction extends RestAction<Message> implements Appendable
      *
      * <p>To reset all files use {@link #clearFiles()}
      *
-     * @param  data
-     *         The byte[] that will be interpreted as file data
-     * @param  name
-     *         The file name that should be used to interpret the type of the given data
-     *         using the file-name extension. This name is similar to what will be visible
-     *         through {@link net.dv8tion.jda.core.entities.Message.Attachment#getFileName() Message.Attachment.getFileName()}
-     *
-     * @throws java.lang.IllegalStateException
-     *         If the file limit of {@value Message#MAX_FILE_AMOUNT} has been reached prior to calling this method,
-     *         or if this MessageAction will perform an edit operation on an existing Message (see {@link #isEdit()})
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided data is {@code null} or the provided name is blank or {@code null}
-     *         or if the provided data exceeds the maximum file size of the currently logged in account
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is targeting a TextChannel and the currently logged in account does not have
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_ATTACH_FILES Permission.MESSAGE_ATTACH_FILES}
-     *
+     * @param data The byte[] that will be interpreted as file data
+     * @param name The file name that should be used to interpret the type of the given data
+     *             using the file-name extension. This name is similar to what will be visible
+     *             through {@link net.dv8tion.jda.core.entities.Message.Attachment#getFileName() Message.Attachment.getFileName()}
      * @return Updated MessageAction for chaining convenience
-     *
-     * @see    net.dv8tion.jda.core.entities.SelfUser#getAllowedFileSize() SelfUser.getAllowedFileSize()
+     * @throws java.lang.IllegalStateException                                 If the file limit of {@value Message#MAX_FILE_AMOUNT} has been reached prior to calling this method,
+     *                                                                         or if this MessageAction will perform an edit operation on an existing Message (see {@link #isEdit()})
+     * @throws java.lang.IllegalArgumentException                              If the provided data is {@code null} or the provided name is blank or {@code null}
+     *                                                                         or if the provided data exceeds the maximum file size of the currently logged in account
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is targeting a TextChannel and the currently logged in account does not have
+     *                                                                         {@link net.dv8tion.jda.core.Permission#MESSAGE_ATTACH_FILES Permission.MESSAGE_ATTACH_FILES}
+     * @see net.dv8tion.jda.core.entities.SelfUser#getAllowedFileSize() SelfUser.getAllowedFileSize()
      */
     @CheckReturnValue
-    public MessageAction addFile(final byte[] data, final String name)
-    {
+    public MessageAction addFile(final byte[] data, final String name) {
         Checks.notNull(data, "Data");
         final long maxSize = getJDA().getSelfUser().getAllowedFileSize();
         Checks.check(data.length <= maxSize, "File may not exceed the maximum file length of %d bytes!", maxSize);
@@ -411,25 +352,17 @@ public class MessageAction extends RestAction<Message> implements Appendable
      *
      * <p>To reset all files use {@link #clearFiles()}
      *
-     * @param  file
-     *         The File that will be interpreted as file data
-     *
-     * @throws java.lang.IllegalStateException
-     *         If the file limit of {@value Message#MAX_FILE_AMOUNT} has been reached prior to calling this method,
-     *         or if this MessageAction will perform an edit operation on an existing Message (see {@link #isEdit()})
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided file is {@code null} or if the provided File is bigger than the maximum file size of the currently logged in account
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is targeting a TextChannel and the currently logged in account does not have
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_ATTACH_FILES Permission.MESSAGE_ATTACH_FILES}
-     *
+     * @param file The File that will be interpreted as file data
      * @return Updated MessageAction for chaining convenience
-     *
-     * @see    net.dv8tion.jda.core.entities.SelfUser#getAllowedFileSize() SelfUser.getAllowedFileSize()
+     * @throws java.lang.IllegalStateException                                 If the file limit of {@value Message#MAX_FILE_AMOUNT} has been reached prior to calling this method,
+     *                                                                         or if this MessageAction will perform an edit operation on an existing Message (see {@link #isEdit()})
+     * @throws java.lang.IllegalArgumentException                              If the provided file is {@code null} or if the provided File is bigger than the maximum file size of the currently logged in account
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is targeting a TextChannel and the currently logged in account does not have
+     *                                                                         {@link net.dv8tion.jda.core.Permission#MESSAGE_ATTACH_FILES Permission.MESSAGE_ATTACH_FILES}
+     * @see net.dv8tion.jda.core.entities.SelfUser#getAllowedFileSize() SelfUser.getAllowedFileSize()
      */
     @CheckReturnValue
-    public MessageAction addFile(final File file)
-    {
+    public MessageAction addFile(final File file) {
         Checks.notNull(file, "File");
         return addFile(file, file.getName());
     }
@@ -439,41 +372,29 @@ public class MessageAction extends RestAction<Message> implements Appendable
      *
      * <p>To reset all files use {@link #clearFiles()}
      *
-     * @param  file
-     *         The File that will be interpreted as file data
-     * @param  name
-     *         The file name that should be used to interpret the type of the given data
-     *         using the file-name extension. This name is similar to what will be visible
-     *         through {@link net.dv8tion.jda.core.entities.Message.Attachment#getFileName() Message.Attachment.getFileName()}
-     *
-     * @throws java.lang.IllegalStateException
-     *         If the file limit of {@value Message#MAX_FILE_AMOUNT} has been reached prior to calling this method,
-     *         or if this MessageAction will perform an edit operation on an existing Message (see {@link #isEdit()})
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided file is {@code null} or the provided name is blank or {@code null}
-     *         or if the provided file is bigger than the maximum file size of the currently logged in account,
-     *         or if the provided file does not exist/ is not readable
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this is targeting a TextChannel and the currently logged in account does not have
-     *         {@link net.dv8tion.jda.core.Permission#MESSAGE_ATTACH_FILES Permission.MESSAGE_ATTACH_FILES}
-     *
+     * @param file The File that will be interpreted as file data
+     * @param name The file name that should be used to interpret the type of the given data
+     *             using the file-name extension. This name is similar to what will be visible
+     *             through {@link net.dv8tion.jda.core.entities.Message.Attachment#getFileName() Message.Attachment.getFileName()}
      * @return Updated MessageAction for chaining convenience
-     *
-     * @see    net.dv8tion.jda.core.entities.SelfUser#getAllowedFileSize() SelfUser.getAllowedFileSize()
+     * @throws java.lang.IllegalStateException                                 If the file limit of {@value Message#MAX_FILE_AMOUNT} has been reached prior to calling this method,
+     *                                                                         or if this MessageAction will perform an edit operation on an existing Message (see {@link #isEdit()})
+     * @throws java.lang.IllegalArgumentException                              If the provided file is {@code null} or the provided name is blank or {@code null}
+     *                                                                         or if the provided file is bigger than the maximum file size of the currently logged in account,
+     *                                                                         or if the provided file does not exist/ is not readable
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this is targeting a TextChannel and the currently logged in account does not have
+     *                                                                         {@link net.dv8tion.jda.core.Permission#MESSAGE_ATTACH_FILES Permission.MESSAGE_ATTACH_FILES}
+     * @see net.dv8tion.jda.core.entities.SelfUser#getAllowedFileSize() SelfUser.getAllowedFileSize()
      */
     @CheckReturnValue
-    public MessageAction addFile(final File file, final String name)
-    {
+    public MessageAction addFile(final File file, final String name) {
         Checks.notNull(file, "File");
         Checks.check(file.exists() && file.canRead(), "Provided file either does not exist or cannot be read from!");
         final long maxSize = getJDA().getSelfUser().getAllowedFileSize();
         Checks.check(file.length() <= maxSize, "File may not exceed the maximum file length of %d bytes!", maxSize);
-        try
-        {
+        try {
             return addFile(new FileInputStream(file), name);
-        }
-        catch (FileNotFoundException e)
-        {
+        } catch (FileNotFoundException e) {
             throw new IllegalArgumentException(e);
         }
     }
@@ -484,8 +405,7 @@ public class MessageAction extends RestAction<Message> implements Appendable
      * @return Updated MessageAction for chaining convenience
      */
     @CheckReturnValue
-    public MessageAction clearFiles()
-    {
+    public MessageAction clearFiles() {
         files.clear();
         return this;
     }
@@ -493,25 +413,20 @@ public class MessageAction extends RestAction<Message> implements Appendable
     /**
      * Whether all fields should be considered when editing a message
      *
-     * @param  bool
-     *         True, to override all fields even if they are not set
-     *
+     * @param bool True, to override all fields even if they are not set
      * @return Updated MessageAction for chaining convenience
      */
     @CheckReturnValue
-    public MessageAction override(final boolean bool)
-    {
+    public MessageAction override(final boolean bool) {
         this.override = isEdit() && bool;
         return this;
     }
 
-    protected RequestBody asMultipart()
-    {
+    protected RequestBody asMultipart() {
         final MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
         final MediaType type = MediaType.parse("application/octet-stream");
         int index = 0;
-        for (Map.Entry<String, InputStream> entry : files.entrySet())
-        {
+        for (Map.Entry<String, InputStream> entry : files.entrySet()) {
             final RequestBody body = MiscUtil.createRequestBody(type, entry.getValue());
             builder.addFormDataPart("file" + index++, entry.getKey(), body);
         }
@@ -520,16 +435,13 @@ public class MessageAction extends RestAction<Message> implements Appendable
         return builder.build();
     }
 
-    protected RequestBody asJSON()
-    {
+    protected RequestBody asJSON() {
         return RequestBody.create(Requester.MEDIA_TYPE_JSON, getJSON().toString());
     }
 
-    protected JSONObject getJSON()
-    {
+    protected JSONObject getJSON() {
         final JSONObject obj = new JSONObject();
-        if (override)
-        {
+        if (override) {
             if (embed == null)
                 obj.put("embed", JSONObject.NULL);
             else
@@ -543,9 +455,7 @@ public class MessageAction extends RestAction<Message> implements Appendable
             else
                 obj.put("nonce", nonce);
             obj.put("tts", tts);
-        }
-        else
-        {
+        } else {
             if (embed != null)
                 obj.put("embed", getJSONEmbed(embed));
             if (content.length() > 0)
@@ -557,31 +467,26 @@ public class MessageAction extends RestAction<Message> implements Appendable
         return obj;
     }
 
-    protected static JSONObject getJSONEmbed(final MessageEmbed embed)
-    {
+    protected static JSONObject getJSONEmbed(final MessageEmbed embed) {
         return embed.toJSONObject();
     }
 
-    protected void checkFileAmount()
-    {
+    protected void checkFileAmount() {
         if (files.size() >= Message.MAX_FILE_AMOUNT)
             throw new IllegalStateException("Cannot add more than " + Message.MAX_FILE_AMOUNT + " files!");
     }
 
-    protected void checkEdit()
-    {
+    protected void checkEdit() {
         if (isEdit())
             throw new IllegalStateException("Cannot add files to an existing message! Edit-Message does not support this operation!");
     }
 
-    protected void checkPermission(Permission perm)
-    {
+    protected void checkPermission(Permission perm) {
         if (!hasPermission(perm))
             throw new InsufficientPermissionException(perm);
     }
 
-    protected boolean hasPermission(Permission perm)
-    {
+    protected boolean hasPermission(Permission perm) {
         if (channel.getType() != ChannelType.TEXT)
             return true;
         TextChannel text = (TextChannel) channel;
@@ -590,8 +495,7 @@ public class MessageAction extends RestAction<Message> implements Appendable
     }
 
     @Override
-    protected RequestBody finalizeData()
-    {
+    protected RequestBody finalizeData() {
         if (!files.isEmpty())
             return asMultipart();
         else if (!isEmpty())
@@ -600,8 +504,7 @@ public class MessageAction extends RestAction<Message> implements Appendable
     }
 
     @Override
-    protected void handleResponse(Response response, Request<Message> request)
-    {
+    protected void handleResponse(Response response, Request<Message> request) {
         if (response.isOk())
             request.onSuccess(api.getEntityBuilder().createMessage(response.getObject(), channel, false));
         else

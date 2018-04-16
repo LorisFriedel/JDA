@@ -25,10 +25,8 @@ import net.dv8tion.jda.core.entities.User;
  *
  * <p>Can be used to detect when a reaction is removed in a guild
  */
-public class GuildMessageReactionRemoveEvent extends GenericGuildMessageReactionEvent
-{
-    public GuildMessageReactionRemoveEvent(JDA api, long responseNumber, User user, MessageReaction reaction)
-    {
+public class GuildMessageReactionRemoveEvent extends GenericGuildMessageReactionEvent {
+    public GuildMessageReactionRemoveEvent(JDA api, long responseNumber, User user, MessageReaction reaction) {
         super(api, responseNumber, user, reaction);
     }
 }

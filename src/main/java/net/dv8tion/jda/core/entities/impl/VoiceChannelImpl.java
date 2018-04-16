@@ -26,47 +26,39 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class VoiceChannelImpl extends AbstractChannelImpl<VoiceChannelImpl> implements VoiceChannel
-{
+public class VoiceChannelImpl extends AbstractChannelImpl<VoiceChannelImpl> implements VoiceChannel {
     private final TLongObjectMap<Member> connectedMembers = MiscUtil.newLongMap();
     private int userLimit;
     private int bitrate;
 
-    public VoiceChannelImpl(long id, GuildImpl guild)
-    {
+    public VoiceChannelImpl(long id, GuildImpl guild) {
         super(id, guild);
     }
 
     @Override
-    public int getUserLimit()
-    {
+    public int getUserLimit() {
         return userLimit;
     }
 
     @Override
-    public int getBitrate()
-    {
+    public int getBitrate() {
         return bitrate;
     }
 
     @Override
-    public ChannelType getType()
-    {
+    public ChannelType getType() {
         return ChannelType.VOICE;
     }
 
     @Override
-    public List<Member> getMembers()
-    {
+    public List<Member> getMembers() {
         return Collections.unmodifiableList(new ArrayList<>(connectedMembers.valueCollection()));
     }
 
     @Override
-    public int getPosition()
-    {
+    public int getPosition() {
         List<VoiceChannel> channels = getGuild().getVoiceChannels();
-        for (int i = 0; i < channels.size(); i++)
-        {
+        for (int i = 0; i < channels.size(); i++) {
             if (channels.get(i) == this)
                 return i;
         }
@@ -74,17 +66,14 @@ public class VoiceChannelImpl extends AbstractChannelImpl<VoiceChannelImpl> impl
     }
 
     @Override
-    public ChannelAction createCopy(Guild guild)
-    {
+    public ChannelAction createCopy(Guild guild) {
         Checks.notNull(guild, "Guild");
         ChannelAction action = guild.getController().createVoiceChannel(name).setBitrate(bitrate).setUserlimit(userLimit);
-        if (guild.equals(getGuild()))
-        {
+        if (guild.equals(getGuild())) {
             Category parent = getParent();
             if (parent != null)
                 action.setParent(parent);
-            for (PermissionOverride o : overrides.valueCollection())
-            {
+            for (PermissionOverride o : overrides.valueCollection()) {
                 if (o.isMemberOverride())
                     action.addPermissionOverride(o.getMember(), o.getAllowedRaw(), o.getDeniedRaw());
                 else
@@ -95,8 +84,7 @@ public class VoiceChannelImpl extends AbstractChannelImpl<VoiceChannelImpl> impl
     }
 
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         if (!(o instanceof VoiceChannel))
             return false;
         VoiceChannel oVChannel = (VoiceChannel) o;
@@ -104,14 +92,12 @@ public class VoiceChannelImpl extends AbstractChannelImpl<VoiceChannelImpl> impl
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "VC:" + getName() + '(' + id + ')';
     }
 
     @Override
-    public int compareTo(VoiceChannel chan)
-    {
+    public int compareTo(VoiceChannel chan) {
         Checks.notNull(chan, "Other VoiceChannel");
         if (this == chan)
             return 0;
@@ -123,22 +109,19 @@ public class VoiceChannelImpl extends AbstractChannelImpl<VoiceChannelImpl> impl
 
     // -- Setters --
 
-    public VoiceChannelImpl setUserLimit(int userLimit)
-    {
+    public VoiceChannelImpl setUserLimit(int userLimit) {
         this.userLimit = userLimit;
         return this;
     }
 
-    public VoiceChannelImpl setBitrate(int bitrate)
-    {
+    public VoiceChannelImpl setBitrate(int bitrate) {
         this.bitrate = bitrate;
         return this;
     }
 
     // -- Map Getters --
 
-    public TLongObjectMap<Member> getConnectedMembersMap()
-    {
+    public TLongObjectMap<Member> getConnectedMembersMap() {
         return connectedMembers;
     }
 }

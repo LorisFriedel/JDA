@@ -24,16 +24,14 @@ import net.dv8tion.jda.core.events.emote.GenericEmoteEvent;
 /**
  * Indicates that an {@link net.dv8tion.jda.core.entities.Emote Emote} was updated.
  */
-public abstract class GenericEmoteUpdateEvent<T> extends GenericEmoteEvent implements UpdateEvent<Emote, T>
-{
+public abstract class GenericEmoteUpdateEvent<T> extends GenericEmoteEvent implements UpdateEvent<Emote, T> {
     protected final T previous;
     protected final T next;
     protected final String identifier;
 
     public GenericEmoteUpdateEvent(
         JDA api, long responseNumber, Emote emote,
-        T previous, T next, String identifier)
-    {
+        T previous, T next, String identifier) {
         super(api, responseNumber, emote);
         this.previous = previous;
         this.next = next;
@@ -41,32 +39,27 @@ public abstract class GenericEmoteUpdateEvent<T> extends GenericEmoteEvent imple
     }
 
     @Override
-    public Emote getEntity()
-    {
+    public Emote getEntity() {
         return getEmote();
     }
 
     @Override
-    public String getPropertyIdentifier()
-    {
+    public String getPropertyIdentifier() {
         return identifier;
     }
 
     @Override
-    public T getOldValue()
-    {
+    public T getOldValue() {
         return previous;
     }
 
     @Override
-    public T getNewValue()
-    {
+    public T getNewValue() {
         return next;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "EmoteUpdate[" + getPropertyIdentifier() + "](" + getOldValue() + "->" + getNewValue() + ')';
     }
 }

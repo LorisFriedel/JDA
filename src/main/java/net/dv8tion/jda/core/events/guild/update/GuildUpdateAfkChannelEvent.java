@@ -27,12 +27,10 @@ import net.dv8tion.jda.core.entities.VoiceChannel;
  *
  * <p>Identifier: {@code afk_channel}
  */
-public class GuildUpdateAfkChannelEvent extends GenericGuildUpdateEvent<VoiceChannel>
-{
+public class GuildUpdateAfkChannelEvent extends GenericGuildUpdateEvent<VoiceChannel> {
     public static final String IDENTIFIER = "afk_channel";
 
-    public GuildUpdateAfkChannelEvent(JDA api, long responseNumber, Guild guild, VoiceChannel oldAfkChannel)
-    {
+    public GuildUpdateAfkChannelEvent(JDA api, long responseNumber, Guild guild, VoiceChannel oldAfkChannel) {
         super(api, responseNumber, guild, oldAfkChannel, guild.getAfkChannel(), IDENTIFIER);
     }
 
@@ -41,8 +39,7 @@ public class GuildUpdateAfkChannelEvent extends GenericGuildUpdateEvent<VoiceCha
      *
      * @return The old afk channel, or null
      */
-    public VoiceChannel getOldAfkChannel()
-    {
+    public VoiceChannel getOldAfkChannel() {
         return getOldValue();
     }
 
@@ -51,8 +48,7 @@ public class GuildUpdateAfkChannelEvent extends GenericGuildUpdateEvent<VoiceCha
      *
      * @return The new afk channel, or null
      */
-    public VoiceChannel getNewAfkChannel()
-    {
+    public VoiceChannel getNewAfkChannel() {
         return getNewValue();
     }
 }

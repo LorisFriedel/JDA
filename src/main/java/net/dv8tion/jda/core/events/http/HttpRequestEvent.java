@@ -31,99 +31,81 @@ import java.util.Set;
 
 /**
  * Indicates that a {@link net.dv8tion.jda.core.requests.RestAction RestAction} has been executed.
- * 
+ *
  * <p>Depending on the request and its result not all values have to be populated.
  */
-public class HttpRequestEvent extends Event
-{
+public class HttpRequestEvent extends Event {
     private final Request<?> request;
     private final Response response;
 
-    public HttpRequestEvent(final Request<?> request, final Response response)
-    {
+    public HttpRequestEvent(final Request<?> request, final Response response) {
         super(request.getJDA());
 
         this.request = request;
         this.response = response;
     }
 
-    public Request<?> getRequest()
-    {
+    public Request<?> getRequest() {
         return this.request;
     }
 
-    public RequestBody getRequestBody()
-    {
+    public RequestBody getRequestBody() {
         return this.request.getBody();
     }
 
-    public Object getRequestBodyRaw()
-    {
+    public Object getRequestBodyRaw() {
         return this.request.getRawBody();
     }
 
-    public Headers getRequestHeaders()
-    {
+    public Headers getRequestHeaders() {
         return this.response.getRawResponse() == null ? null : this.response.getRawResponse().request().headers();
     }
 
-    public okhttp3.Request getRequestRaw()
-    {
+    public okhttp3.Request getRequestRaw() {
         return this.response.getRawResponse() == null ? null : this.response.getRawResponse().request();
     }
 
-    public Response getResponse()
-    {
+    public Response getResponse() {
         return this.response;
     }
 
-    public ResponseBody getResponseBody()
-    {
+    public ResponseBody getResponseBody() {
         return this.response.getRawResponse() == null ? null : this.response.getRawResponse().body();
     }
 
-    public JSONArray getResponseBodyAsArray()
-    {
+    public JSONArray getResponseBodyAsArray() {
         return this.response.getArray();
     }
 
-    public JSONObject getResponseBodyAsObject()
-    {
+    public JSONObject getResponseBodyAsObject() {
         return this.response.getObject();
     }
 
-    public String getResponseBodyAsString()
-    {
+    public String getResponseBodyAsString() {
         return this.response.getString();
     }
 
-    public Headers getResponseHeaders()
-    {
+    public Headers getResponseHeaders() {
         return this.response.getRawResponse() == null ? null : this.response.getRawResponse().headers();
     }
 
-    public okhttp3.Response getResponseRaw()
-    {
+    public okhttp3.Response getResponseRaw() {
         return this.response.getRawResponse();
     }
 
-    public Set<String> getCFRays()
-    {
+    public Set<String> getCFRays() {
         return this.response.getCFRays();
     }
 
-    public RestAction<?> getRestAction()
-    {
+    public RestAction<?> getRestAction() {
         return this.request.getRestAction();
     }
 
-    public CompiledRoute getRoute()
-    {
+    public CompiledRoute getRoute() {
         return this.request.getRoute();
     }
 
-    public boolean isRateLimit()
-    {
+    public boolean isRateLimit() {
         return this.response.isRateLimit();
     }
 

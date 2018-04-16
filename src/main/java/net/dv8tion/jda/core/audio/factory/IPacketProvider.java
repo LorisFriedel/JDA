@@ -27,8 +27,7 @@ import java.net.DatagramSocket;
  * JDA's internal audio system, providing access to audio packets built from data provided from
  * {@link net.dv8tion.jda.core.audio.AudioSendHandler AudioSendHandlers}.
  */
-public interface IPacketProvider
-{
+public interface IPacketProvider {
     /**
      * Provides a unique String identifier for the connection.
      * <br>Uses shard information and specific audio connection information to build string.
@@ -68,11 +67,9 @@ public interface IPacketProvider
      *
      * <p><b>Note:</b> When the AudioSendHandler cannot or does not provide a new packet to send, this method will return null.
      *
-     * @param  changeTalking
-     *         Whether or not to change the talking indicator if the AudioSendHandler cannot provide a new audio packet.
-     *
+     * @param changeTalking Whether or not to change the talking indicator if the AudioSendHandler cannot provide a new audio packet.
      * @return Possibly-null {@link java.net.DatagramPacket DatagramPacket} containing an encoded and encrypted packet
-     *         of audio data ready to be sent to discord.
+     * of audio data ready to be sent to discord.
      */
     DatagramPacket getNextPacket(boolean changeTalking);
 
@@ -80,9 +77,8 @@ public interface IPacketProvider
      * This method is used to indicate a connection error to JDA so that the connection can be properly shutdown.
      * <br>This is useful if, during setup or operation, an unrecoverable error is encountered.
      *
-     * @param  status
-     *         The {@link net.dv8tion.jda.core.audio.hooks.ConnectionStatus ConnectionStatus} being reported to JDA
-     *         indicating an error with connection.
+     * @param status The {@link net.dv8tion.jda.core.audio.hooks.ConnectionStatus ConnectionStatus} being reported to JDA
+     *               indicating an error with connection.
      */
     void onConnectionError(ConnectionStatus status);
 

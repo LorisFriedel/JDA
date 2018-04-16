@@ -26,15 +26,13 @@ import net.dv8tion.jda.core.entities.Role;
  *
  * <p>Identifier: {@code position}
  */
-public class RoleUpdatePositionEvent extends GenericRoleUpdateEvent<Integer>
-{
+public class RoleUpdatePositionEvent extends GenericRoleUpdateEvent<Integer> {
     public static final String IDENTIFIER = "position";
 
     private final int oldPositionRaw;
     private final int newPositionRaw;
 
-    public RoleUpdatePositionEvent(JDA api, long responseNumber, Role role, int oldPosition, int oldPositionRaw)
-    {
+    public RoleUpdatePositionEvent(JDA api, long responseNumber, Role role, int oldPosition, int oldPositionRaw) {
         super(api, responseNumber, role, oldPosition, role.getPosition(), IDENTIFIER);
         this.oldPositionRaw = oldPositionRaw;
         this.newPositionRaw = role.getPositionRaw();
@@ -45,8 +43,7 @@ public class RoleUpdatePositionEvent extends GenericRoleUpdateEvent<Integer>
      *
      * @return The old position
      */
-    public int getOldPosition()
-    {
+    public int getOldPosition() {
         return getOldValue();
     }
 
@@ -55,8 +52,7 @@ public class RoleUpdatePositionEvent extends GenericRoleUpdateEvent<Integer>
      *
      * @return The old position
      */
-    public int getOldPositionRaw()
-    {
+    public int getOldPositionRaw() {
         return oldPositionRaw;
     }
 
@@ -65,8 +61,7 @@ public class RoleUpdatePositionEvent extends GenericRoleUpdateEvent<Integer>
      *
      * @return The new position
      */
-    public int getNewPosition()
-    {
+    public int getNewPosition() {
         return getNewValue();
     }
 
@@ -75,8 +70,7 @@ public class RoleUpdatePositionEvent extends GenericRoleUpdateEvent<Integer>
      *
      * @return The new position
      */
-    public int getNewPositionRaw()
-    {
+    public int getNewPositionRaw() {
         return newPositionRaw;
     }
 }

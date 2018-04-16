@@ -25,12 +25,10 @@ import net.dv8tion.jda.core.events.Event;
  *
  * <p>Can be used to retrieve id of new unavailable Guild.
  */
-public class UnavailableGuildJoinedEvent extends Event
-{
+public class UnavailableGuildJoinedEvent extends Event {
     private final long guildId;
 
-    public UnavailableGuildJoinedEvent(JDA api, long responseNumber, long guildId)
-    {
+    public UnavailableGuildJoinedEvent(JDA api, long responseNumber, long guildId) {
         super(api, responseNumber);
         this.guildId = guildId;
     }
@@ -40,8 +38,7 @@ public class UnavailableGuildJoinedEvent extends Event
      *
      * @return The ID of the guild
      */
-    public String getGuildId()
-    {
+    public String getGuildId() {
         return Long.toUnsignedString(guildId);
     }
 
@@ -50,8 +47,7 @@ public class UnavailableGuildJoinedEvent extends Event
      *
      * @return The ID of the guild
      */
-    public long getGuildIdLong()
-    {
+    public long getGuildIdLong() {
         return guildId;
     }
 }

@@ -49,8 +49,7 @@ import java.util.Collection;
  * in the parent {@link net.dv8tion.jda.core.entities.Channel Channel}
  */
 @Deprecated
-public class PermOverrideManagerUpdatable
-{
+public class PermOverrideManagerUpdatable {
     protected final PermissionOverride override;
 
     protected Long allow;
@@ -60,11 +59,9 @@ public class PermOverrideManagerUpdatable
     /**
      * Creates a new PermOverrideManagerUpdatable instance
      *
-     * @param override
-     *        The {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride} to manage
+     * @param override The {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride} to manage
      */
-    public PermOverrideManagerUpdatable(PermissionOverride override)
-    {
+    public PermOverrideManagerUpdatable(PermissionOverride override) {
         this.override = override;
     }
 
@@ -73,8 +70,7 @@ public class PermOverrideManagerUpdatable
      *
      * @return the corresponding JDA instance
      */
-    public JDA getJDA()
-    {
+    public JDA getJDA() {
         return override.getJDA();
     }
 
@@ -85,8 +81,7 @@ public class PermOverrideManagerUpdatable
      *
      * @return The parent {@link net.dv8tion.jda.core.entities.Guild Guild}
      */
-    public Guild getGuild()
-    {
+    public Guild getGuild() {
         return override.getGuild();
     }
 
@@ -97,8 +92,7 @@ public class PermOverrideManagerUpdatable
      *
      * @return The parent {@link net.dv8tion.jda.core.entities.Channel Channel}
      */
-    public Channel getChannel()
-    {
+    public Channel getChannel() {
         return override.getChannel();
     }
 
@@ -108,8 +102,7 @@ public class PermOverrideManagerUpdatable
      *
      * @return The target {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
      */
-    public PermissionOverride getPermissionOverride()
-    {
+    public PermissionOverride getPermissionOverride() {
         return override;
     }
 
@@ -117,17 +110,12 @@ public class PermOverrideManagerUpdatable
      * Grants the specified permission bits
      * to the target {@link net.dv8tion.jda.core.entities.PermissionOverride}
      *
-     * @param  permissions
-     *         Raw permission bits to grant
-     *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If any of the provided permissions are not accessible
-     *
+     * @param permissions Raw permission bits to grant
      * @return The current Manager instance for chaining convenience
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If any of the provided permissions are not accessible
      */
     @CheckReturnValue
-    public PermOverrideManagerUpdatable grant(long permissions)
-    {
+    public PermOverrideManagerUpdatable grant(long permissions) {
         return grant(Permission.getPermissions(permissions));
     }
 
@@ -135,19 +123,13 @@ public class PermOverrideManagerUpdatable
      * Grants the specified {@link net.dv8tion.jda.core.Permission Permissions}
      * to the target {@link net.dv8tion.jda.core.entities.PermissionOverride}
      *
-     * @param  permissions
-     *         Permissions to grant
-     *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If any of the provided permissions are not accessible
-     * @throws IllegalArgumentException
-     *         If any of the provided permissions is {@code null}
-     *
+     * @param permissions Permissions to grant
      * @return The current Manager instance for chaining convenience
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If any of the provided permissions are not accessible
+     * @throws IllegalArgumentException                                        If any of the provided permissions is {@code null}
      */
     @CheckReturnValue
-    public PermOverrideManagerUpdatable grant(Permission... permissions)
-    {
+    public PermOverrideManagerUpdatable grant(Permission... permissions) {
         return grant(Arrays.asList(permissions));
     }
 
@@ -155,19 +137,13 @@ public class PermOverrideManagerUpdatable
      * Grants the specified {@link net.dv8tion.jda.core.Permission Permissions}
      * to the target {@link net.dv8tion.jda.core.entities.PermissionOverride}
      *
-     * @param  permissions
-     *         Permissions to grant
-     *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If any of the provided permissions are not accessible
-     * @throws IllegalArgumentException
-     *         If any of the provided permissions is {@code null}
-     *
+     * @param permissions Permissions to grant
      * @return The current Manager instance for chaining convenience
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If any of the provided permissions are not accessible
+     * @throws IllegalArgumentException                                        If any of the provided permissions is {@code null}
      */
     @CheckReturnValue
-    public PermOverrideManagerUpdatable grant(Collection<Permission> permissions)
-    {
+    public PermOverrideManagerUpdatable grant(Collection<Permission> permissions) {
         Checks.notNull(permissions, "Permission Collection");
         permissions.forEach(perm ->
         {
@@ -187,17 +163,12 @@ public class PermOverrideManagerUpdatable
      * Denies the specified permission bits
      * from the target {@link net.dv8tion.jda.core.entities.PermissionOverride}
      *
-     * @param  permissions
-     *         Raw permission bits to deny
-     *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If any of the provided permissions are not accessible
-     *
+     * @param permissions Raw permission bits to deny
      * @return The current Manager instance for chaining convenience
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If any of the provided permissions are not accessible
      */
     @CheckReturnValue
-    public PermOverrideManagerUpdatable deny(long permissions)
-    {
+    public PermOverrideManagerUpdatable deny(long permissions) {
         return deny(Permission.getPermissions(permissions));
     }
 
@@ -205,19 +176,13 @@ public class PermOverrideManagerUpdatable
      * Denies the specified {@link net.dv8tion.jda.core.Permission Permissions}
      * from the target {@link net.dv8tion.jda.core.entities.PermissionOverride}
      *
-     * @param  permissions
-     *         Permissions to deny
-     *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If any of the provided permissions are not accessible
-     * @throws IllegalArgumentException
-     *         If any of the provided permissions is {@code null}
-     *
+     * @param permissions Permissions to deny
      * @return The current Manager instance for chaining convenience
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If any of the provided permissions are not accessible
+     * @throws IllegalArgumentException                                        If any of the provided permissions is {@code null}
      */
     @CheckReturnValue
-    public PermOverrideManagerUpdatable deny(Permission... permissions)
-    {
+    public PermOverrideManagerUpdatable deny(Permission... permissions) {
         return deny(Arrays.asList(permissions));
     }
 
@@ -225,19 +190,13 @@ public class PermOverrideManagerUpdatable
      * Denies the specified {@link net.dv8tion.jda.core.Permission Permissions}
      * from the target {@link net.dv8tion.jda.core.entities.PermissionOverride}
      *
-     * @param  permissions
-     *         Permissions to deny
-     *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If any of the provided permissions are not accessible
-     * @throws IllegalArgumentException
-     *         If any of the provided permissions is {@code null}
-     *
+     * @param permissions Permissions to deny
      * @return The current Manager instance for chaining convenience
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If any of the provided permissions are not accessible
+     * @throws IllegalArgumentException                                        If any of the provided permissions is {@code null}
      */
     @CheckReturnValue
-    public PermOverrideManagerUpdatable deny(Collection<Permission> permissions)
-    {
+    public PermOverrideManagerUpdatable deny(Collection<Permission> permissions) {
         Checks.notNull(permissions, "Permission Collection");
         permissions.forEach(perm ->
         {
@@ -258,17 +217,12 @@ public class PermOverrideManagerUpdatable
      * from the target {@link net.dv8tion.jda.core.entities.PermissionOverride}
      * <br>This will make the specified Permissions be inherited
      *
-     * @param  permission
-     *         Raw permission bits to clear
-     *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If any of the provided permissions are not accessible
-     *
+     * @param permission Raw permission bits to clear
      * @return The current Manager instance for chaining convenience
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If any of the provided permissions are not accessible
      */
     @CheckReturnValue
-    public PermOverrideManagerUpdatable clear(long permission)
-    {
+    public PermOverrideManagerUpdatable clear(long permission) {
         return clear(Permission.getPermissions(permission));
     }
 
@@ -277,19 +231,13 @@ public class PermOverrideManagerUpdatable
      * from the target {@link net.dv8tion.jda.core.entities.PermissionOverride}
      * <br>This will make the specified Permissions be inherited
      *
-     * @param  permissions
-     *         Permissions to clear
-     *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If any of the provided permissions are not accessible
-     * @throws IllegalArgumentException
-     *         If any of the provided permissions is {@code null}
-     *
+     * @param permissions Permissions to clear
      * @return The current Manager instance for chaining convenience
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If any of the provided permissions are not accessible
+     * @throws IllegalArgumentException                                        If any of the provided permissions is {@code null}
      */
     @CheckReturnValue
-    public PermOverrideManagerUpdatable clear(Permission... permissions)
-    {
+    public PermOverrideManagerUpdatable clear(Permission... permissions) {
         return clear(Arrays.asList(permissions));
     }
 
@@ -298,19 +246,13 @@ public class PermOverrideManagerUpdatable
      * from the target {@link net.dv8tion.jda.core.entities.PermissionOverride}
      * <br>This will make the specified Permissions be inherited
      *
-     * @param  permissions
-     *         Permissions to clear
-     *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If any of the provided permissions are not accessible
-     * @throws IllegalArgumentException
-     *         If any of the provided permissions is {@code null}
-     *
+     * @param permissions Permissions to clear
      * @return The current Manager instance for chaining convenience
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If any of the provided permissions are not accessible
+     * @throws IllegalArgumentException                                        If any of the provided permissions is {@code null}
      */
     @CheckReturnValue
-    public PermOverrideManagerUpdatable clear(Collection<Permission> permissions)
-    {
+    public PermOverrideManagerUpdatable clear(Collection<Permission> permissions) {
         Checks.notNull(permissions, "Permission Collection");
         permissions.forEach(perm ->
         {
@@ -335,10 +277,9 @@ public class PermOverrideManagerUpdatable
      * <p>This value represents all permissions that should be granted by this {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
      *
      * @return Granted {@link net.dv8tion.jda.core.Permission Permissions} value
-     *         or {@code null} if {@link #isSet()} is {@code false}
+     * or {@code null} if {@link #isSet()} is {@code false}
      */
-    public Long getAllowBits()
-    {
+    public Long getAllowBits() {
         return allow;
     }
 
@@ -351,10 +292,9 @@ public class PermOverrideManagerUpdatable
      * <p>This value represents all permissions that should be denied by this {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
      *
      * @return Denied {@link net.dv8tion.jda.core.Permission Permissions} value
-     *         or {@code null} if {@link #isSet()} is {@code false}
+     * or {@code null} if {@link #isSet()} is {@code false}
      */
-    public Long getDenyBits()
-    {
+    public Long getDenyBits() {
         return deny;
     }
 
@@ -368,16 +308,14 @@ public class PermOverrideManagerUpdatable
      * - thus they represent all permissions that are set to inherit from other overrides.
      *
      * @return Inherited {@link net.dv8tion.jda.core.Permission Permissions} value
-     *         or {@code null} if {@link #isSet()} is {@code false}
+     * or {@code null} if {@link #isSet()} is {@code false}
      */
-    public Long getInheritBits()
-    {
+    public Long getInheritBits() {
         if (!set)
             return null;
 
         long maxPerms = 0;
-        for (Permission perm : Permission.values())
-        {
+        for (Permission perm : Permission.values()) {
             if (perm.getOffset() > maxPerms)
                 maxPerms = perm.getOffset();
         }
@@ -391,8 +329,7 @@ public class PermOverrideManagerUpdatable
      *
      * @return Whether anything has been modified
      */
-    public boolean isSet()
-    {
+    public boolean isSet() {
         return set;
     }
 
@@ -400,8 +337,7 @@ public class PermOverrideManagerUpdatable
      * Resets all {@link net.dv8tion.jda.core.Permission Permission} values
      * <br>This is automatically called by {@link #update()}
      */
-    public void reset()
-    {
+    public void reset() {
         set = false;
         allow = null;
         deny = null;
@@ -418,26 +354,23 @@ public class PermOverrideManagerUpdatable
      * <p>Possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} for this
      * update include the following:
      * <ul>
-     *      <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_OVERRIDE UNKNOWN_OVERRIDE}
-     *      <br>If the PermissionOverride was deleted before finishing the task</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_OVERRIDE UNKNOWN_OVERRIDE}
+     * <br>If the PermissionOverride was deleted before finishing the task</li>
      *
-     *      <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *      <br>If the currently logged in account was removed from the Guild before finishing the task</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>If the currently logged in account was removed from the Guild before finishing the task</li>
      *
-     *      <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *      <br>If the currently logged in account loses the {@link net.dv8tion.jda.core.Permission#MANAGE_PERMISSIONS MANAGE_PERMISSIONS Permission}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>If the currently logged in account loses the {@link net.dv8tion.jda.core.Permission#MANAGE_PERMISSIONS MANAGE_PERMISSIONS Permission}</li>
      * </ul>
      *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If the currently logged in account does not have the Permission {@link net.dv8tion.jda.core.Permission#MANAGE_PERMISSIONS MANAGE_PERMISSIONS}
-     *         in the {@link #getChannel() Channel}
-     *
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
-     *         <br>Applies all changes that have been made in a single api-call.
+     * <br>Applies all changes that have been made in a single api-call.
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If the currently logged in account does not have the Permission {@link net.dv8tion.jda.core.Permission#MANAGE_PERMISSIONS MANAGE_PERMISSIONS}
+     *                                                                         in the {@link #getChannel() Channel}
      */
     @CheckReturnValue
-    public AuditableRestAction<Void> update()
-    {
+    public AuditableRestAction<Void> update() {
         checkPermission(Permission.MANAGE_PERMISSIONS);
 
         if (!shouldUpdate())
@@ -445,18 +378,16 @@ public class PermOverrideManagerUpdatable
 
         String targetId = override.isRoleOverride() ? override.getRole().getId() : override.getMember().getUser().getId();
         JSONObject body = new JSONObject()
-                .put("id", targetId)
-                .put("type", override.isRoleOverride() ? "role" : "member")
-                .put("allow", getAllowBits())
-                .put("deny", getDenyBits());
+            .put("id", targetId)
+            .put("type", override.isRoleOverride() ? "role" : "member")
+            .put("allow", getAllowBits())
+            .put("deny", getDenyBits());
 
         reset();
         Route.CompiledRoute route = Route.Channels.MODIFY_PERM_OVERRIDE.compile(override.getChannel().getId(), targetId);
-        return new AuditableRestAction<Void>(getJDA(), route, body)
-        {
+        return new AuditableRestAction<Void>(getJDA(), route, body) {
             @Override
-            protected void handleResponse(Response response, Request<Void> request)
-            {
+            protected void handleResponse(Response response, Request<Void> request) {
                 if (response.isOk())
                     request.onSuccess(null);
                 else
@@ -465,23 +396,19 @@ public class PermOverrideManagerUpdatable
         };
     }
 
-    protected boolean shouldUpdate()
-    {
+    protected boolean shouldUpdate() {
         return set && (allow != override.getAllowedRaw() || deny != override.getDeniedRaw());
     }
 
-    protected void setupValues()
-    {
-        if (!set)
-        {
+    protected void setupValues() {
+        if (!set) {
             set = true;
             allow = override.getAllowedRaw();
             deny = override.getDeniedRaw();
         }
     }
 
-    protected void checkPermission(Permission perm)
-    {
+    protected void checkPermission(Permission perm) {
         if (!getGuild().getSelfMember().hasPermission(getChannel(), perm))
             throw new InsufficientPermissionException(perm);
     }

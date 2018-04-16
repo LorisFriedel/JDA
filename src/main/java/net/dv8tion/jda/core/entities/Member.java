@@ -32,8 +32,7 @@ import java.util.List;
  *
  * @since 3.0
  */
-public interface Member extends IMentionable, IPermissionHolder
-{
+public interface Member extends IMentionable, IPermissionHolder {
     /**
      * The user wrapped by this Entity.
      *
@@ -76,7 +75,7 @@ public interface Member extends IMentionable, IPermissionHolder
      * <br>If the user is not currently playing a game, this will return null.
      *
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.Game Game} containing the game
-     *         that the {@link net.dv8tion.jda.core.entities.User User} is currently playing.
+     * that the {@link net.dv8tion.jda.core.entities.User User} is currently playing.
      */
     Game getGame();
 
@@ -126,8 +125,7 @@ public interface Member extends IMentionable, IPermissionHolder
      * <br>If all roles have default color, this returns null.
      *
      * @return The display Color for this Member.
-     *
-     * @see    #getColorRaw()
+     * @see #getColorRaw()
      */
     Color getColor();
 
@@ -145,9 +143,7 @@ public interface Member extends IMentionable, IPermissionHolder
      * <br>Permissions returned by this may be different from {@link #getPermissions()}
      * due to the Channel's {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverrides}.
      *
-     * @param  channel
-     *         The {@link net.dv8tion.jda.core.entities.Channel Channel} of which to get Permissions for
-     *
+     * @param channel The {@link net.dv8tion.jda.core.entities.Channel Channel} of which to get Permissions for
      * @return An immutable List of Permissions granted to this Member.
      */
     List<Permission> getPermissions(Channel channel);
@@ -156,17 +152,11 @@ public interface Member extends IMentionable, IPermissionHolder
      * Whether this Member can interact with the provided Member
      * (kick/ban/etc.)
      *
-     * @param  member
-     *         The target Member to check
-     *
-     * @throws NullPointerException
-     *         if the specified Member is null
-     * @throws IllegalArgumentException
-     *         if the specified Member is not from the same guild
-     *
+     * @param member The target Member to check
      * @return True, if this Member is able to interact with the specified Member
-     *
-     * @see    net.dv8tion.jda.core.utils.PermissionUtil#canInteract(Member, Member)
+     * @throws NullPointerException     if the specified Member is null
+     * @throws IllegalArgumentException if the specified Member is not from the same guild
+     * @see net.dv8tion.jda.core.utils.PermissionUtil#canInteract(Member, Member)
      */
     boolean canInteract(Member member);
 
@@ -174,17 +164,11 @@ public interface Member extends IMentionable, IPermissionHolder
      * Whether this Member can interact with the provided {@link net.dv8tion.jda.core.entities.Role Role}
      * (kick/ban/move/modify/delete/etc.)
      *
-     * @param  role
-     *         The target Role to check
-     *
-     * @throws NullPointerException
-     *         if the specified Role is null
-     * @throws IllegalArgumentException
-     *         if the specified Role is not from the same guild
-     *
+     * @param role The target Role to check
      * @return True, if this member is able to interact with the specified Role
-     *
-     * @see    net.dv8tion.jda.core.utils.PermissionUtil#canInteract(Member, Role)
+     * @throws NullPointerException     if the specified Role is null
+     * @throws IllegalArgumentException if the specified Role is not from the same guild
+     * @see net.dv8tion.jda.core.utils.PermissionUtil#canInteract(Member, Role)
      */
     boolean canInteract(Role role);
 
@@ -192,17 +176,11 @@ public interface Member extends IMentionable, IPermissionHolder
      * Whether this Member can interact with the provided {@link net.dv8tion.jda.core.entities.Emote Emote}
      * (use in a message)
      *
-     * @param  emote
-     *         The target Emote to check
-     *
-     * @throws NullPointerException
-     *         if the specified Emote is null
-     * @throws IllegalArgumentException
-     *         if the specified Emote is not from the same guild
-     *
+     * @param emote The target Emote to check
      * @return True, if this Member is able to interact with the specified Emote
-     *
-     * @see    net.dv8tion.jda.core.utils.PermissionUtil#canInteract(Member, Emote)
+     * @throws NullPointerException     if the specified Emote is null
+     * @throws IllegalArgumentException if the specified Emote is not from the same guild
+     * @see net.dv8tion.jda.core.utils.PermissionUtil#canInteract(Member, Emote)
      */
     boolean canInteract(Emote emote);
 
@@ -222,7 +200,7 @@ public interface Member extends IMentionable, IPermissionHolder
      * any channel in the guild, this method returns {@code null}.
      *
      * @return The {@link net.dv8tion.jda.core.entities.TextChannel TextChannel} representing the default channel for this member
-     *         or null if no such channel exists.
+     * or null if no such channel exists.
      */
     @Nullable
     TextChannel getDefaultChannel();

@@ -26,12 +26,10 @@ import net.dv8tion.jda.core.entities.Emote;
  *
  * <p>Identifier: {@code name}
  */
-public class EmoteUpdateNameEvent extends GenericEmoteUpdateEvent<String>
-{
+public class EmoteUpdateNameEvent extends GenericEmoteUpdateEvent<String> {
     public static final String IDENTIFIER = "name";
 
-    public EmoteUpdateNameEvent(JDA api, long responseNumber, Emote emote, String oldName)
-    {
+    public EmoteUpdateNameEvent(JDA api, long responseNumber, Emote emote, String oldName) {
         super(api, responseNumber, emote, oldName, emote.getName(), IDENTIFIER);
     }
 
@@ -40,8 +38,7 @@ public class EmoteUpdateNameEvent extends GenericEmoteUpdateEvent<String>
      *
      * @return The old name
      */
-    public String getOldName()
-    {
+    public String getOldName() {
         return getOldValue();
     }
 
@@ -50,8 +47,7 @@ public class EmoteUpdateNameEvent extends GenericEmoteUpdateEvent<String>
      *
      * @return The new name
      */
-    public String getNewName()
-    {
+    public String getNewName() {
         return getNewValue();
     }
 }

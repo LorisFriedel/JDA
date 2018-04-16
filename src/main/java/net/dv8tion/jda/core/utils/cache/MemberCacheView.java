@@ -31,14 +31,11 @@ import java.util.List;
  * <p>This is done because Members do not implement {@link net.dv8tion.jda.core.entities.ISnowflake ISnowflake} as
  * they are not globally unique but only unique per {@link net.dv8tion.jda.core.entities.Guild Guild}!
  */
-public interface MemberCacheView extends CacheView<Member>
-{
+public interface MemberCacheView extends CacheView<Member> {
     /**
      * Retrieves the member represented by the provided ID.
      *
-     * @param  id
-     *         The ID of the member
-     *
+     * @param id The ID of the member
      * @return Possibly-null member for the specified ID
      */
     Member getElementById(long id);
@@ -46,17 +43,12 @@ public interface MemberCacheView extends CacheView<Member>
     /**
      * Retrieves the member represented by the provided ID.
      *
-     * @param  id
-     *         The ID of the member
-     *
-     * @throws java.lang.NumberFormatException
-     *         If the provided String is {@code null} or
-     *         cannot be resolved to an unsigned long id
-     *
+     * @param id The ID of the member
      * @return Possibly-null member for the specified ID
+     * @throws java.lang.NumberFormatException If the provided String is {@code null} or
+     *                                         cannot be resolved to an unsigned long id
      */
-    default Member getElementById(String id)
-    {
+    default Member getElementById(String id) {
         return getElementById(MiscUtil.parseSnowflake(id));
     }
 
@@ -64,15 +56,10 @@ public interface MemberCacheView extends CacheView<Member>
      * Creates an immutable list of all members matching the given username.
      * <br>This will check the name of the wrapped user.
      *
-     * @param  name
-     *         The name to check
-     * @param  ignoreCase
-     *         Whether to ignore case when comparing usernames
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided name is {@code null}
-     *
+     * @param name       The name to check
+     * @param ignoreCase Whether to ignore case when comparing usernames
      * @return Immutable list of members with the given username
+     * @throws java.lang.IllegalArgumentException If the provided name is {@code null}
      */
     List<Member> getElementsByUsername(String name, boolean ignoreCase);
 
@@ -80,16 +67,11 @@ public interface MemberCacheView extends CacheView<Member>
      * Creates an immutable list of all members matching the given username.
      * <br>This will check the name of the wrapped user.
      *
-     * @param  name
-     *         The name to check
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided name is {@code null}
-     *
+     * @param name The name to check
      * @return Immutable list of members with the given username
+     * @throws java.lang.IllegalArgumentException If the provided name is {@code null}
      */
-    default List<Member> getElementsByUsername(String name)
-    {
+    default List<Member> getElementsByUsername(String name) {
         return getElementsByUsername(name, false);
     }
 
@@ -99,11 +81,8 @@ public interface MemberCacheView extends CacheView<Member>
      * If provided with {@code null} this will check for members
      * that have no nickname set.
      *
-     * @param  name
-     *         The nullable nickname to check
-     * @param  ignoreCase
-     *         Whether to ignore case when comparing nicknames
-     *
+     * @param name       The nullable nickname to check
+     * @param ignoreCase Whether to ignore case when comparing nicknames
      * @return Immutable list of members with the given nickname
      */
     List<Member> getElementsByNickname(@Nullable String name, boolean ignoreCase);
@@ -114,13 +93,10 @@ public interface MemberCacheView extends CacheView<Member>
      * If provided with {@code null} this will check for members
      * that have no nickname set.
      *
-     * @param  name
-     *         The nullable nickname to check
-     *
+     * @param name The nullable nickname to check
      * @return Immutable list of members with the given nickname
      */
-    default List<Member> getElementsByNickname(@Nullable String name)
-    {
+    default List<Member> getElementsByNickname(@Nullable String name) {
         return getElementsByNickname(name, false);
     }
 
@@ -128,13 +104,9 @@ public interface MemberCacheView extends CacheView<Member>
      * Creates an immutable list of all members that hold all
      * of the provided roles.
      *
-     * @param  roles
-     *         Roles the members should have
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If provided with {@code null}
-     *
+     * @param roles Roles the members should have
      * @return Immutable list of members with the given roles
+     * @throws java.lang.IllegalArgumentException If provided with {@code null}
      */
     List<Member> getElementsWithRoles(Role... roles);
 
@@ -142,13 +114,9 @@ public interface MemberCacheView extends CacheView<Member>
      * Creates an immutable list of all members that hold all
      * of the provided roles.
      *
-     * @param  roles
-     *         Roles the members should have
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If provided with {@code null}
-     *
+     * @param roles Roles the members should have
      * @return Immutable list of members with the given roles
+     * @throws java.lang.IllegalArgumentException If provided with {@code null}
      */
     List<Member> getElementsWithRoles(Collection<Role> roles);
 }

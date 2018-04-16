@@ -20,23 +20,20 @@ import net.dv8tion.jda.core.requests.RequestFuture;
 
 import java.util.concurrent.CompletableFuture;
 
-public class Promise<T> extends CompletableFuture<T> implements RequestFuture<T>
-{
-    public Promise() {}
+public class Promise<T> extends CompletableFuture<T> implements RequestFuture<T> {
+    public Promise() {
+    }
 
-    public Promise(final Throwable t)
-    {
+    public Promise(final Throwable t) {
         this.completeExceptionally(t);
     }
 
-    public Promise(final T t)
-    {
+    public Promise(final T t) {
         this.complete(t);
     }
 
     @Override
-    public CompletableFuture<T> toCompletableFuture()
-    {
+    public CompletableFuture<T> toCompletableFuture() {
         throw new UnsupportedOperationException("Access to the CompletableFuture is not supported to secure JDA integrity.");
     }
 }

@@ -24,10 +24,8 @@ import net.dv8tion.jda.core.JDA;
  * <p>Can be used to indicate when JDA finished populating internal objects and is ready to be used.
  * When this is fired all entities are cached and accessible.
  */
-public class ReadyEvent extends Event
-{
-    public ReadyEvent(JDA api, long responseNumber)
-    {
+public class ReadyEvent extends Event {
+    public ReadyEvent(JDA api, long responseNumber) {
         super(api, responseNumber);
     }
 }

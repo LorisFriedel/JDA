@@ -22,30 +22,25 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.MessageReaction;
 import net.dv8tion.jda.core.entities.User;
 
-public class GenericGroupMessageReactionEvent extends GenericGroupMessageEvent
-{
+public class GenericGroupMessageReactionEvent extends GenericGroupMessageEvent {
     protected final User issuer;
     protected final MessageReaction reaction;
 
-    public GenericGroupMessageReactionEvent(JDA api, long responseNumber, User user, MessageReaction reaction)
-    {
+    public GenericGroupMessageReactionEvent(JDA api, long responseNumber, User user, MessageReaction reaction) {
         super(api, responseNumber, reaction.getMessageIdLong(), (Group) reaction.getChannel());
         this.issuer = user;
         this.reaction = reaction;
     }
 
-    public User getUser()
-    {
+    public User getUser() {
         return issuer;
     }
 
-    public MessageReaction getReaction()
-    {
+    public MessageReaction getReaction() {
         return reaction;
     }
 
-    public MessageReaction.ReactionEmote getReactionEmote()
-    {
+    public MessageReaction.ReactionEmote getReactionEmote() {
         return reaction.getReactionEmote();
     }
 }

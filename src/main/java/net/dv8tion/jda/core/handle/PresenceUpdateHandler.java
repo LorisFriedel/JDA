@@ -30,27 +30,22 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
-public class PresenceUpdateHandler extends SocketHandler
-{
+public class PresenceUpdateHandler extends SocketHandler {
 
-    public PresenceUpdateHandler(JDAImpl api)
-    {
+    public PresenceUpdateHandler(JDAImpl api) {
         super(api);
     }
 
     @Override
-    protected Long handleInternally(JSONObject content)
-    {
+    protected Long handleInternally(JSONObject content) {
         GuildImpl guild = null;
         //Do a pre-check to see if this is for a Guild, and if it is, if the guild is currently locked or not cached.
-        if (!content.isNull("guild_id"))
-        {
+        if (!content.isNull("guild_id")) {
             final long guildId = content.getLong("guild_id");
             if (api.getGuildLock().isLocked(guildId))
                 return guildId;
             guild = (GuildImpl) api.getGuildById(guildId);
-            if (guild == null)
-            {
+            if (guild == null) {
                 api.getEventCache().cache(EventCache.Type.GUILD, guildId, () -> handle(responseNumber, allContent));
                 EventCache.LOG.debug("Received a PRESENCE_UPDATE for a guild that is not yet cached! " +
                     "GuildId: " + guildId + " UserId: " + content.getJSONObject("user").get("id"));
@@ -67,17 +62,14 @@ public class PresenceUpdateHandler extends SocketHandler
         // or Relation. If not, we'll cache the OnlineStatus and Game for later handling
         // unless OnlineStatus is OFFLINE, in which case we probably received this event
         // due to a User leaving a guild or no longer being a relation.
-        if (user != null)
-        {
-            if (jsonUser.has("username"))
-            {
+        if (user != null) {
+            if (jsonUser.has("username")) {
                 String name = jsonUser.getString("username");
                 String discriminator = jsonUser.get("discriminator").toString();
                 String avatarId = jsonUser.optString("avatar", null);
                 String oldAvatar = user.getAvatarId();
 
-                if (!user.getName().equals(name))
-                {
+                if (!user.getName().equals(name)) {
                     String oldUsername = user.getName();
                     user.setName(name);
                     api.getEventManager().handle(
@@ -85,8 +77,7 @@ public class PresenceUpdateHandler extends SocketHandler
                             api, responseNumber,
                             user, oldUsername));
                 }
-                if (!user.getDiscriminator().equals(discriminator))
-                {
+                if (!user.getDiscriminator().equals(discriminator)) {
                     String oldDiscriminator = user.getDiscriminator();
                     user.setDiscriminator(discriminator);
                     api.getEventManager().handle(
@@ -94,8 +85,7 @@ public class PresenceUpdateHandler extends SocketHandler
                             api, responseNumber,
                             user, oldDiscriminator));
                 }
-                if (!Objects.equals(avatarId, oldAvatar))
-                {
+                if (!Objects.equals(avatarId, oldAvatar)) {
                     String oldAvatarId = user.getAvatarId();
                     user.setAvatarId(avatarId);
                     api.getEventManager().handle(
@@ -110,13 +100,10 @@ public class PresenceUpdateHandler extends SocketHandler
             final JSONObject game = content.isNull("game") ? null : content.optJSONObject("game");
             Game nextGame = null;
             boolean parsedGame = false;
-            try
-            {
+            try {
                 nextGame = game == null ? null : EntityBuilder.createGame(game);
                 parsedGame = true;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 if (EntityBuilder.LOG.isDebugEnabled())
                     EntityBuilder.LOG.warn("Encountered exception trying to parse a presence! UserID: {} JSON: {}", userId, game, ex);
                 else
@@ -126,8 +113,7 @@ public class PresenceUpdateHandler extends SocketHandler
 
             //If we are in a Guild, then we will use Member.
             // If we aren't we'll be dealing with the Relation system.
-            if (guild != null)
-            {
+            if (guild != null) {
                 MemberImpl member = (MemberImpl) guild.getMember(user);
 
                 //If the Member is null, then User isn't in the Guild.
@@ -136,20 +122,15 @@ public class PresenceUpdateHandler extends SocketHandler
                 //If it is because a Member recently left, then the status should be OFFLINE. As such, we will ignore
                 // the event if this is the case. If the status isn't OFFLINE, we will cache and use it when the
                 // Member object is setup during GUILD_MEMBER_ADD
-                if (member == null)
-                {
+                if (member == null) {
                     //Cache the presence and return to finish up.
-                    if (status != OnlineStatus.OFFLINE)
-                    {
+                    if (status != OnlineStatus.OFFLINE) {
                         guild.getCachedPresenceMap().put(userId, content);
                         return null;
                     }
-                }
-                else
-                {
+                } else {
                     //The member is already cached, so modify the presence values and fire events as needed.
-                    if (!member.getOnlineStatus().equals(status))
-                    {
+                    if (!member.getOnlineStatus().equals(status)) {
                         OnlineStatus oldStatus = member.getOnlineStatus();
                         member.setOnlineStatus(status);
                         api.getEventManager().handle(
@@ -157,8 +138,7 @@ public class PresenceUpdateHandler extends SocketHandler
                                 api, responseNumber,
                                 user, guild, oldStatus));
                     }
-                    if (parsedGame && !Objects.equals(member.getGame(), nextGame))
-                    {
+                    if (parsedGame && !Objects.equals(member.getGame(), nextGame)) {
                         Game oldGame = member.getGame();
                         member.setGame(nextGame);
                         api.getEventManager().handle(
@@ -167,19 +147,15 @@ public class PresenceUpdateHandler extends SocketHandler
                                 user, guild, oldGame));
                     }
                 }
-            }
-            else
-            {
+            } else {
                 //In this case, this PRESENCE_UPDATE is for a Relation.
                 if (api.getAccountType() != AccountType.CLIENT)
                     return null;
                 JDAClient client = api.asClient();
                 FriendImpl friend = (FriendImpl) client.getFriendById(userId);
 
-                if (friend != null)
-                {
-                    if (!friend.getOnlineStatus().equals(status))
-                    {
+                if (friend != null) {
+                    if (!friend.getOnlineStatus().equals(status)) {
                         OnlineStatus oldStatus = friend.getOnlineStatus();
                         friend.setOnlineStatus(status);
                         api.getEventManager().handle(
@@ -187,8 +163,7 @@ public class PresenceUpdateHandler extends SocketHandler
                                 api, responseNumber,
                                 user, null, oldStatus));
                     }
-                    if (parsedGame && !Objects.equals(friend.getGame(), nextGame))
-                    {
+                    if (parsedGame && !Objects.equals(friend.getGame(), nextGame)) {
                         Game oldGame = friend.getGame();
                         friend.setGame(nextGame);
                         api.getEventManager().handle(
@@ -198,9 +173,7 @@ public class PresenceUpdateHandler extends SocketHandler
                     }
                 }
             }
-        }
-        else
-        {
+        } else {
             //In this case, we don't have the User cached, which means that we can't update the User's information.
             // This is most likely because this PRESENCE_UPDATE came before the GUILD_MEMBER_ADD that would have added
             // this User to our User cache. Or, it could have come after a GUILD_MEMBER_REMOVE that caused the User

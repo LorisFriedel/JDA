@@ -24,8 +24,7 @@ package net.dv8tion.jda.core.audit;
  * returned {@link AuditLogChange AuditLogChange}.
  * <br>There is no guarantee that the resulting type is accurate or that the value selected is not {@code null}!
  */
-public enum AuditLogKey
-{
+public enum AuditLogKey {
     /**
      * This is sometimes visible for {@link ActionType ActionTypes}
      * which create a new entity.
@@ -420,19 +419,16 @@ public enum AuditLogKey
 
     private final String key;
 
-    AuditLogKey(String key)
-    {
+    AuditLogKey(String key) {
         this.key = key;
     }
 
-    public String getKey()
-    {
+    public String getKey() {
         return key;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return name() + '(' + key + ')';
     }
 }

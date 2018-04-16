@@ -34,25 +34,24 @@ import javax.annotation.CheckReturnValue;
  * <p>This will use {@link #getAsMention()} rather than {@link Object#toString()}!
  * <br>Supported Features:
  * <ul>
- *     <li><b>Alternative</b>
- *     <br>   - Uses the <u>Discord Tag</u> (Username#Discriminator) instead
- *              (Example: {@code %#s} - results in <code>{@link User#getName()}#{@link User#getDiscriminator()}
- *              {@literal ->} Minn#6688</code>)</li>
+ * <li><b>Alternative</b>
+ * <br>   - Uses the <u>Discord Tag</u> (Username#Discriminator) instead
+ * (Example: {@code %#s} - results in <code>{@link User#getName()}#{@link User#getDiscriminator()}
+ * {@literal ->} Minn#6688</code>)</li>
  *
- *     <li><b>Width/Left-Justification</b>
- *     <br>   - Ensures the size of a format
- *              (Example: {@code %20s} - uses at minimum 20 chars;
- *              {@code %-10s} - uses left-justified padding)</li>
+ * <li><b>Width/Left-Justification</b>
+ * <br>   - Ensures the size of a format
+ * (Example: {@code %20s} - uses at minimum 20 chars;
+ * {@code %-10s} - uses left-justified padding)</li>
  *
- *     <li><b>Precision</b>
- *     <br>   - Cuts the content to the specified size
- *              (Example: {@code %.20s})</li>
+ * <li><b>Precision</b>
+ * <br>   - Cuts the content to the specified size
+ * (Example: {@code %.20s})</li>
  * </ul>
  *
  * <p>More information on formatting syntax can be found in the {@link java.util.Formatter format syntax documentation}!
  */
-public interface User extends ISnowflake, IMentionable, IFakeable
-{
+public interface User extends ISnowflake, IMentionable, IFakeable {
 
     /**
      * The username of the {@link net.dv8tion.jda.core.entities.User User}. Length is between 2 and 32 characters (inclusive).
@@ -105,7 +104,7 @@ public interface User extends ISnowflake, IMentionable, IFakeable
      * If they do not have an avatar set, this will return the URL of their
      * default avatar
      *
-     * @return  Never-null String containing the {@link net.dv8tion.jda.core.entities.User User} effective avatar url.
+     * @return Never-null String containing the {@link net.dv8tion.jda.core.entities.User User} effective avatar url.
      */
     String getEffectiveAvatarUrl();
 
@@ -124,17 +123,14 @@ public interface User extends ISnowflake, IMentionable, IFakeable
      *
      * <p>The following {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} are possible:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#CANNOT_SEND_TO_USER CANNOT_SEND_TO_USER}
-     *     <br>If the recipient User has you blocked</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#CANNOT_SEND_TO_USER CANNOT_SEND_TO_USER}
+     * <br>If the recipient User has you blocked</li>
      * </ul>
      *
-     * @throws java.lang.UnsupportedOperationException
-     *         If the recipient User is the currently logged in account (represented by {@link net.dv8tion.jda.core.entities.SelfUser SelfUser})
-     * @throws java.lang.IllegalStateException
-     *         If this User is {@link #isFake() fake}
-     *
      * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type: {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}
-     *         <br>The PrivateChannel to use to directly message this User.
+     * <br>The PrivateChannel to use to directly message this User.
+     * @throws java.lang.UnsupportedOperationException If the recipient User is the currently logged in account (represented by {@link net.dv8tion.jda.core.entities.SelfUser SelfUser})
+     * @throws java.lang.IllegalStateException         If this User is {@link #isFake() fake}
      */
     @CheckReturnValue
     RestAction<PrivateChannel> openPrivateChannel();

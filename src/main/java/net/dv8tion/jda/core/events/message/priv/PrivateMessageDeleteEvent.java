@@ -20,13 +20,11 @@ import net.dv8tion.jda.core.entities.PrivateChannel;
 
 /**
  * Indicates that a Message was deleted in a {@link net.dv8tion.jda.core.entities.PrivateChannel PrivateChannel}.
- * 
+ *
  * <p>Can be used to retrieve affected PrivateChannel and the ID of the deleted Message.
  */
-public class PrivateMessageDeleteEvent extends GenericPrivateMessageEvent
-{
-    public PrivateMessageDeleteEvent(JDA api, long responseNumber, long messageId, PrivateChannel channel)
-    {
+public class PrivateMessageDeleteEvent extends GenericPrivateMessageEvent {
+    public PrivateMessageDeleteEvent(JDA api, long responseNumber, long messageId, PrivateChannel channel) {
         super(api, responseNumber, messageId, channel);
     }
 }

@@ -26,22 +26,18 @@ import net.dv8tion.jda.core.handle.EventCache;
 import net.dv8tion.jda.core.handle.SocketHandler;
 import org.json.JSONObject;
 
-public class ChannelRecipientAddHandler extends SocketHandler
-{
-    public ChannelRecipientAddHandler(JDAImpl api)
-    {
+public class ChannelRecipientAddHandler extends SocketHandler {
+    public ChannelRecipientAddHandler(JDAImpl api) {
         super(api);
     }
 
     @Override
-    protected Long handleInternally(JSONObject content)
-    {
+    protected Long handleInternally(JSONObject content) {
         final long groupId = content.getLong("channel_id");
         JSONObject userJson = content.getJSONObject("user");
 
         GroupImpl group = (GroupImpl) api.asClient().getGroupById(groupId);
-        if (group == null)
-        {
+        if (group == null) {
             api.getEventCache().cache(EventCache.Type.CHANNEL, groupId, () -> handle(responseNumber, allContent));
             EventCache.LOG.debug("Received a CHANNEL_RECIPIENT_ADD for a group that is not yet cached! JSON: {}", content);
             return null;
@@ -51,15 +47,14 @@ public class ChannelRecipientAddHandler extends SocketHandler
         group.getUserMap().put(user.getIdLong(), user);
 
         CallImpl call = (CallImpl) group.getCurrentCall();
-        if (call != null)
-        {
+        if (call != null) {
             call.getCallUserMap().put(user.getIdLong(), new CallUserImpl(call, user));
         }
 
         api.getEventManager().handle(
-                new GroupUserJoinEvent(
-                        api, responseNumber,
-                        group, user));
+            new GroupUserJoinEvent(
+                api, responseNumber,
+                group, user));
 
         api.getEventCache().playbackCache(EventCache.Type.USER, user.getIdLong());
         return null;

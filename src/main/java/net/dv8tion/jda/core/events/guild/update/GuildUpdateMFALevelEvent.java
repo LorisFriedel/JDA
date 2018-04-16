@@ -26,12 +26,10 @@ import net.dv8tion.jda.core.entities.Guild;
  *
  * <p>Identifier: {@code mfa_level}
  */
-public class GuildUpdateMFALevelEvent extends GenericGuildUpdateEvent<Guild.MFALevel>
-{
+public class GuildUpdateMFALevelEvent extends GenericGuildUpdateEvent<Guild.MFALevel> {
     public static final String IDENTIFIER = "mfa_level";
 
-    public GuildUpdateMFALevelEvent(JDA api, long responseNumber, Guild guild, Guild.MFALevel oldMFALevel)
-    {
+    public GuildUpdateMFALevelEvent(JDA api, long responseNumber, Guild guild, Guild.MFALevel oldMFALevel) {
         super(api, responseNumber, guild, oldMFALevel, guild.getRequiredMFALevel(), IDENTIFIER);
     }
 
@@ -40,8 +38,7 @@ public class GuildUpdateMFALevelEvent extends GenericGuildUpdateEvent<Guild.MFAL
      *
      * @return The old MFALevel
      */
-    public Guild.MFALevel getOldMFALevel()
-    {
+    public Guild.MFALevel getOldMFALevel() {
         return getOldValue();
     }
 
@@ -50,8 +47,7 @@ public class GuildUpdateMFALevelEvent extends GenericGuildUpdateEvent<Guild.MFAL
      *
      * @return The new MFALevel
      */
-    public Guild.MFALevel getNewMFALevel()
-    {
+    public Guild.MFALevel getNewMFALevel() {
         return getNewValue();
     }
 }

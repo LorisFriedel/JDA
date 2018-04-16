@@ -28,12 +28,10 @@ import java.awt.Color;
  *
  * <p>Identifier: {@code color}
  */
-public class RoleUpdateColorEvent extends GenericRoleUpdateEvent<Integer>
-{
+public class RoleUpdateColorEvent extends GenericRoleUpdateEvent<Integer> {
     public static final String IDENTIFIER = "color";
 
-    public RoleUpdateColorEvent(JDA api, long responseNumber, Role role, int oldColor)
-    {
+    public RoleUpdateColorEvent(JDA api, long responseNumber, Role role, int oldColor) {
         super(api, responseNumber, role, oldColor, role.getColorRaw(), IDENTIFIER);
     }
 
@@ -42,8 +40,7 @@ public class RoleUpdateColorEvent extends GenericRoleUpdateEvent<Integer>
      *
      * @return The old color, or null
      */
-    public Color getOldColor()
-    {
+    public Color getOldColor() {
         return previous != Role.DEFAULT_COLOR_RAW ? new Color(previous) : null;
     }
 
@@ -52,8 +49,7 @@ public class RoleUpdateColorEvent extends GenericRoleUpdateEvent<Integer>
      *
      * @return The raw rgb value of the old color
      */
-    public int getOldColorRaw()
-    {
+    public int getOldColorRaw() {
         return getOldValue();
     }
 
@@ -62,8 +58,7 @@ public class RoleUpdateColorEvent extends GenericRoleUpdateEvent<Integer>
      *
      * @return The new color, or null
      */
-    public Color getNewColor()
-    {
+    public Color getNewColor() {
         return next != Role.DEFAULT_COLOR_RAW ? new Color(next) : null;
     }
 
@@ -72,8 +67,7 @@ public class RoleUpdateColorEvent extends GenericRoleUpdateEvent<Integer>
      *
      * @return The raw rgb value of the new color
      */
-    public int getNewColorRaw()
-    {
+    public int getNewColorRaw() {
         return getNewValue();
     }
 }

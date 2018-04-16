@@ -26,12 +26,10 @@ import net.dv8tion.jda.core.entities.Role;
  *
  * <p>Identifier: {@code name}
  */
-public class RoleUpdateNameEvent extends GenericRoleUpdateEvent<String>
-{
+public class RoleUpdateNameEvent extends GenericRoleUpdateEvent<String> {
     public static final String IDENTIFIER = "name";
 
-    public RoleUpdateNameEvent(JDA api, long responseNumber, Role role, String oldName)
-    {
+    public RoleUpdateNameEvent(JDA api, long responseNumber, Role role, String oldName) {
         super(api, responseNumber, role, oldName, role.getName(), IDENTIFIER);
     }
 
@@ -40,8 +38,7 @@ public class RoleUpdateNameEvent extends GenericRoleUpdateEvent<String>
      *
      * @return The old name
      */
-    public String getOldName()
-    {
+    public String getOldName() {
         return getOldValue();
     }
 
@@ -50,8 +47,7 @@ public class RoleUpdateNameEvent extends GenericRoleUpdateEvent<String>
      *
      * @return The new name
      */
-    public String getNewName()
-    {
+    public String getNewName() {
         return getNewValue();
     }
 }

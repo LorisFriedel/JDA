@@ -41,36 +41,29 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implements TextChannel
-{
+public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implements TextChannel {
     private String topic;
     private long lastMessageId;
     private boolean nsfw;
 
-    public TextChannelImpl(long id, GuildImpl guild)
-    {
+    public TextChannelImpl(long id, GuildImpl guild) {
         super(id, guild);
     }
 
     @Override
-    public String getAsMention()
-    {
+    public String getAsMention() {
         return "<#" + id + '>';
     }
 
     @Override
-    public RestAction<List<Webhook>> getWebhooks()
-    {
+    public RestAction<List<Webhook>> getWebhooks() {
         checkPermission(Permission.MANAGE_WEBHOOKS);
 
         Route.CompiledRoute route = Route.Channels.GET_WEBHOOKS.compile(getId());
-        return new RestAction<List<Webhook>>(getJDA(), route)
-        {
+        return new RestAction<List<Webhook>>(getJDA(), route) {
             @Override
-            protected void handleResponse(Response response, Request<List<Webhook>> request)
-            {
-                if (!response.isOk())
-                {
+            protected void handleResponse(Response response, Request<List<Webhook>> request) {
+                if (!response.isOk()) {
                     request.onFailure(response);
                     return;
                 }
@@ -79,14 +72,10 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
                 List<Webhook> webhooks = new ArrayList<>(array.length());
                 EntityBuilder builder = api.getEntityBuilder();
 
-                for (Object object : array)
-                {
-                    try
-                    {
+                for (Object object : array) {
+                    try {
                         webhooks.add(builder.createWebhook((JSONObject) object));
-                    }
-                    catch (JSONException | NullPointerException e)
-                    {
+                    } catch (JSONException | NullPointerException e) {
                         JDAImpl.LOG.error("Error while creating websocket from json", e);
                     }
                 }
@@ -97,8 +86,7 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     }
 
     @Override
-    public WebhookAction createWebhook(String name)
-    {
+    public WebhookAction createWebhook(String name) {
         Checks.notBlank(name, "Webhook name");
         name = name.trim();
         checkPermission(Permission.MANAGE_WEBHOOKS);
@@ -110,36 +98,31 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     }
 
     @Override
-    public RestAction<Void> deleteMessages(Collection<Message> messages)
-    {
+    public RestAction<Void> deleteMessages(Collection<Message> messages) {
         Checks.notEmpty(messages, "Messages collection");
 
         return deleteMessagesByIds(messages.stream()
-                .map(ISnowflake::getId)
-                .collect(Collectors.toList()));
+            .map(ISnowflake::getId)
+            .collect(Collectors.toList()));
     }
 
     @Override
-    public RestAction<Void> deleteMessagesByIds(Collection<String> messageIds)
-    {
+    public RestAction<Void> deleteMessagesByIds(Collection<String> messageIds) {
         checkPermission(Permission.MESSAGE_MANAGE, "Must have MESSAGE_MANAGE in order to bulk delete messages in this channel regardless of author.");
         if (messageIds.size() < 2 || messageIds.size() > 100)
             throw new IllegalArgumentException("Must provide at least 2 or at most 100 messages to be deleted.");
 
         long twoWeeksAgo = ((System.currentTimeMillis() - (14 * 24 * 60 * 60 * 1000)) - MiscUtil.DISCORD_EPOCH) << MiscUtil.TIMESTAMP_OFFSET;
-        for (String id : messageIds)
-        {
+        for (String id : messageIds) {
             Checks.notEmpty(id, "Message id in messageIds");
             Checks.check(MiscUtil.parseSnowflake(id) > twoWeeksAgo, "Message Id provided was older than 2 weeks. Id: " + id);
         }
 
         JSONObject body = new JSONObject().put("messages", messageIds);
         Route.CompiledRoute route = Route.Messages.DELETE_MESSAGES.compile(getId());
-        return new RestAction<Void>(getJDA(), route, body)
-        {
+        return new RestAction<Void>(getJDA(), route, body) {
             @Override
-            protected void handleResponse(Response response, Request<Void> request)
-            {
+            protected void handleResponse(Response response, Request<Void> request) {
                 if (response.isOk())
                     request.onSuccess(null);
                 else
@@ -149,19 +132,16 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     }
 
     @Override
-    public AuditableRestAction<Void> deleteWebhookById(String id)
-    {
+    public AuditableRestAction<Void> deleteWebhookById(String id) {
         Checks.notEmpty(id, "webhook id");
 
         if (!guild.getSelfMember().hasPermission(this, Permission.MANAGE_WEBHOOKS))
             throw new InsufficientPermissionException(Permission.MANAGE_WEBHOOKS);
 
         Route.CompiledRoute route = Route.Webhooks.DELETE_WEBHOOK.compile(id);
-        return new AuditableRestAction<Void>(getJDA(), route)
-        {
+        return new AuditableRestAction<Void>(getJDA(), route) {
             @Override
-            protected void handleResponse(Response response, Request<Void> request)
-            {
+            protected void handleResponse(Response response, Request<Void> request) {
                 if (response.isOk())
                     request.onSuccess(null);
                 else
@@ -171,14 +151,12 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     }
 
     @Override
-    public boolean canTalk()
-    {
+    public boolean canTalk() {
         return canTalk(guild.getSelfMember());
     }
 
     @Override
-    public boolean canTalk(Member member)
-    {
+    public boolean canTalk(Member member) {
         if (!guild.equals(member.getGuild()))
             throw new IllegalArgumentException("Provided Member is not from the Guild that this TextChannel is part of.");
 
@@ -186,8 +164,7 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     }
 
     @Override
-    public long getLatestMessageIdLong()
-    {
+    public long getLatestMessageIdLong() {
         final long messageId = lastMessageId;
         if (messageId == 0)
             throw new IllegalStateException("No last message id found.");
@@ -195,20 +172,17 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     }
 
     @Override
-    public boolean hasLatestMessage()
-    {
+    public boolean hasLatestMessage() {
         return lastMessageId != 0;
     }
 
     @Override
-    public ChannelType getType()
-    {
+    public ChannelType getType() {
         return ChannelType.TEXT;
     }
 
     @Override
-    public String getTopic()
-    {
+    public String getTopic() {
         return topic;
     }
 
@@ -218,21 +192,18 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     }
 
     @Override
-    public List<Member> getMembers()
-    {
+    public List<Member> getMembers() {
         return Collections.unmodifiableList(guild.getMembersMap().valueCollection().stream()
-                .filter(m -> m.hasPermission(this, Permission.MESSAGE_READ))
-                .collect(Collectors.toList()));
+            .filter(m -> m.hasPermission(this, Permission.MESSAGE_READ))
+            .collect(Collectors.toList()));
     }
 
     @Override
-    public int getPosition()
-    {
+    public int getPosition() {
         //We call getTextChannels instead of directly accessing the GuildImpl.getTextChannelMap because
         // getTextChannels does the sorting logic.
         List<TextChannel> channels = guild.getTextChannels();
-        for (int i = 0; i < channels.size(); i++)
-        {
+        for (int i = 0; i < channels.size(); i++) {
             if (channels.get(i) == this)
                 return i;
         }
@@ -240,17 +211,14 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     }
 
     @Override
-    public ChannelAction createCopy(Guild guild)
-    {
+    public ChannelAction createCopy(Guild guild) {
         Checks.notNull(guild, "Guild");
         ChannelAction action = guild.getController().createTextChannel(name).setNSFW(nsfw).setTopic(topic);
-        if (guild.equals(getGuild()))
-        {
+        if (guild.equals(getGuild())) {
             Category parent = getParent();
             if (parent != null)
                 action.setParent(parent);
-            for (PermissionOverride o : overrides.valueCollection())
-            {
+            for (PermissionOverride o : overrides.valueCollection()) {
                 if (o.isMemberOverride())
                     action.addPermissionOverride(o.getMember(), o.getAllowedRaw(), o.getDeniedRaw());
                 else
@@ -261,8 +229,7 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     }
 
     @Override
-    public MessageAction sendMessage(CharSequence text)
-    {
+    public MessageAction sendMessage(CharSequence text) {
         checkVerification();
         checkPermission(Permission.MESSAGE_READ);
         checkPermission(Permission.MESSAGE_WRITE);
@@ -270,8 +237,7 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     }
 
     @Override
-    public MessageAction sendMessage(MessageEmbed embed)
-    {
+    public MessageAction sendMessage(MessageEmbed embed) {
         checkVerification();
         checkPermission(Permission.MESSAGE_READ);
         checkPermission(Permission.MESSAGE_WRITE);
@@ -281,8 +247,7 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     }
 
     @Override
-    public MessageAction sendMessage(Message msg)
-    {
+    public MessageAction sendMessage(Message msg) {
         Checks.notNull(msg, "Message");
 
         checkVerification();
@@ -296,8 +261,7 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     }
 
     @Override
-    public MessageAction sendFile(InputStream data, String fileName, Message message)
-    {
+    public MessageAction sendFile(InputStream data, String fileName, Message message) {
         checkVerification();
         checkPermission(Permission.MESSAGE_READ);
         checkPermission(Permission.MESSAGE_WRITE);
@@ -308,8 +272,7 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     }
 
     @Override
-    public RestAction<Message> getMessageById(String messageId)
-    {
+    public RestAction<Message> getMessageById(String messageId) {
         checkPermission(Permission.MESSAGE_READ);
         checkPermission(Permission.MESSAGE_HISTORY);
 
@@ -318,8 +281,7 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     }
 
     @Override
-    public AuditableRestAction<Void> deleteMessageById(String messageId)
-    {
+    public AuditableRestAction<Void> deleteMessageById(String messageId) {
         Checks.notEmpty(messageId, "messageId");
         checkPermission(Permission.MESSAGE_READ);
 
@@ -328,8 +290,7 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     }
 
     @Override
-    public RestAction<Void> pinMessageById(String messageId)
-    {
+    public RestAction<Void> pinMessageById(String messageId) {
         checkPermission(Permission.MESSAGE_READ, "You cannot pin a message in a channel you can't access. (MESSAGE_READ)");
         checkPermission(Permission.MESSAGE_MANAGE, "You need MESSAGE_MANAGE to pin or unpin messages.");
 
@@ -338,8 +299,7 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     }
 
     @Override
-    public RestAction<Void> unpinMessageById(String messageId)
-    {
+    public RestAction<Void> unpinMessageById(String messageId) {
         checkPermission(Permission.MESSAGE_READ, "You cannot unpin a message in a channel you can't access. (MESSAGE_READ)");
         checkPermission(Permission.MESSAGE_MANAGE, "You need MESSAGE_MANAGE to pin or unpin messages.");
 
@@ -348,8 +308,7 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     }
 
     @Override
-    public RestAction<List<Message>> getPinnedMessages()
-    {
+    public RestAction<List<Message>> getPinnedMessages() {
         checkPermission(Permission.MESSAGE_READ, "Cannot get the pinned message of a channel without MESSAGE_READ access.");
 
         //Call MessageChannel's default method
@@ -357,8 +316,7 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     }
 
     @Override
-    public RestAction<Void> addReactionById(String messageId, String unicode)
-    {
+    public RestAction<Void> addReactionById(String messageId, String unicode) {
         checkPermission(Permission.MESSAGE_HISTORY);
 
         //Call MessageChannel's default method
@@ -366,8 +324,7 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     }
 
     @Override
-    public RestAction<Void> addReactionById(String messageId, Emote emote)
-    {
+    public RestAction<Void> addReactionById(String messageId, Emote emote) {
         checkPermission(Permission.MESSAGE_HISTORY);
 
         //Call MessageChannel's default method
@@ -375,17 +332,14 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     }
 
     @Override
-    public RestAction<Void> clearReactionsById(String messageId)
-    {
+    public RestAction<Void> clearReactionsById(String messageId) {
         Checks.notEmpty(messageId, "Message ID");
 
         checkPermission(Permission.MESSAGE_MANAGE);
         final Route.CompiledRoute route = Route.Messages.REMOVE_ALL_REACTIONS.compile(getId(), messageId);
-        return new RestAction<Void>(getJDA(), route)
-        {
+        return new RestAction<Void>(getJDA(), route) {
             @Override
-            protected void handleResponse(Response response, Request<Void> request)
-            {
+            protected void handleResponse(Response response, Request<Void> request) {
                 if (response.isOk())
                     request.onSuccess(null);
                 else
@@ -395,8 +349,7 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     }
 
     @Override
-    public RestAction<Void> removeReactionById(String messageId, String unicode, User user)
-    {
+    public RestAction<Void> removeReactionById(String messageId, String unicode, User user) {
         Checks.noWhitespace(messageId, "Message ID");
         Checks.noWhitespace(unicode, "Unicode emoji");
         Checks.notNull(user, "User");
@@ -408,11 +361,9 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
             route = Route.Messages.REMOVE_OWN_REACTION.compile(getId(), messageId, code);
         else
             route = Route.Messages.REMOVE_REACTION.compile(getId(), messageId, code, user.getId());
-        return new RestAction<Void>(getJDA(), route)
-        {
+        return new RestAction<Void>(getJDA(), route) {
             @Override
-            protected void handleResponse(Response response, Request<Void> request)
-            {
+            protected void handleResponse(Response response, Request<Void> request) {
                 if (!response.isOk())
                     request.onFailure(response);
                 else
@@ -422,16 +373,14 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     }
 
     @Override
-    public MessageAction editMessageById(String messageId, CharSequence newContent)
-    {
+    public MessageAction editMessageById(String messageId, CharSequence newContent) {
         checkPermission(Permission.MESSAGE_READ);
         checkPermission(Permission.MESSAGE_WRITE);
         return TextChannel.super.editMessageById(messageId, newContent);
     }
 
     @Override
-    public MessageAction editMessageById(String messageId, MessageEmbed newEmbed)
-    {
+    public MessageAction editMessageById(String messageId, MessageEmbed newEmbed) {
         checkPermission(Permission.MESSAGE_READ);
         checkPermission(Permission.MESSAGE_WRITE);
         checkPermission(Permission.MESSAGE_EMBED_LINKS);
@@ -439,8 +388,7 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     }
 
     @Override
-    public MessageAction editMessageById(String id, Message newContent)
-    {
+    public MessageAction editMessageById(String id, Message newContent) {
         Checks.notNull(newContent, "Message");
 
         //checkVerification(); no verification needed to edit a message
@@ -454,14 +402,12 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "TC:" + getName() + '(' + id + ')';
     }
 
     @Override
-    public int compareTo(TextChannel chan)
-    {
+    public int compareTo(TextChannel chan) {
         Checks.notNull(chan, "Other TextChannel");
         if (this == chan)
             return 0;
@@ -473,28 +419,24 @@ public class TextChannelImpl extends AbstractChannelImpl<TextChannelImpl> implem
 
     // -- Setters --
 
-    public TextChannelImpl setTopic(String topic)
-    {
+    public TextChannelImpl setTopic(String topic) {
         this.topic = topic;
         return this;
     }
 
-    public TextChannelImpl setLastMessageId(long id)
-    {
+    public TextChannelImpl setLastMessageId(long id) {
         this.lastMessageId = id;
         return this;
     }
 
-    public TextChannelImpl setNSFW(boolean nsfw)
-    {
+    public TextChannelImpl setNSFW(boolean nsfw) {
         this.nsfw = nsfw;
         return this;
     }
 
     // -- internal --
 
-    private void checkVerification()
-    {
+    private void checkVerification() {
         if (!guild.checkVerification())
             throw new VerificationLevelException(guild.getVerificationLevel());
     }

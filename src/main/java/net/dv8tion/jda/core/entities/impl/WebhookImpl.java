@@ -32,10 +32,9 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * The implementation for {@link net.dv8tion.jda.core.entities.Webhook Webhook}
  *
- * @since  3.0
+ * @since 3.0
  */
-public class WebhookImpl implements Webhook
-{
+public class WebhookImpl implements Webhook {
     @Deprecated
     protected volatile net.dv8tion.jda.core.managers.WebhookManagerUpdatable managerUpdatable = null;
     protected volatile WebhookManager manager = null;
@@ -48,69 +47,57 @@ public class WebhookImpl implements Webhook
     private User user;
     private String token;
 
-    public WebhookImpl(TextChannel channel, long id)
-    {
+    public WebhookImpl(TextChannel channel, long id) {
         this.channel = channel;
         this.id = id;
     }
 
     @Override
-    public JDA getJDA()
-    {
+    public JDA getJDA() {
         return channel.getJDA();
     }
 
     @Override
-    public Guild getGuild()
-    {
+    public Guild getGuild() {
         return channel.getGuild();
     }
 
     @Override
-    public TextChannel getChannel()
-    {
+    public TextChannel getChannel() {
         return channel;
     }
 
     @Override
-    public Member getOwner()
-    {
+    public Member getOwner() {
         return owner;
     }
 
     @Override
-    public User getDefaultUser()
-    {
+    public User getDefaultUser() {
         return user;
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return user.getName();
     }
 
     @Override
-    public String getToken()
-    {
+    public String getToken() {
         return token;
     }
 
     @Override
-    public String getUrl()
-    {
+    public String getUrl() {
         return Requester.DISCORD_API_PREFIX + "webhooks/" + getId() + "/" + getToken();
     }
 
     @Override
-    public AuditableRestAction<Void> delete()
-    {
+    public AuditableRestAction<Void> delete() {
         Route.CompiledRoute route = Route.Webhooks.DELETE_TOKEN_WEBHOOK.compile(getId(), token);
-        return new AuditableRestAction<Void>(getJDA(), route)
-        {
+        return new AuditableRestAction<Void>(getJDA(), route) {
             @Override
-            protected void handleResponse(Response response, Request<Void> request)
-            {
+            protected void handleResponse(Response response, Request<Void> request) {
                 if (response.isOk())
                     request.onSuccess(null);
                 else
@@ -120,11 +107,9 @@ public class WebhookImpl implements Webhook
     }
 
     @Override
-    public WebhookManager getManager()
-    {
+    public WebhookManager getManager() {
         WebhookManager mng = manager;
-        if (mng == null)
-        {
+        if (mng == null) {
             mng = MiscUtil.locked(mngLock, () ->
             {
                 if (manager == null)
@@ -137,11 +122,9 @@ public class WebhookImpl implements Webhook
 
     @Override
     @Deprecated
-    public net.dv8tion.jda.core.managers.WebhookManagerUpdatable getManagerUpdatable()
-    {
+    public net.dv8tion.jda.core.managers.WebhookManagerUpdatable getManagerUpdatable() {
         net.dv8tion.jda.core.managers.WebhookManagerUpdatable mng = managerUpdatable;
-        if (mng == null)
-        {
+        if (mng == null) {
             mng = MiscUtil.locked(mngLock, () ->
             {
                 if (managerUpdatable == null)
@@ -153,33 +136,28 @@ public class WebhookImpl implements Webhook
     }
 
     @Override
-    public WebhookClientBuilder newClient()
-    {
+    public WebhookClientBuilder newClient() {
         return new WebhookClientBuilder(id, token);
     }
 
     @Override
-    public long getIdLong()
-    {
+    public long getIdLong() {
         return id;
     }
 
     /* -- Impl Setters -- */
 
-    public WebhookImpl setOwner(Member member)
-    {
+    public WebhookImpl setOwner(Member member) {
         this.owner = member;
         return this;
     }
 
-    public WebhookImpl setToken(String token)
-    {
+    public WebhookImpl setToken(String token) {
         this.token = token;
         return this;
     }
 
-    public WebhookImpl setUser(User user)
-    {
+    public WebhookImpl setUser(User user) {
         this.user = user;
         return this;
     }
@@ -187,21 +165,18 @@ public class WebhookImpl implements Webhook
     /* -- Object Overrides -- */
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return Long.hashCode(id);
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         return obj instanceof WebhookImpl
-                && ((WebhookImpl) obj).id == this.id;
+            && ((WebhookImpl) obj).id == this.id;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "WH:" + getName() + "(" + id + ")";
     }
 }

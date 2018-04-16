@@ -24,10 +24,8 @@ import net.dv8tion.jda.core.entities.Category;
  *
  * <p>Can be used to retrieve the newly created Category
  */
-public class CategoryCreateEvent extends GenericCategoryEvent
-{
-    public CategoryCreateEvent(JDA api, long responseNumber, Category category)
-    {
+public class CategoryCreateEvent extends GenericCategoryEvent {
+    public CategoryCreateEvent(JDA api, long responseNumber, Category category) {
         super(api, responseNumber, category);
     }
 }

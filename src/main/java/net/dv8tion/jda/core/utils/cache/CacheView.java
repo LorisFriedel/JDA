@@ -36,11 +36,9 @@ import java.util.stream.Stream;
  * <br>This can be useful to check information such as size without creating
  * an immutable snapshot first.
  *
- * @param  <T>
- *         The cache type
+ * @param <T> The cache type
  */
-public interface CacheView<T> extends Iterable<T>
-{
+public interface CacheView<T> extends Iterable<T> {
     /**
      * Creates an immutable snapshot of the current cache state.
      * <br>This will copy all elements contained in this cache into a list.
@@ -87,15 +85,10 @@ public interface CacheView<T> extends Iterable<T>
      * <br>For a {@link net.dv8tion.jda.core.utils.cache.MemberCacheView MemberCacheView} this will
      * check the {@link net.dv8tion.jda.core.entities.Member#getEffectiveName() Effective Name} of the cached members.
      *
-     * @param  name
-     *         The name to check
-     * @param  ignoreCase
-     *         Whether to ignore case when comparing names
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided name is {@code null}
-     *
+     * @param name       The name to check
+     * @param ignoreCase Whether to ignore case when comparing names
      * @return Immutable list of elements with the given name
+     * @throws java.lang.IllegalArgumentException If the provided name is {@code null}
      */
     List<T> getElementsByName(String name, boolean ignoreCase);
 
@@ -104,16 +97,11 @@ public interface CacheView<T> extends Iterable<T>
      * <br>For a {@link net.dv8tion.jda.core.utils.cache.MemberCacheView MemberCacheView} this will
      * check the {@link net.dv8tion.jda.core.entities.Member#getEffectiveName() Effective Name} of the cached members.
      *
-     * @param  name
-     *         The name to check
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided name is {@code null}
-     *
+     * @param name The name to check
      * @return Immutable list of elements with the given name
+     * @throws java.lang.IllegalArgumentException If the provided name is {@code null}
      */
-    default List<T> getElementsByName(String name)
-    {
+    default List<T> getElementsByName(String name) {
         return getElementsByName(name, false);
     }
 
@@ -138,21 +126,13 @@ public interface CacheView<T> extends Iterable<T>
      * {@link java.util.stream.Collector Collector}.
      * Shortcut for {@code stream().collect(collector)}.
      *
-     * @param  collector
-     *         The collector used to collect the elements
-     *
-     * @param  <R>
-     *         The output type
-     * @param  <A>
-     *         The accumulator type
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided collector is {@code null}
-     *
+     * @param collector The collector used to collect the elements
+     * @param <R>       The output type
+     * @param <A>       The accumulator type
      * @return Resulting collections
+     * @throws java.lang.IllegalArgumentException If the provided collector is {@code null}
      */
-    default <R, A> R collect(Collector<? super T, A, R> collector)
-    {
+    default <R, A> R collect(Collector<? super T, A, R> collector) {
         return stream().collect(collector);
     }
 
@@ -161,16 +141,11 @@ public interface CacheView<T> extends Iterable<T>
      * for all provided CacheView implementations. This allows to combine cache of multiple
      * JDA sessions or Guilds.
      *
-     * @param  cacheViews
-     *         Collection of {@link net.dv8tion.jda.core.utils.cache.CacheView CacheView} implementations
-     *
-     * @param  <E>
-     *         The target type of the projection
-     *
+     * @param cacheViews Collection of {@link net.dv8tion.jda.core.utils.cache.CacheView CacheView} implementations
+     * @param <E>        The target type of the projection
      * @return Combined CacheView spanning over all provided implementation instances
      */
-    static <E> CacheView<E> all(Collection<? extends CacheView<E>> cacheViews)
-    {
+    static <E> CacheView<E> all(Collection<? extends CacheView<E>> cacheViews) {
         Checks.noneNull(cacheViews, "Collection");
         return new UnifiedCacheViewImpl<>(cacheViews::stream);
     }
@@ -180,16 +155,11 @@ public interface CacheView<T> extends Iterable<T>
      * for all provided CacheView implementations. This allows to combine cache of multiple
      * JDA sessions or Guilds.
      *
-     * @param  generator
-     *         Stream generator of {@link net.dv8tion.jda.core.utils.cache.CacheView CacheView} implementations
-     *
-     * @param  <E>
-     *         The target type of the projection
-     *
+     * @param generator Stream generator of {@link net.dv8tion.jda.core.utils.cache.CacheView CacheView} implementations
+     * @param <E>       The target type of the projection
      * @return Combined CacheView spanning over all provided implementation instances
      */
-    static <E> CacheView<E> all(Supplier<Stream<CacheView<E>>> generator)
-    {
+    static <E> CacheView<E> all(Supplier<Stream<CacheView<E>>> generator) {
         Checks.notNull(generator, "Generator");
         return new UnifiedCacheViewImpl<>(generator);
     }
@@ -198,13 +168,10 @@ public interface CacheView<T> extends Iterable<T>
      * Creates a combined {@link net.dv8tion.jda.bot.utils.cache.ShardCacheView ShardCacheView}
      * for all provided ShardCacheView implementations.
      *
-     * @param  cacheViews
-     *         Collection of {@link net.dv8tion.jda.bot.utils.cache.ShardCacheView ShardCacheView} implementations
-     *
+     * @param cacheViews Collection of {@link net.dv8tion.jda.bot.utils.cache.ShardCacheView ShardCacheView} implementations
      * @return Combined ShardCacheView spanning over all provided implementation instances
      */
-    static ShardCacheView allShards(Collection<ShardCacheView> cacheViews)
-    {
+    static ShardCacheView allShards(Collection<ShardCacheView> cacheViews) {
         Checks.noneNull(cacheViews, "Collection");
         return new ShardCacheViewImpl.UnifiedShardCacheViewImpl(cacheViews::stream);
     }
@@ -213,13 +180,10 @@ public interface CacheView<T> extends Iterable<T>
      * Creates a combined {@link net.dv8tion.jda.bot.utils.cache.ShardCacheView ShardCacheView}
      * for all provided ShardCacheView implementations.
      *
-     * @param  generator
-     *         Stream generator of {@link net.dv8tion.jda.bot.utils.cache.ShardCacheView ShardCacheView} implementations
-     *
+     * @param generator Stream generator of {@link net.dv8tion.jda.bot.utils.cache.ShardCacheView ShardCacheView} implementations
      * @return Combined ShardCacheView spanning over all provided implementation instances
      */
-    static ShardCacheView allShards(Supplier<Stream<ShardCacheView>> generator)
-    {
+    static ShardCacheView allShards(Supplier<Stream<ShardCacheView>> generator) {
         Checks.notNull(generator, "Generator");
         return new ShardCacheViewImpl.UnifiedShardCacheViewImpl(generator);
     }
@@ -229,16 +193,11 @@ public interface CacheView<T> extends Iterable<T>
      * for all provided SnowflakeCacheView implementations.
      * <br>This allows to combine cache of multiple JDA sessions or Guilds.
      *
-     * @param  cacheViews
-     *         Collection of {@link net.dv8tion.jda.core.utils.cache.SnowflakeCacheView SnowflakeCacheView} implementations
-     *
-     * @param  <E>
-     *         The target type of the chain
-     *
+     * @param cacheViews Collection of {@link net.dv8tion.jda.core.utils.cache.SnowflakeCacheView SnowflakeCacheView} implementations
+     * @param <E>        The target type of the chain
      * @return Combined SnowflakeCacheView spanning over all provided implementation instances
      */
-    static <E extends ISnowflake> SnowflakeCacheView<E> allSnowflakes(Collection<SnowflakeCacheView<E>> cacheViews)
-    {
+    static <E extends ISnowflake> SnowflakeCacheView<E> allSnowflakes(Collection<SnowflakeCacheView<E>> cacheViews) {
         Checks.noneNull(cacheViews, "Collection");
         return new UnifiedCacheViewImpl.UnifiedSnowflakeCacheView<>(cacheViews::stream);
     }
@@ -248,16 +207,11 @@ public interface CacheView<T> extends Iterable<T>
      * for all provided SnowflakeCacheView implementations.
      * <br>This allows to combine cache of multiple JDA sessions or Guilds.
      *
-     * @param  generator
-     *         Stream generator of {@link net.dv8tion.jda.core.utils.cache.SnowflakeCacheView SnowflakeCacheView} implementations
-     *
-     * @param  <E>
-     *         The target type of the chain
-     *
+     * @param generator Stream generator of {@link net.dv8tion.jda.core.utils.cache.SnowflakeCacheView SnowflakeCacheView} implementations
+     * @param <E>       The target type of the chain
      * @return Combined SnowflakeCacheView spanning over all provided implementation instances
      */
-    static <E extends ISnowflake> SnowflakeCacheView<E> allSnowflakes(Supplier<Stream<SnowflakeCacheView<E>>> generator)
-    {
+    static <E extends ISnowflake> SnowflakeCacheView<E> allSnowflakes(Supplier<Stream<SnowflakeCacheView<E>>> generator) {
         Checks.notNull(generator, "Generator");
         return new UnifiedCacheViewImpl.UnifiedSnowflakeCacheView<>(generator);
     }
@@ -267,13 +221,10 @@ public interface CacheView<T> extends Iterable<T>
      * for all provided MemberCacheView implementations.
      * <br>This allows to combine cache of multiple JDA sessions or Guilds.
      *
-     * @param  cacheViews
-     *         Collection of {@link net.dv8tion.jda.core.utils.cache.MemberCacheView MemberCacheView} instances
-     *
+     * @param cacheViews Collection of {@link net.dv8tion.jda.core.utils.cache.MemberCacheView MemberCacheView} instances
      * @return Combined MemberCacheView spanning over all provided instances
      */
-    static UnifiedMemberCacheView allMembers(Collection<MemberCacheView> cacheViews)
-    {
+    static UnifiedMemberCacheView allMembers(Collection<MemberCacheView> cacheViews) {
         Checks.noneNull(cacheViews, "Collection");
         return new UnifiedCacheViewImpl.UnifiedMemberCacheViewImpl(cacheViews::stream);
     }
@@ -283,13 +234,10 @@ public interface CacheView<T> extends Iterable<T>
      * for all provided MemberCacheView implementations.
      * <br>This allows to combine cache of multiple JDA sessions or Guilds.
      *
-     * @param  generator
-     *         Stream generator of {@link net.dv8tion.jda.core.utils.cache.MemberCacheView MemberCacheView} instances
-     *
+     * @param generator Stream generator of {@link net.dv8tion.jda.core.utils.cache.MemberCacheView MemberCacheView} instances
      * @return Combined MemberCacheView spanning over all provided instances
      */
-    static UnifiedMemberCacheView allMembers(Supplier<Stream<MemberCacheView>> generator)
-    {
+    static UnifiedMemberCacheView allMembers(Supplier<Stream<MemberCacheView>> generator) {
         Checks.notNull(generator, "Generator");
         return new UnifiedCacheViewImpl.UnifiedMemberCacheViewImpl(generator);
     }
@@ -298,13 +246,10 @@ public interface CacheView<T> extends Iterable<T>
      * Basic implementation of {@link net.dv8tion.jda.core.utils.cache.CacheView CacheView} interface.
      * <br>Using {@link gnu.trove.map.TLongObjectMap TLongObjectMap} to cache entities!
      *
-     * @param <T>
-     *        The type this should cache
+     * @param <T> The type this should cache
      */
-    class SimpleCacheView<T> extends AbstractCacheView<T>
-    {
-        public SimpleCacheView(Class<T> type, Function<T, String> nameMapper)
-        {
+    class SimpleCacheView<T> extends AbstractCacheView<T> {
+        public SimpleCacheView(Class<T> type, Function<T, String> nameMapper) {
             super(type, nameMapper);
         }
     }

@@ -26,12 +26,10 @@ import net.dv8tion.jda.core.entities.User;
  *
  * <p>Identifier: {@code name}
  */
-public class UserUpdateNameEvent extends GenericUserUpdateEvent<String>
-{
+public class UserUpdateNameEvent extends GenericUserUpdateEvent<String> {
     public static final String IDENTIFIER = "name";
 
-    public UserUpdateNameEvent(JDA api, long responseNumber, User user, String oldName)
-    {
+    public UserUpdateNameEvent(JDA api, long responseNumber, User user, String oldName) {
         super(api, responseNumber, user, oldName, user.getName(), IDENTIFIER);
     }
 
@@ -40,8 +38,7 @@ public class UserUpdateNameEvent extends GenericUserUpdateEvent<String>
      *
      * @return The old username
      */
-    public String getOldName()
-    {
+    public String getOldName() {
         return getOldValue();
     }
 
@@ -50,8 +47,7 @@ public class UserUpdateNameEvent extends GenericUserUpdateEvent<String>
      *
      * @return The new username
      */
-    public String getNewName()
-    {
+    public String getNewName() {
         return getNewValue();
     }
 }

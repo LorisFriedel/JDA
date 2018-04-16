@@ -18,8 +18,7 @@ package net.dv8tion.jda.core.utils;
 
 import java.io.*;
 
-public class IOUtil
-{
+public class IOUtil {
 
     /**
      * Used as an alternate to Java's nio Files.readAllBytes.
@@ -30,21 +29,15 @@ public class IOUtil
      *
      * <p>Code provided from <a href="http://stackoverflow.com/a/6276139">Stackoverflow</a>
      *
-     * @param  file
-     *         The file from which we should retrieve the bytes from
-     *
-     * @throws java.io.IOException
-     *         Thrown if there is a problem while reading the file.
-     *
+     * @param file The file from which we should retrieve the bytes from
      * @return A byte[] containing all of the file's data
+     * @throws java.io.IOException Thrown if there is a problem while reading the file.
      */
-    public static byte[] readFully(File file) throws IOException
-    {
+    public static byte[] readFully(File file) throws IOException {
         Checks.notNull(file, "File");
         Checks.check(file.exists(), "Provided file does not exist!");
 
-        try (InputStream is = new FileInputStream(file))
-        {
+        try (InputStream is = new FileInputStream(file)) {
             // Get the size of the file
             long length = file.length();
 
@@ -52,8 +45,7 @@ public class IOUtil
             // It needs to be an int type.
             // Before converting to an int type, check
             // to ensure that file is not larger than Integer.MAX_VALUE.
-            if (length > Integer.MAX_VALUE)
-            {
+            if (length > Integer.MAX_VALUE) {
                 throw new IOException("Cannot read the file into memory completely due to it being too large!");
                 // File is too large
             }
@@ -64,14 +56,12 @@ public class IOUtil
             // Read in the bytes
             int offset = 0;
             int numRead = 0;
-            while (offset < bytes.length && (numRead = is.read(bytes, offset, bytes.length - offset)) >= 0)
-            {
+            while (offset < bytes.length && (numRead = is.read(bytes, offset, bytes.length - offset)) >= 0) {
                 offset += numRead;
             }
 
             // Ensure all the bytes have been read in
-            if (offset < bytes.length)
-            {
+            if (offset < bytes.length) {
                 throw new IOException("Could not completely read file " + file.getName());
             }
 
@@ -87,25 +77,18 @@ public class IOUtil
      * <p>This method will block until the InputStream has been fully read, so if you provide an InputStream that is
      * non-finite, you're gonna have a bad time.
      *
-     * @param  stream
-     *         The Stream to be read.
-     *
-     * @throws IOException
-     *         If the first byte cannot be read for any reason other than the end of the file,
-     *         if the input stream has been closed, or if some other I/O error occurs.
-     *
+     * @param stream The Stream to be read.
      * @return A byte[] containing all of the data provided by the InputStream
+     * @throws IOException If the first byte cannot be read for any reason other than the end of the file,
+     *                     if the input stream has been closed, or if some other I/O error occurs.
      */
-    public static byte[] readFully(InputStream stream) throws IOException
-    {
+    public static byte[] readFully(InputStream stream) throws IOException {
         Checks.notNull(stream, "InputStream");
 
         byte[] buffer = new byte[1024];
-        try (ByteArrayOutputStream bos = new ByteArrayOutputStream())
-        {
+        try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
             int readAmount = 0;
-            while ((readAmount = stream.read(buffer)) != -1)
-            {
+            while ((readAmount = stream.read(buffer)) != -1) {
                 bos.write(buffer, 0, readAmount);
             }
             return bos.toByteArray();

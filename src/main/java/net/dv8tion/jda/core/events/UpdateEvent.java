@@ -19,21 +19,17 @@ package net.dv8tion.jda.core.events;
 /**
  * Indicates that a value of an entity was updated
  *
- * @param <E>
- *        The entity type
- * @param <T>
- *        The value type
+ * @param <E> The entity type
+ * @param <T> The value type
  */
-public interface UpdateEvent<E, T>
-{
+public interface UpdateEvent<E, T> {
     /**
      * Class representation of the affected entity, useful when dealing with refection.
      *
      * @return The class of the affected entity
      */
     @SuppressWarnings("unchecked")
-    default Class<E> getEntityType()
-    {
+    default Class<E> getEntityType() {
         return (Class<E>) getEntity().getClass();
     }
 

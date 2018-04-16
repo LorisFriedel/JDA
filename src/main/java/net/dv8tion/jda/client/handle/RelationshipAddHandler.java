@@ -27,47 +27,42 @@ import net.dv8tion.jda.core.handle.SocketHandler;
 import net.dv8tion.jda.core.requests.WebSocketClient;
 import org.json.JSONObject;
 
-public class RelationshipAddHandler extends SocketHandler
-{
-    public RelationshipAddHandler(JDAImpl api)
-    {
+public class RelationshipAddHandler extends SocketHandler {
+    public RelationshipAddHandler(JDAImpl api) {
         super(api);
     }
 
     @Override
-    protected Long handleInternally(JSONObject content)
-    {
+    protected Long handleInternally(JSONObject content) {
         Relationship relationship = api.getEntityBuilder().createRelationship(content);
-        if (relationship == null)
-        {
+        if (relationship == null) {
             WebSocketClient.LOG.warn("Received a RELATIONSHIP_ADD with an unknown type! JSON: {}", content);
             return null;
         }
-        switch (relationship.getType())
-        {
+        switch (relationship.getType()) {
             case FRIEND:
                 api.getEventManager().handle(
-                        new FriendAddedEvent(
-                                api, responseNumber,
-                                relationship));
+                    new FriendAddedEvent(
+                        api, responseNumber,
+                        relationship));
                 break;
             case BLOCKED:
                 api.getEventManager().handle(
-                        new UserBlockedEvent(
-                                api, responseNumber,
-                                relationship));
+                    new UserBlockedEvent(
+                        api, responseNumber,
+                        relationship));
                 break;
             case INCOMING_FRIEND_REQUEST:
                 api.getEventManager().handle(
-                        new FriendRequestReceivedEvent(
-                                api, responseNumber,
-                                relationship));
+                    new FriendRequestReceivedEvent(
+                        api, responseNumber,
+                        relationship));
                 break;
             case OUTGOING_FRIEND_REQUEST:
                 api.getEventManager().handle(
-                        new FriendRequestSentEvent(
-                                api, responseNumber,
-                                relationship));
+                    new FriendRequestSentEvent(
+                        api, responseNumber,
+                        relationship));
                 break;
             default:
                 WebSocketClient.LOG.warn("Received a RELATIONSHIP_ADD with an unknown type! JSON: {}", content);

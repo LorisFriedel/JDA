@@ -26,12 +26,10 @@ import net.dv8tion.jda.core.events.Event;
  *
  * <p>Can be used to detect any TextChannelEvent.
  */
-public abstract class GenericTextChannelEvent extends Event
-{
+public abstract class GenericTextChannelEvent extends Event {
     private final TextChannel channel;
 
-    public GenericTextChannelEvent(JDA api, long responseNumber, TextChannel channel)
-    {
+    public GenericTextChannelEvent(JDA api, long responseNumber, TextChannel channel) {
         super(api, responseNumber);
         this.channel = channel;
     }
@@ -41,8 +39,7 @@ public abstract class GenericTextChannelEvent extends Event
      *
      * @return The TextChannel
      */
-    public TextChannel getChannel()
-    {
+    public TextChannel getChannel() {
         return channel;
     }
 
@@ -52,8 +49,7 @@ public abstract class GenericTextChannelEvent extends Event
      *
      * @return The Guild
      */
-    public Guild getGuild()
-    {
+    public Guild getGuild() {
         return channel.getGuild();
     }
 }

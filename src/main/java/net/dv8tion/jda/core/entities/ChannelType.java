@@ -18,8 +18,7 @@ package net.dv8tion.jda.core.entities;
 /**
  * Enum used to differentiate between the different types of Discord channels.
  */
-public enum ChannelType
-{
+public enum ChannelType {
     /**
      * A {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}, Guild-Only.
      */
@@ -49,13 +48,11 @@ public enum ChannelType
     protected final int id;
     protected final boolean isGuild;
 
-    ChannelType(int id)
-    {
+    ChannelType(int id) {
         this(id, false);
     }
 
-    ChannelType(int id, boolean isGuild)
-    {
+    ChannelType(int id, boolean isGuild) {
         this.id = id;
         this.isGuild = isGuild;
     }
@@ -65,8 +62,7 @@ public enum ChannelType
      *
      * @return The id key used by discord for this channel type.
      */
-    public int getId()
-    {
+    public int getId() {
         return id;
     }
 
@@ -75,23 +71,18 @@ public enum ChannelType
      *
      * @return Whether or not this a Guild Channel
      */
-    public boolean isGuild()
-    {
+    public boolean isGuild() {
         return isGuild;
     }
 
     /**
      * Static accessor for retrieving a channel type based on its Discord id key.
      *
-     * @param  id
-     *         The id key of the requested channel type.
-     *
+     * @param id The id key of the requested channel type.
      * @return The ChannelType that is referred to by the provided key. If the id key is unknown, {@link #UNKNOWN} is returned.
      */
-    public static ChannelType fromId(int id)
-    {
-        for (ChannelType type : values())
-        {
+    public static ChannelType fromId(int id) {
+        for (ChannelType type : values()) {
             if (type.id == id)
                 return type;
         }

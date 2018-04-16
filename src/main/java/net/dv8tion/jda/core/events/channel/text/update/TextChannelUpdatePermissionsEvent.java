@@ -30,12 +30,10 @@ import java.util.stream.Collectors;
  *
  * <p>Can be use to detect when a TextChannel's permission overrides change and get affected {@link net.dv8tion.jda.core.entities.Role Roles}/{@link net.dv8tion.jda.core.entities.User Users}.
  */
-public class TextChannelUpdatePermissionsEvent extends GenericTextChannelEvent
-{
+public class TextChannelUpdatePermissionsEvent extends GenericTextChannelEvent {
     private final List<IPermissionHolder> changed;
 
-    public TextChannelUpdatePermissionsEvent(JDA api, long responseNumber, TextChannel channel, List<IPermissionHolder> permHolders)
-    {
+    public TextChannelUpdatePermissionsEvent(JDA api, long responseNumber, TextChannel channel, List<IPermissionHolder> permHolders) {
         super(api, responseNumber, channel);
         this.changed = permHolders;
     }
@@ -44,12 +42,10 @@ public class TextChannelUpdatePermissionsEvent extends GenericTextChannelEvent
      * The affected {@link net.dv8tion.jda.core.entities.IPermissionHolder IPermissionHolders}
      *
      * @return The affected permission holders
-     *
-     * @see    #getChangedRoles()
-     * @see    #getChangedMembers()
+     * @see #getChangedRoles()
+     * @see #getChangedMembers()
      */
-    public List<IPermissionHolder> getChangedPermissionHolders()
-    {
+    public List<IPermissionHolder> getChangedPermissionHolders() {
         return changed;
     }
 
@@ -58,12 +54,11 @@ public class TextChannelUpdatePermissionsEvent extends GenericTextChannelEvent
      *
      * @return List of affected roles
      */
-    public List<Role> getChangedRoles()
-    {
+    public List<Role> getChangedRoles() {
         return changed.stream()
-                      .filter(it -> it instanceof Role)
-                      .map(Role.class::cast)
-                      .collect(Collectors.toList());
+            .filter(it -> it instanceof Role)
+            .map(Role.class::cast)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -71,25 +66,21 @@ public class TextChannelUpdatePermissionsEvent extends GenericTextChannelEvent
      *
      * @return List of affected members
      */
-    public List<Member> getChangedMembers()
-    {
+    public List<Member> getChangedMembers() {
         return changed.stream()
-                      .filter(it -> it instanceof Member)
-                      .map(Member.class::cast)
-                      .collect(Collectors.toList());
+            .filter(it -> it instanceof Member)
+            .map(Member.class::cast)
+            .collect(Collectors.toList());
     }
 
     /**
      * Deprecated.
      *
      * @return List of affected members
-     *
-     * @deprecated
-     *         Use {@link #getChangedMembers()} instead
+     * @deprecated Use {@link #getChangedMembers()} instead
      */
     @Deprecated
-    public List<Member> getMembersWithPermissionChanges()
-    {
+    public List<Member> getMembersWithPermissionChanges() {
         return getChangedMembers();
     }
 }

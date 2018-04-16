@@ -32,14 +32,14 @@
  * <p>In addition this package included helpful builders for message sending
  * such as:
  * <ul>
- *     <li>{@link net.dv8tion.jda.core.MessageBuilder MessageBuilder}
- *     <br>Used to build a {@link net.dv8tion.jda.core.entities.Message Message} which can be used to
- *         send a message to a {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel} together with
- *         an {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed} and Text-To-Speech!</li>
+ * <li>{@link net.dv8tion.jda.core.MessageBuilder MessageBuilder}
+ * <br>Used to build a {@link net.dv8tion.jda.core.entities.Message Message} which can be used to
+ * send a message to a {@link net.dv8tion.jda.core.entities.MessageChannel MessageChannel} together with
+ * an {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed} and Text-To-Speech!</li>
  *
- *     <li>{@link net.dv8tion.jda.core.EmbedBuilder EmbedBuilder}
- *     <br>Used to build a {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed}
- *         which can then be used in the message sending process (see above)</li>
+ * <li>{@link net.dv8tion.jda.core.EmbedBuilder EmbedBuilder}
+ * <br>Used to build a {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed}
+ * which can then be used in the message sending process (see above)</li>
  * </ul>
  */
 package net.dv8tion.jda.core;

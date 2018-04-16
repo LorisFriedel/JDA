@@ -28,8 +28,7 @@ import org.apache.commons.collections4.map.CaseInsensitiveMap;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
-public class Request<T>
-{
+public class Request<T> {
     private final JDAImpl api;
     private final RestAction<T> restAction;
     private final Consumer<T> onSuccess;
@@ -45,8 +44,7 @@ public class Request<T>
 
     public Request(RestAction<T> restAction, Consumer<T> onSuccess, Consumer<Throwable> onFailure,
                    BooleanSupplier checks, boolean shouldQueue, RequestBody body, Object rawBody,
-                   Route.CompiledRoute route, CaseInsensitiveMap<String, String> headers)
-    {
+                   Route.CompiledRoute route, CaseInsensitiveMap<String, String> headers) {
         this.restAction = restAction;
         this.onSuccess = onSuccess;
         if (RestAction.isPassContext())
@@ -63,16 +61,12 @@ public class Request<T>
         this.api = (JDAImpl) restAction.getJDA();
     }
 
-    public void onSuccess(T successObj)
-    {
+    public void onSuccess(T successObj) {
         api.pool.execute(() ->
         {
-            try
-            {
+            try {
                 onSuccess.accept(successObj);
-            }
-            catch (Throwable t)
-            {
+            } catch (Throwable t) {
                 RestAction.LOG.error("Encountered error while processing success consumer", t);
                 if (t instanceof Error)
                     api.getEventManager().handle(new ExceptionEvent(api, t, true));
@@ -80,31 +74,23 @@ public class Request<T>
         });
     }
 
-    public void onFailure(Response response)
-    {
-        if (response.code == 429)
-        {
+    public void onFailure(Response response) {
+        if (response.code == 429) {
             onFailure(new RateLimitedException(route, response.retryAfter));
-        }
-        else
-        {
+        } else {
             onFailure(ErrorResponseException.create(
-                    ErrorResponse.fromJSON(response.optObject().orElse(null)), response));
+                ErrorResponse.fromJSON(response.optObject().orElse(null)), response));
         }
     }
 
-    public void onFailure(Throwable failException)
-    {
+    public void onFailure(Throwable failException) {
         api.pool.execute(() ->
         {
-            try
-            {
+            try {
                 onFailure.accept(failException);
                 if (failException instanceof Error)
                     api.getEventManager().handle(new ExceptionEvent(api, failException, false));
-            }
-            catch (Throwable t)
-            {
+            } catch (Throwable t) {
                 RestAction.LOG.error("Encountered error while processing failure consumer", t);
                 if (t instanceof Error)
                     api.getEventManager().handle(new ExceptionEvent(api, t, true));
@@ -112,68 +98,55 @@ public class Request<T>
         });
     }
 
-    public JDAImpl getJDA()
-    {
+    public JDAImpl getJDA() {
         return api;
     }
 
-    public RestAction<T> getRestAction()
-    {
+    public RestAction<T> getRestAction() {
         return restAction;
     }
 
-    public Consumer<T> getOnSuccess()
-    {
+    public Consumer<T> getOnSuccess() {
         return onSuccess;
     }
 
-    public Consumer<Throwable> getOnFailure()
-    {
+    public Consumer<Throwable> getOnFailure() {
         return onFailure;
     }
 
-    public boolean runChecks()
-    {
+    public boolean runChecks() {
         return checks == null || checks.getAsBoolean();
     }
 
-    public CaseInsensitiveMap<String, String> getHeaders()
-    {
+    public CaseInsensitiveMap<String, String> getHeaders() {
         return headers;
     }
 
-    public Route.CompiledRoute getRoute()
-    {
+    public Route.CompiledRoute getRoute() {
         return route;
     }
 
-    public RequestBody getBody()
-    {
+    public RequestBody getBody() {
         return body;
     }
 
-    public Object getRawBody()
-    {
+    public Object getRawBody() {
         return rawBody;
     }
 
-    public boolean shouldQueue()
-    {
+    public boolean shouldQueue() {
         return shouldQueue;
     }
 
-    public void cancel()
-    {
+    public void cancel() {
         this.isCanceled = true;
     }
 
-    public boolean isCanceled()
-    {
+    public boolean isCanceled() {
         return isCanceled;
     }
 
-    public void handleResponse(Response response)
-    {
+    public void handleResponse(Response response) {
         api.getEventManager().handle(new HttpRequestEvent(this, response));
         restAction.handleResponse(response, this);
     }

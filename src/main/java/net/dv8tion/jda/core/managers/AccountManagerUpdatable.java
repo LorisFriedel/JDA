@@ -47,8 +47,7 @@ import java.util.regex.Pattern;
  * for the current session use the {@link net.dv8tion.jda.core.managers.Presence Presence} instance of the corresponding JDA instance</b>
  */
 @Deprecated
-public class AccountManagerUpdatable
-{
+public class AccountManagerUpdatable {
     public static final Pattern EMAIL_PATTERN = Pattern.compile(".+@.+");
 
     protected final SelfUser selfUser;
@@ -61,12 +60,10 @@ public class AccountManagerUpdatable
     /**
      * Creates a new AccountManagerUpdatable instance
      *
-     * @param selfUser
-     *        A {@link net.dv8tion.jda.core.entities.SelfUser SelfUser} instance
-     *        that represents the currently logged in account
+     * @param selfUser A {@link net.dv8tion.jda.core.entities.SelfUser SelfUser} instance
+     *                 that represents the currently logged in account
      */
-    public AccountManagerUpdatable(SelfUser selfUser)
-    {
+    public AccountManagerUpdatable(SelfUser selfUser) {
         this.selfUser = selfUser;
         setupFields();
     }
@@ -76,8 +73,7 @@ public class AccountManagerUpdatable
      *
      * @return the corresponding JDA instance
      */
-    public JDA getJDA()
-    {
+    public JDA getJDA() {
         return selfUser.getJDA();
     }
 
@@ -88,8 +84,7 @@ public class AccountManagerUpdatable
      *
      * @return The corresponding SelfUser
      */
-    public SelfUser getSelfUser()
-    {
+    public SelfUser getSelfUser() {
         return selfUser;
     }
 
@@ -106,8 +101,7 @@ public class AccountManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.AccountField AccountField} - Type: {@code String}
      */
-    public AccountField<String> getNameField()
-    {
+    public AccountField<String> getNameField() {
         return name;
     }
 
@@ -125,8 +119,7 @@ public class AccountManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.AccountField AccountField} - Type: {@link net.dv8tion.jda.core.entities.Icon Icon}
      */
-    public AccountField<Icon> getAvatarField()
-    {
+    public AccountField<Icon> getAvatarField() {
         return avatar;
     }
 
@@ -143,13 +136,10 @@ public class AccountManagerUpdatable
      * <br>Otherwise {@link net.dv8tion.jda.core.managers.fields.Field#setValue(Object) Field.setValue(...)} will
      * throw an {@link IllegalArgumentException IllegalArgumentException}.
      *
-     * @throws net.dv8tion.jda.core.exceptions.AccountTypeException
-     *         If the currently logged in account is not from {@link net.dv8tion.jda.core.AccountType#CLIENT AccountType.CLIENT}
-     *
      * @return {@link net.dv8tion.jda.core.managers.fields.AccountField AccountField} - Type: {@code String}
+     * @throws net.dv8tion.jda.core.exceptions.AccountTypeException If the currently logged in account is not from {@link net.dv8tion.jda.core.AccountType#CLIENT AccountType.CLIENT}
      */
-    public AccountField<String> getEmailField()
-    {
+    public AccountField<String> getEmailField() {
         if (!isType(AccountType.CLIENT))
             throw new AccountTypeException(AccountType.CLIENT);
 
@@ -169,13 +159,10 @@ public class AccountManagerUpdatable
      * <br>Otherwise {@link net.dv8tion.jda.core.managers.fields.Field#setValue(Object) Field.setValue(...)} will
      * throw an {@link IllegalArgumentException IllegalArgumentException}.
      *
-     * @throws net.dv8tion.jda.core.exceptions.AccountTypeException
-     *         If the currently logged in account is not from {@link net.dv8tion.jda.core.AccountType#CLIENT AccountType.CLIENT}
-     *
      * @return {@link net.dv8tion.jda.core.managers.fields.AccountField AccountField} - Type: {@code String}
+     * @throws net.dv8tion.jda.core.exceptions.AccountTypeException If the currently logged in account is not from {@link net.dv8tion.jda.core.AccountType#CLIENT AccountType.CLIENT}
      */
-    public AccountField<String> getPasswordField()
-    {
+    public AccountField<String> getPasswordField() {
         if (!isType(AccountType.CLIENT))
             throw new AccountTypeException(AccountType.CLIENT);
 
@@ -186,13 +173,11 @@ public class AccountManagerUpdatable
      * Resets all {@link net.dv8tion.jda.core.managers.fields.AccountField Fields}
      * for this manager instance by calling {@link net.dv8tion.jda.core.managers.fields.Field#reset() Field.reset()} sequentially
      */
-    public void reset()
-    {
+    public void reset() {
         name.reset();
         avatar.reset();
 
-        if (isType(AccountType.CLIENT))
-        {
+        if (isType(AccountType.CLIENT)) {
             email.reset();
             password.reset();
         }
@@ -208,25 +193,20 @@ public class AccountManagerUpdatable
      * <p>Possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} for this
      * update include the following:
      * <ul>
-     *      <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#INVALID_PASSWORD INVALID_PASSWORD}
-     *      <br>If the specified {@code currentPassword} is not a valid password</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#INVALID_PASSWORD INVALID_PASSWORD}
+     * <br>If the specified {@code currentPassword} is not a valid password</li>
      * </ul>
      *
-     * @param  currentPassword
-     *         Used for accounts from {@link net.dv8tion.jda.core.AccountType#CLIENT AccountType.CLIENT},
-     *         provide {@code null} if this is not a client-account
-     *
-     * @throws IllegalArgumentException
-     *         If the provided password is null or empty and the currently logged in account
-     *         is from {@link net.dv8tion.jda.core.AccountType#CLIENT AccountType.CLIENT}
-     *
+     * @param currentPassword Used for accounts from {@link net.dv8tion.jda.core.AccountType#CLIENT AccountType.CLIENT},
+     *                        provide {@code null} if this is not a client-account
      * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction}
-     *         <br>Updates all modified fields or does nothing if none of the {@link net.dv8tion.jda.core.managers.fields.Field Fields}
-     *         have been modified. ({@link net.dv8tion.jda.core.requests.RestAction.EmptyRestAction EmptyRestAction})
+     * <br>Updates all modified fields or does nothing if none of the {@link net.dv8tion.jda.core.managers.fields.Field Fields}
+     * have been modified. ({@link net.dv8tion.jda.core.requests.RestAction.EmptyRestAction EmptyRestAction})
+     * @throws IllegalArgumentException If the provided password is null or empty and the currently logged in account
+     *                                  is from {@link net.dv8tion.jda.core.AccountType#CLIENT AccountType.CLIENT}
      */
     @CheckReturnValue
-    public RestAction<Void> update(String currentPassword)
-    {
+    public RestAction<Void> update(String currentPassword) {
         if (isType(AccountType.CLIENT) && (currentPassword == null || currentPassword.isEmpty()))
             throw new IllegalArgumentException("Provided client account password to be used in auth is null or empty!");
 
@@ -244,8 +224,7 @@ public class AccountManagerUpdatable
         if (avatar.shouldUpdate())
             body.put("avatar", avatar.getValue() != null ? avatar.getValue().getEncoding() : JSONObject.NULL);
 
-        if (isType(AccountType.CLIENT))
-        {
+        if (isType(AccountType.CLIENT)) {
             //Required fields. Populate with current values.
             body.put("password", currentPassword);
             body.put("email", email.getOriginalValue());
@@ -258,13 +237,10 @@ public class AccountManagerUpdatable
 
         reset();    //now that we've built our JSON object, reset the manager back to the non-modified state
         Route.CompiledRoute route = Route.Self.MODIFY_SELF.compile();
-        return new RestAction<Void>(getJDA(), route, body)
-        {
+        return new RestAction<Void>(getJDA(), route, body) {
             @Override
-            protected void handleResponse(Response response, Request<Void> request)
-            {
-                if (!response.isOk())
-                {
+            protected void handleResponse(Response response, Request<Void> request) {
+                if (!response.isOk()) {
                     request.onFailure(response);
                     return;
                 }
@@ -285,100 +261,83 @@ public class AccountManagerUpdatable
      * <p>Before applying new changes it is recommended to call {@link #reset()} to reset previous changes.
      * <br>This is automatically called if this method returns successfully.
      *
-     * @throws net.dv8tion.jda.core.exceptions.AccountTypeException
-     *         If the currently logged in account is from {@link net.dv8tion.jda.core.AccountType#CLIENT AccountType.CLIENT}
-     *
      * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type: Void
-     *         Updates all modified fields or does nothing if none of the {@link net.dv8tion.jda.core.managers.fields.Field Fields}
-     *         have been modified. ({@link net.dv8tion.jda.core.requests.RestAction.EmptyRestAction EmptyRestAction})
+     * Updates all modified fields or does nothing if none of the {@link net.dv8tion.jda.core.managers.fields.Field Fields}
+     * have been modified. ({@link net.dv8tion.jda.core.requests.RestAction.EmptyRestAction EmptyRestAction})
+     * @throws net.dv8tion.jda.core.exceptions.AccountTypeException If the currently logged in account is from {@link net.dv8tion.jda.core.AccountType#CLIENT AccountType.CLIENT}
      */
     @CheckReturnValue
-    public RestAction<Void> update()
-    {
+    public RestAction<Void> update() {
         if (getJDA().getAccountType() == AccountType.CLIENT)
             throw new AccountTypeException(AccountType.BOT);
         return update(null);
     }
 
-    protected boolean needToUpdate()
-    {
+    protected boolean needToUpdate() {
         return name.shouldUpdate()
-                || avatar.shouldUpdate()
-                || (isType(AccountType.CLIENT) && email.shouldUpdate())
-                || (isType(AccountType.CLIENT) && password.shouldUpdate());
+            || avatar.shouldUpdate()
+            || (isType(AccountType.CLIENT) && email.shouldUpdate())
+            || (isType(AccountType.CLIENT) && password.shouldUpdate());
     }
 
-    protected void setupFields()
-    {
-        name = new AccountField<String>(this, selfUser::getName)
-        {
+    protected void setupFields() {
+        name = new AccountField<String>(this, selfUser::getName) {
             @Override
-            public void checkValue(String value)
-            {
+            public void checkValue(String value) {
                 Checks.notNull(value, "account name");
                 if (value.length() < 2 || value.length() > 32)
                     throw new IllegalArgumentException("Provided name must be 2 to 32 characters in length");
             }
         };
 
-        avatar = new AccountField<Icon>(this, null)
-        {
+        avatar = new AccountField<Icon>(this, null) {
             @Override
-            public void checkValue(Icon value) { }
+            public void checkValue(Icon value) {
+            }
 
             @Override
-            public Icon getOriginalValue()
-            {
+            public Icon getOriginalValue() {
                 throw new UnsupportedOperationException("Cannot easily provide the original Avatar. Use User#getIconUrl() and download it yourself.");
             }
 
             @Override
-            public boolean shouldUpdate()
-            {
+            public boolean shouldUpdate() {
                 return isSet();
             }
         };
 
-        if (isType(AccountType.CLIENT))
-        {
-            email = new AccountField<String>(this, selfUser::getEmail)
-            {
+        if (isType(AccountType.CLIENT)) {
+            email = new AccountField<String>(this, selfUser::getEmail) {
                 @Override
-                public void checkValue(String value)
-                {
+                public void checkValue(String value) {
                     Checks.notNull(value, "account email");
                     if (!EMAIL_PATTERN.matcher(value).find())
                         throw new IllegalArgumentException("Provided email is in invalid format. Provided value: " + value);
                 }
             };
 
-            password = new AccountField<String>(this, null)
-            {
+            password = new AccountField<String>(this, null) {
                 @Override
-                public void checkValue(String value)
-                {
+                public void checkValue(String value) {
                     Checks.notNull(value, "account password");
                     if (value.length() < 6 || value.length() > 128)
                         throw new IllegalArgumentException("Provided password must ben 6 to 128 characters in length");
                 }
 
                 @Override
-                public String getOriginalValue()
-                {
+                public String getOriginalValue() {
                     throw new UnsupportedOperationException("Cannot get the original password. We are not given this information.");
                 }
 
                 @Override
-                public boolean shouldUpdate()
-                {
+                public boolean shouldUpdate() {
                     return isSet();
                 }
             };
         }
     }
 
-    private boolean isType(AccountType type)
-    {
+    private boolean isType(AccountType type) {
         return getJDA().getAccountType() == type;
     }
 }

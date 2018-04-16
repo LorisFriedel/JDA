@@ -29,34 +29,27 @@ import net.dv8tion.jda.core.requests.Route;
 
 import java.util.Collection;
 
-public class JDABotImpl implements JDABot
-{
+public class JDABotImpl implements JDABot {
     protected final JDAImpl api;
     protected String clientId = null;
     protected ShardManager shardManager = null;
 
-    public JDABotImpl(JDAImpl api)
-    {
+    public JDABotImpl(JDAImpl api) {
         this.api = api;
     }
 
     @Override
-    public JDA getJDA()
-    {
+    public JDA getJDA() {
         return api;
     }
 
     @Override
-    public RestAction<ApplicationInfo> getApplicationInfo()
-    {
+    public RestAction<ApplicationInfo> getApplicationInfo() {
         Route.CompiledRoute route = Route.Applications.GET_BOT_APPLICATION.compile();
-        return new RestAction<ApplicationInfo>(getJDA(), route)
-        {
+        return new RestAction<ApplicationInfo>(getJDA(), route) {
             @Override
-            protected void handleResponse(Response response, Request<ApplicationInfo> request)
-            {
-                if (!response.isOk())
-                {
+            protected void handleResponse(Response response, Request<ApplicationInfo> request) {
+                if (!response.isOk()) {
                     request.onFailure(response);
                     return;
                 }
@@ -69,40 +62,38 @@ public class JDABotImpl implements JDABot
     }
 
     @Override
-    public String getInviteUrl(Permission... permissions)
-    {
+    public String getInviteUrl(Permission... permissions) {
         StringBuilder builder = buildBaseInviteUrl();
-        if (permissions != null && permissions.length > 0)
+        if (permissions != null && permissions.length > 0) {
             builder.append("&permissions=").append(Permission.getRaw(permissions));
+        }
         return builder.toString();
     }
 
     @Override
-    public String getInviteUrl(Collection<Permission> permissions)
-    {
+    public String getInviteUrl(Collection<Permission> permissions) {
         StringBuilder builder = buildBaseInviteUrl();
-        if (permissions != null && !permissions.isEmpty())
+        if (permissions != null && !permissions.isEmpty()) {
             builder.append("&permissions=").append(Permission.getRaw(permissions));
+        }
         return builder.toString();
     }
 
-    private StringBuilder buildBaseInviteUrl()
-    {
-        if (clientId == null)
+    private StringBuilder buildBaseInviteUrl() {
+        if (clientId == null) {
             getApplicationInfo().complete();
+        }
         StringBuilder builder = new StringBuilder("https://discordapp.com/oauth2/authorize?scope=bot&client_id=");
         builder.append(clientId);
         return builder;
     }
 
-    public void setShardManager(ShardManager shardManager)
-    {
+    public void setShardManager(ShardManager shardManager) {
         this.shardManager = shardManager;
     }
 
     @Override
-    public ShardManager getShardManager()
-    {
+    public ShardManager getShardManager() {
         return shardManager;
     }
 }

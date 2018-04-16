@@ -24,12 +24,10 @@ import net.dv8tion.jda.core.entities.User;
  *
  * <p>Can be used to retrieve the user who was unbanned (if available) and the guild which they were unbanned from.
  */
-public class GuildUnbanEvent extends GenericGuildEvent
-{
+public class GuildUnbanEvent extends GenericGuildEvent {
     private final User user;
 
-    public GuildUnbanEvent(JDA api, long responseNumber, Guild guild, User user)
-    {
+    public GuildUnbanEvent(JDA api, long responseNumber, Guild guild, User user) {
         super(api, responseNumber, guild);
         this.user = user;
     }
@@ -40,8 +38,7 @@ public class GuildUnbanEvent extends GenericGuildEvent
      *
      * @return The unbanned user
      */
-    public User getUser()
-    {
+    public User getUser() {
         return user;
     }
 }

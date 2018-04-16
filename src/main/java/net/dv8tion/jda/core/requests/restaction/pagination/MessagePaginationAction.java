@@ -59,18 +59,15 @@ import java.util.List;
  * }
  * </code></pre>
  *
- * @since  3.1
+ * @since 3.1
  */
-public class MessagePaginationAction extends PaginationAction<Message, MessagePaginationAction>
-{
+public class MessagePaginationAction extends PaginationAction<Message, MessagePaginationAction> {
     private final MessageChannel channel;
 
-    public MessagePaginationAction(MessageChannel channel)
-    {
+    public MessagePaginationAction(MessageChannel channel) {
         super(channel.getJDA(), Route.Messages.GET_MESSAGE_HISTORY.compile(channel.getId()), 1, 100, 100);
 
-        if (channel.getType() == ChannelType.TEXT)
-        {
+        if (channel.getType() == ChannelType.TEXT) {
             TextChannel textChannel = (TextChannel) channel;
             if (!textChannel.getGuild().getSelfMember().hasPermission(textChannel, Permission.MESSAGE_HISTORY))
                 throw new InsufficientPermissionException(Permission.MESSAGE_HISTORY);
@@ -85,8 +82,7 @@ public class MessagePaginationAction extends PaginationAction<Message, MessagePa
      *
      * @return {@link net.dv8tion.jda.core.entities.ChannelType ChannelType}
      */
-    public ChannelType getType()
-    {
+    public ChannelType getType() {
         return getChannel().getType();
     }
 
@@ -95,14 +91,12 @@ public class MessagePaginationAction extends PaginationAction<Message, MessagePa
      *
      * @return The MessageChannel instance
      */
-    public MessageChannel getChannel()
-    {
+    public MessageChannel getChannel() {
         return channel;
     }
 
     @Override
-    protected Route.CompiledRoute finalizeRoute()
-    {
+    protected Route.CompiledRoute finalizeRoute() {
         Route.CompiledRoute route = super.finalizeRoute();
 
         final String limit = String.valueOf(this.getLimit());
@@ -117,10 +111,8 @@ public class MessagePaginationAction extends PaginationAction<Message, MessagePa
     }
 
     @Override
-    protected void handleResponse(Response response, Request<List<Message>> request)
-    {
-        if (!response.isOk())
-        {
+    protected void handleResponse(Response response, Request<List<Message>> request) {
+        if (!response.isOk()) {
             request.onFailure(response);
             return;
         }
@@ -128,18 +120,14 @@ public class MessagePaginationAction extends PaginationAction<Message, MessagePa
         JSONArray array = response.getArray();
         List<Message> messages = new ArrayList<>(array.length());
         EntityBuilder builder = api.getEntityBuilder();
-        for (int i = 0; i < array.length(); i++)
-        {
-            try
-            {
+        for (int i = 0; i < array.length(); i++) {
+            try {
                 Message msg = builder.createMessage(array.getJSONObject(i), channel, false);
                 messages.add(msg);
                 if (useCache)
                     cached.add(msg);
                 last = msg;
-            }
-            catch (JSONException | NullPointerException e)
-            {
+            } catch (JSONException | NullPointerException e) {
                 LOG.warn("Encountered an exception in MessagePagination", e);
             }
         }

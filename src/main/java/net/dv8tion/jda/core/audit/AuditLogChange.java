@@ -24,14 +24,12 @@ import java.util.Objects;
  * <br>This object holds the {@link #getOldValue() old-} and {@link #getNewValue() new value} for the
  * updated field. The field is specified by the {@link #getKey() key}.
  */
-public class AuditLogChange
-{
+public class AuditLogChange {
     protected final Object oldValue;
     protected final Object newValue;
     protected final String key;
 
-    public AuditLogChange(Object oldValue, Object newValue, String key)
-    {
+    public AuditLogChange(Object oldValue, Object newValue, String key) {
         this.oldValue = oldValue;
         this.newValue = newValue;
         this.key = key;
@@ -40,36 +38,26 @@ public class AuditLogChange
     /**
      * The previous value for the field specified by {@link #getKey()}.
      *
-     * @param  <T>
-     *         The expected generic type for this value.
-     *         <br>This will be used to cast the value.
-     *
-     * @throws java.lang.ClassCastException
-     *         If the type cast to the generic type fails
-     *
+     * @param <T> The expected generic type for this value.
+     *            <br>This will be used to cast the value.
      * @return The old value
+     * @throws java.lang.ClassCastException If the type cast to the generic type fails
      */
     @SuppressWarnings("unchecked")
-    public <T> T getOldValue()
-    {
+    public <T> T getOldValue() {
         return (T) oldValue;
     }
 
     /**
      * The updated value for the field specified by {@link #getKey()}.
      *
-     * @param  <T>
-     *         The expected generic type for this value.
-     *         <br>This will be used to cast the value.
-     *
-     * @throws java.lang.ClassCastException
-     *         If the type cast to the generic type fails
-     *
+     * @param <T> The expected generic type for this value.
+     *            <br>This will be used to cast the value.
      * @return The new value
+     * @throws java.lang.ClassCastException If the type cast to the generic type fails
      */
     @SuppressWarnings("unchecked")
-    public <T> T getNewValue()
-    {
+    public <T> T getNewValue() {
         return (T) newValue;
     }
 
@@ -79,31 +67,27 @@ public class AuditLogChange
      *
      * @return The key
      */
-    public String getKey()
-    {
+    public String getKey() {
         return key;
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return Objects.hash(key, oldValue, newValue);
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         if (!(obj instanceof AuditLogChange))
             return false;
         AuditLogChange other = (AuditLogChange) obj;
         return other.key.equals(key)
-                && Objects.equals(other.oldValue, oldValue)
-                && Objects.equals(other.newValue, newValue);
+            && Objects.equals(other.oldValue, oldValue)
+            && Objects.equals(other.newValue, newValue);
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return String.format("ALC:%s(%s -> %s)", key, oldValue, newValue);
     }
 }

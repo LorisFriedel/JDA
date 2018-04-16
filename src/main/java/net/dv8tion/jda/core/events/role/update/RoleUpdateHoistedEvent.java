@@ -26,12 +26,10 @@ import net.dv8tion.jda.core.entities.Role;
  *
  * <p>Identifier: {@code hoist}
  */
-public class RoleUpdateHoistedEvent extends GenericRoleUpdateEvent<Boolean>
-{
+public class RoleUpdateHoistedEvent extends GenericRoleUpdateEvent<Boolean> {
     public static final String IDENTIFIER = "hoist";
 
-    public RoleUpdateHoistedEvent(JDA api, long responseNumber, Role role, boolean wasHoisted)
-    {
+    public RoleUpdateHoistedEvent(JDA api, long responseNumber, Role role, boolean wasHoisted) {
         super(api, responseNumber, role, wasHoisted, !wasHoisted, IDENTIFIER);
     }
 
@@ -40,8 +38,7 @@ public class RoleUpdateHoistedEvent extends GenericRoleUpdateEvent<Boolean>
      *
      * @return True, if the role was hoisted before this update
      */
-    public boolean wasHoisted()
-    {
+    public boolean wasHoisted() {
         return getOldValue();
     }
 }

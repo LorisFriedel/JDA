@@ -31,8 +31,7 @@ import org.slf4j.Logger;
  * AudioManager deals with creating, managing and severing audio connections to
  * {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannels}. Also controls audio handlers.
  */
-public interface AudioManager
-{
+public interface AudioManager {
     long DEFAULT_CONNECTION_TIMEOUT = 10000;
     Logger LOG = JDALogger.getLog(AudioManager.class);
 
@@ -48,24 +47,18 @@ public interface AudioManager
      * <p>Client accounts can only connect to a single {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel}
      * at once. It is an Account-Wide limitation!
      *
-     * @param  channel
-     *         The {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel} to open an audio connection with.
-     *
-     * @throws IllegalArgumentException
-     *         <ul>
-     *             <li>If the provided channel was {@code null}.</li>
-     *             <li>If the provided channel is not part of the Guild that the current audio connection is connected to.</li>
-     *         </ul>
-     * @throws UnsupportedOperationException
-     *         If audio is disabled due to an internal JDA error
-     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException
-     *         If the Guild is temporarily unavailable
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         <ul>
-     *             <li>If the currently logged in account does not have the Permission {@link net.dv8tion.jda.core.Permission#VOICE_CONNECT VOICE_CONNECT}</li>
-     *             <li>If the currently logged in account does not have the Permission {@link net.dv8tion.jda.core.Permission#VOICE_MOVE_OTHERS VOICE_MOVE_OTHERS}
-     *                 and the {@link net.dv8tion.jda.core.entities.VoiceChannel#getUserLimit() user limit} has been exceeded!</li>
-     *         </ul>
+     * @param channel The {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel} to open an audio connection with.
+     * @throws IllegalArgumentException                                        <ul>
+     *                                                                         <li>If the provided channel was {@code null}.</li>
+     *                                                                         <li>If the provided channel is not part of the Guild that the current audio connection is connected to.</li>
+     *                                                                         </ul>
+     * @throws UnsupportedOperationException                                   If audio is disabled due to an internal JDA error
+     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException       If the Guild is temporarily unavailable
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException <ul>
+     *                                                                         <li>If the currently logged in account does not have the Permission {@link net.dv8tion.jda.core.Permission#VOICE_CONNECT VOICE_CONNECT}</li>
+     *                                                                         <li>If the currently logged in account does not have the Permission {@link net.dv8tion.jda.core.Permission#VOICE_MOVE_OTHERS VOICE_MOVE_OTHERS}
+     *                                                                         and the {@link net.dv8tion.jda.core.entities.VoiceChannel#getUserLimit() user limit} has been exceeded!</li>
+     *                                                                         </ul>
      */
     void openAudioConnection(VoiceChannel channel);
 
@@ -107,7 +100,7 @@ public interface AudioManager
      * with a {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel} use {@link #isConnected()}
      *
      * @return The {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel} that JDA is attempting to create an
-     *         audio connection with, or {@code null} if JDA isn't attempting to create a connection.
+     * audio connection with, or {@code null} if JDA isn't attempting to create a connection.
      */
     VoiceChannel getQueuedAudioConnection();
 
@@ -117,7 +110,7 @@ public interface AudioManager
      * this will return {@code null}.
      *
      * @return The {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel} the audio connection is connected to
-     *         or {@code null} if not connected.
+     * or {@code null} if not connected.
      */
     VoiceChannel getConnectedChannel();
 
@@ -137,9 +130,8 @@ public interface AudioManager
      * <br><b>Note</b>: If you set this value to 0, you can remove timeout functionality and JDA will wait FOREVER for the connection
      * to be established. This is no advised as it is possible that the connection may never be established.
      *
-     * @param timeout
-     *        The amount of time, in milliseconds, that should be waited when waiting for the audio connection
-     *        to be established.
+     * @param timeout The amount of time, in milliseconds, that should be waited when waiting for the audio connection
+     *                to be established.
      */
     void setConnectTimeout(long timeout);
 
@@ -162,8 +154,7 @@ public interface AudioManager
      * as an {@link net.dv8tion.jda.core.audio.AudioSendHandler AudioSendHandler}.
      * It provides a <a href="https://github.com/sedmelluq/lavaplayer/tree/master/demo-jda" target="_blank">demo</a> targeted at JDA users.
      *
-     * @param handler
-     *        The {@link net.dv8tion.jda.core.audio.AudioSendHandler AudioSendHandler} used to provide audio data.
+     * @param handler The {@link net.dv8tion.jda.core.audio.AudioSendHandler AudioSendHandler} used to provide audio data.
      */
     void setSendingHandler(AudioSendHandler handler);
 
@@ -184,9 +175,8 @@ public interface AudioManager
      * When JDA sets up a new audio connection it will use the handler provided here.
      * <br>Setting this to null will remove the audio handler.
      *
-     * @param handler
-     *        The {@link net.dv8tion.jda.core.audio.AudioReceiveHandler AudioReceiveHandler} used to process
-     *        received audio data.
+     * @param handler The {@link net.dv8tion.jda.core.audio.AudioReceiveHandler AudioReceiveHandler} used to process
+     *                received audio data.
      */
     void setReceivingHandler(AudioReceiveHandler handler);
 
@@ -203,8 +193,7 @@ public interface AudioManager
      * It will be informed about meta data of any audio connection established through this AudioManager.
      * Further information can be found in the {@link net.dv8tion.jda.core.audio.hooks.ConnectionListener ConnectionListener} documentation!
      *
-     * @param listener
-     *        A {@link net.dv8tion.jda.core.audio.hooks.ConnectionListener ConnectionListener} instance
+     * @param listener A {@link net.dv8tion.jda.core.audio.hooks.ConnectionListener ConnectionListener} instance
      */
     void setConnectionListener(ConnectionListener listener);
 
@@ -213,7 +202,7 @@ public interface AudioManager
      * or {@code null} if no {@link net.dv8tion.jda.core.audio.hooks.ConnectionListener ConnectionListener} has been {@link #setConnectionListener(ConnectionListener) set}.
      *
      * @return The current {@link net.dv8tion.jda.core.audio.hooks.ConnectionListener ConnectionListener} instance
-     *         for this AudioManager.
+     * for this AudioManager.
      */
     ConnectionListener getConnectionListener();
 
@@ -229,8 +218,7 @@ public interface AudioManager
      * Sets whether audio connections from this AudioManager
      * should automatically reconnect or not. Default {@code true}
      *
-     * @param shouldReconnect
-     *        Whether audio connections from this AudioManager should automatically reconnect
+     * @param shouldReconnect Whether audio connections from this AudioManager should automatically reconnect
      */
     void setAutoReconnect(boolean shouldReconnect);
 
@@ -246,9 +234,8 @@ public interface AudioManager
      * this will cause the {@link net.dv8tion.jda.core.audio.AudioSendHandler AudioSendHandler} packages
      * to not be ignored by Discord!
      *
-     * @param muted
-     *        Whether the connection should stop sending audio
-     *        and display as muted.
+     * @param muted Whether the connection should stop sending audio
+     *              and display as muted.
      */
     void setSelfMuted(boolean muted);
 
@@ -266,8 +253,7 @@ public interface AudioManager
      * <br>This does not include being muted, that value can be set individually from {@link #setSelfMuted(boolean)}
      * and checked via {@link #isSelfMuted()}
      *
-     * @param deafened
-     *        Whether connections from this AudioManager should be deafened.
+     * @param deafened Whether connections from this AudioManager should be deafened.
      */
     void setSelfDeafened(boolean deafened);
 

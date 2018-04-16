@@ -18,10 +18,8 @@ package net.dv8tion.jda.client.exceptions;
 
 import net.dv8tion.jda.core.entities.Guild;
 
-public class VerificationLevelException extends RuntimeException
-{
-    public VerificationLevelException(Guild.VerificationLevel level)
-    {
+public class VerificationLevelException extends RuntimeException {
+    public VerificationLevelException(Guild.VerificationLevel level) {
         super("Messages to this Guild can not be sent due to the Guilds verification level. (" + level.toString() + ')');
     }
 }

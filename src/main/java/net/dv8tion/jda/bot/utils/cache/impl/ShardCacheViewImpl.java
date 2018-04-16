@@ -31,75 +31,60 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public class ShardCacheViewImpl implements ShardCacheView
-{
+public class ShardCacheViewImpl implements ShardCacheView {
     protected static final JDA[] EMPTY_ARRAY = new JDA[0];
     protected final TIntObjectMap<JDA> elements;
 
-    public ShardCacheViewImpl()
-    {
+    public ShardCacheViewImpl() {
         this.elements = new TSynchronizedIntObjectMap<>(new TIntObjectHashMap<>(), new Object());
     }
 
-    public ShardCacheViewImpl(int initialCapacity)
-    {
+    public ShardCacheViewImpl(int initialCapacity) {
         this.elements = new TSynchronizedIntObjectMap<>(new TIntObjectHashMap<>(initialCapacity), new Object());
     }
 
-    public void clear()
-    {
+    public void clear() {
         elements.clear();
     }
 
-    public TIntObjectMap<JDA> getMap()
-    {
+    public TIntObjectMap<JDA> getMap() {
         return elements;
     }
 
     @Override
-    public List<JDA> asList()
-    {
+    public List<JDA> asList() {
         return Collections.unmodifiableList(new ArrayList<>(elements.valueCollection()));
     }
 
     @Override
-    public Set<JDA> asSet()
-    {
+    public Set<JDA> asSet() {
         return Collections.unmodifiableSet(new HashSet<>(elements.valueCollection()));
     }
 
     @Override
-    public long size()
-    {
+    public long size() {
         return elements.size();
     }
 
     @Override
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return elements.isEmpty();
     }
 
     @Override
-    public List<JDA> getElementsByName(String name, boolean ignoreCase)
-    {
+    public List<JDA> getElementsByName(String name, boolean ignoreCase) {
         Checks.notEmpty(name, "Name");
         if (elements.isEmpty())
             return Collections.emptyList();
 
         List<JDA> list = new LinkedList<>();
-        for (JDA elem : elements.valueCollection())
-        {
+        for (JDA elem : elements.valueCollection()) {
             String elementName = elem.getShardInfo().getShardString();
-            if (elementName != null)
-            {
-                if (ignoreCase)
-                {
+            if (elementName != null) {
+                if (ignoreCase) {
                     if (elementName.equalsIgnoreCase(name))
                         list.add(elem);
-                }
-                else
-                {
+                } else {
                     if (elementName.equals(name))
                         list.add(elem);
                 }
@@ -110,79 +95,67 @@ public class ShardCacheViewImpl implements ShardCacheView
     }
 
     @Override
-    public Stream<JDA> stream()
-    {
+    public Stream<JDA> stream() {
         return StreamSupport.stream(spliterator(), false);
     }
 
     @Override
-    public Stream<JDA> parallelStream()
-    {
+    public Stream<JDA> parallelStream() {
         return StreamSupport.stream(spliterator(), true);
     }
 
     @Nonnull
     @Override
-    public Iterator<JDA> iterator()
-    {
+    public Iterator<JDA> iterator() {
         JDA[] arr = elements.values(EMPTY_ARRAY);
         return new ObjectArrayIterator<>(arr);
     }
 
     @Override
-    public JDA getElementById(int id)
-    {
+    public JDA getElementById(int id) {
         return this.elements.get(id);
     }
 
-    public static class UnifiedShardCacheViewImpl implements ShardCacheView
-    {
+    public static class UnifiedShardCacheViewImpl implements ShardCacheView {
         protected final Supplier<Stream<ShardCacheView>> generator;
 
-        public UnifiedShardCacheViewImpl(Supplier<Stream<ShardCacheView>> generator)
-        {
+        public UnifiedShardCacheViewImpl(Supplier<Stream<ShardCacheView>> generator) {
             this.generator = generator;
         }
 
         @Override
-        public long size()
-        {
+        public long size() {
             return distinctStream().mapToLong(CacheView::size).sum();
         }
 
         @Override
-        public boolean isEmpty()
-        {
+        public boolean isEmpty() {
             return generator.get().allMatch(CacheView::isEmpty);
         }
 
         @Override
-        public List<JDA> asList()
-        {
+        public List<JDA> asList() {
             List<JDA> list = new ArrayList<>();
             stream().forEach(list::add);
             return Collections.unmodifiableList(list);
         }
 
         @Override
-        public Set<JDA> asSet()
-        {
+        public Set<JDA> asSet() {
             Set<JDA> set = new HashSet<>();
             generator.get().flatMap(CacheView::stream).forEach(set::add);
             return Collections.unmodifiableSet(set);
         }
 
         @Override
-        public List<JDA> getElementsByName(String name, boolean ignoreCase)
-        {
+        public List<JDA> getElementsByName(String name, boolean ignoreCase) {
             return Collections.unmodifiableList(distinctStream()
                 .flatMap(view -> view.getElementsByName(name, ignoreCase).stream())
                 .collect(Collectors.toList()));
         }
 
         @Override
-        public JDA getElementById(int id)
-        {
+        public JDA getElementById(int id) {
             return generator.get()
                 .map(view -> view.getElementById(id))
                 .filter(Objects::nonNull)
@@ -190,26 +163,22 @@ public class ShardCacheViewImpl implements ShardCacheView
         }
 
         @Override
-        public Stream<JDA> stream()
-        {
+        public Stream<JDA> stream() {
             return generator.get().flatMap(CacheView::stream).distinct();
         }
 
         @Override
-        public Stream<JDA> parallelStream()
-        {
+        public Stream<JDA> parallelStream() {
             return generator.get().flatMap(CacheView::parallelStream).distinct();
         }
 
         @Nonnull
         @Override
-        public Iterator<JDA> iterator()
-        {
+        public Iterator<JDA> iterator() {
             return stream().iterator();
         }
 
-        protected Stream<ShardCacheView> distinctStream()
-        {
+        protected Stream<ShardCacheView> distinctStream() {
             return generator.get().distinct();
         }
     }

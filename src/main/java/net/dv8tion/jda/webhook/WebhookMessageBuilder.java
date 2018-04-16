@@ -30,8 +30,7 @@ import java.util.List;
 /**
  * Builder for a {@link net.dv8tion.jda.webhook.WebhookMessage WebhookMessage}
  */
-public class WebhookMessageBuilder
-{
+public class WebhookMessageBuilder {
     protected final StringBuilder content = new StringBuilder();
     protected final List<MessageEmbed> embeds = new LinkedList<>();
     protected String username, avatarUrl, fileName;
@@ -44,14 +43,11 @@ public class WebhookMessageBuilder
      * as preset values.
      * <br>This will not copy any attachments!
      *
-     * @param  message
-     *         The {@link net.dv8tion.jda.core.entities.Message Message} used
-     *         to set initial values of the builder
+     * @param message The {@link net.dv8tion.jda.core.entities.Message Message} used
+     *                to set initial values of the builder
      */
-    public WebhookMessageBuilder(Message message)
-    {
-        if (message != null)
-        {
+    public WebhookMessageBuilder(Message message) {
+        if (message != null) {
             embeds.addAll(message.getEmbeds());
             setContent(message.getContentRaw());
             isTTS = message.isTTS();
@@ -61,7 +57,8 @@ public class WebhookMessageBuilder
     /**
      * Creates a new empty WebhookMessageBuilder
      */
-    public WebhookMessageBuilder() {}
+    public WebhookMessageBuilder() {
+    }
 
     /**
      * Whether this WebhookMessageBuilder contains any readable content.
@@ -69,8 +66,7 @@ public class WebhookMessageBuilder
      *
      * @return True, if this builder has no readable content
      */
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return content.length() == 0 && embeds.isEmpty() && file == null;
     }
 
@@ -79,8 +75,7 @@ public class WebhookMessageBuilder
      *
      * @return The current WebhookMessageBuilder for chaining convenience
      */
-    public WebhookMessageBuilder reset()
-    {
+    public WebhookMessageBuilder reset() {
         content.setLength(0);
         embeds.clear();
         username = null;
@@ -96,8 +91,7 @@ public class WebhookMessageBuilder
      *
      * @return The current WebhookMessageBuilder for chaining convenience
      */
-    public WebhookMessageBuilder resetEmbeds()
-    {
+    public WebhookMessageBuilder resetEmbeds() {
         this.embeds.clear();
         return this;
     }
@@ -108,20 +102,14 @@ public class WebhookMessageBuilder
      *
      * <p><b>You can send up to 10 embeds per message! If more are sent they will not be displayed.</b>
      *
-     * @param  embeds
-     *         The embeds to add
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If any of the provided embeds is {@code null}
-     *         or exceeds the maximum total character count of {@link MessageEmbed#EMBED_MAX_LENGTH_BOT}
-     *
+     * @param embeds The embeds to add
      * @return The current WebhookMessageBuilder for chaining convenience
+     * @throws java.lang.IllegalArgumentException If any of the provided embeds is {@code null}
+     *                                            or exceeds the maximum total character count of {@link MessageEmbed#EMBED_MAX_LENGTH_BOT}
      */
-    public WebhookMessageBuilder addEmbeds(MessageEmbed... embeds)
-    {
+    public WebhookMessageBuilder addEmbeds(MessageEmbed... embeds) {
         Checks.notNull(embeds, "Embeds");
-        for (MessageEmbed embed : embeds)
-        {
+        for (MessageEmbed embed : embeds) {
             Checks.notNull(embed, "Embed");
             Checks.check(embed.isSendable(AccountType.BOT),
                 "One of the provided embeds is empty or exceeds the maximum character count of %d!", MessageEmbed.EMBED_MAX_LENGTH_BOT);
@@ -136,20 +124,14 @@ public class WebhookMessageBuilder
      *
      * <p><b>You can send up to 10 embeds per message! If more are sent they will not be displayed.</b>
      *
-     * @param  embeds
-     *         The embeds to add
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If any of the provided embeds is {@code null}
-     *         or exceeds the maximum total character count of {@link MessageEmbed#EMBED_MAX_LENGTH_BOT}
-     *
+     * @param embeds The embeds to add
      * @return The current WebhookMessageBuilder for chaining convenience
+     * @throws java.lang.IllegalArgumentException If any of the provided embeds is {@code null}
+     *                                            or exceeds the maximum total character count of {@link MessageEmbed#EMBED_MAX_LENGTH_BOT}
      */
-    public WebhookMessageBuilder addEmbeds(Collection<MessageEmbed> embeds)
-    {
+    public WebhookMessageBuilder addEmbeds(Collection<MessageEmbed> embeds) {
         Checks.notNull(embeds, "Embeds");
-        for (MessageEmbed embed : embeds)
-        {
+        for (MessageEmbed embed : embeds) {
             Checks.notNull(embed, "Embed");
             Checks.check(embed.isSendable(AccountType.BOT),
                 "One of the provided embeds is empty or exceeds the maximum character count of %d!", MessageEmbed.EMBED_MAX_LENGTH_BOT);
@@ -162,16 +144,11 @@ public class WebhookMessageBuilder
      * Sets the content of the resulting message.
      * <br>This will override the previous content.
      *
-     * @param  content
-     *         The new content
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided content exceeds {@code 2000} characters in length
-     *
+     * @param content The new content
      * @return The current WebhookMessageBuilder for chaining convenience
+     * @throws java.lang.IllegalArgumentException If the provided content exceeds {@code 2000} characters in length
      */
-    public WebhookMessageBuilder setContent(String content)
-    {
+    public WebhookMessageBuilder setContent(String content) {
         Checks.check(content == null || content.length() <= 2000,
             "Content may not exceed 2000 characters!");
         if (content != null)
@@ -184,17 +161,12 @@ public class WebhookMessageBuilder
     /**
      * Appends to the currently set content of the resulting message.
      *
-     * @param  content
-     *         The content to append
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided content is {@code null} or
-     *         the resulting content would exceed {@code 2000} characters in length
-     *
+     * @param content The content to append
      * @return The current WebhookMessageBuilder for chaining convenience
+     * @throws java.lang.IllegalArgumentException If the provided content is {@code null} or
+     *                                            the resulting content would exceed {@code 2000} characters in length
      */
-    public WebhookMessageBuilder append(String content)
-    {
+    public WebhookMessageBuilder append(String content) {
         Checks.notNull(content, "Content");
         Checks.check(this.content.length() + content.length() <= 2000,
             "Content may not exceed 2000 characters!");
@@ -206,13 +178,10 @@ public class WebhookMessageBuilder
      * Sets the username that should be used for the resulting message.
      * <br>This will override the default username of the webhook.
      *
-     * @param  username
-     *         The username to use for this message
-     *
+     * @param username The username to use for this message
      * @return The current WebhookMessageBuilder for chaining convenience
      */
-    public WebhookMessageBuilder setUsername(String username)
-    {
+    public WebhookMessageBuilder setUsername(String username) {
         this.username = Helpers.isBlank(username) ? null : username;
         return this;
     }
@@ -221,13 +190,10 @@ public class WebhookMessageBuilder
      * Sets the avatar url that should be used for the resulting message.
      * <br>This will override the default avatar of the webhook.
      *
-     * @param  avatarUrl
-     *         The avatar url to use for this message
-     *
+     * @param avatarUrl The avatar url to use for this message
      * @return The current WebhookMessageBuilder for chaining convenience
      */
-    public WebhookMessageBuilder setAvatarUrl(String avatarUrl)
-    {
+    public WebhookMessageBuilder setAvatarUrl(String avatarUrl) {
         this.avatarUrl = Helpers.isBlank(avatarUrl) ? null : avatarUrl;
         return this;
     }
@@ -235,38 +201,26 @@ public class WebhookMessageBuilder
     /**
      * Sets the attached file for the resulting message.
      *
-     * @param  file
-     *         The {@link java.io.File File} that should be attached to the message
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided file is {@code null}, does not exist, is not readable
-     *         or exceeds the maximum size of 8MB
-     *
+     * @param file The {@link java.io.File File} that should be attached to the message
      * @return The current WebhookMessageBuilder for chaining convenience
+     * @throws java.lang.IllegalArgumentException If the provided file is {@code null}, does not exist, is not readable
+     *                                            or exceeds the maximum size of 8MB
      */
-    public WebhookMessageBuilder setFile(File file)
-    {
+    public WebhookMessageBuilder setFile(File file) {
         return setFile(file, file == null ? null : file.getName());
     }
 
     /**
      * Sets the attached file for the resulting message.
      *
-     * @param  file
-     *         The {@link java.io.File File} that should be attached to the message
-     * @param  fileName
-     *         The name that should be used for this attachment
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided file is does not exist, is not readable
-     *         or exceeds the maximum size of 8MB
-     *
+     * @param file     The {@link java.io.File File} that should be attached to the message
+     * @param fileName The name that should be used for this attachment
      * @return The current WebhookMessageBuilder for chaining convenience
+     * @throws java.lang.IllegalArgumentException If the provided file is does not exist, is not readable
+     *                                            or exceeds the maximum size of 8MB
      */
-    public WebhookMessageBuilder setFile(File file, String fileName)
-    {
-        if (file == null)
-        {
+    public WebhookMessageBuilder setFile(File file, String fileName) {
+        if (file == null) {
             this.file = null;
             this.fileName = null;
             return this;
@@ -274,13 +228,10 @@ public class WebhookMessageBuilder
         Checks.check(file.canRead() && file.exists(), "File must exist and be readable!");
         Checks.notBlank(fileName, "File name");
         Checks.check(file.length() <= Message.MAX_FILE_SIZE, "Provided data exceeds the maximum size of 8MB!");
-        try
-        {
+        try {
             this.file = new FileInputStream(file);
             this.fileName = fileName;
-        }
-        catch (FileNotFoundException ex)
-        {
+        } catch (FileNotFoundException ex) {
             throw new IllegalArgumentException(ex);
         }
         return this;
@@ -289,20 +240,13 @@ public class WebhookMessageBuilder
     /**
      * Sets the attached file for the resulting message.
      *
-     * @param  data
-     *         The {@code byte[]} data that should be attached to the message
-     * @param  fileName
-     *         The name that should be used for this attachment
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided data exceeds the maximum size of 8MB
-     *
+     * @param data     The {@code byte[]} data that should be attached to the message
+     * @param fileName The name that should be used for this attachment
      * @return The current WebhookMessageBuilder for chaining convenience
+     * @throws java.lang.IllegalArgumentException If the provided data exceeds the maximum size of 8MB
      */
-    public WebhookMessageBuilder setFile(byte[] data, String fileName)
-    {
-        if (data == null)
-        {
+    public WebhookMessageBuilder setFile(byte[] data, String fileName) {
+        if (data == null) {
             this.fileName = null;
             this.file = null;
             return this;
@@ -317,15 +261,11 @@ public class WebhookMessageBuilder
     /**
      * Sets the attached file for the resulting message.
      *
-     * @param  data
-     *         The {@link java.io.InputStream InputStream} data that should be attached to the message
-     * @param  fileName
-     *         The name that should be used for this attachment
-     *
+     * @param data     The {@link java.io.InputStream InputStream} data that should be attached to the message
+     * @param fileName The name that should be used for this attachment
      * @return The current WebhookMessageBuilder for chaining convenience
      */
-    public WebhookMessageBuilder setFile(InputStream data, String fileName)
-    {
+    public WebhookMessageBuilder setFile(InputStream data, String fileName) {
         Checks.check(data == null || !Helpers.isBlank(fileName),
             "The provided file name must not be null, empty or blank!");
         this.file = data;
@@ -336,13 +276,10 @@ public class WebhookMessageBuilder
     /**
      * Sets whether the resulting message should use Text-To-Speech.
      *
-     * @param  tts
-     *         True, if the resulting message should use Text-To-Speech
-     *
+     * @param tts True, if the resulting message should use Text-To-Speech
      * @return The current WebhookMessageBuilder for chaining convenience
      */
-    public WebhookMessageBuilder setTTS(boolean tts)
-    {
+    public WebhookMessageBuilder setTTS(boolean tts) {
         isTTS = tts;
         return this;
     }
@@ -351,13 +288,10 @@ public class WebhookMessageBuilder
      * Builds a {@link net.dv8tion.jda.webhook.WebhookMessage WebhookMessage} instance
      * with the current state of this builder.
      *
-     * @throws java.lang.IllegalStateException
-     *         If this builder is empty
-     *
      * @return The resulting {@link net.dv8tion.jda.webhook.WebhookMessage WebhookMessage}
+     * @throws java.lang.IllegalStateException If this builder is empty
      */
-    public WebhookMessage build()
-    {
+    public WebhookMessage build() {
         if (isEmpty())
             throw new IllegalStateException("Cannot build an empty message!");
         return new WebhookMessage(username, avatarUrl, content.toString(), embeds, isTTS, file, fileName);

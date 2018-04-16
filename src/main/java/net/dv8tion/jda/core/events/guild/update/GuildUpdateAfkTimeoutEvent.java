@@ -26,12 +26,10 @@ import net.dv8tion.jda.core.entities.Guild;
  *
  * <p>Identifier: {@code afk_timeout}
  */
-public class GuildUpdateAfkTimeoutEvent extends GenericGuildUpdateEvent<Guild.Timeout>
-{
+public class GuildUpdateAfkTimeoutEvent extends GenericGuildUpdateEvent<Guild.Timeout> {
     public static final String IDENTIFIER = "afk_timeout";
 
-    public GuildUpdateAfkTimeoutEvent(JDA api, long responseNumber, Guild guild, Guild.Timeout oldAfkTimeout)
-    {
+    public GuildUpdateAfkTimeoutEvent(JDA api, long responseNumber, Guild guild, Guild.Timeout oldAfkTimeout) {
         super(api, responseNumber, guild, oldAfkTimeout, guild.getAfkTimeout(), IDENTIFIER);
     }
 
@@ -40,8 +38,7 @@ public class GuildUpdateAfkTimeoutEvent extends GenericGuildUpdateEvent<Guild.Ti
      *
      * @return The old AFK-Timeout
      */
-    public Guild.Timeout getOldAfkTimeout()
-    {
+    public Guild.Timeout getOldAfkTimeout() {
         return getOldValue();
     }
 
@@ -50,8 +47,7 @@ public class GuildUpdateAfkTimeoutEvent extends GenericGuildUpdateEvent<Guild.Ti
      *
      * @return The new AFK-Timeout
      */
-    public Guild.Timeout getNewAfkTimeout()
-    {
+    public Guild.Timeout getNewAfkTimeout() {
         return getNewValue();
     }
 }

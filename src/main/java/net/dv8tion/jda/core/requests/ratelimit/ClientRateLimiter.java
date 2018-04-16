@@ -34,47 +34,37 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 
-public class ClientRateLimiter extends RateLimiter
-{
+public class ClientRateLimiter extends RateLimiter {
     volatile Long globalCooldown = null;
 
-    public ClientRateLimiter(Requester requester, int poolSize)
-    {
+    public ClientRateLimiter(Requester requester, int poolSize) {
         super(requester, poolSize);
     }
 
     @Override
-    public Long getRateLimit(Route.CompiledRoute route)
-    {
+    public Long getRateLimit(Route.CompiledRoute route) {
         Bucket bucket = getBucket(route);
-        synchronized (bucket)
-        {
-           return bucket.getRateLimit();
+        synchronized (bucket) {
+            return bucket.getRateLimit();
         }
     }
 
     @Override
-    protected void queueRequest(Request request)
-    {
+    protected void queueRequest(Request request) {
         Bucket bucket = getBucket(request.getRoute());
-        synchronized (bucket)
-        {
+        synchronized (bucket) {
             bucket.addToQueue(request);
         }
     }
 
     @Override
-    protected Long handleResponse(Route.CompiledRoute route, okhttp3.Response response)
-    {
+    protected Long handleResponse(Route.CompiledRoute route, okhttp3.Response response) {
         Bucket bucket = getBucket(route);
-        synchronized (bucket)
-        {
+        synchronized (bucket) {
             long now = System.currentTimeMillis();
             int code = response.code();
-            if (code == 429)
-            {
-                try (InputStream in = Requester.getBody(response))
-                {
+            if (code == 429) {
+                try (InputStream in = Requester.getBody(response)) {
                     JSONObject limitObj = new JSONObject(new JSONTokener(in));
                     long retryAfter = limitObj.getLong("retry_after");
 
@@ -83,31 +73,23 @@ public class ClientRateLimiter extends RateLimiter
                     else
                         bucket.retryAfter = now + retryAfter;
 
-                    return retryAfter;                    
-                }
-                catch (IOException e)
-                {
+                    return retryAfter;
+                } catch (IOException e) {
                     throw new IllegalStateException(e);
                 }
-            }
-            else
-            {
+            } else {
                 return null;
             }
         }
     }
 
-    private Bucket getBucket(Route.CompiledRoute route)
-    {
+    private Bucket getBucket(Route.CompiledRoute route) {
         String baseRoute = route.getBaseRoute().getRoute();
         Bucket bucket = (Bucket) buckets.get(baseRoute);
-        if (bucket == null)
-        {
-            synchronized (buckets)
-            {
+        if (bucket == null) {
+            synchronized (buckets) {
                 bucket = (Bucket) buckets.get(baseRoute);
-                if (bucket == null)
-                {
+                if (bucket == null) {
                     bucket = new Bucket(baseRoute, route.getBaseRoute().getRatelimit());
                     buckets.put(baseRoute, bucket);
                 }
@@ -116,31 +98,25 @@ public class ClientRateLimiter extends RateLimiter
         return bucket;
     }
 
-    private class Bucket implements IBucket, Runnable
-    {
+    private class Bucket implements IBucket, Runnable {
         final String route;
         final RateLimit rateLimit;
         final ConcurrentLinkedQueue<Request> requests = new ConcurrentLinkedQueue<>();
         volatile long retryAfter = 0;
 
-        public Bucket(String route, RateLimit rateLimit)
-        {
+        public Bucket(String route, RateLimit rateLimit) {
             this.route = route;
             this.rateLimit = rateLimit;
         }
 
-        void addToQueue(Request request)
-        {
+        void addToQueue(Request request) {
             requests.add(request);
             submitForProcessing();
         }
 
-        void submitForProcessing()
-        {
-            synchronized (submittedBuckets)
-            {
-                if (!submittedBuckets.contains(this))
-                {
+        void submitForProcessing() {
+            synchronized (submittedBuckets) {
+                if (!submittedBuckets.contains(this)) {
                     Long delay = getRateLimit();
                     if (delay == null)
                         delay = 0L;
@@ -151,32 +127,26 @@ public class ClientRateLimiter extends RateLimiter
             }
         }
 
-        Long getRateLimit()
-        {
+        Long getRateLimit() {
             long now = System.currentTimeMillis();
             if (globalCooldown != null) //Are we on global cooldown?
             {
                 if (now > globalCooldown)   //Verify that we should still be on cooldown.
                 {
                     globalCooldown = null;  //If we are done cooling down, reset the globalCooldown and continue.
-                } else
-                {
+                } else {
                     return globalCooldown - now;    //If we should still be on cooldown, return when we can go again.
                 }
             }
-            if (this.retryAfter > now)
-            {
+            if (this.retryAfter > now) {
                 return this.retryAfter - now;
-            }
-            else
-            {
+            } else {
                 return null;
             }
         }
 
         @Override
-        public boolean equals(Object o)
-        {
+        public boolean equals(Object o) {
             if (!(o instanceof Bucket))
                 return false;
 
@@ -185,23 +155,17 @@ public class ClientRateLimiter extends RateLimiter
         }
 
         @Override
-        public int hashCode()
-        {
+        public int hashCode() {
             return route.hashCode();
         }
 
         @Override
-        public void run()
-        {
-            try
-            {
-                synchronized (requests)
-                {
-                    for (Iterator<Request> it = requests.iterator(); it.hasNext(); )
-                    {
+        public void run() {
+            try {
+                synchronized (requests) {
+                    for (Iterator<Request> it = requests.iterator(); it.hasNext(); ) {
                         Request request = null;
-                        try
-                        {
+                        try {
                             request = it.next();
                             if (isSkipped(it, request))
                                 continue;
@@ -210,9 +174,7 @@ public class ClientRateLimiter extends RateLimiter
                                 break;
                             else
                                 it.remove();
-                        }
-                        catch (Throwable t)
-                        {
+                        } catch (Throwable t) {
                             Requester.LOG.error("Error executing REST request", t);
                             it.remove();
                             if (request != null)
@@ -220,28 +182,20 @@ public class ClientRateLimiter extends RateLimiter
                         }
                     }
 
-                    synchronized (submittedBuckets)
-                    {
+                    synchronized (submittedBuckets) {
                         submittedBuckets.remove(this);
-                        if (!requests.isEmpty())
-                        {
-                            try
-                            {
+                        if (!requests.isEmpty()) {
+                            try {
                                 this.submitForProcessing();
-                            }
-                            catch (RejectedExecutionException e)
-                            {
+                            } catch (RejectedExecutionException e) {
                                 Requester.LOG.debug("Caught RejectedExecutionException when re-queuing a ratelimited request. The requester is probably shutdown, thus, this can be ignored.");
                             }
                         }
                     }
                 }
-            }
-            catch (Throwable err)
-            {
+            } catch (Throwable err) {
                 Requester.LOG.error("There was some exception in the ClientRateLimiter", err);
-                if (err instanceof Error)
-                {
+                if (err instanceof Error) {
                     JDAImpl api = requester.getJDA();
                     api.getEventManager().handle(new ExceptionEvent(api, err, true));
                 }
@@ -249,20 +203,17 @@ public class ClientRateLimiter extends RateLimiter
         }
 
         @Override
-        public RateLimit getRatelimit()
-        {
+        public RateLimit getRatelimit() {
             return rateLimit;
         }
 
         @Override
-        public String getRoute()
-        {
+        public String getRoute() {
             return route;
         }
 
         @Override
-        public Queue<Request> getRequests()
-        {
+        public Queue<Request> getRequests() {
             return requests;
         }
     }

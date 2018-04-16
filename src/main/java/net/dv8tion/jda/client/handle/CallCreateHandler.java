@@ -30,16 +30,13 @@ import net.dv8tion.jda.core.requests.WebSocketClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class CallCreateHandler extends SocketHandler
-{
-    public CallCreateHandler(JDAImpl api)
-    {
+public class CallCreateHandler extends SocketHandler {
+    public CallCreateHandler(JDAImpl api) {
         super(api);
     }
 
     @Override
-    protected Long handleInternally(JSONObject content)
-    {
+    protected Long handleInternally(JSONObject content) {
         final long channelId = content.getLong("channel_id");
         final long messageId = content.getLong("message_id");
         Region region = Region.fromKey(content.getString("region"));
@@ -49,8 +46,7 @@ public class CallCreateHandler extends SocketHandler
         CallableChannel channel = api.asClient().getGroupById(channelId);
         if (channel == null)
             channel = api.getPrivateChannelMap().get(channelId);
-        if (channel == null)
-        {
+        if (channel == null) {
             api.getEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
             EventCache.LOG.debug("Received a CALL_CREATE for a Group/PrivateChannel that is not yet cached. JSON: {}", content);
             return null;
@@ -60,8 +56,7 @@ public class CallCreateHandler extends SocketHandler
         call.setRegion(region);
         TLongObjectMap<CallUser> callUsers = call.getCallUserMap();
 
-        if (channel instanceof Group)
-        {
+        if (channel instanceof Group) {
             GroupImpl group = (GroupImpl) channel;
             if (group.getCurrentCall() != null)
                 WebSocketClient.LOG.error("Received a CALL_CREATE for a Group that already has an active call cached! JSON: {}", content);
@@ -71,11 +66,9 @@ public class CallCreateHandler extends SocketHandler
                 CallUserImpl callUser = new CallUserImpl(call, user);
                 callUsers.put(userId, callUser);
 
-                for (int i = 0; i < ringing.length(); i++)
-                {
+                for (int i = 0; i < ringing.length(); i++) {
                     final long current = ringing.getLong(i);
-                    if (current == userId)
-                    {
+                    if (current == userId) {
                         callUser.setRinging(true);
                         break;
                     }
@@ -83,9 +76,7 @@ public class CallCreateHandler extends SocketHandler
 
                 return true;
             });
-        }
-        else
-        {
+        } else {
             PrivateChannelImpl priv = (PrivateChannelImpl) channel;
             if (priv.getCurrentCall() != null)
                 WebSocketClient.LOG.error("Received a CALL_CREATE for a PrivateChannel that already has an active call cached! JSON: {}", content);
@@ -94,8 +85,7 @@ public class CallCreateHandler extends SocketHandler
             callUsers.put(api.getSelfUser().getIdLong(), new CallUserImpl(call, api.getSelfUser()));
         }
 
-        for (int i = 0; i < voiceStates.length(); i++)
-        {
+        for (int i = 0; i < voiceStates.length(); i++) {
             JSONObject voiceState = voiceStates.getJSONObject(i);
             final long userId = voiceState.getLong("user_id");
             CallUser cUser = callUsers.get(userId);

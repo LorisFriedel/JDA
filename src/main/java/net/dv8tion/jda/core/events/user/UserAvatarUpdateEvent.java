@@ -26,12 +26,10 @@ import net.dv8tion.jda.core.entities.User;
  * @deprecated Use {@link net.dv8tion.jda.core.events.user.update.UserUpdateAvatarEvent UserUpdateAvatarEvent}
  */
 @Deprecated
-public class UserAvatarUpdateEvent extends GenericUserEvent
-{
+public class UserAvatarUpdateEvent extends GenericUserEvent {
     private final String previousAvatarId;
 
-    public UserAvatarUpdateEvent(JDA api, long responseNumber, User user, String previousAvatarId)
-    {
+    public UserAvatarUpdateEvent(JDA api, long responseNumber, User user, String previousAvatarId) {
         super(api, responseNumber, user);
         this.previousAvatarId = previousAvatarId;
     }
@@ -41,8 +39,7 @@ public class UserAvatarUpdateEvent extends GenericUserEvent
      *
      * @return The previous avatar id
      */
-    public String getPreviousAvatarId()
-    {
+    public String getPreviousAvatarId() {
         return previousAvatarId;
     }
 
@@ -51,8 +48,7 @@ public class UserAvatarUpdateEvent extends GenericUserEvent
      *
      * @return The previous avatar url
      */
-    public String getPreviousAvatarUrl()
-    {
+    public String getPreviousAvatarUrl() {
         return previousAvatarId == null ? null : "https://cdn.discordapp.com/avatars/" + getUser().getId() + "/" + previousAvatarId + (previousAvatarId.startsWith("a_") ? ".gif" : ".png");
     }
 }

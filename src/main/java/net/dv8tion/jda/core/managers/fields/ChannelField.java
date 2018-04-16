@@ -26,16 +26,12 @@ import java.util.function.Supplier;
  * <p><b>This class is abstract and requires an implementation
  * for {@link #checkValue(Object)}</b>
  *
- * @param  <T>
- *         The Field-Type for this ChannelField
- *
- * @since  3.0
+ * @param <T> The Field-Type for this ChannelField
+ * @since 3.0
  */
 @Deprecated
-public abstract class ChannelField<T> extends Field<T, net.dv8tion.jda.core.managers.ChannelManagerUpdatable>
-{
-    public ChannelField(net.dv8tion.jda.core.managers.ChannelManagerUpdatable manager, Supplier<T> originalValue)
-    {
+public abstract class ChannelField<T> extends Field<T, net.dv8tion.jda.core.managers.ChannelManagerUpdatable> {
+    public ChannelField(net.dv8tion.jda.core.managers.ChannelManagerUpdatable manager, Supplier<T> originalValue) {
         super(manager, originalValue);
     }
 }

@@ -27,15 +27,13 @@ import net.dv8tion.jda.core.entities.Guild;
  *
  * <p>Identifier: {@code region}
  */
-public class GuildUpdateRegionEvent extends GenericGuildUpdateEvent<Region>
-{
+public class GuildUpdateRegionEvent extends GenericGuildUpdateEvent<Region> {
     public static final String IDENTIFIER = "region";
 
     private final String oldRegion;
     private final String newRegion;
 
-    public GuildUpdateRegionEvent(JDA api, long responseNumber, Guild guild, String oldRegion)
-    {
+    public GuildUpdateRegionEvent(JDA api, long responseNumber, Guild guild, String oldRegion) {
         super(api, responseNumber, guild, Region.fromKey(oldRegion), guild.getRegion(), IDENTIFIER);
         this.oldRegion = oldRegion;
         this.newRegion = guild.getRegionRaw();
@@ -49,8 +47,7 @@ public class GuildUpdateRegionEvent extends GenericGuildUpdateEvent<Region>
      *
      * @return Resolved {@link net.dv8tion.jda.core.Region Region} constant from the raw name
      */
-    public Region getOldRegion()
-    {
+    public Region getOldRegion() {
         return getOldValue();
     }
 
@@ -61,8 +58,7 @@ public class GuildUpdateRegionEvent extends GenericGuildUpdateEvent<Region>
      *
      * @return Raw name of the old voice region
      */
-    public String getOldRegionRaw()
-    {
+    public String getOldRegionRaw() {
         return oldRegion;
     }
 
@@ -74,8 +70,7 @@ public class GuildUpdateRegionEvent extends GenericGuildUpdateEvent<Region>
      *
      * @return Resolved {@link net.dv8tion.jda.core.Region Region} constant from the raw name
      */
-    public Region getNewRegion()
-    {
+    public Region getNewRegion() {
         return getNewValue();
     }
 
@@ -86,8 +81,7 @@ public class GuildUpdateRegionEvent extends GenericGuildUpdateEvent<Region>
      *
      * @return Raw name of the updated voice region
      */
-    public String getNewRegionRaw()
-    {
+    public String getNewRegionRaw() {
         return newRegion;
     }
 }

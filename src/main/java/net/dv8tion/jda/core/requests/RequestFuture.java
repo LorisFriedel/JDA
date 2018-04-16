@@ -26,11 +26,9 @@ import java.util.stream.Stream;
 /**
  * Future allowing for use of continuations.
  *
- * @param <T>
- *        The completion type for this Future
+ * @param <T> The completion type for this Future
  */
-public interface RequestFuture<T> extends Future<T>, CompletionStage<T>
-{
+public interface RequestFuture<T> extends Future<T>, CompletionStage<T> {
     /**
      * Returns a new CompletableFuture that is completed when all of
      * the given RequestFutures complete.  If any of the given
@@ -48,18 +46,12 @@ public interface RequestFuture<T> extends Future<T>, CompletionStage<T>
      * program, as in: {@code RequestFuture.allOf(c1, c2,
      * c3).join();}.
      *
-     * @param  cfs
-     *         the RequestFutures
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         if the array or any of its elements are {@code null}
-     *
+     * @param cfs the RequestFutures
      * @return a new CompletableFuture that is completed when all of the given RequestFutures complete
-     *
-     * @see    java.util.concurrent.CompletableFuture#allOf(java.util.concurrent.CompletableFuture[]) CompletableFuture.allOf(...)
+     * @throws java.lang.IllegalArgumentException if the array or any of its elements are {@code null}
+     * @see java.util.concurrent.CompletableFuture#allOf(java.util.concurrent.CompletableFuture[]) CompletableFuture.allOf(...)
      */
-    static CompletableFuture<Void> allOf(RequestFuture<?>... cfs)
-    {
+    static CompletableFuture<Void> allOf(RequestFuture<?>... cfs) {
         Checks.noneNull(cfs, "RequestFutures");
         CompletableFuture[] all = Stream.of(cfs).map(CompletableFuture.class::cast).toArray(CompletableFuture[]::new);
         return CompletableFuture.allOf(all);
@@ -82,20 +74,13 @@ public interface RequestFuture<T> extends Future<T>, CompletionStage<T>
      * program, as in: {@code RequestFuture.allOf(c1, c2,
      * c3).join();}.
      *
-     * @param  <F>
-     *         the future implementation
-     * @param  cfs
-     *         the Futures
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         if the collection or any of its elements are {@code null}
-     *
+     * @param <F> the future implementation
+     * @param cfs the Futures
      * @return a new CompletableFuture that is completed when all of the given Futures complete
-     *
-     * @see    java.util.concurrent.CompletableFuture#allOf(java.util.concurrent.CompletableFuture[]) CompletableFuture.allOf(...)
+     * @throws java.lang.IllegalArgumentException if the collection or any of its elements are {@code null}
+     * @see java.util.concurrent.CompletableFuture#allOf(java.util.concurrent.CompletableFuture[]) CompletableFuture.allOf(...)
      */
-    static <F extends Future<?> & CompletionStage<?>> CompletableFuture<Void> allOf(Collection<F> cfs)
-    {
+    static <F extends Future<?> & CompletionStage<?>> CompletableFuture<Void> allOf(Collection<F> cfs) {
         Checks.notNull(cfs, "Collection");
         CompletableFuture[] all = cfs.stream().map(CompletableFuture.class::cast).toArray(CompletableFuture[]::new);
         return CompletableFuture.allOf(all);
@@ -109,19 +94,13 @@ public interface RequestFuture<T> extends Future<T>, CompletionStage<T>
      * holding this exception as its cause.  If no RequestFutures
      * are provided, returns an incomplete CompletableFuture.
      *
-     * @param  cfs
-     *         the RequestFutures
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         if the array or any of its elements are {@code null}
-     *
+     * @param cfs the RequestFutures
      * @return a new CompletableFuture that is completed with the
-     *         result or exception of any of the given RequestFutures when one completes
-     *
-     * @see    java.util.concurrent.CompletableFuture#anyOf(java.util.concurrent.CompletableFuture[]) CompletableFuture.anyOf(...)
+     * result or exception of any of the given RequestFutures when one completes
+     * @throws java.lang.IllegalArgumentException if the array or any of its elements are {@code null}
+     * @see java.util.concurrent.CompletableFuture#anyOf(java.util.concurrent.CompletableFuture[]) CompletableFuture.anyOf(...)
      */
-    static CompletableFuture<Object> anyOf(RequestFuture<?>... cfs)
-    {
+    static CompletableFuture<Object> anyOf(RequestFuture<?>... cfs) {
         Checks.noneNull(cfs, "RequestFutures");
         CompletableFuture[] all = Stream.of(cfs).map(CompletableFuture.class::cast).toArray(CompletableFuture[]::new);
         return CompletableFuture.anyOf(all);
@@ -135,21 +114,14 @@ public interface RequestFuture<T> extends Future<T>, CompletionStage<T>
      * holding this exception as its cause.  If no Futures
      * are provided, returns an incomplete CompletableFuture.
      *
-     * @param  <F>
-     *         the future implementation
-     * @param  cfs
-     *         the Futures
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         if the collection or any of its elements are {@code null}
-     *
+     * @param <F> the future implementation
+     * @param cfs the Futures
      * @return a new CompletableFuture that is completed with the
-     *         result or exception of any of the given Futures when one completes
-     *
-     * @see    java.util.concurrent.CompletableFuture#anyOf(java.util.concurrent.CompletableFuture[]) CompletableFuture.anyOf(...)
+     * result or exception of any of the given Futures when one completes
+     * @throws java.lang.IllegalArgumentException if the collection or any of its elements are {@code null}
+     * @see java.util.concurrent.CompletableFuture#anyOf(java.util.concurrent.CompletableFuture[]) CompletableFuture.anyOf(...)
      */
-    static <F extends Future<?> & CompletionStage<?>> CompletableFuture<Object> anyOf(Collection<F> cfs)
-    {
+    static <F extends Future<?> & CompletionStage<?>> CompletableFuture<Object> anyOf(Collection<F> cfs) {
         Checks.notNull(cfs, "Collection");
         CompletableFuture[] all = cfs.stream().map(CompletableFuture.class::cast).toArray(CompletableFuture[]::new);
         return CompletableFuture.anyOf(all);
@@ -166,13 +138,10 @@ public interface RequestFuture<T> extends Future<T>, CompletionStage<T>
      * (unchecked) {@link java.util.concurrent.CompletionException} with the underlying
      * exception as its cause.
      *
-     * @throws java.util.concurrent.CancellationException
-     *         if the computation was cancelled
-     * @throws java.util.concurrent.CompletionException
-     *         if this future completed exceptionally
-     *         or a completion computation threw an exception
-     *
      * @return the result value
+     * @throws java.util.concurrent.CancellationException if the computation was cancelled
+     * @throws java.util.concurrent.CompletionException   if this future completed exceptionally
+     *                                                    or a completion computation threw an exception
      */
     T join();
 
@@ -180,16 +149,11 @@ public interface RequestFuture<T> extends Future<T>, CompletionStage<T>
      * Returns the result value (or throws any encountered exception)
      * if completed, else returns the given valueIfAbsent.
      *
-     * @param  valueIfAbsent
-     *         the value to return if not completed
-     *
-     * @throws java.util.concurrent.CancellationException
-     *         if the computation was cancelled
-     * @throws java.util.concurrent.CompletionException
-     *         if this future completed exceptionally
-     *         or a completion computation threw an exception
-     *
+     * @param valueIfAbsent the value to return if not completed
      * @return the result value, if completed, else the given valueIfAbsent
+     * @throws java.util.concurrent.CancellationException if the computation was cancelled
+     * @throws java.util.concurrent.CompletionException   if this future completed exceptionally
+     *                                                    or a completion computation threw an exception
      */
     T getNow(T valueIfAbsent);
 

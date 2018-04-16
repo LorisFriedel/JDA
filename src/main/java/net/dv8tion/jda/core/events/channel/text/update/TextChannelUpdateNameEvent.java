@@ -25,12 +25,10 @@ import net.dv8tion.jda.core.entities.TextChannel;
  *
  * <p>Identifier: {@code name}
  */
-public class TextChannelUpdateNameEvent extends GenericTextChannelUpdateEvent<String>
-{
+public class TextChannelUpdateNameEvent extends GenericTextChannelUpdateEvent<String> {
     public static final String IDENTIFIER = "name";
 
-    public TextChannelUpdateNameEvent(JDA api, long responseNumber, TextChannel channel, String oldName)
-    {
+    public TextChannelUpdateNameEvent(JDA api, long responseNumber, TextChannel channel, String oldName) {
         super(api, responseNumber, channel, oldName, channel.getName(), IDENTIFIER);
     }
 
@@ -39,8 +37,7 @@ public class TextChannelUpdateNameEvent extends GenericTextChannelUpdateEvent<St
      *
      * @return The old name
      */
-    public String getOldName()
-    {
+    public String getOldName() {
         return getOldValue();
     }
 
@@ -49,8 +46,7 @@ public class TextChannelUpdateNameEvent extends GenericTextChannelUpdateEvent<St
      *
      * @return The new name
      */
-    public String getNewName()
-    {
+    public String getNewName() {
         return getNewValue();
     }
 }

@@ -21,8 +21,7 @@ import javax.sound.sampled.AudioFormat;
 /**
  * Interface used to send audio to Discord through JDA.
  */
-public interface AudioSendHandler
-{
+public interface AudioSendHandler {
     /**
      * Audio Input Format expected by JDA if {@link #isOpus()} returns false. 48KHz 16bit stereo signed BigEndian PCM.
      */
@@ -60,10 +59,9 @@ public interface AudioSendHandler
      * will provide it to Discord <b>exactly as it is given</b>.
      *
      * @return If true, JDA will not attempt to encode the provided audio data as Opus.
-     *         <br>Default - False.
+     * <br>Default - False.
      */
-    default boolean isOpus()
-    {
-        return false;
+    default boolean isOpus() {
+        return true;
     }
 }

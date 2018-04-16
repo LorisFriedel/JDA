@@ -24,16 +24,13 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
-public class UserUpdateHandler extends SocketHandler
-{
-    public UserUpdateHandler(JDAImpl api)
-    {
+public class UserUpdateHandler extends SocketHandler {
+    public UserUpdateHandler(JDAImpl api) {
         super(api);
     }
 
     @Override
-    protected Long handleInternally(JSONObject content)
-    {
+    protected Long handleInternally(JSONObject content) {
         SelfUserImpl self = (SelfUserImpl) api.getSelfUser();
 
         String name = content.getString("username");
@@ -48,8 +45,7 @@ public class UserUpdateHandler extends SocketHandler
         Boolean nitro = content.has("premium") ? content.getBoolean("premium") : null; // nitro
         String phoneNumber = content.optString("phone", null); // verified phone number (verification level !)
 
-        if (!Objects.equals(name, self.getName()) || !Objects.equals(discriminator, self.getDiscriminator()))
-        {
+        if (!Objects.equals(name, self.getName()) || !Objects.equals(discriminator, self.getDiscriminator())) {
             String oldName = self.getName();
             String oldDiscriminator = self.getDiscriminator();
             self.setName(name);
@@ -60,8 +56,7 @@ public class UserUpdateHandler extends SocketHandler
                     oldName, oldDiscriminator));
         }
 
-        if (!Objects.equals(avatarId, self.getAvatarId()))
-        {
+        if (!Objects.equals(avatarId, self.getAvatarId())) {
             String oldAvatarId = self.getAvatarId();
             self.setAvatarId(avatarId);
             api.getEventManager().handle(
@@ -70,8 +65,7 @@ public class UserUpdateHandler extends SocketHandler
                     oldAvatarId));
         }
 
-        if (verified != null && verified != self.isVerified())
-        {
+        if (verified != null && verified != self.isVerified()) {
             boolean wasVerified = self.isVerified();
             self.setVerified(verified);
             api.getEventManager().handle(
@@ -80,8 +74,7 @@ public class UserUpdateHandler extends SocketHandler
                     wasVerified));
         }
 
-        if (mfaEnabled != null && mfaEnabled != self.isMfaEnabled())
-        {
+        if (mfaEnabled != null && mfaEnabled != self.isMfaEnabled()) {
             boolean wasMfaEnabled = self.isMfaEnabled();
             self.setMfaEnabled(mfaEnabled);
             api.getEventManager().handle(
@@ -90,10 +83,8 @@ public class UserUpdateHandler extends SocketHandler
                     wasMfaEnabled));
         }
 
-        if (api.getAccountType() == AccountType.CLIENT)
-        {
-            if (!Objects.equals(email, self.getEmail()))
-            {
+        if (api.getAccountType() == AccountType.CLIENT) {
+            if (!Objects.equals(email, self.getEmail())) {
                 String oldEmail = self.getEmail();
                 self.setEmail(email);
                 api.getEventManager().handle(
@@ -102,8 +93,7 @@ public class UserUpdateHandler extends SocketHandler
                         oldEmail));
             }
 
-            if (mobile != null && mobile != self.isMobile())
-            {
+            if (mobile != null && mobile != self.isMobile()) {
                 boolean oldMobile = self.isMobile();
                 self.setMobile(mobile);
                 api.getEventManager().handle(
@@ -112,8 +102,7 @@ public class UserUpdateHandler extends SocketHandler
                         oldMobile));
             }
 
-            if (nitro != null && nitro != self.isNitro())
-            {
+            if (nitro != null && nitro != self.isNitro()) {
                 boolean oldNitro = self.isNitro();
                 self.setNitro(nitro);
                 api.getEventManager().handle(
@@ -122,8 +111,7 @@ public class UserUpdateHandler extends SocketHandler
                         oldNitro));
             }
 
-            if (!Objects.equals(phoneNumber, self.getPhoneNumber()))
-            {
+            if (!Objects.equals(phoneNumber, self.getPhoneNumber())) {
                 String oldPhoneNumber = self.getPhoneNumber();
                 self.setPhoneNumber(phoneNumber);
                 api.getEventManager().handle(

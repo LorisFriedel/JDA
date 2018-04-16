@@ -36,16 +36,14 @@ import java.util.function.Supplier;
  * <p><b>This class is an extension of {@link net.dv8tion.jda.core.managers.fields.RoleField RoleField}</b>
  * <br>It provides specific convenience Methods to modify the Permissions for a Role or equal.
  *
- * @since  3.0
+ * @since 3.0
  */
 @Deprecated
-public class PermissionField extends RoleField<Long>
-{
+public class PermissionField extends RoleField<Long> {
     Set<Permission> permsGiven = new HashSet<>();
     Set<Permission> permsRevoked = new HashSet<>();
 
-    public PermissionField(net.dv8tion.jda.core.managers.RoleManagerUpdatable manager, Supplier<Long> originalValue)
-    {
+    public PermissionField(net.dv8tion.jda.core.managers.RoleManagerUpdatable manager, Supplier<Long> originalValue) {
         super(manager, originalValue);
     }
 
@@ -54,19 +52,13 @@ public class PermissionField extends RoleField<Long>
      * operation for the Manager instance.
      * <br>This will cause {@link #isSet()} to return {@code true}!
      *
-     * @param  value
-     *         The value that should be used by the update operation
-     *
-     * @throws IllegalArgumentException
-     *         If the provided value is null
-     *
+     * @param value The value that should be used by the update operation
      * @return The specific manager instance for chaining convenience
-     *
-     * @see    #isSet()
+     * @throws IllegalArgumentException If the provided value is null
+     * @see #isSet()
      */
     @Override
-    public net.dv8tion.jda.core.managers.RoleManagerUpdatable setValue(Long value)
-    {
+    public net.dv8tion.jda.core.managers.RoleManagerUpdatable setValue(Long value) {
         checkValue(value);
 
         this.value = value;
@@ -82,21 +74,15 @@ public class PermissionField extends RoleField<Long>
      * <br>Convenience method to provide multiple permissions with a single
      * method.
      *
-     * @param  permissions
-     *         The {@link net.dv8tion.jda.core.Permission Permissions} to use
-     *
-     * @throws IllegalArgumentException
-     *         If the provided permission collection or any of the permissions within
-     *         it are null
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If the permissions provided require other permissions
-     *         to be available
-     *
+     * @param permissions The {@link net.dv8tion.jda.core.Permission Permissions} to use
      * @return The {@link net.dv8tion.jda.core.managers.RoleManagerUpdatable RoleManagerUpdatable} instance
-     *         for this PermissionField for chaining convenience
+     * for this PermissionField for chaining convenience
+     * @throws IllegalArgumentException                                        If the provided permission collection or any of the permissions within
+     *                                                                         it are null
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If the permissions provided require other permissions
+     *                                                                         to be available
      */
-    public net.dv8tion.jda.core.managers.RoleManagerUpdatable setPermissions(Permission... permissions)
-    {
+    public net.dv8tion.jda.core.managers.RoleManagerUpdatable setPermissions(Permission... permissions) {
         return setPermissions(Arrays.asList(permissions));
     }
 
@@ -105,21 +91,15 @@ public class PermissionField extends RoleField<Long>
      * <br>Convenience method to provide multiple permissions with a single
      * method.
      *
-     * @param  permissions
-     *         The {@link net.dv8tion.jda.core.Permission Permissions} to use
-     *
-     * @throws IllegalArgumentException
-     *         If the provided permission collection or any of the permissions within
-     *         it are null
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If the permissions provided require other permissions
-     *         to be available
-     *
+     * @param permissions The {@link net.dv8tion.jda.core.Permission Permissions} to use
      * @return The {@link net.dv8tion.jda.core.managers.RoleManagerUpdatable RoleManagerUpdatable} instance
-     *         for this PermissionField for chaining convenience
+     * for this PermissionField for chaining convenience
+     * @throws IllegalArgumentException                                        If the provided permission collection or any of the permissions within
+     *                                                                         it are null
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If the permissions provided require other permissions
+     *                                                                         to be available
      */
-    public net.dv8tion.jda.core.managers.RoleManagerUpdatable setPermissions(Collection<Permission> permissions)
-    {
+    public net.dv8tion.jda.core.managers.RoleManagerUpdatable setPermissions(Collection<Permission> permissions) {
         Checks.notNull(permissions, "permissions Collection");
         permissions.forEach(p ->
             Checks.notNull(p, "Permission in the Collection"));
@@ -128,8 +108,7 @@ public class PermissionField extends RoleField<Long>
     }
 
     @Override
-    public void checkValue(Long value)
-    {
+    public void checkValue(Long value) {
         Checks.notNull(value, "permission value");
         Permission.getPermissions(value).forEach(p ->
         {
@@ -142,17 +121,12 @@ public class PermissionField extends RoleField<Long>
      * <br>If any of the specified permissions is present in the revoked permissions it will be removed!
      * <br><b>This does not apply immediately - it is applied in the value returned by {@link #getValue()}</b>
      *
-     * @param  permissions
-     *         Permissions that should be granted
-     *
-     * @throws IllegalArgumentException
-     *         If any of the provided Permissions is {@code null}
-     *
+     * @param permissions Permissions that should be granted
      * @return The {@link net.dv8tion.jda.core.managers.RoleManagerUpdatable RoleManagerUpdatable} instance
-     *         for this PermissionField for chaining convenience
+     * for this PermissionField for chaining convenience
+     * @throws IllegalArgumentException If any of the provided Permissions is {@code null}
      */
-    public net.dv8tion.jda.core.managers.RoleManagerUpdatable givePermissions(Permission... permissions)
-    {
+    public net.dv8tion.jda.core.managers.RoleManagerUpdatable givePermissions(Permission... permissions) {
         return givePermissions(Arrays.asList(permissions));
     }
 
@@ -161,17 +135,12 @@ public class PermissionField extends RoleField<Long>
      * <br>If any of the specified permissions is present in the revoked permissions it will be removed!
      * <br><b>This does not apply immediately - it is applied in the value returned by {@link #getValue()}</b>
      *
-     * @param  permissions
-     *         Permissions that should be granted
-     *
-     * @throws IllegalArgumentException
-     *         If any of the provided Permissions is {@code null}
-     *
+     * @param permissions Permissions that should be granted
      * @return The {@link net.dv8tion.jda.core.managers.RoleManagerUpdatable RoleManagerUpdatable} instance
-     *         for this PermissionField for chaining convenience
+     * for this PermissionField for chaining convenience
+     * @throws IllegalArgumentException If any of the provided Permissions is {@code null}
      */
-    public net.dv8tion.jda.core.managers.RoleManagerUpdatable givePermissions(Collection<Permission> permissions)
-    {
+    public net.dv8tion.jda.core.managers.RoleManagerUpdatable givePermissions(Collection<Permission> permissions) {
         Checks.notNull(permissions, "Permission Collection");
         permissions.forEach(p ->
         {
@@ -192,17 +161,12 @@ public class PermissionField extends RoleField<Long>
      * <br>These will override permissions that are given through {@link #givePermissions(Collection)} and {@link #givePermissions(Permission...)}!
      * <br><b>This does not apply immediately - it is applied in the value returned by {@link #getValue()}</b>
      *
-     * @param  permissions
-     *         Permissions that should be revoked
-     *
-     * @throws IllegalArgumentException
-     *         If any of the provided Permissions is {@code null}
-     *
+     * @param permissions Permissions that should be revoked
      * @return The {@link net.dv8tion.jda.core.managers.RoleManagerUpdatable RoleManagerUpdatable} instance
-     *         for this PermissionField for chaining convenience
+     * for this PermissionField for chaining convenience
+     * @throws IllegalArgumentException If any of the provided Permissions is {@code null}
      */
-    public net.dv8tion.jda.core.managers.RoleManagerUpdatable revokePermissions(Permission... permissions)
-    {
+    public net.dv8tion.jda.core.managers.RoleManagerUpdatable revokePermissions(Permission... permissions) {
         return revokePermissions(Arrays.asList(permissions));
     }
 
@@ -211,17 +175,12 @@ public class PermissionField extends RoleField<Long>
      * <br>These will override permissions that are given through {@link #givePermissions(Collection)} and {@link #givePermissions(Permission...)}!
      * <br><b>This does not apply immediately - it is applied in the value returned by {@link #getValue()}</b>
      *
-     * @param  permissions
-     *         Permissions that should be revoked
-     *
-     * @throws IllegalArgumentException
-     *         If any of the provided Permissions is {@code null}
-     *
+     * @param permissions Permissions that should be revoked
      * @return The {@link net.dv8tion.jda.core.managers.RoleManagerUpdatable RoleManagerUpdatable} instance
-     *         for this PermissionField for chaining convenience
+     * for this PermissionField for chaining convenience
+     * @throws IllegalArgumentException If any of the provided Permissions is {@code null}
      */
-    public net.dv8tion.jda.core.managers.RoleManagerUpdatable revokePermissions(Collection<Permission> permissions)
-    {
+    public net.dv8tion.jda.core.managers.RoleManagerUpdatable revokePermissions(Collection<Permission> permissions) {
         Checks.notNull(permissions, "Permission Collection");
         permissions.forEach(p ->
         {
@@ -238,8 +197,7 @@ public class PermissionField extends RoleField<Long>
     }
 
     @Override
-    public Long getValue()
-    {
+    public Long getValue() {
         if (!isSet())
             return null;
 
@@ -259,8 +217,7 @@ public class PermissionField extends RoleField<Long>
     }
 
     @Override
-    public net.dv8tion.jda.core.managers.RoleManagerUpdatable reset()
-    {
+    public net.dv8tion.jda.core.managers.RoleManagerUpdatable reset() {
         super.reset();
         this.permsGiven.clear();
         this.permsRevoked.clear();
@@ -273,11 +230,9 @@ public class PermissionField extends RoleField<Long>
      * that are calculated from {@link #getValue()} using {@link Permission#getPermissions(long)}
      *
      * @return An immutable list of the currently set permissions
-     *
-     * @see    #getOriginalPermissions()
+     * @see #getOriginalPermissions()
      */
-    public List<Permission> getPermissions()
-    {
+    public List<Permission> getPermissions() {
         Long perms = getValue();
         return perms != null ? Permission.getPermissions(perms) : null;
     }
@@ -287,16 +242,13 @@ public class PermissionField extends RoleField<Long>
      * that have been calculated {@link #getOriginalValue()} using {@link Permission#getPermissions(long)}
      *
      * @return An immutable list of the originally set permissions
-     *
-     * @see    #getPermissions()
+     * @see #getPermissions()
      */
-    public List<Permission> getOriginalPermissions()
-    {
+    public List<Permission> getOriginalPermissions() {
         return Permission.getPermissions(getOriginalValue());
     }
 
-    protected void checkPermission(Permission perm)
-    {
+    protected void checkPermission(Permission perm) {
         if (!manager.getGuild().getSelfMember().hasPermission(perm))
             throw new InsufficientPermissionException(perm, "Cannot give / revoke the permission because the logged in account does not have access to it! Permission: " + perm);
     }

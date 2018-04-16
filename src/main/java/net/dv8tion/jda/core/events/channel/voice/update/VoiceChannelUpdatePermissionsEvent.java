@@ -30,12 +30,10 @@ import java.util.stream.Collectors;
  *
  * <p>Can be used to get affected VoiceChannel, affected Guild and affected {@link net.dv8tion.jda.core.entities.Role Roles}/{@link net.dv8tion.jda.core.entities.User Users}.
  */
-public class VoiceChannelUpdatePermissionsEvent extends GenericVoiceChannelEvent
-{
+public class VoiceChannelUpdatePermissionsEvent extends GenericVoiceChannelEvent {
     private final List<IPermissionHolder> changedPermHolders;
 
-    public VoiceChannelUpdatePermissionsEvent(JDA api, long responseNumber, VoiceChannel channel, List<IPermissionHolder> changed)
-    {
+    public VoiceChannelUpdatePermissionsEvent(JDA api, long responseNumber, VoiceChannel channel, List<IPermissionHolder> changed) {
         super(api, responseNumber, channel);
         this.changedPermHolders = changed;
     }
@@ -44,12 +42,10 @@ public class VoiceChannelUpdatePermissionsEvent extends GenericVoiceChannelEvent
      * The affected {@link net.dv8tion.jda.core.entities.IPermissionHolder IPermissionHolders}
      *
      * @return The affected permission holders
-     *
-     * @see    #getChangedRoles()
-     * @see    #getChangedMembers()
+     * @see #getChangedRoles()
+     * @see #getChangedMembers()
      */
-    public List<IPermissionHolder> getChangedPermissionHolders()
-    {
+    public List<IPermissionHolder> getChangedPermissionHolders() {
         return changedPermHolders;
     }
 
@@ -58,12 +54,11 @@ public class VoiceChannelUpdatePermissionsEvent extends GenericVoiceChannelEvent
      *
      * @return List of affected roles
      */
-    public List<Role> getChangedRoles()
-    {
+    public List<Role> getChangedRoles() {
         return changedPermHolders.stream()
-                .filter(p -> p instanceof Role)
-                .map(Role.class::cast)
-                .collect(Collectors.toList());
+            .filter(p -> p instanceof Role)
+            .map(Role.class::cast)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -71,24 +66,20 @@ public class VoiceChannelUpdatePermissionsEvent extends GenericVoiceChannelEvent
      *
      * @return List of affected members
      */
-    public List<Member> getChangedMembers()
-    {
+    public List<Member> getChangedMembers() {
         return changedPermHolders.stream()
-                .filter(p -> p instanceof Member)
-                .map(Member.class::cast)
-                .collect(Collectors.toList());
+            .filter(p -> p instanceof Member)
+            .map(Member.class::cast)
+            .collect(Collectors.toList());
     }
 
     /**
      * Deprecated.
      *
      * @return List of affected members
-     *
-     * @deprecated
-     *         Use {@link #getChangedMembers()} instead
+     * @deprecated Use {@link #getChangedMembers()} instead
      */
-    public List<Member> getMemberWithPermissionChanges()
-    {
+    public List<Member> getMemberWithPermissionChanges() {
         return getChangedMembers();
     }
 }

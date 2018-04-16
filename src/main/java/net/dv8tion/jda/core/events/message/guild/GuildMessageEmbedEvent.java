@@ -23,15 +23,13 @@ import java.util.List;
 
 /**
  * Indicates that a Guild Message contains one or more {@link net.dv8tion.jda.core.entities.MessageEmbed Embeds}.
- * 
+ *
  * <p>Can be used to retrieve the affected TextChannel, the id of the affected Message and a list of MessageEmbeds.
  */
-public class GuildMessageEmbedEvent extends GenericGuildMessageEvent
-{
+public class GuildMessageEmbedEvent extends GenericGuildMessageEvent {
     private final List<MessageEmbed> embeds;
 
-    public GuildMessageEmbedEvent(JDA api, long responseNumber, long messageId, TextChannel channel, List<MessageEmbed> embeds)
-    {
+    public GuildMessageEmbedEvent(JDA api, long responseNumber, long messageId, TextChannel channel, List<MessageEmbed> embeds) {
         super(api, responseNumber, messageId, channel);
         this.embeds = embeds;
     }
@@ -41,8 +39,7 @@ public class GuildMessageEmbedEvent extends GenericGuildMessageEvent
      *
      * @return The MessageEmbeds
      */
-    public List<MessageEmbed> getMessageEmbeds()
-    {
+    public List<MessageEmbed> getMessageEmbeds() {
         return embeds;
     }
 }

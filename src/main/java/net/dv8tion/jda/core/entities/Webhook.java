@@ -27,10 +27,9 @@ import javax.annotation.CheckReturnValue;
 /**
  * An object representing Webhooks in Discord
  *
- * @since  3.0
+ * @since 3.0
  */
-public interface Webhook extends ISnowflake
-{
+public interface Webhook extends ISnowflake {
 
     /**
      * The JDA instance of this Webhook.
@@ -60,7 +59,7 @@ public interface Webhook extends ISnowflake
      * The owner of this Webhook.
      *
      * @return A {@link net.dv8tion.jda.core.entities.Member Member} instance
-     *         representing the owner of this Webhook
+     * representing the owner of this Webhook
      */
     Member getOwner();
 
@@ -75,9 +74,8 @@ public interface Webhook extends ISnowflake
      * can be overridden.
      *
      * @return A fake {@link net.dv8tion.jda.core.entities.User User} instance
-     *         representing the default webhook user.
-     *
-     * @see    <a href="https://discordapp.com/developers/docs/resources/webhook#execute-webhook">Execute Webhook Docs</a>
+     * representing the default webhook user.
+     * @see <a href="https://discordapp.com/developers/docs/resources/webhook#execute-webhook">Execute Webhook Docs</a>
      */
     User getDefaultUser();
 
@@ -123,7 +121,7 @@ public interface Webhook extends ISnowflake
      * Deletes this Webhook.
      *
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
-     *         <br>The rest action to delete this Webhook.
+     * <br>The rest action to delete this Webhook.
      */
     @CheckReturnValue
     AuditableRestAction<Void> delete();
@@ -132,10 +130,8 @@ public interface Webhook extends ISnowflake
      * The {@link net.dv8tion.jda.core.managers.WebhookManager WebhookManager} for this Webhook.
      * <br>You modify multiple fields in one request by chaining setters before calling {@link net.dv8tion.jda.core.requests.RestAction#queue() RestAction.queue()}.
      *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If the currently logged in account does not have {@link net.dv8tion.jda.core.Permission#MANAGE_WEBHOOKS Permission.MANAGE_WEBHOOKS}
-     *
      * @return The {@link net.dv8tion.jda.core.managers.WebhookManager WebhookManager} for this Webhook
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If the currently logged in account does not have {@link net.dv8tion.jda.core.Permission#MANAGE_WEBHOOKS Permission.MANAGE_WEBHOOKS}
      */
     WebhookManager getManager();
 
@@ -146,10 +142,8 @@ public interface Webhook extends ISnowflake
      * to retrieve {@link net.dv8tion.jda.core.managers.fields.WebhookField fields} of this Webhook which can be modified and updated.
      *
      * @return An instance of {@link net.dv8tion.jda.core.managers.WebhookManagerUpdatable WebhookManagerUpdatable}
-     *         for this Webhook
-     *
-     * @deprecated
-     *         Use {@link #getManager()} instead
+     * for this Webhook
+     * @deprecated Use {@link #getManager()} instead
      */
     @Deprecated
     WebhookManagerUpdatable getManagerUpdatable();

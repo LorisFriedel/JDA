@@ -30,8 +30,7 @@ import java.util.List;
 /**
  * Represents a {@link net.dv8tion.jda.core.entities.Guild Guild} channel.
  */
-public interface Channel extends ISnowflake
-{
+public interface Channel extends ISnowflake {
     /**
      * The {@link net.dv8tion.jda.core.entities.ChannelType ChannelType} for this Channel
      *
@@ -108,12 +107,10 @@ public interface Channel extends ISnowflake
      * If there is no {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride} for this {@link net.dv8tion.jda.core.entities.Channel Channel}
      * relating to the provided {@link net.dv8tion.jda.core.entities.Member Member}, then this returns {@code null}.
      *
-     * @param  member
-     *         The {@link net.dv8tion.jda.core.entities.Member Member} whose
-     *         {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride} is requested.
-     *
+     * @param member The {@link net.dv8tion.jda.core.entities.Member Member} whose
+     *               {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride} is requested.
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
-     *         relating to the provided {@link net.dv8tion.jda.core.entities.Member Member}.
+     * relating to the provided {@link net.dv8tion.jda.core.entities.Member Member}.
      */
     PermissionOverride getPermissionOverride(Member member);
 
@@ -122,11 +119,9 @@ public interface Channel extends ISnowflake
      * If there is no {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride} for this {@link net.dv8tion.jda.core.entities.Channel Channel}
      * relating to the provided {@link net.dv8tion.jda.core.entities.Role Role}, then this returns {@code null}.
      *
-     * @param  role
-     *         The {@link net.dv8tion.jda.core.entities.User Role} whose {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride} is requested.
-     *
+     * @param role The {@link net.dv8tion.jda.core.entities.User Role} whose {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride} is requested.
      * @return Possibly-null {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverride}
-     *         relating to the provided {@link net.dv8tion.jda.core.entities.Role Role}.
+     * relating to the provided {@link net.dv8tion.jda.core.entities.Role Role}.
      */
     PermissionOverride getPermissionOverride(Role role);
 
@@ -138,7 +133,7 @@ public interface Channel extends ISnowflake
      * overrides, use {@link #getMemberPermissionOverrides()} or {@link #getRolePermissionOverrides()} respectively.
      *
      * @return Possibly-empty list of all {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverrides}
-     *         for this {@link net.dv8tion.jda.core.entities.Channel Channel}.
+     * for this {@link net.dv8tion.jda.core.entities.Channel Channel}.
      */
     List<PermissionOverride> getPermissionOverrides();
 
@@ -147,8 +142,8 @@ public interface Channel extends ISnowflake
      * that are part of this {@link net.dv8tion.jda.core.entities.Channel Channel}.
      *
      * @return Possibly-empty list of all {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverrides}
-     *         for {@link net.dv8tion.jda.core.entities.Member Member}
-     *         for this {@link net.dv8tion.jda.core.entities.Channel Channel}.
+     * for {@link net.dv8tion.jda.core.entities.Member Member}
+     * for this {@link net.dv8tion.jda.core.entities.Channel Channel}.
      */
     List<PermissionOverride> getMemberPermissionOverrides();
 
@@ -157,8 +152,8 @@ public interface Channel extends ISnowflake
      * that are part of this {@link net.dv8tion.jda.core.entities.Channel Channel}.
      *
      * @return Possibly-empty list of all {@link net.dv8tion.jda.core.entities.PermissionOverride PermissionOverrides}
-     *         for {@link net.dv8tion.jda.core.entities.Role Roles}
-     *         for this {@link net.dv8tion.jda.core.entities.Channel Channel}.
+     * for {@link net.dv8tion.jda.core.entities.Role Roles}
+     * for this {@link net.dv8tion.jda.core.entities.Channel Channel}.
      */
     List<PermissionOverride> getRolePermissionOverrides();
 
@@ -170,33 +165,28 @@ public interface Channel extends ISnowflake
      *
      * <p>This copies the following elements:
      * <ol>
-     *     <li>Name</li>
-     *     <li>Parent Category (if present)</li>
-     *     <li>Voice Elements (Bitrate, Userlimit)</li>
-     *     <li>Text Elements (Topic, NSFW)</li>
-     *     <li>All permission overrides for Members/Roles</li>
+     * <li>Name</li>
+     * <li>Parent Category (if present)</li>
+     * <li>Voice Elements (Bitrate, Userlimit)</li>
+     * <li>Text Elements (Topic, NSFW)</li>
+     * <li>All permission overrides for Members/Roles</li>
      * </ol>
      *
      * <p>Possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} caused by
      * the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} include the following:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The channel could not be created due to a permission discrepancy</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The channel could not be created due to a permission discrepancy</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>We were removed from the Guild before finishing the task</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>We were removed from the Guild before finishing the task</li>
      * </ul>
      *
-     * @param  guild
-     *         The {@link net.dv8tion.jda.core.entities.Guild Guild} to create the channel in
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided guild is {@code null}
-     * @throws net.dv8tion.jda.core.exceptions.PermissionException
-     *         If the currently logged in account does not have the {@link net.dv8tion.jda.core.Permission#MANAGE_CHANNEL MANAGE_CHANNEL} Permission
-     *
+     * @param guild The {@link net.dv8tion.jda.core.entities.Guild Guild} to create the channel in
      * @return A specific {@link net.dv8tion.jda.core.requests.restaction.ChannelAction ChannelAction}
-     *         <br>This action allows to set fields for the new Channel before creating it!
+     * <br>This action allows to set fields for the new Channel before creating it!
+     * @throws java.lang.IllegalArgumentException                  If the provided guild is {@code null}
+     * @throws net.dv8tion.jda.core.exceptions.PermissionException If the currently logged in account does not have the {@link net.dv8tion.jda.core.Permission#MANAGE_CHANNEL MANAGE_CHANNEL} Permission
      */
     @CheckReturnValue
     ChannelAction createCopy(Guild guild);
@@ -206,32 +196,29 @@ public interface Channel extends ISnowflake
      *
      * <p>This copies the following elements:
      * <ol>
-     *     <li>Name</li>
-     *     <li>Parent Category (if present)</li>
-     *     <li>Voice Elements (Bitrate, Userlimit)</li>
-     *     <li>Text Elements (Topic, NSFW)</li>
-     *     <li>All permission overrides for Members/Roles</li>
+     * <li>Name</li>
+     * <li>Parent Category (if present)</li>
+     * <li>Voice Elements (Bitrate, Userlimit)</li>
+     * <li>Text Elements (Topic, NSFW)</li>
+     * <li>All permission overrides for Members/Roles</li>
      * </ol>
      *
      * <p>Possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} caused by
      * the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} include the following:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The channel could not be created due to a permission discrepancy</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The channel could not be created due to a permission discrepancy</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>We were removed from the Guild before finishing the task</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>We were removed from the Guild before finishing the task</li>
      * </ul>
      *
-     * @throws net.dv8tion.jda.core.exceptions.PermissionException
-     *         If the currently logged in account does not have the {@link net.dv8tion.jda.core.Permission#MANAGE_CHANNEL MANAGE_CHANNEL} Permission
-     *
      * @return A specific {@link net.dv8tion.jda.core.requests.restaction.ChannelAction ChannelAction}
-     *         <br>This action allows to set fields for the new Channel before creating it!
+     * <br>This action allows to set fields for the new Channel before creating it!
+     * @throws net.dv8tion.jda.core.exceptions.PermissionException If the currently logged in account does not have the {@link net.dv8tion.jda.core.Permission#MANAGE_CHANNEL MANAGE_CHANNEL} Permission
      */
     @CheckReturnValue
-    default ChannelAction createCopy()
-    {
+    default ChannelAction createCopy() {
         return createCopy(getGuild());
     }
 
@@ -240,10 +227,8 @@ public interface Channel extends ISnowflake
      * <br>In the ChannelManager, you can modify the name, topic and position of this Channel.
      * You modify multiple fields in one request by chaining setters before calling {@link net.dv8tion.jda.core.requests.RestAction#queue() RestAction.queue()}.
      *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If the currently logged in account does not have {@link net.dv8tion.jda.core.Permission#MANAGE_CHANNEL Permission.MANAGE_CHANNEL}
-     *
      * @return The ChannelManager of this Channel
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If the currently logged in account does not have {@link net.dv8tion.jda.core.Permission#MANAGE_CHANNEL Permission.MANAGE_CHANNEL}
      */
     ChannelManager getManager();
 
@@ -253,11 +238,8 @@ public interface Channel extends ISnowflake
      * <br>This can be used to bulk update channel settings.
      *
      * @return The ChannelManagerUpdatable of this Channel
-     *
-     * @see    #getManager()
-     *
-     * @deprecated
-     *         Use {@link #getManager()} instead
+     * @see #getManager()
+     * @deprecated Use {@link #getManager()} instead
      */
     @Deprecated
     ChannelManagerUpdatable getManagerUpdatable();
@@ -267,22 +249,20 @@ public interface Channel extends ISnowflake
      *
      * <p>Possible ErrorResponses include:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>If this channel was already deleted</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>If this channel was already deleted</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *     <br>The send request was attempted after the account lost
-     *         {@link net.dv8tion.jda.core.Permission#MANAGE_CHANNEL Permission.MANAGE_CHANNEL} in the channel.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>The send request was attempted after the account lost
+     * {@link net.dv8tion.jda.core.Permission#MANAGE_CHANNEL Permission.MANAGE_CHANNEL} in the channel.</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>If we were removed from the Guild</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>If we were removed from the Guild</li>
      * </ul>
      *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         if the currently logged in account doesn't have {@link net.dv8tion.jda.core.Permission#MANAGE_CHANNEL MANAGE_CHANNEL}
-     *         for the channel.
-     *
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException if the currently logged in account doesn't have {@link net.dv8tion.jda.core.Permission#MANAGE_CHANNEL MANAGE_CHANNEL}
+     *                                                                         for the channel.
      */
     @CheckReturnValue
     AuditableRestAction<Void> delete();
@@ -294,29 +274,22 @@ public interface Channel extends ISnowflake
      *
      * <p>Possible ErrorResponses include:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>If this channel was already deleted</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>If this channel was already deleted</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>If we were removed from the Guild</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>If we were removed from the Guild</li>
      * </ul>
      *
-     * @param  member
-     *         The Member to create an override for
-     *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         if we don't have the permission to {@link net.dv8tion.jda.core.Permission#MANAGE_PERMISSIONS MANAGE_PERMISSIONS}
-     * @throws IllegalArgumentException
-     *         if the specified Member is null or the Member is not from {@link #getGuild()}
-     * @throws java.lang.IllegalStateException
-     *         If the specified Member already has a PermissionOverride. Use {@link #getPermissionOverride(Member)} to retrieve it.
-     *         You can use {@link #putPermissionOverride(Member)} to replace existing overrides.
-     *
+     * @param member The Member to create an override for
      * @return {@link net.dv8tion.jda.core.requests.restaction.PermissionOverrideAction PermissionOverrideAction}
-     *         Provides the newly created PermissionOverride for the specified Role
-     *
-     * @see    #createPermissionOverride(Role)
-     * @see    #putPermissionOverride(Member)
+     * Provides the newly created PermissionOverride for the specified Role
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException if we don't have the permission to {@link net.dv8tion.jda.core.Permission#MANAGE_PERMISSIONS MANAGE_PERMISSIONS}
+     * @throws IllegalArgumentException                                        if the specified Member is null or the Member is not from {@link #getGuild()}
+     * @throws java.lang.IllegalStateException                                 If the specified Member already has a PermissionOverride. Use {@link #getPermissionOverride(Member)} to retrieve it.
+     *                                                                         You can use {@link #putPermissionOverride(Member)} to replace existing overrides.
+     * @see #createPermissionOverride(Role)
+     * @see #putPermissionOverride(Member)
      */
     @CheckReturnValue
     PermissionOverrideAction createPermissionOverride(Member member);
@@ -328,29 +301,22 @@ public interface Channel extends ISnowflake
      *
      * <p>Possible ErrorResponses include:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *     <br>If this channel was already deleted</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>If this channel was already deleted</li>
      *
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *     <br>If we were removed from the Guild</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>If we were removed from the Guild</li>
      * </ul>
      *
-     * @param  role
-     *         The Role to create an override for
-     *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         if we don't have the permission to {@link net.dv8tion.jda.core.Permission#MANAGE_PERMISSIONS MANAGE_PERMISSIONS}
-     * @throws IllegalArgumentException
-     *         if the specified Role is null or the Role is not from {@link #getGuild()}
-     * @throws java.lang.IllegalStateException
-     *         If the specified Role already has a PermissionOverride. Use {@link #getPermissionOverride(Role)} to retrieve it.
-     *         You can use {@link #putPermissionOverride(Role)} to replace existing overrides.
-     *
+     * @param role The Role to create an override for
      * @return {@link net.dv8tion.jda.core.requests.restaction.PermissionOverrideAction PermissionOverrideAction}
-     *         Provides the newly created PermissionOverride for the specified Role
-     *
-     * @see    #createPermissionOverride(Member)
-     * @see    #putPermissionOverride(Role)
+     * Provides the newly created PermissionOverride for the specified Role
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException if we don't have the permission to {@link net.dv8tion.jda.core.Permission#MANAGE_PERMISSIONS MANAGE_PERMISSIONS}
+     * @throws IllegalArgumentException                                        if the specified Role is null or the Role is not from {@link #getGuild()}
+     * @throws java.lang.IllegalStateException                                 If the specified Role already has a PermissionOverride. Use {@link #getPermissionOverride(Role)} to retrieve it.
+     *                                                                         You can use {@link #putPermissionOverride(Role)} to replace existing overrides.
+     * @see #createPermissionOverride(Member)
+     * @see #putPermissionOverride(Role)
      */
     @CheckReturnValue
     PermissionOverrideAction createPermissionOverride(Role role);
@@ -360,18 +326,12 @@ public interface Channel extends ISnowflake
      * for the specified {@link net.dv8tion.jda.core.entities.Member Member} in this Channel.
      * <br>If the member already has an existing override it will be replaced.
      *
-     * @param  member
-     *         The Member to create the override for
-     *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         if we don't have the permission to {@link net.dv8tion.jda.core.Permission#MANAGE_PERMISSIONS MANAGE_PERMISSIONS}
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided member is null or from a different guild
-     *
+     * @param member The Member to create the override for
      * @return {@link net.dv8tion.jda.core.requests.restaction.PermissionOverrideAction PermissionOverrideAction}
-     *         Provides the newly created PermissionOverride for the specified Member
-     *
-     * @see    #putPermissionOverride(Role)
+     * Provides the newly created PermissionOverride for the specified Member
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException if we don't have the permission to {@link net.dv8tion.jda.core.Permission#MANAGE_PERMISSIONS MANAGE_PERMISSIONS}
+     * @throws java.lang.IllegalArgumentException                              If the provided member is null or from a different guild
+     * @see #putPermissionOverride(Role)
      */
     @CheckReturnValue
     PermissionOverrideAction putPermissionOverride(Member member);
@@ -381,35 +341,25 @@ public interface Channel extends ISnowflake
      * for the specified {@link net.dv8tion.jda.core.entities.Role Role} in this Channel.
      * <br>If the role already has an existing override it will be replaced.
      *
-     * @param  role
-     *         The Role to create the override for
-     *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         if we don't have the permission to {@link net.dv8tion.jda.core.Permission#MANAGE_PERMISSIONS MANAGE_PERMISSIONS}
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided role is null or from a different guild
-     *
+     * @param role The Role to create the override for
      * @return {@link net.dv8tion.jda.core.requests.restaction.PermissionOverrideAction PermissionOverrideAction}
-     *         Provides the newly created PermissionOverride for the specified Role
-     *
-     * @see    #putPermissionOverride(Member)
+     * Provides the newly created PermissionOverride for the specified Role
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException if we don't have the permission to {@link net.dv8tion.jda.core.Permission#MANAGE_PERMISSIONS MANAGE_PERMISSIONS}
+     * @throws java.lang.IllegalArgumentException                              If the provided role is null or from a different guild
+     * @see #putPermissionOverride(Member)
      */
     @CheckReturnValue
     PermissionOverrideAction putPermissionOverride(Role role);
 
     /**
      * Creates a new {@link net.dv8tion.jda.core.requests.restaction.InviteAction InviteAction} which can be used to create a
-     * new {@link net.dv8tion.jda.core.entities.Invite Invite}. 
+     * new {@link net.dv8tion.jda.core.entities.Invite Invite}.
      * <br>Requires {@link net.dv8tion.jda.core.Permission#CREATE_INSTANT_INVITE CREATE_INSTANT_INVITE} in this channel.
      *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If the account does not have {@link net.dv8tion.jda.core.Permission#CREATE_INSTANT_INVITE CREATE_INSTANT_INVITE} in this channel
-     * @throws java.lang.IllegalArgumentException
-     *         If this is an instance of a {@link net.dv8tion.jda.core.entities.Category Category}
-     *
      * @return A new {@link net.dv8tion.jda.core.requests.restaction.InviteAction InviteAction}
-     * 
-     * @see    net.dv8tion.jda.core.requests.restaction.InviteAction
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If the account does not have {@link net.dv8tion.jda.core.Permission#CREATE_INSTANT_INVITE CREATE_INSTANT_INVITE} in this channel
+     * @throws java.lang.IllegalArgumentException                              If this is an instance of a {@link net.dv8tion.jda.core.entities.Category Category}
+     * @see net.dv8tion.jda.core.requests.restaction.InviteAction
      */
     @CheckReturnValue
     InviteAction createInvite();
@@ -419,13 +369,10 @@ public interface Channel extends ISnowflake
      * <br>Requires {@link net.dv8tion.jda.core.Permission#MANAGE_CHANNEL MANAGE_CHANNEL} in this channel.
      * Will throw a {@link net.dv8tion.jda.core.exceptions.InsufficientPermissionException InsufficientPermissionException} otherwise.
      *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         if the account does not have {@link net.dv8tion.jda.core.Permission#MANAGE_CHANNEL MANAGE_CHANNEL} in this channel
-     *
      * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type: List{@literal <}{@link net.dv8tion.jda.core.entities.Invite Invite}{@literal >}
-     *         <br>The list of expanded Invite objects
-     *
-     * @see    net.dv8tion.jda.core.entities.Guild#getInvites()
+     * <br>The list of expanded Invite objects
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException if the account does not have {@link net.dv8tion.jda.core.Permission#MANAGE_CHANNEL MANAGE_CHANNEL} in this channel
+     * @see net.dv8tion.jda.core.entities.Guild#getInvites()
      */
     @CheckReturnValue
     RestAction<List<Invite>> getInvites();

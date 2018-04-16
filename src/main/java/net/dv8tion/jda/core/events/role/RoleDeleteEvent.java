@@ -24,10 +24,8 @@ import net.dv8tion.jda.core.entities.Role;
  *
  * <p>Can be used to retrieve the deleted Role and its Guild.
  */
-public class RoleDeleteEvent extends GenericRoleEvent
-{
-    public RoleDeleteEvent(JDA api, long responseNumber, Role deletedRole)
-    {
+public class RoleDeleteEvent extends GenericRoleEvent {
+    public RoleDeleteEvent(JDA api, long responseNumber, Role deletedRole) {
         super(api, responseNumber, deletedRole);
     }
 }

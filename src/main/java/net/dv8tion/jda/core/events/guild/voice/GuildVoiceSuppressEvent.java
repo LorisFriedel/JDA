@@ -26,12 +26,10 @@ import net.dv8tion.jda.core.entities.Member;
  *
  * @see net.dv8tion.jda.core.entities.GuildVoiceState#isSuppressed() GuildVoiceState.isSuppressed()
  */
-public class GuildVoiceSuppressEvent extends GenericGuildVoiceEvent
-{
+public class GuildVoiceSuppressEvent extends GenericGuildVoiceEvent {
     protected final boolean suppressed;
 
-    public GuildVoiceSuppressEvent(JDA api, long responseNumber, Member member)
-    {
+    public GuildVoiceSuppressEvent(JDA api, long responseNumber, Member member) {
         super(api, responseNumber, member);
         this.suppressed = member.getVoiceState().isSuppressed();
     }
@@ -40,10 +38,9 @@ public class GuildVoiceSuppressEvent extends GenericGuildVoiceEvent
      * Whether the member was suppressed in this event
      *
      * @return True, if the member was suppressed,
-     *         <br>False, if the member was un-suppressed
+     * <br>False, if the member was un-suppressed
      */
-    public boolean isSuppressed()
-    {
+    public boolean isSuppressed() {
         return suppressed;
     }
 }

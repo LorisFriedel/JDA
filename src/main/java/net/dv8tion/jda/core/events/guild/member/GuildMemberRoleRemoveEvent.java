@@ -27,12 +27,10 @@ import java.util.List;
  *
  * <p>Can be used to retrieve affected member and guild. Provides a list of removed roles.
  */
-public class GuildMemberRoleRemoveEvent extends GenericGuildMemberEvent
-{
+public class GuildMemberRoleRemoveEvent extends GenericGuildMemberEvent {
     private final List<Role> removedRoles;
 
-    public GuildMemberRoleRemoveEvent(JDA api, long responseNumber, Member member, List<Role> removedRoles)
-    {
+    public GuildMemberRoleRemoveEvent(JDA api, long responseNumber, Member member, List<Role> removedRoles) {
         super(api, responseNumber, member);
         this.removedRoles = Collections.unmodifiableList(removedRoles);
     }
@@ -42,8 +40,7 @@ public class GuildMemberRoleRemoveEvent extends GenericGuildMemberEvent
      *
      * @return The removed roles
      */
-    public List<Role> getRoles()
-    {
+    public List<Role> getRoles() {
         return removedRoles;
     }
 }

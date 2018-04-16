@@ -39,8 +39,7 @@ import net.dv8tion.jda.core.utils.NativeUtil;
 import java.io.IOException;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class AudioManagerImpl implements AudioManager
-{
+public class AudioManagerImpl implements AudioManager {
     public static final ThreadGroup AUDIO_THREADS = new ThreadGroup("jda-audio");
     //These values are set at the bottom of this file.
     public static boolean AUDIO_SUPPORTED;
@@ -65,44 +64,38 @@ public class AudioManagerImpl implements AudioManager
 
     protected long timeout = DEFAULT_CONNECTION_TIMEOUT;
 
-    public AudioManagerImpl(GuildImpl guild)
-    {
+    public AudioManagerImpl(GuildImpl guild) {
         this.guild = guild;
         this.api = this.guild.getJDA();
         init(); //Just to make sure that the audio libs have been initialized.
     }
 
-    public AudioConnection getAudioConnection()
-    {
+    public AudioConnection getAudioConnection() {
         return audioConnection;
     }
 
     @Override
-    public void openAudioConnection(VoiceChannel channel)
-    {
+    public void openAudioConnection(VoiceChannel channel) {
         Checks.notNull(channel, "Provided VoiceChannel");
 
         if (!AUDIO_SUPPORTED)
             throw new UnsupportedOperationException("Sorry! Audio is disabled due to an internal JDA error! Contact Dev!");
         if (!guild.equals(channel.getGuild()))
             throw new IllegalArgumentException("The provided VoiceChannel is not a part of the Guild that this AudioManager handles." +
-                    "Please provide a VoiceChannel from the proper Guild");
+                "Please provide a VoiceChannel from the proper Guild");
         if (!guild.isAvailable())
             throw new GuildUnavailableException("Cannot open an Audio Connection with an unavailable guild. " +
-                    "Please wait until this Guild is available to open a connection.");
+                "Please wait until this Guild is available to open a connection.");
         final Member self = guild.getSelfMember();
         if (!self.hasPermission(channel, Permission.VOICE_CONNECT) && !self.hasPermission(channel, Permission.VOICE_MOVE_OTHERS))
             throw new InsufficientPermissionException(Permission.VOICE_CONNECT);
 
-        if (audioConnection == null)
-        {
+        if (audioConnection == null) {
             checkUserlimit(channel, self);
             //Start establishing connection, joining provided channel
             queuedAudioConnection = channel;
             api.getClient().queueAudioConnect(channel);
-        }
-        else
-        {
+        } else {
             //Connection is already established, move to specified channel
 
             //If we are already connected to this VoiceChannel, then do nothing.
@@ -116,11 +109,9 @@ public class AudioManagerImpl implements AudioManager
         }
     }
 
-    private void checkUserlimit(VoiceChannel channel, Member self)
-    {
+    private void checkUserlimit(VoiceChannel channel, Member self) {
         final int userLimit = channel.getUserLimit(); // userLimit is 0 if no limit is set!
-        if (userLimit > 0 && !self.hasPermission(Permission.ADMINISTRATOR))
-        {
+        if (userLimit > 0 && !self.hasPermission(Permission.ADMINISTRATOR)) {
             // Check if we can actually join this channel
             // - If there is a userlimit
             // - If that userlimit is reached
@@ -128,8 +119,7 @@ public class AudioManagerImpl implements AudioManager
             // VOICE_MOVE_OTHERS allows access because you would be able to move people out to
             // open up a slot anyway
             if (userLimit <= channel.getMembers().size()
-                && !guild.getSelfMember().hasPermission(channel, Permission.VOICE_MOVE_OTHERS))
-            {
+                && !guild.getSelfMember().hasPermission(channel, Permission.VOICE_MOVE_OTHERS)) {
                 throw new InsufficientPermissionException(Permission.VOICE_MOVE_OTHERS,
                     "Unable to connect to VoiceChannel due to userlimit! Requires permission VOICE_MOVE_OTHERS to bypass");
             }
@@ -137,13 +127,11 @@ public class AudioManagerImpl implements AudioManager
     }
 
     @Override
-    public void closeAudioConnection()
-    {
+    public void closeAudioConnection() {
         closeAudioConnection(ConnectionStatus.NOT_CONNECTED);
     }
 
-    public void closeAudioConnection(ConnectionStatus reason)
-    {
+    public void closeAudioConnection(ConnectionStatus reason) {
         MiscUtil.locked(CONNECTION_LOCK, () ->
         {
             this.queuedAudioConnection = null;
@@ -156,96 +144,81 @@ public class AudioManagerImpl implements AudioManager
     }
 
     @Override
-    public JDA getJDA()
-    {
+    public JDA getJDA() {
         return api;
     }
 
     @Override
-    public Guild getGuild()
-    {
+    public Guild getGuild() {
         return guild;
     }
 
     @Override
-    public boolean isAttemptingToConnect()
-    {
+    public boolean isAttemptingToConnect() {
         return queuedAudioConnection != null;
     }
 
     @Override
-    public VoiceChannel getQueuedAudioConnection()
-    {
+    public VoiceChannel getQueuedAudioConnection() {
         return queuedAudioConnection;
     }
 
     @Override
-    public VoiceChannel getConnectedChannel()
-    {
+    public VoiceChannel getConnectedChannel() {
         return audioConnection == null ? null : audioConnection.getChannel();
     }
 
     @Override
-    public boolean isConnected()
-    {
+    public boolean isConnected() {
         return audioConnection != null;
     }
 
     @Override
-    public void setConnectTimeout(long timeout)
-    {
+    public void setConnectTimeout(long timeout) {
         this.timeout = timeout;
     }
 
     @Override
-    public long getConnectTimeout()
-    {
+    public long getConnectTimeout() {
         return timeout;
     }
 
     @Override
-    public void setSendingHandler(AudioSendHandler handler)
-    {
+    public void setSendingHandler(AudioSendHandler handler) {
         sendHandler = handler;
         if (audioConnection != null)
             audioConnection.setSendingHandler(handler);
     }
 
     @Override
-    public AudioSendHandler getSendingHandler()
-    {
+    public AudioSendHandler getSendingHandler() {
         return sendHandler;
     }
 
     @Override
-    public void setReceivingHandler(AudioReceiveHandler handler)
-    {
+    public void setReceivingHandler(AudioReceiveHandler handler) {
         receiveHandler = handler;
         if (audioConnection != null)
             audioConnection.setReceivingHandler(handler);
     }
 
     @Override
-    public AudioReceiveHandler getReceiveHandler()
-    {
+    public AudioReceiveHandler getReceiveHandler() {
         return receiveHandler;
     }
 
     @Override
-    public void setConnectionListener(ConnectionListener listener)
-    {
+    public void setConnectionListener(ConnectionListener listener) {
         this.connectionListener.setListener(listener);
     }
 
     @Override
-    public ConnectionListener getConnectionListener()
-    {
+    public ConnectionListener getConnectionListener() {
         return connectionListener.getListener();
     }
 
     @Override
-    public ConnectionStatus getConnectionStatus()
-    {
+    public ConnectionStatus getConnectionStatus() {
         if (audioConnection != null)
             return audioConnection.getWebSocket().getConnectionStatus();
         else
@@ -253,40 +226,33 @@ public class AudioManagerImpl implements AudioManager
     }
 
     @Override
-    public void setAutoReconnect(boolean shouldReconnect)
-    {
+    public void setAutoReconnect(boolean shouldReconnect) {
         this.shouldReconnect = shouldReconnect;
         if (audioConnection != null)
             audioConnection.getWebSocket().setAutoReconnect(shouldReconnect);
     }
 
     @Override
-    public boolean isAutoReconnect()
-    {
+    public boolean isAutoReconnect() {
         return shouldReconnect;
     }
 
     @Override
-    public void setSelfMuted(boolean muted)
-    {
-        if (selfMuted != muted)
-        {
+    public void setSelfMuted(boolean muted) {
+        if (selfMuted != muted) {
             this.selfMuted = muted;
             updateVoiceState();
         }
     }
 
     @Override
-    public boolean isSelfMuted()
-    {
+    public boolean isSelfMuted() {
         return selfMuted;
     }
 
     @Override
-    public void setSelfDeafened(boolean deafened)
-    {
-        if (selfDeafened != deafened)
-        {
+    public void setSelfDeafened(boolean deafened) {
+        if (selfDeafened != deafened) {
             this.selfDeafened = deafened;
             updateVoiceState();
         }
@@ -294,18 +260,15 @@ public class AudioManagerImpl implements AudioManager
     }
 
     @Override
-    public boolean isSelfDeafened()
-    {
+    public boolean isSelfDeafened() {
         return selfDeafened;
     }
 
-    public ConnectionListener getListenerProxy()
-    {
+    public ConnectionListener getListenerProxy() {
         return connectionListener;
     }
 
-    public void setAudioConnection(AudioConnection audioConnection)
-    {
+    public void setAudioConnection(AudioConnection audioConnection) {
         this.audioConnection = audioConnection;
         if (audioConnection == null)
             return;
@@ -316,35 +279,29 @@ public class AudioManagerImpl implements AudioManager
         audioConnection.setQueueTimeout(queueTimeout);
     }
 
-    public void prepareForRegionChange()
-    {
+    public void prepareForRegionChange() {
         VoiceChannel queuedChannel = audioConnection.getChannel();
         closeAudioConnection(ConnectionStatus.AUDIO_REGION_CHANGE);
         this.queuedAudioConnection = queuedChannel;
     }
 
-    public void setQueuedAudioConnection(VoiceChannel channel)
-    {
+    public void setQueuedAudioConnection(VoiceChannel channel) {
         queuedAudioConnection = channel;
     }
 
-    public void setConnectedChannel(VoiceChannel channel)
-    {
+    public void setConnectedChannel(VoiceChannel channel) {
         if (audioConnection != null)
             audioConnection.setChannel(channel);
     }
 
-    public void setQueueTimeout(long queueTimeout)
-    {
+    public void setQueueTimeout(long queueTimeout) {
         this.queueTimeout = queueTimeout;
         if (audioConnection != null)
             audioConnection.setQueueTimeout(queueTimeout);
     }
 
-    protected void updateVoiceState()
-    {
-        if (isConnected() || isAttemptingToConnect())
-        {
+    protected void updateVoiceState() {
+        if (isConnected() || isAttemptingToConnect()) {
             VoiceChannel channel = isConnected() ? getConnectedChannel() : getQueuedAudioConnection();
 
             //This is technically equivalent to an audio open/move packet.
@@ -353,14 +310,12 @@ public class AudioManagerImpl implements AudioManager
     }
 
     //Load the Opus library.
-    public static synchronized boolean init()
-    {
-        if(initialized)
+    public static synchronized boolean init() {
+        if (initialized)
             return AUDIO_SUPPORTED;
         initialized = true;
-        String nativesRoot  = null;
-        try
-        {
+        String nativesRoot = null;
+        try {
             //The libraries that this is referencing are available in the src/main/resources/opus/ folder.
             //Of course, when JDA is compiled that just becomes /opus/
             nativesRoot = "/natives/" + Platform.RESOURCE_PREFIX + "/%s";
@@ -374,30 +329,21 @@ public class AudioManagerImpl implements AudioManager
                 throw new UnsupportedOperationException();
 
             NativeUtil.loadLibraryFromJar(String.format(nativesRoot, "libopus"));
-        }
-        catch (Throwable e)
-        {
+        } catch (Throwable e) {
             if (e instanceof UnsupportedOperationException)
                 LOG.error("Sorry, JDA's audio system doesn't support this system.\n" +
-                        "Supported Systems: Windows(x86, x64), Mac(x86, x64) and Linux(x86, x64)\n" +
-                        "Operating system: " + Platform.RESOURCE_PREFIX);
-            else if (e instanceof  IOException)
-            {
+                    "Supported Systems: Windows(x86, x64), Mac(x86, x64) and Linux(x86, x64)\n" +
+                    "Operating system: " + Platform.RESOURCE_PREFIX);
+            else if (e instanceof IOException) {
                 LOG.error("There was an IO Exception when setting up the temp files for audio.", e);
-            }
-            else if (e instanceof UnsatisfiedLinkError)
-            {
+            } else if (e instanceof UnsatisfiedLinkError) {
                 LOG.error("JDA encountered a problem when attempting to load the Native libraries. Contact a DEV.", e);
-            }
-            else
-            {
+            } else {
                 LOG.error("An unknown error occurred while attempting to setup JDA's audio system!", e);
             }
 
             nativesRoot = null;
-        }
-        finally
-        {
+        } finally {
             OPUS_LIB_NAME = nativesRoot != null ? String.format(nativesRoot, "libopus") : null;
             AUDIO_SUPPORTED = nativesRoot != null;
 

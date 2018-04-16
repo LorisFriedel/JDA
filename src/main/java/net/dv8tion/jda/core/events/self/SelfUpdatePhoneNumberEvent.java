@@ -25,12 +25,10 @@ import net.dv8tion.jda.core.JDA;
  *
  * <p>Identifier: {@code phone}
  */
-public class SelfUpdatePhoneNumberEvent extends GenericSelfUpdateEvent<String>
-{
+public class SelfUpdatePhoneNumberEvent extends GenericSelfUpdateEvent<String> {
     public static final String IDENTIFIER = "phone";
 
-    public SelfUpdatePhoneNumberEvent(JDA api, long responseNumber, String oldPhoneNumber)
-    {
+    public SelfUpdatePhoneNumberEvent(JDA api, long responseNumber, String oldPhoneNumber) {
         super(api, responseNumber, oldPhoneNumber, api.getSelfUser().getPhoneNumber(), IDENTIFIER);
     }
 
@@ -39,8 +37,7 @@ public class SelfUpdatePhoneNumberEvent extends GenericSelfUpdateEvent<String>
      *
      * @return The old phone number or {@code null}.
      */
-    public String getOldPhoneNumber()
-    {
+    public String getOldPhoneNumber() {
         return getOldValue();
     }
 
@@ -49,8 +46,7 @@ public class SelfUpdatePhoneNumberEvent extends GenericSelfUpdateEvent<String>
      *
      * @return The new phone number
      */
-    public String getNewPhoneNumber()
-    {
+    public String getNewPhoneNumber() {
         return getNewValue();
     }
 }

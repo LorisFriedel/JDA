@@ -26,12 +26,11 @@ import java.util.List;
  *
  * @since 3.0
  */
-public interface IPermissionHolder
-{
+public interface IPermissionHolder {
 
     /**
      * The Guild to which this PermissionHolder is related
-     * 
+     *
      * @return A never-null Guild to which this PermissionHolder is linked
      */
     Guild getGuild();
@@ -46,9 +45,7 @@ public interface IPermissionHolder
     /**
      * Checks whether or not this PermissionHolder has the given {@link net.dv8tion.jda.core.Permission Permissions} in the Guild.
      *
-     * @param  permissions
-     *         Permissions to check for.
-     *
+     * @param permissions Permissions to check for.
      * @return True, if all of the specified Permissions are granted to this PermissionHolder.
      */
     boolean hasPermission(Permission... permissions);
@@ -57,26 +54,19 @@ public interface IPermissionHolder
      * Checks whether or not this PermissionHolder has the {@link net.dv8tion.jda.core.Permission Permissions} in the provided
      * {@code Collection<Permission>} in the Guild.
      *
-     * @param  permissions
-     *         Permissions to check for.
-     *
+     * @param permissions Permissions to check for.
      * @return True, if all of the specified Permissions are granted to this PermissionHolder.
-     *
-     * @see    java.util.EnumSet EnumSet
+     * @see java.util.EnumSet EnumSet
      */
     boolean hasPermission(Collection<Permission> permissions);
 
     /**
      * Checks whether or not this PermissionHolder has the given {@link net.dv8tion.jda.core.Permission Permissions} in the specified Channel.
      *
-     * @param  channel
-     *         The {@link net.dv8tion.jda.core.entities.Channel Channel} in which to check.
-     * @param  permissions
-     *         Permissions to check for.
-     *
+     * @param channel     The {@link net.dv8tion.jda.core.entities.Channel Channel} in which to check.
+     * @param permissions Permissions to check for.
      * @return True, if all of the specified Permissions are granted to this PermissionHolder in the provided Channel.
-     *
-     * @see    java.util.EnumSet EnumSet
+     * @see java.util.EnumSet EnumSet
      */
     boolean hasPermission(Channel channel, Permission... permissions);
 
@@ -84,11 +74,8 @@ public interface IPermissionHolder
      * Checks whether or not this PermissionHolder has the {@link net.dv8tion.jda.core.Permission Permissions} in the provided
      * {@code Collection<Permission>} in the specified Channel.
      *
-     * @param  channel
-     *         The {@link net.dv8tion.jda.core.entities.Channel Channel} in which to check.
-     * @param  permissions
-     *         Permissions to check for.
-     *
+     * @param channel     The {@link net.dv8tion.jda.core.entities.Channel Channel} in which to check.
+     * @param permissions Permissions to check for.
      * @return True, if all of the specified Permissions are granted to this PermissionHolder in the provided Channel.
      */
     boolean hasPermission(Channel channel, Collection<Permission> permissions);

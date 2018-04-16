@@ -29,8 +29,7 @@ package net.dv8tion.jda.core.audit;
  * <br>Then the target id returned by {@code entry.getTargetId()} and {@code entry.getTargetIdLong()}
  * can be used with {@link net.dv8tion.jda.core.JDA#getGuildById(long) JDA.getGuildById(id)}
  */
-public enum TargetType
-{
+public enum TargetType {
     GUILD,
     CHANNEL,
     ROLE,

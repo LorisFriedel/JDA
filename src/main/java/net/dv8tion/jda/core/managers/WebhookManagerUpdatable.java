@@ -45,8 +45,7 @@ import javax.annotation.CheckReturnValue;
  * the currently logged in account requires the Permission {@link net.dv8tion.jda.core.Permission#MANAGE_WEBHOOKS MANAGE_WEBHOOKS} in the parent TextChannel
  */
 @Deprecated
-public class WebhookManagerUpdatable
-{
+public class WebhookManagerUpdatable {
     protected final Webhook webhook;
 
     protected WebhookField<String> name;
@@ -56,11 +55,9 @@ public class WebhookManagerUpdatable
     /**
      * Creates a new WebhookManagerUpdatable instance
      *
-     * @param webhook
-     *        The target {@link net.dv8tion.jda.core.entities.Webhook Webhook} to modify
+     * @param webhook The target {@link net.dv8tion.jda.core.entities.Webhook Webhook} to modify
      */
-    public WebhookManagerUpdatable(Webhook webhook)
-    {
+    public WebhookManagerUpdatable(Webhook webhook) {
         this.webhook = webhook;
         setupFields();
     }
@@ -70,8 +67,7 @@ public class WebhookManagerUpdatable
      *
      * @return the corresponding JDA instance
      */
-    public JDA getJDA()
-    {
+    public JDA getJDA() {
         return webhook.getJDA();
     }
 
@@ -82,8 +78,7 @@ public class WebhookManagerUpdatable
      *
      * @return The parent {@link net.dv8tion.jda.core.entities.Guild Guild}
      */
-    public Guild getGuild()
-    {
+    public Guild getGuild() {
         return webhook.getGuild();
     }
 
@@ -94,8 +89,7 @@ public class WebhookManagerUpdatable
      *
      * @return The parent {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
      */
-    public TextChannel getChannel()
-    {
+    public TextChannel getChannel() {
         return webhook.getChannel();
     }
 
@@ -105,8 +99,7 @@ public class WebhookManagerUpdatable
      *
      * @return The target {@link net.dv8tion.jda.core.entities.Webhook Webhook}
      */
-    public Webhook getWebhook()
-    {
+    public Webhook getWebhook() {
         return webhook;
     }
 
@@ -124,8 +117,7 @@ public class WebhookManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.WebhookField WebhookField} - Type: {@code String}
      */
-    public WebhookField<String> getNameField()
-    {
+    public WebhookField<String> getNameField() {
         return name;
     }
 
@@ -139,8 +131,7 @@ public class WebhookManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.WebhookField WebhookField} - Type: {@link net.dv8tion.jda.core.entities.Icon}
      */
-    public WebhookField<Icon> getAvatarField()
-    {
+    public WebhookField<Icon> getAvatarField() {
         return avatar;
     }
 
@@ -159,8 +150,7 @@ public class WebhookManagerUpdatable
      *
      * @return {@link net.dv8tion.jda.core.managers.fields.WebhookField WebhookField} - Type: {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}
      */
-    public WebhookField<TextChannel> getChannelField()
-    {
+    public WebhookField<TextChannel> getChannelField() {
         return channel;
     }
 
@@ -169,8 +159,7 @@ public class WebhookManagerUpdatable
      * for this manager instance by calling {@link net.dv8tion.jda.core.managers.fields.Field#reset() Field.reset()} sequentially
      * <br>This is automatically called by {@link #update()}
      */
-    public void reset()
-    {
+    public void reset() {
         name.reset();
         avatar.reset();
         channel.reset();
@@ -187,26 +176,23 @@ public class WebhookManagerUpdatable
      * <p>Possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} for this
      * update include the following:
      * <ul>
-     *      <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
-     *      <br>If the TextChannel was deleted before finishing the task</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_CHANNEL UNKNOWN_CHANNEL}
+     * <br>If the TextChannel was deleted before finishing the task</li>
      *
-     *      <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
-     *      <br>If the currently logged in account was removed from the Guild before finishing the task</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_ACCESS MISSING_ACCESS}
+     * <br>If the currently logged in account was removed from the Guild before finishing the task</li>
      *
-     *      <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
-     *      <br>If the currently logged in account loses the {@link net.dv8tion.jda.core.Permission#MANAGE_WEBHOOKS MANAGE_WEBHOOKS Permission}</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MISSING_PERMISSIONS MISSING_PERMISSIONS}
+     * <br>If the currently logged in account loses the {@link net.dv8tion.jda.core.Permission#MANAGE_WEBHOOKS MANAGE_WEBHOOKS Permission}</li>
      * </ul>
      *
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If the currently logged in account does not have the Permission {@link net.dv8tion.jda.core.Permission#MANAGE_WEBHOOKS MANAGE_WEBHOOKS}
-     *         in either the current or selected new TextChannel.
-     *
      * @return {@link net.dv8tion.jda.core.requests.restaction.AuditableRestAction AuditableRestAction}
-     *         <br>Applies all changes that have been made in a single api-call.
+     * <br>Applies all changes that have been made in a single api-call.
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If the currently logged in account does not have the Permission {@link net.dv8tion.jda.core.Permission#MANAGE_WEBHOOKS MANAGE_WEBHOOKS}
+     *                                                                         in either the current or selected new TextChannel.
      */
     @CheckReturnValue
-    public AuditableRestAction<Void> update()
-    {
+    public AuditableRestAction<Void> update() {
         Member self = getGuild().getSelfMember();
         if (!self.hasPermission(webhook.getChannel(), Permission.MANAGE_WEBHOOKS))
             throw new InsufficientPermissionException(Permission.MANAGE_WEBHOOKS);
@@ -222,18 +208,15 @@ public class WebhookManagerUpdatable
             data.put("channel_id", channel.getValue().getId());
         if (name.shouldUpdate())
             data.put("name", name.getValue());
-        if (avatar.shouldUpdate())
-        {
+        if (avatar.shouldUpdate()) {
             Icon value = avatar.getValue();
             data.put("avatar", value != null ? value.getEncoding() : JSONObject.NULL);
         }
 
         Route.CompiledRoute route = Route.Webhooks.MODIFY_WEBHOOK.compile(webhook.getId());
-        return new AuditableRestAction<Void>(getJDA(), route, data)
-        {
+        return new AuditableRestAction<Void>(getJDA(), route, data) {
             @Override
-            protected void handleResponse(Response response, Request<Void> request)
-            {
+            protected void handleResponse(Response response, Request<Void> request) {
                 if (response.isOk())
                     request.onSuccess(null);
                 else
@@ -242,47 +225,39 @@ public class WebhookManagerUpdatable
         };
     }
 
-    protected boolean shouldUpdate()
-    {
+    protected boolean shouldUpdate() {
         return name.shouldUpdate()
-                || avatar.shouldUpdate()
-                || channel.shouldUpdate();
+            || avatar.shouldUpdate()
+            || channel.shouldUpdate();
     }
 
-    protected void setupFields()
-    {
-        name = new WebhookField<String>(this, webhook::getName)
-        {
+    protected void setupFields() {
+        name = new WebhookField<String>(this, webhook::getName) {
             @Override
-            public void checkValue(String value)
-            {
+            public void checkValue(String value) {
                 Checks.notNull(value, "default name");
             }
         };
 
-        avatar = new WebhookField<Icon>(this, null)
-        {
+        avatar = new WebhookField<Icon>(this, null) {
             @Override
-            public void checkValue(Icon value) { }
+            public void checkValue(Icon value) {
+            }
 
             @Override
-            public Icon getOriginalValue()
-            {
+            public Icon getOriginalValue() {
                 throw new UnsupportedOperationException("Cannot easily provide the original Avatar. Use User#getIconUrl() and download it yourself.");
             }
 
             @Override
-            public boolean shouldUpdate()
-            {
+            public boolean shouldUpdate() {
                 return isSet();
             }
         };
 
-        channel = new WebhookField<TextChannel>(this, webhook::getChannel)
-        {
+        channel = new WebhookField<TextChannel>(this, webhook::getChannel) {
             @Override
-            public void checkValue(TextChannel value)
-            {
+            public void checkValue(TextChannel value) {
                 Checks.notNull(value, "channel");
                 Checks.check(value.getGuild().equals(getGuild()), "Channel is not from the same Guild!");
             }

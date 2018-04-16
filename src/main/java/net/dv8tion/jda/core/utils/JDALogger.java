@@ -31,23 +31,19 @@ import java.util.Map;
  * <p>
  * It also has the utility method {@link #getLazyString(LazyEvaluation)} which is used to lazily construct Strings for Logging.
  */
-public class JDALogger
-{
+public class JDALogger {
     /**
      * Marks whether or not a SLF4J <code>StaticLoggerBinder</code> was found. If false, JDA will use its fallback logger.
      * <br>This variable is initialized during static class initialization.
      */
     public static final boolean SLF4J_ENABLED;
-    static
-    {
+
+    static {
         boolean tmp = false;
-        try
-        {
+        try {
             Class.forName("org.slf4j.impl.StaticLoggerBinder");
             tmp = true;
-        }
-        catch (ClassNotFoundException e)
-        {
+        } catch (ClassNotFoundException e) {
             //prints warning of missing implementation
             LoggerFactory.getLogger(JDALogger.class);
         }
@@ -56,7 +52,8 @@ public class JDALogger
 
     private static final Map<String, Logger> LOGS = new CaseInsensitiveMap<>();
 
-    private JDALogger() {}
+    private JDALogger() {
+    }
 
     /**
      * Will get the {@link org.slf4j.Logger} with the given log-name
@@ -64,15 +61,11 @@ public class JDALogger
      * <p>
      * The fallback logger will be an instance of a slightly modified version of SLF4Js SimpleLogger.
      *
-     * @param  name
-     *         The name of the Logger
-     *
+     * @param name The name of the Logger
      * @return Logger with given log name
      */
-    public static Logger getLog(String name)
-    {
-        synchronized (LOGS)
-        {
+    public static Logger getLog(String name) {
+        synchronized (LOGS) {
             if (SLF4J_ENABLED)
                 return LoggerFactory.getLogger(name);
             return LOGS.computeIfAbsent(name, SimpleLogger::new);
@@ -85,15 +78,11 @@ public class JDALogger
      * <p>
      * The fallback logger will be an instance of a slightly modified version of SLF4Js SimpleLogger.
      *
-     * @param  clazz
-     *         The class used for the Logger name
-     *
+     * @param clazz The class used for the Logger name
      * @return Logger for given Class
      */
-    public static Logger getLog(Class<?> clazz)
-    {
-        synchronized (LOGS)
-        {
+    public static Logger getLog(Class<?> clazz) {
+        synchronized (LOGS) {
             if (SLF4J_ENABLED)
                 return LoggerFactory.getLogger(clazz);
             return LOGS.computeIfAbsent(clazz.getName(), (n) -> new SimpleLogger(clazz.getSimpleName()));
@@ -103,24 +92,16 @@ public class JDALogger
     /**
      * Utility function to enable logging of complex statements more efficiently (lazy).
      *
-     * @param  lazyLambda
-     *         The Supplier used when evaluating the expression
-     *
+     * @param lazyLambda The Supplier used when evaluating the expression
      * @return An Object that can be passed to SLF4J's logging methods as lazy parameter
      */
-    public static Object getLazyString(LazyEvaluation lazyLambda)
-    {
-        return new Object()
-        {
+    public static Object getLazyString(LazyEvaluation lazyLambda) {
+        return new Object() {
             @Override
-            public String toString()
-            {
-                try
-                {
+            public String toString() {
+                try {
                     return lazyLambda.getString();
-                }
-                catch (Exception ex)
-                {
+                } catch (Exception ex) {
                     StringWriter sw = new StringWriter();
                     ex.printStackTrace(new PrintWriter(sw));
                     return "Error while evaluating lazy String... " + sw.toString();
@@ -133,17 +114,14 @@ public class JDALogger
      * Functional interface used for {@link #getLazyString(LazyEvaluation)} to lazily construct a String.
      */
     @FunctionalInterface
-    public interface LazyEvaluation
-    {
+    public interface LazyEvaluation {
         /**
          * This method is used by {@link #getLazyString(LazyEvaluation)}
          * when SLF4J requests String construction.
          * <br>The String returned by this is used to construct the log message.
          *
-         * @throws Exception
-         *         To allow lazy evaluation of methods that might throw exceptions
-         *
          * @return The String for log message
+         * @throws Exception To allow lazy evaluation of methods that might throw exceptions
          */
         String getString() throws Exception;
     }

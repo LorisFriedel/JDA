@@ -28,8 +28,7 @@ import org.json.JSONObject;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
-public abstract class ManagerBase extends AuditableRestAction<Void>
-{
+public abstract class ManagerBase extends AuditableRestAction<Void> {
     private static boolean enablePermissionChecks = true;
     protected long set = 0;
 
@@ -41,13 +40,10 @@ public abstract class ManagerBase extends AuditableRestAction<Void>
      * {@link net.dv8tion.jda.core.exceptions.InsufficientPermissionException InsufficientPermissionException}.
      * <br><b>Default: true</b>
      *
-     * @param enable
-     *        True, if JDA should perform permissions checks internally
-     *
-     * @see   #isPermissionChecksEnabled()
+     * @param enable True, if JDA should perform permissions checks internally
+     * @see #isPermissionChecksEnabled()
      */
-    public static void setPermissionChecksEnabled(boolean enable)
-    {
+    public static void setPermissionChecksEnabled(boolean enable) {
         enablePermissionChecks = enable;
     }
 
@@ -59,21 +55,17 @@ public abstract class ManagerBase extends AuditableRestAction<Void>
      * {@link net.dv8tion.jda.core.exceptions.InsufficientPermissionException InsufficientPermissionException}.
      *
      * @return True, if internal permission checks are enabled
-     *
-     * @see    #setPermissionChecksEnabled(boolean)
+     * @see #setPermissionChecksEnabled(boolean)
      */
-    public static boolean isPermissionChecksEnabled()
-    {
+    public static boolean isPermissionChecksEnabled() {
         return enablePermissionChecks;
     }
 
-    protected ManagerBase(JDA api, Route.CompiledRoute route)
-    {
+    protected ManagerBase(JDA api, Route.CompiledRoute route) {
         super(api, route);
     }
 
-    public ManagerBase reset(long fields)
-    {
+    public ManagerBase reset(long fields) {
         //logic explanation:
         //0101 = fields
         //1010 = ~fields
@@ -83,8 +75,7 @@ public abstract class ManagerBase extends AuditableRestAction<Void>
         return this;
     }
 
-    public ManagerBase reset(long... fields)
-    {
+    public ManagerBase reset(long... fields) {
         Checks.notNull(fields, "Fields");
         //trivial case
         if (fields.length == 0)
@@ -99,16 +90,14 @@ public abstract class ManagerBase extends AuditableRestAction<Void>
         return reset(sum);
     }
 
-    protected ManagerBase reset()
-    {
+    protected ManagerBase reset() {
         set = 0;
         return this;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public void queue(Consumer<Void> success, Consumer<Throwable> failure)
-    {
+    public void queue(Consumer<Void> success, Consumer<Throwable> failure) {
         if (shouldUpdate())
             super.queue(success, failure);
         else if (success != null)
@@ -118,16 +107,14 @@ public abstract class ManagerBase extends AuditableRestAction<Void>
     }
 
     @Override
-    public Void complete(boolean shouldQueue) throws RateLimitedException
-    {
+    public Void complete(boolean shouldQueue) throws RateLimitedException {
         if (shouldUpdate())
             return super.complete(shouldQueue);
         return null;
     }
 
     @Override
-    protected void handleResponse(Response response, Request<Void> request)
-    {
+    protected void handleResponse(Response response, Request<Void> request) {
         if (response.isOk())
             request.onSuccess(null);
         else
@@ -135,36 +122,29 @@ public abstract class ManagerBase extends AuditableRestAction<Void>
     }
 
     @Override
-    protected BooleanSupplier finalizeChecks()
-    {
+    protected BooleanSupplier finalizeChecks() {
         return enablePermissionChecks ? this::checkPermissions : super.finalizeChecks();
     }
 
-    protected Object opt(Object it)
-    {
+    protected Object opt(Object it) {
         return it == null ? JSONObject.NULL : it;
     }
 
-    protected boolean shouldUpdate()
-    {
+    protected boolean shouldUpdate() {
         return set != 0;
     }
 
-    protected boolean shouldUpdate(long bit)
-    {
+    protected boolean shouldUpdate(long bit) {
         return (set & bit) == bit;
     }
 
-    protected <E> void withLock(E object, Consumer<E> consumer)
-    {
-        synchronized (object)
-        {
+    protected <E> void withLock(E object, Consumer<E> consumer) {
+        synchronized (object) {
             consumer.accept(object);
         }
     }
 
-    protected boolean checkPermissions()
-    {
+    protected boolean checkPermissions() {
         return true;
     }
 }

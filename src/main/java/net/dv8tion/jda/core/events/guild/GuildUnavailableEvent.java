@@ -25,10 +25,8 @@ import net.dv8tion.jda.core.entities.Guild;
  *
  * <p>Can be used to detect that a Guild stopped responding.
  */
-public class GuildUnavailableEvent extends GenericGuildEvent
-{
-    public GuildUnavailableEvent(JDA api, long responseNumber, Guild guild)
-    {
+public class GuildUnavailableEvent extends GenericGuildEvent {
+    public GuildUnavailableEvent(JDA api, long responseNumber, Guild guild) {
         super(api, responseNumber, guild);
     }
 }

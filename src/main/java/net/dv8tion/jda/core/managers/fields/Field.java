@@ -30,19 +30,15 @@ import java.util.function.Supplier;
  * <p><b>This class is abstract and requires an implementation
  * for {@link #checkValue(Object)}</b>
  *
- * @param  <T>
- *         The Field-Type for this Field.
- *         This Type represents the value that will be modified by the manager
- * @param  <M>
- *         The Manager-Type for this Field.
- *         This Type represents the Manager that is returned by {@link #setValue(Object)}
- *         for chaining convenience.
- *
- * @since  3.0
+ * @param <T> The Field-Type for this Field.
+ *            This Type represents the value that will be modified by the manager
+ * @param <M> The Manager-Type for this Field.
+ *            This Type represents the Manager that is returned by {@link #setValue(Object)}
+ *            for chaining convenience.
+ * @since 3.0
  */
 @Deprecated
-public abstract class Field<T, M>
-{
+public abstract class Field<T, M> {
     protected final M manager;
     protected final Supplier<T> originalValue;
     protected T value;
@@ -52,15 +48,12 @@ public abstract class Field<T, M>
     /**
      * Creates a new Field instance
      *
-     * @param manager
-     *        The updatable manager instance this field
-     *        is used in. This will be returned by {@link #setValue(Object)} for chaining convenience
-     * @param originalValue
-     *        The original value, represented with a {@link java.util.function.Supplier Supplier}
-     *        access function.
+     * @param manager       The updatable manager instance this field
+     *                      is used in. This will be returned by {@link #setValue(Object)} for chaining convenience
+     * @param originalValue The original value, represented with a {@link java.util.function.Supplier Supplier}
+     *                      access function.
      */
-    public Field(M manager, Supplier<T> originalValue)
-    {
+    public Field(M manager, Supplier<T> originalValue) {
         this.manager = manager;
         this.originalValue = originalValue;
         this.value = null;
@@ -71,11 +64,9 @@ public abstract class Field<T, M>
      * The currently set value, null if no value has been set.
      *
      * @return The current value, null if no value has been set
-     *
-     * @see    #getOriginalValue()
+     * @see #getOriginalValue()
      */
-    public T getValue()
-    {
+    public T getValue() {
         return value;
     }
 
@@ -84,15 +75,11 @@ public abstract class Field<T, M>
      * This might not work for some field implementations and will throw
      * an {@link java.lang.UnsupportedOperationException UnsupportedOperationException}.
      *
-     * @throws UnsupportedOperationException
-     *         If the original value is not accessible
-     *
      * @return The original value for the underlying entity
-     *
-     * @see    #getValue()
+     * @throws UnsupportedOperationException If the original value is not accessible
+     * @see #getValue()
      */
-    public T getOriginalValue()
-    {
+    public T getOriginalValue() {
         return originalValue.get();
     }
 
@@ -104,18 +91,12 @@ public abstract class Field<T, M>
      * <p>Values might be checked differently depending on the Field implementation.
      * <br>The check criteria are specified in the field getter of the updatable manager.
      *
-     * @param  value
-     *         The value that should be used by the update operation
-     *
-     * @throws IllegalArgumentException
-     *         If the provided value does not pass the specified checks
-     *
+     * @param value The value that should be used by the update operation
      * @return The specific manager instance for chaining convenience
-     *
-     * @see    #isSet()
+     * @throws IllegalArgumentException If the provided value does not pass the specified checks
+     * @see #isSet()
      */
-    public M setValue(T value)
-    {
+    public M setValue(T value) {
         checkValue(value);
 
         this.value = value;
@@ -129,8 +110,7 @@ public abstract class Field<T, M>
      *
      * @return Whether the value for this Field has been set
      */
-    public boolean isSet()
-    {
+    public boolean isSet() {
         return set;
     }
 
@@ -138,11 +118,10 @@ public abstract class Field<T, M>
      * Whether the field should be update or not
      *
      * @return Whether the field should be update or not
-     *         <br>This (in most cases) is {@code true} when the value has been set and is
-     *         different from the value returned by the original value {@link java.util.function.Supplier Supplier}
+     * <br>This (in most cases) is {@code true} when the value has been set and is
+     * different from the value returned by the original value {@link java.util.function.Supplier Supplier}
      */
-    public boolean shouldUpdate()
-    {
+    public boolean shouldUpdate() {
         return isSet() && !equals(getOriginalValue());
     }
 
@@ -151,8 +130,7 @@ public abstract class Field<T, M>
      *
      * @return The Manager of this specific Field instance
      */
-    public M getManager()
-    {
+    public M getManager() {
         return manager;
     }
 
@@ -161,10 +139,9 @@ public abstract class Field<T, M>
      * <br>This will cause {@link #isSet()} to return {@code false}
      *
      * @return The specific manager instance for chaining convenience
-     *         <br>Similar to {@link #setValue(Object)}
+     * <br>Similar to {@link #setValue(Object)}
      */
-    public M reset()
-    {
+    public M reset() {
         this.value = null;
         this.set = false;
 
@@ -176,26 +153,20 @@ public abstract class Field<T, M>
      *
      * <p><b>This method is abstract and requires specific implementation</b>
      *
-     * @param  value
-     *         The value that should be checked
-     *
-     * @throws IllegalArgumentException
-     *         If the specified value does not pass the specified checks
-     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException
-     *         If this value requires specific {@link net.dv8tion.jda.core.Permission Permissions}
-     *         that are not fulfilled
+     * @param value The value that should be checked
+     * @throws IllegalArgumentException                                        If the specified value does not pass the specified checks
+     * @throws net.dv8tion.jda.core.exceptions.InsufficientPermissionException If this value requires specific {@link net.dv8tion.jda.core.Permission Permissions}
+     *                                                                         that are not fulfilled
      */
     public abstract void checkValue(T value);
 
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         return isSet() && Objects.equals(o, value);
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         throw new UnsupportedOperationException("toString is disabled for Fields due to possible, accidental usage in JSON bodies.");
     }
 }

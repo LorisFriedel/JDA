@@ -25,15 +25,13 @@ import net.dv8tion.jda.core.entities.VoiceChannel;
  *
  * <p>Identifier: {@code bitrate}
  */
-public class VoiceChannelUpdateBitrateEvent extends GenericVoiceChannelUpdateEvent<Integer>
-{
+public class VoiceChannelUpdateBitrateEvent extends GenericVoiceChannelUpdateEvent<Integer> {
     public static final String IDENTIFIER = "bitrate";
 
     private final int oldBitrate;
     private final int newBitrate;
 
-    public VoiceChannelUpdateBitrateEvent(JDA api, long responseNumber, VoiceChannel channel, int oldBitrate)
-    {
+    public VoiceChannelUpdateBitrateEvent(JDA api, long responseNumber, VoiceChannel channel, int oldBitrate) {
         super(api, responseNumber, channel);
         this.oldBitrate = oldBitrate;
         this.newBitrate = channel.getBitrate();
@@ -44,8 +42,7 @@ public class VoiceChannelUpdateBitrateEvent extends GenericVoiceChannelUpdateEve
      *
      * @return The old bitrate
      */
-    public int getOldBitrate()
-    {
+    public int getOldBitrate() {
         return oldBitrate;
     }
 
@@ -54,26 +51,22 @@ public class VoiceChannelUpdateBitrateEvent extends GenericVoiceChannelUpdateEve
      *
      * @return The new bitrate
      */
-    public int getNewBitrate()
-    {
+    public int getNewBitrate() {
         return newBitrate;
     }
 
     @Override
-    public String getPropertyIdentifier()
-    {
+    public String getPropertyIdentifier() {
         return IDENTIFIER;
     }
 
     @Override
-    public Integer getOldValue()
-    {
+    public Integer getOldValue() {
         return oldBitrate;
     }
 
     @Override
-    public Integer getNewValue()
-    {
+    public Integer getNewValue() {
         return newBitrate;
     }
 }

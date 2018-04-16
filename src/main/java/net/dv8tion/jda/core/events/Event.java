@@ -24,23 +24,18 @@ import net.dv8tion.jda.core.JDA;
  * <p>Can be used to check if an Object is a JDA event in {@link net.dv8tion.jda.core.hooks.EventListener EventListener} implementations to distinguish what event is being fired.
  * <br>Adapter implementation: {@link net.dv8tion.jda.core.hooks.ListenerAdapter ListenerAdapter}
  */
-public abstract class Event
-{
+public abstract class Event {
     protected final JDA api;
     protected final long responseNumber;
 
     /**
      * Creates a new Event from the given JDA instance
      *
-     * @param api
-     *        Current JDA instance
-     * @param responseNumber
-     *        The sequence number for this event
-     *
-     * @see   #Event(net.dv8tion.jda.core.JDA)
+     * @param api            Current JDA instance
+     * @param responseNumber The sequence number for this event
+     * @see #Event(net.dv8tion.jda.core.JDA)
      */
-    public Event(JDA api, long responseNumber)
-    {
+    public Event(JDA api, long responseNumber) {
         this.api = api;
         this.responseNumber = responseNumber;
     }
@@ -49,11 +44,9 @@ public abstract class Event
      * Creates a new Event from the given JDA instance
      * <br>Uses the current {@link net.dv8tion.jda.core.JDA#getResponseTotal()} as sequence
      *
-     * @param api
-     *        Current JDA instance
+     * @param api Current JDA instance
      */
-    public Event(JDA api)
-    {
+    public Event(JDA api) {
         this(api, api.getResponseTotal());
     }
 
@@ -62,8 +55,7 @@ public abstract class Event
      *
      * @return The corresponding JDA instance
      */
-    public JDA getJDA()
-    {
+    public JDA getJDA() {
         return api;
     }
 
@@ -73,8 +65,7 @@ public abstract class Event
      *
      * @return The current sequence number for this event
      */
-    public long getResponseNumber()
-    {
+    public long getResponseNumber() {
         return responseNumber;
     }
 }

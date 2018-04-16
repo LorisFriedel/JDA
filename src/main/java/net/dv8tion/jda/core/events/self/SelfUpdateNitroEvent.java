@@ -25,12 +25,10 @@ import net.dv8tion.jda.core.JDA;
  *
  * <p>Identifier: {@code nitro}
  */
-public class SelfUpdateNitroEvent extends GenericSelfUpdateEvent<Boolean>
-{
+public class SelfUpdateNitroEvent extends GenericSelfUpdateEvent<Boolean> {
     public static final String IDENTIFIER = "nitro";
 
-    public SelfUpdateNitroEvent(JDA api, long responseNumber, boolean wasNitro)
-    {
+    public SelfUpdateNitroEvent(JDA api, long responseNumber, boolean wasNitro) {
         super(api, responseNumber, wasNitro, !wasNitro, IDENTIFIER);
     }
 
@@ -39,8 +37,7 @@ public class SelfUpdateNitroEvent extends GenericSelfUpdateEvent<Boolean>
      *
      * @return The old nitro subscription status.
      */
-    public boolean wasNitro()
-    {
+    public boolean wasNitro() {
         return getOldValue();
     }
 }

@@ -31,16 +31,13 @@ import java.util.stream.Collectors;
  *
  * <p>Can be used to retrieve the changed permissions
  */
-public class CategoryUpdatePermissionsEvent extends GenericCategoryEvent
-{
+public class CategoryUpdatePermissionsEvent extends GenericCategoryEvent {
     protected final List<IPermissionHolder> changed;
 
-    public CategoryUpdatePermissionsEvent(JDA api, long responseNumber, Category category, List<IPermissionHolder> changed)
-    {
+    public CategoryUpdatePermissionsEvent(JDA api, long responseNumber, Category category, List<IPermissionHolder> changed) {
         super(api, responseNumber, category);
         this.changed = changed;
     }
-
 
 
     /**
@@ -48,8 +45,7 @@ public class CategoryUpdatePermissionsEvent extends GenericCategoryEvent
      *
      * @return Immutable list of permission holders affected by this event
      */
-    public List<IPermissionHolder> getChangedPermissionHolders()
-    {
+    public List<IPermissionHolder> getChangedPermissionHolders() {
         return changed;
     }
 
@@ -58,8 +54,7 @@ public class CategoryUpdatePermissionsEvent extends GenericCategoryEvent
      *
      * @return Immutable list of affected roles
      */
-    public List<Role> getChangedRoles()
-    {
+    public List<Role> getChangedRoles() {
         return changed.stream()
             .filter(it -> it instanceof Role)
             .map(Role.class::cast)
@@ -71,8 +66,7 @@ public class CategoryUpdatePermissionsEvent extends GenericCategoryEvent
      *
      * @return Immutable list of affected members
      */
-    public List<Member> getChangedMembers()
-    {
+    public List<Member> getChangedMembers() {
         return changed.stream()
             .filter(it -> it instanceof Member)
             .map(Member.class::cast)
@@ -83,13 +77,10 @@ public class CategoryUpdatePermissionsEvent extends GenericCategoryEvent
      * Deprecated.
      *
      * @return List of affected members
-     *
-     * @deprecated
-     *         Use {@link #getChangedMembers()} instead
+     * @deprecated Use {@link #getChangedMembers()} instead
      */
     @Deprecated
-    public List<Member> getMembersWithPermissionChanges()
-    {
+    public List<Member> getMembersWithPermissionChanges() {
         return getChangedMembers();
     }
 }

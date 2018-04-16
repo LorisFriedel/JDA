@@ -24,113 +24,95 @@ import net.dv8tion.jda.core.entities.Guild;
 import java.util.List;
 import java.util.Locale;
 
-public class UserSettingsImpl implements UserSettings
-{
+public class UserSettingsImpl implements UserSettings {
 
     private final JDA api;
 
     private OnlineStatus status = OnlineStatus.UNKNOWN;
 
-    public UserSettingsImpl(JDA api)
-    {
+    public UserSettingsImpl(JDA api) {
         this.api = api;
     }
 
     @Override
-    public JDA getJDA()
-    {
+    public JDA getJDA() {
         return api;
     }
 
 
     @Override
-    public OnlineStatus getStatus()
-    {
+    public OnlineStatus getStatus() {
         return status;
     }
 
     @Override
-    public Locale getLocale()
-    {
+    public Locale getLocale() {
         return null;
     }
 
     @Override
-    public List<Guild> getGuildPositions()
-    {
+    public List<Guild> getGuildPositions() {
         return null;
     }
 
     @Override
-    public List<Guild> getRestrictedGuilds()
-    {
+    public List<Guild> getRestrictedGuilds() {
         return null;
     }
 
     @Override
-    public boolean isAllowEmailFriendRequest()
-    {
+    public boolean isAllowEmailFriendRequest() {
         return false;
     }
 
     @Override
-    public boolean isConvertEmoticons()
-    {
+    public boolean isConvertEmoticons() {
         return false;
     }
 
     @Override
-    public boolean isDetectPlatformAccounts()
-    {
+    public boolean isDetectPlatformAccounts() {
         return false;
     }
 
     @Override
-    public boolean isDeveloperMode()
-    {
+    public boolean isDeveloperMode() {
         return false;
     }
 
     @Override
-    public boolean isEnableTTS()
-    {
+    public boolean isEnableTTS() {
         return false;
     }
 
     @Override
-    public boolean isShowCurrentGame()
-    {
+    public boolean isShowCurrentGame() {
         return false;
     }
 
     @Override
-    public boolean isRenderEmbeds()
-    {
+    public boolean isRenderEmbeds() {
         return false;
     }
 
     @Override
-    public boolean isMessageDisplayCompact()
-    {
+    public boolean isMessageDisplayCompact() {
         return false;
     }
 
     @Override
-    public boolean isInlineEmbedMedia()
-    {
+    public boolean isInlineEmbedMedia() {
         return false;
     }
 
     @Override
-    public boolean isInlineAttachmentMedia()
-    {
+    public boolean isInlineAttachmentMedia() {
         return false;
     }
 
     /* -- Setters -- */
 
-    public UserSettingsImpl setStatus(OnlineStatus status)
-    {
+    public UserSettingsImpl setStatus(OnlineStatus status) {
         this.status = status;
         return this;
     }
@@ -138,20 +120,17 @@ public class UserSettingsImpl implements UserSettings
     /* -- Object overrides -- */
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return Long.hashCode(getJDA().getSelfUser().getIdLong());
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         return obj instanceof UserSettingsImpl && getJDA().equals(((UserSettingsImpl) obj).getJDA());
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "UserSettings(" + getJDA().getSelfUser() + ")";
     }
 }

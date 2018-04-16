@@ -27,12 +27,10 @@ import net.dv8tion.jda.core.entities.Member;
  *
  * <p>Identifier: {@code owner}
  */
-public class GuildUpdateOwnerEvent extends GenericGuildUpdateEvent<Member>
-{
+public class GuildUpdateOwnerEvent extends GenericGuildUpdateEvent<Member> {
     public static final String IDENTIFIER = "owner";
 
-    public GuildUpdateOwnerEvent(JDA api, long responseNumber, Guild guild, Member oldOwner)
-    {
+    public GuildUpdateOwnerEvent(JDA api, long responseNumber, Guild guild, Member oldOwner) {
         super(api, responseNumber, guild, oldOwner, guild.getOwner(), IDENTIFIER);
     }
 
@@ -41,8 +39,7 @@ public class GuildUpdateOwnerEvent extends GenericGuildUpdateEvent<Member>
      *
      * @return The old owner
      */
-    public Member getOldOwner()
-    {
+    public Member getOldOwner() {
         return getOldValue();
     }
 
@@ -51,8 +48,7 @@ public class GuildUpdateOwnerEvent extends GenericGuildUpdateEvent<Member>
      *
      * @return The new owner
      */
-    public Member getNewOwner()
-    {
+    public Member getNewOwner() {
         return getNewValue();
     }
 }

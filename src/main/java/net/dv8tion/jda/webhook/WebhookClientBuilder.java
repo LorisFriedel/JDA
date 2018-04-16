@@ -32,8 +32,7 @@ import java.util.regex.Pattern;
 /**
  * Builder that creates a new {@link net.dv8tion.jda.webhook.WebhookClient WebhookClient} instance
  */
-public class WebhookClientBuilder
-{
+public class WebhookClientBuilder {
     public static final OkHttpClient.Builder DEFAULT_HTTP_BUILDER = new OkHttpClient.Builder();
     private static final Pattern WEBHOOK_PATTERN = Pattern.compile("(?:https?://)?(?:\\w+\\.)?discordapp\\.com/api(?:/v\\d+)?/webhooks/(\\d+)/([\\w-]+)(?:/(?:\\w+)?)?");
 
@@ -48,18 +47,13 @@ public class WebhookClientBuilder
     /**
      * Creates a new WebhookClientBuilder with the provided id and token
      *
-     * @param  id
-     *         The snowflake id of the target webhook
-     * @param  token
-     *         The authorization token of the target webhook
-     *         <br><b>This is not a bot/client token!</b>
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided token is {@code null}
-     *         or contains any whitespace!
+     * @param id    The snowflake id of the target webhook
+     * @param token The authorization token of the target webhook
+     *              <br><b>This is not a bot/client token!</b>
+     * @throws java.lang.IllegalArgumentException If the provided token is {@code null}
+     *                                            or contains any whitespace!
      */
-    public WebhookClientBuilder(final long id, final String token)
-    {
+    public WebhookClientBuilder(final long id, final String token) {
         Checks.noWhitespace(token, "Token");
         this.id = id;
         this.token = token;
@@ -68,20 +62,15 @@ public class WebhookClientBuilder
     /**
      * Creates a new WebhookClientBuilder with the provided webhook URL
      *
-     * @param  url
-     *         The URL of the webhook. May be directly copied from Discord's UI
-     *         <br>Example: {@code https://discordapp.com/api/webhooks/123456789012345678/my-webhook-token}
-     *         <br>This constructor also parses URLs pointing to subdomains of {@code discordapp.com}
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided URL is {@code null}
-     *         or is incorrectly formatted
+     * @param url The URL of the webhook. May be directly copied from Discord's UI
+     *            <br>Example: {@code https://discordapp.com/api/webhooks/123456789012345678/my-webhook-token}
+     *            <br>This constructor also parses URLs pointing to subdomains of {@code discordapp.com}
+     * @throws java.lang.IllegalArgumentException If the provided URL is {@code null}
+     *                                            or is incorrectly formatted
      */
-    public WebhookClientBuilder(@Nonnull String url)
-    {
+    public WebhookClientBuilder(@Nonnull String url) {
         Matcher matcher = WEBHOOK_PATTERN.matcher(url);
-        if (!matcher.matches())
-        {
+        if (!matcher.matches()) {
             throw new IllegalArgumentException("Failed to parse webhook URL");
         }
 
@@ -92,14 +81,10 @@ public class WebhookClientBuilder
     /**
      * Creates a new WebhookClientBuilder with the provided id and token
      *
-     * @param  webhook
-     *         The target {@link net.dv8tion.jda.core.entities.Webhook Webhook}
-     *
-     * @throws java.lang.NullPointerException
-     *         If the provided {@link net.dv8tion.jda.core.entities.Webhook Webhook} is {@code null}
+     * @param webhook The target {@link net.dv8tion.jda.core.entities.Webhook Webhook}
+     * @throws java.lang.NullPointerException If the provided {@link net.dv8tion.jda.core.entities.Webhook Webhook} is {@code null}
      */
-    public WebhookClientBuilder(@Nonnull Webhook webhook)
-    {
+    public WebhookClientBuilder(@Nonnull Webhook webhook) {
         this(webhook.getIdLong(), webhook.getToken());
     }
 
@@ -111,13 +96,10 @@ public class WebhookClientBuilder
      * <p><b><u>Closing the {@link net.dv8tion.jda.webhook.WebhookClient WebhookClient} will close this
      * executor service!</u></b>
      *
-     * @param  executorService
-     *         The executor service that should be used
-     *
+     * @param executorService The executor service that should be used
      * @return The current WebhookClientBuilder for chaining convenience
      */
-    public WebhookClientBuilder setExecutorService(@Nullable ScheduledExecutorService executorService)
-    {
+    public WebhookClientBuilder setExecutorService(@Nullable ScheduledExecutorService executorService) {
         this.pool = executorService;
         return this;
     }
@@ -129,13 +111,10 @@ public class WebhookClientBuilder
      * <p>Setting this will skip the {@link #setHttpClientBuilder(okhttp3.OkHttpClient.Builder) setHttpClientBuilder(OkHttpClient.Builder)}
      * setting and directly use the provided client!
      *
-     * @param  client
-     *         The client that should be used
-     *
+     * @param client The client that should be used
      * @return The current WebhookClientBuilder for chaining convenience
      */
-    public WebhookClientBuilder setHttpClient(@Nullable OkHttpClient client)
-    {
+    public WebhookClientBuilder setHttpClient(@Nullable OkHttpClient client) {
         this.client = client;
         return this;
     }
@@ -147,13 +126,10 @@ public class WebhookClientBuilder
      *
      * <p>This setting is ignored if {@link #setHttpClient(okhttp3.OkHttpClient)} is set!
      *
-     * @param  builder
-     *         The builder that should be used
-     *
+     * @param builder The builder that should be used
      * @return The current WebhookClientBuilder for chaining convenience
      */
-    public WebhookClientBuilder setHttpClientBuilder(@Nullable OkHttpClient.Builder builder)
-    {
+    public WebhookClientBuilder setHttpClientBuilder(@Nullable OkHttpClient.Builder builder) {
         Checks.notNull(builder, "Builder");
         this.builder = builder;
         return this;
@@ -164,15 +140,12 @@ public class WebhookClientBuilder
      * to create Threads for rate limitation handling of the created {@link net.dv8tion.jda.webhook.WebhookClient WebhookClient}!
      * <br>This allows changing thread information such as name without having to create your own executor.
      *
-     * @param  factory
-     *         The {@link java.util.concurrent.ThreadFactory ThreadFactory} that will
-     *         be used when no {@link java.util.concurrent.ScheduledExecutorService ScheduledExecutorService}
-     *         has been set via {@link #setExecutorService(ScheduledExecutorService)}
-     *
+     * @param factory The {@link java.util.concurrent.ThreadFactory ThreadFactory} that will
+     *                be used when no {@link java.util.concurrent.ScheduledExecutorService ScheduledExecutorService}
+     *                has been set via {@link #setExecutorService(ScheduledExecutorService)}
      * @return The current WebhookClientBuilder for chaining convenience
      */
-    public WebhookClientBuilder setThreadFactory(@Nullable ThreadFactory factory)
-    {
+    public WebhookClientBuilder setThreadFactory(@Nullable ThreadFactory factory) {
         this.threadFactory = factory;
         return this;
     }
@@ -184,13 +157,10 @@ public class WebhookClientBuilder
      *
      * <p>This will not be used when the default thread pool has been set via {@link #setExecutorService(ScheduledExecutorService)}!
      *
-     * @param  isDaemon
-     *         True, if the threads should be daemon
-     *
+     * @param isDaemon True, if the threads should be daemon
      * @return The current WebhookClientBuilder for chaining convenience
      */
-    public WebhookClientBuilder setDaemon(boolean isDaemon)
-    {
+    public WebhookClientBuilder setDaemon(boolean isDaemon) {
         this.isDaemon = isDaemon;
         return this;
     }
@@ -204,17 +174,14 @@ public class WebhookClientBuilder
      *
      * @return The new WebhookClient instance
      */
-    public WebhookClient build()
-    {
+    public WebhookClient build() {
         OkHttpClient client = this.client;
-        if (client == null)
-        {
+        if (client == null) {
             if (builder == null)
                 builder = DEFAULT_HTTP_BUILDER;
             client = builder.build();
         }
-        if (pool == null)
-        {
+        if (pool == null) {
             if (threadFactory == null)
                 threadFactory = new DefaultWebhookThreadFactory();
             pool = Executors.newSingleThreadScheduledExecutor(threadFactory);
@@ -222,11 +189,9 @@ public class WebhookClientBuilder
         return new WebhookClient(id, token, client, pool);
     }
 
-    public final class DefaultWebhookThreadFactory implements ThreadFactory
-    {
+    public final class DefaultWebhookThreadFactory implements ThreadFactory {
         @Override
-        public Thread newThread(Runnable r)
-        {
+        public Thread newThread(Runnable r) {
             final Thread thread = new Thread(r, "Webhook-RateLimit Thread WebhookID: " + id);
             thread.setDaemon(isDaemon);
             return thread;

@@ -26,12 +26,10 @@ import net.dv8tion.jda.core.entities.Member;
  *
  * <p>Can be used to detect when a member is deafened or un-deafened.
  */
-public class GuildVoiceDeafenEvent extends GenericGuildVoiceEvent
-{
+public class GuildVoiceDeafenEvent extends GenericGuildVoiceEvent {
     protected final boolean deafened;
 
-    public GuildVoiceDeafenEvent(JDA api, long responseNumber, Member member)
-    {
+    public GuildVoiceDeafenEvent(JDA api, long responseNumber, Member member) {
         super(api, responseNumber, member);
         this.deafened = member.getVoiceState().isDeafened();
     }
@@ -40,10 +38,9 @@ public class GuildVoiceDeafenEvent extends GenericGuildVoiceEvent
      * Whether the member was deafened in this event.
      *
      * @return True, if the member was deafened with this event
-     *         <br>False, if the member was un-deafened in this event
+     * <br>False, if the member was un-deafened in this event
      */
-    public boolean isDeafened()
-    {
+    public boolean isDeafened() {
         return deafened;
     }
 }

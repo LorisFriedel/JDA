@@ -22,15 +22,13 @@ import net.dv8tion.jda.core.entities.User;
 
 /**
  * Indicates that a Message was edited in a {@link net.dv8tion.jda.core.entities.TextChannel TextChannel}.
- * 
+ *
  * <p>Can be used to retrieve affected TextChannel and Message.
  */
-public class GuildMessageUpdateEvent extends GenericGuildMessageEvent
-{
+public class GuildMessageUpdateEvent extends GenericGuildMessageEvent {
     private final Message message;
 
-    public GuildMessageUpdateEvent(JDA api, long responseNumber, Message message)
-    {
+    public GuildMessageUpdateEvent(JDA api, long responseNumber, Message message) {
         super(api, responseNumber, message.getIdLong(), message.getTextChannel());
         this.message = message;
     }
@@ -40,8 +38,7 @@ public class GuildMessageUpdateEvent extends GenericGuildMessageEvent
      *
      * @return The Message
      */
-    public Message getMessage()
-    {
+    public Message getMessage() {
         return message;
     }
 
@@ -49,11 +46,9 @@ public class GuildMessageUpdateEvent extends GenericGuildMessageEvent
      * The author of this message
      *
      * @return The author of this message
-     *
-     * @see    net.dv8tion.jda.core.entities.User User
+     * @see net.dv8tion.jda.core.entities.User User
      */
-    public User getAuthor()
-    {
+    public User getAuthor() {
         return message.getAuthor();
     }
 
@@ -62,8 +57,7 @@ public class GuildMessageUpdateEvent extends GenericGuildMessageEvent
      *
      * @return The member instance for the author
      */
-    public Member getMember()
-    {
+    public Member getMember() {
         return getGuild().getMember(getAuthor());
     }
 }

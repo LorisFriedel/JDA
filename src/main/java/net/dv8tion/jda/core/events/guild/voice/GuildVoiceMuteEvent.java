@@ -26,12 +26,10 @@ import net.dv8tion.jda.core.entities.Member;
  *
  * <p>Can be used to detect when a member is muted or un-muted.
  */
-public class GuildVoiceMuteEvent extends GenericGuildVoiceEvent
-{
+public class GuildVoiceMuteEvent extends GenericGuildVoiceEvent {
     protected final boolean muted;
 
-    public GuildVoiceMuteEvent(JDA api, long responseNumber, Member member)
-    {
+    public GuildVoiceMuteEvent(JDA api, long responseNumber, Member member) {
         super(api, responseNumber, member);
         this.muted = member.getVoiceState().isMuted();
     }
@@ -40,10 +38,9 @@ public class GuildVoiceMuteEvent extends GenericGuildVoiceEvent
      * Whether the member was muted in this event.
      *
      * @return True, if the member was muted with this event
-     *         <br>False, if the member was un-muted in this event
+     * <br>False, if the member was un-muted in this event
      */
-    public boolean isMuted()
-    {
+    public boolean isMuted() {
         return muted;
     }
 }

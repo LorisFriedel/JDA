@@ -22,8 +22,7 @@ import java.util.function.Consumer;
 /**
  * Used to pass a context to async exception handling for debugging purposes.
  */
-public class ContextException extends Exception
-{
+public class ContextException extends Exception {
     /**
      * Creates a failure consumer that appends a context cause
      * before printing the stack trace using {@link Throwable#printStackTrace()}.
@@ -32,8 +31,7 @@ public class ContextException extends Exception
      * @return Wrapping failure consumer around {@code Throwable::printStackTrace}
      */
     @Nonnull
-    public static Consumer<Throwable> herePrintingTrace()
-    {
+    public static Consumer<Throwable> herePrintingTrace() {
         return here(Throwable::printStackTrace);
     }
 
@@ -41,14 +39,11 @@ public class ContextException extends Exception
      * Creates a wrapping {@link java.util.function.Consumer Consumer} for
      * the provided target.
      *
-     * @param  acceptor
-     *         The end-target for the throwable
-     *
+     * @param acceptor The end-target for the throwable
      * @return Wrapper of the provided consumer that will append a context with the current stack-trace
      */
     @Nonnull
-    public static Consumer<Throwable> here(@Nonnull Consumer<Throwable> acceptor)
-    {
+    public static Consumer<Throwable> here(@Nonnull Consumer<Throwable> acceptor) {
         ContextException context = new ContextException();
         return (ex) ->
         {

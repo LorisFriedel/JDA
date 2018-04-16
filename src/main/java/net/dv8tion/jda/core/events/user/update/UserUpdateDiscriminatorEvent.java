@@ -26,12 +26,10 @@ import net.dv8tion.jda.core.entities.User;
  *
  * <p>Identifier: {@code discriminator}
  */
-public class UserUpdateDiscriminatorEvent extends GenericUserUpdateEvent<String>
-{
+public class UserUpdateDiscriminatorEvent extends GenericUserUpdateEvent<String> {
     public static final String IDENTIFIER = "discriminator";
 
-    public UserUpdateDiscriminatorEvent(JDA api, long responseNumber, User user, String oldDiscriminator)
-    {
+    public UserUpdateDiscriminatorEvent(JDA api, long responseNumber, User user, String oldDiscriminator) {
         super(api, responseNumber, user, oldDiscriminator, user.getDiscriminator(), IDENTIFIER);
     }
 
@@ -40,8 +38,7 @@ public class UserUpdateDiscriminatorEvent extends GenericUserUpdateEvent<String>
      *
      * @return The old discriminator
      */
-    public String getOldDiscriminator()
-    {
+    public String getOldDiscriminator() {
         return getOldValue();
     }
 
@@ -50,8 +47,7 @@ public class UserUpdateDiscriminatorEvent extends GenericUserUpdateEvent<String>
      *
      * @return The new discriminator
      */
-    public String getNewDiscriminator()
-    {
+    public String getNewDiscriminator() {
         return getNewValue();
     }
 }

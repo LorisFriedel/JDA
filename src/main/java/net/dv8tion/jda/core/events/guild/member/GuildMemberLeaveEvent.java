@@ -23,10 +23,8 @@ import net.dv8tion.jda.core.entities.Member;
  *
  * <p>Can be used to retrieve members who leave a guild.
  */
-public class GuildMemberLeaveEvent extends GenericGuildMemberEvent
-{
-    public GuildMemberLeaveEvent(JDA api, long responseNumber, Member member)
-    {
+public class GuildMemberLeaveEvent extends GenericGuildMemberEvent {
+    public GuildMemberLeaveEvent(JDA api, long responseNumber, Member member) {
         super(api, responseNumber, member);
     }
 }

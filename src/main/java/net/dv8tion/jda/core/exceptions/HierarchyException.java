@@ -16,10 +16,8 @@
 
 package net.dv8tion.jda.core.exceptions;
 
-public class HierarchyException extends PermissionException
-{
-    public HierarchyException(String reason)
-    {
+public class HierarchyException extends PermissionException {
+    public HierarchyException(String reason) {
         super(reason);
     }
 }

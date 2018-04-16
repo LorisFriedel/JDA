@@ -29,44 +29,57 @@ import net.dv8tion.jda.core.utils.cache.SnowflakeCacheView;
 import javax.annotation.CheckReturnValue;
 import java.util.List;
 
-public interface JDAClient
-{
+public interface JDAClient {
     JDA getJDA();
 
     SnowflakeCacheView<Group> getGroupCache();
-    default List<Group> getGroups()
-    {
+
+    default List<Group> getGroups() {
         return getGroupCache().asList();
     }
-    default List<Group> getGroupsByName(String name, boolean ignoreCase)
-    {
+
+    default List<Group> getGroupsByName(String name, boolean ignoreCase) {
         return getGroupCache().getElementsByName(name, ignoreCase);
     }
-    default Group getGroupById(String id)
-    {
+
+    default Group getGroupById(String id) {
         return getGroupCache().getElementById(id);
     }
-    default Group getGroupById(long id)
-    {
+
+    default Group getGroupById(long id) {
         return getGroupCache().getElementById(id);
     }
 
     List<Relationship> getRelationships();
+
     List<Relationship> getRelationships(RelationshipType type);
+
     List<Relationship> getRelationships(RelationshipType type, String name, boolean ignoreCase);
+
     List<Relationship> getRelationshipsByName(String name, boolean ignoreCase);
+
     Relationship getRelationship(User user);
+
     Relationship getRelationship(Member member);
+
     Relationship getRelationshipById(String id);
+
     Relationship getRelationshipById(long id);
+
     Relationship getRelationshipById(String id, RelationshipType type);
+
     Relationship getRelationshipById(long id, RelationshipType type);
 
     List<Friend> getFriends();
+
     List<Friend> getFriendsByName(String name, boolean ignoreCase);
+
     Friend getFriend(User user);
+
     Friend getFriend(Member member);
+
     Friend getFriendById(String id);
+
     Friend getFriendById(long id);
 
     /**
@@ -90,15 +103,10 @@ public interface JDAClient
      *
      * <p><b>To target recent mentions from all over Discord use {@link #getRecentMentions()} instead!</b>
      *
-     * @param  guild
-     *         The {@link net.dv8tion.jda.core.entities.Guild Guild} to narrow recent mentions to
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the specified Guild is {@code null}
-     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException
-     *         If the specified Guild is not currently {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
-     *
+     * @param guild The {@link net.dv8tion.jda.core.entities.Guild Guild} to narrow recent mentions to
      * @return {@link net.dv8tion.jda.client.requests.restaction.pagination.MentionPaginationAction MentionPaginationAction}
+     * @throws java.lang.IllegalArgumentException                        If the specified Guild is {@code null}
+     * @throws net.dv8tion.jda.core.exceptions.GuildUnavailableException If the specified Guild is not currently {@link net.dv8tion.jda.core.entities.Guild#isAvailable() available}
      */
     @CheckReturnValue
     MentionPaginationAction getRecentMentions(Guild guild);
@@ -114,18 +122,14 @@ public interface JDAClient
      * <p>Possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses} caused by
      * the returned {@link net.dv8tion.jda.core.requests.RestAction RestAction} include the following:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MAX_OAUTH_APPS MAX_OAUTH_APPS}
-     *     <br>OAuth2 application limit reached</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#MAX_OAUTH_APPS MAX_OAUTH_APPS}
+     * <br>OAuth2 application limit reached</li>
      * </ul>
      *
-     * @param  name
-     *         The name for new {@link net.dv8tion.jda.client.entities.Application Application}
-     *
-     * @throws IllegalArgumentException
-     *         If the provided name is {@code null}, less than 2 or more than 32 characters long
-     * 
+     * @param name The name for new {@link net.dv8tion.jda.client.entities.Application Application}
      * @return A specific {@link net.dv8tion.jda.client.requests.restaction.ApplicationAction ApplicationAction}
-     *         <br>This action allows to set fields for the new application before creating it
+     * <br>This action allows to set fields for the new application before creating it
+     * @throws IllegalArgumentException If the provided name is {@code null}, less than 2 or more than 32 characters long
      */
     @CheckReturnValue
     ApplicationAction createApplication(String name);
@@ -133,9 +137,9 @@ public interface JDAClient
     /**
      * Retrieves all {@link net.dv8tion.jda.client.entities.Application Applications} owned by this user account.
      *
-     * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type: 
-     *         {@link java.util.List List}{@literal <}{@link net.dv8tion.jda.client.entities.Application Application}{@literal >}
-     *         <br>A list of all Applications owned by this user account.
+     * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type:
+     * {@link java.util.List List}{@literal <}{@link net.dv8tion.jda.client.entities.Application Application}{@literal >}
+     * <br>A list of all Applications owned by this user account.
      */
     @CheckReturnValue
     RestAction<List<Application>> getApplications();
@@ -145,18 +149,14 @@ public interface JDAClient
      *
      * <p>Possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses}:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_APPLICATION UNKNOWN_APPLICATION}
-     *     <br>The Application did not exist (possibly deleted).</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_APPLICATION UNKNOWN_APPLICATION}
+     * <br>The Application did not exist (possibly deleted).</li>
      * </ul>
      *
-     * @param  id
-     *         The id for the {@link net.dv8tion.jda.client.entities.Application Application}
-     * 
-     * @throws IllegalArgumentException
-     *         If the provided id is {@code null} or empty
-     *
+     * @param id The id for the {@link net.dv8tion.jda.client.entities.Application Application}
      * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type: {@link net.dv8tion.jda.client.entities.Application Application}
-     *         <br>The Application behind the provided id.
+     * <br>The Application behind the provided id.
+     * @throws IllegalArgumentException If the provided id is {@code null} or empty
      */
     @CheckReturnValue
     RestAction<Application> getApplicationById(String id);
@@ -164,9 +164,9 @@ public interface JDAClient
     /**
      * Retrieves all {@link net.dv8tion.jda.client.entities.AuthorizedApplication AuthorizedApplications} authorized by this user account.
      *
-     * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type: 
-     *         List{@literal <}{@link net.dv8tion.jda.client.entities.AuthorizedApplication AuthorizedApplication}{@literal >}
-     *         <br>A list of all AuthorizedApplications authorized by this user account.
+     * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type:
+     * List{@literal <}{@link net.dv8tion.jda.client.entities.AuthorizedApplication AuthorizedApplication}{@literal >}
+     * <br>A list of all AuthorizedApplications authorized by this user account.
      */
     @CheckReturnValue
     RestAction<List<AuthorizedApplication>> getAuthorizedApplications();
@@ -176,18 +176,15 @@ public interface JDAClient
      *
      * <p>Possible {@link net.dv8tion.jda.core.requests.ErrorResponse ErrorResponses}:
      * <ul>
-     *     <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_TOKEN UNKNOWN_TOKEN}
-     *     <br>The Application either doesn't exist or isn't authorized by this user account.</li>
+     * <li>{@link net.dv8tion.jda.core.requests.ErrorResponse#UNKNOWN_TOKEN UNKNOWN_TOKEN}
+     * <br>The Application either doesn't exist or isn't authorized by this user account.</li>
      * </ul>
      *
-     * @param  id
-     *         The id of the {@link net.dv8tion.jda.client.entities.AuthorizedApplication AuthorizedApplication}
-     * 
+     * @param id The id of the {@link net.dv8tion.jda.client.entities.AuthorizedApplication AuthorizedApplication}
+     * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type:
+     * {@link net.dv8tion.jda.client.entities.AuthorizedApplication AuthorizedApplication}
+     * <br>The Application behind the provided id.
      * @throws IllegalArgumentException If the provided id is {@code null} or empty
-     *
-     * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type: 
-     *         {@link net.dv8tion.jda.client.entities.AuthorizedApplication AuthorizedApplication}
-     *         <br>The Application behind the provided id.
      */
     @CheckReturnValue
     RestAction<AuthorizedApplication> getAuthorizedApplicationById(String id);

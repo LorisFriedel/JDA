@@ -20,8 +20,7 @@ package net.dv8tion.jda.core.entities;
  * Represents the voice state of a {@link net.dv8tion.jda.core.entities.Member Member} in a
  * {@link net.dv8tion.jda.core.entities.Guild Guild}.
  */
-public interface GuildVoiceState extends VoiceState
-{
+public interface GuildVoiceState extends VoiceState {
     /**
      * Returns whether the {@link net.dv8tion.jda.core.entities.Member Member} is muted, either
      * by choice {@link #isSelfMuted()} or deafened by an admin {@link #isGuildMuted()}
@@ -95,7 +94,7 @@ public interface GuildVoiceState extends VoiceState
      * If this is {@code false}, {@link #getChannel() getChannel()} will return {@code null}.
      *
      * @return True, if the {@link net.dv8tion.jda.core.entities.Member Member} is currently in a {@link net.dv8tion.jda.core.entities.VoiceChannel VoiceChannel}
-     *         in this {@link net.dv8tion.jda.core.entities.Guild Guild}.
+     * in this {@link net.dv8tion.jda.core.entities.Guild Guild}.
      */
     boolean inVoiceChannel();
 }

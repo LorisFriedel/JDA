@@ -23,10 +23,8 @@ import net.dv8tion.jda.core.entities.Guild;
  *
  * <p><b>Warning: Discord already triggered a mass amount of these events due to a downtime. Be careful!</b>
  */
-public class GuildJoinEvent extends GenericGuildEvent
-{
-    public GuildJoinEvent(JDA api, long responseNumber, Guild guild)
-    {
+public class GuildJoinEvent extends GenericGuildEvent {
+    public GuildJoinEvent(JDA api, long responseNumber, Guild guild) {
         super(api, responseNumber, guild);
     }
 }

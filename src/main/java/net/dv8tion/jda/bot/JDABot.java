@@ -25,11 +25,10 @@ import net.dv8tion.jda.core.requests.RestAction;
 import java.util.Collection;
 import javax.annotation.CheckReturnValue;
 
-public interface JDABot
-{
+public interface JDABot {
     /**
      * Returns the {@link net.dv8tion.jda.core.JDA JDA} instance of this JDABot
-     * 
+     *
      * @return The corresponding JDA instance
      */
     JDA getJDA();
@@ -40,7 +39,7 @@ public interface JDABot
      * <br>This contains information about the owner of the currently logged in bot account!
      *
      * @return {@link net.dv8tion.jda.core.requests.RestAction RestAction} - Type: {@link net.dv8tion.jda.bot.entities.ApplicationInfo ApplicationInfo}
-     *         <br>The {@link net.dv8tion.jda.bot.entities.ApplicationInfo ApplicationInfo} of the bot's application.
+     * <br>The {@link net.dv8tion.jda.bot.entities.ApplicationInfo ApplicationInfo} of the bot's application.
      */
     @CheckReturnValue
     RestAction<ApplicationInfo> getApplicationInfo();
@@ -52,10 +51,8 @@ public interface JDABot
      *
      * <p><b>Hint:</b> To enable a pre-selected Guild of choice append the parameter {@code &guild_id=YOUR_GUILD_ID}
      *
-     * @param  permissions
-     *         The permissions to use in your invite, these can be changed by the link user.
-     *         <br>If no permissions are provided the {@code permissions} parameter is omitted
-     *
+     * @param permissions The permissions to use in your invite, these can be changed by the link user.
+     *                    <br>If no permissions are provided the {@code permissions} parameter is omitted
      * @return A valid OAuth2 invite url for the currently logged in Bot-Account
      */
     String getInviteUrl(Permission... permissions);
@@ -67,10 +64,8 @@ public interface JDABot
      *
      * <p><b>Hint:</b> To enable a pre-selected Guild of choice append the parameter {@code &guild_id=YOUR_GUILD_ID}
      *
-     * @param  permissions
-     *         The permissions to use in your invite, these can be changed by the link user.
-     *         <br>If no permissions are provided the {@code permissions} parameter is omitted
-     *
+     * @param permissions The permissions to use in your invite, these can be changed by the link user.
+     *                    <br>If no permissions are provided the {@code permissions} parameter is omitted
      * @return A valid OAuth2 invite url for the currently logged in Bot-Account
      */
     String getInviteUrl(Collection<Permission> permissions);

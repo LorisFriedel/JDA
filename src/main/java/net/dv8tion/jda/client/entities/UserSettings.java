@@ -23,26 +23,36 @@ import net.dv8tion.jda.core.entities.Guild;
 import java.util.List;
 import java.util.Locale;
 
-public interface UserSettings
-{
+public interface UserSettings {
 
     JDA getJDA();
 
     OnlineStatus getStatus();
+
     Locale getLocale();
     //getTheme() : ?
 
     List<Guild> getGuildPositions();
+
     List<Guild> getRestrictedGuilds();
 
     boolean isAllowEmailFriendRequest();
+
     boolean isConvertEmoticons();
+
     boolean isDetectPlatformAccounts();
+
     boolean isDeveloperMode();
+
     boolean isEnableTTS();
+
     boolean isShowCurrentGame();
+
     boolean isRenderEmbeds();
+
     boolean isMessageDisplayCompact();
+
     boolean isInlineEmbedMedia();
+
     boolean isInlineAttachmentMedia();
 }

@@ -22,8 +22,7 @@ import net.dv8tion.jda.core.managers.AccountManagerUpdatable;
 /**
  * Represents the currently logged in account.
  */
-public interface SelfUser extends User
-{
+public interface SelfUser extends User {
 
     /**
      * The status of this account's verification.
@@ -46,11 +45,9 @@ public interface SelfUser extends User
      * Used to get the email of the currently logged in account.
      * <br><b>NOTE:</b> this is a {@link net.dv8tion.jda.core.AccountType#CLIENT AccountType.CLIENT} method only!
      *
-     * @throws AccountTypeException
-     *         If this method is called when {@link net.dv8tion.jda.core.JDA#getAccountType() JDA#getAccountType()} does not return
-     *         {@link net.dv8tion.jda.core.AccountType#CLIENT AccountType.CLIENT}. E.g: If the logged in account isn't a Client account!
-     *
      * @return The email of the currently logged in account.
+     * @throws AccountTypeException If this method is called when {@link net.dv8tion.jda.core.JDA#getAccountType() JDA#getAccountType()} does not return
+     *                              {@link net.dv8tion.jda.core.AccountType#CLIENT AccountType.CLIENT}. E.g: If the logged in account isn't a Client account!
      */
     String getEmail() throws AccountTypeException;
 
@@ -58,11 +55,9 @@ public interface SelfUser extends User
      * Shows whether there has ever been a mobile app connected to this account.
      * <br><b>NOTE:</b> this is a {@link net.dv8tion.jda.core.AccountType#CLIENT AccountType.CLIENT} method only!
      *
-     * @throws AccountTypeException
-     *         If this method is called when {@link net.dv8tion.jda.core.JDA#getAccountType() JDA#getAccountType()} does not return
-     *         {@link net.dv8tion.jda.core.AccountType#CLIENT AccountType.CLIENT}. E.g: If the logged in account isn't a Client account!
-     *
      * @return {@code true} if the account is linked with a mobile app, otherwise {@code false}
+     * @throws AccountTypeException If this method is called when {@link net.dv8tion.jda.core.JDA#getAccountType() JDA#getAccountType()} does not return
+     *                              {@link net.dv8tion.jda.core.AccountType#CLIENT AccountType.CLIENT}. E.g: If the logged in account isn't a Client account!
      */
     boolean isMobile() throws AccountTypeException;
 
@@ -70,11 +65,9 @@ public interface SelfUser extends User
      * The Discord Nitro status of this account.
      * <br><b>NOTE:</b> this is a {@link net.dv8tion.jda.core.AccountType#CLIENT AccountType.CLIENT} method only!
      *
-     * @throws AccountTypeException
-     *         If this method is called when {@link net.dv8tion.jda.core.JDA#getAccountType() JDA#getAccountType()} does not return
-     *         {@link net.dv8tion.jda.core.AccountType#CLIENT AccountType.CLIENT}. E.g: If the logged in account isn't a Client account!
-     *
      * @return The Discord Nitro status of the currently logged in account.
+     * @throws AccountTypeException If this method is called when {@link net.dv8tion.jda.core.JDA#getAccountType() JDA#getAccountType()} does not return
+     *                              {@link net.dv8tion.jda.core.AccountType#CLIENT AccountType.CLIENT}. E.g: If the logged in account isn't a Client account!
      */
     boolean isNitro() throws AccountTypeException;
 
@@ -82,11 +75,9 @@ public interface SelfUser extends User
      * Used to get the phone number of the currently logged in account if a phone number has been attached to it.
      * <br><b>NOTE:</b> this is a {@link net.dv8tion.jda.core.AccountType#CLIENT AccountType.CLIENT} method only!
      *
-     * @throws AccountTypeException
-     *         If this method is called when {@link net.dv8tion.jda.core.JDA#getAccountType() JDA#getAccountType()} does not return
-     *         {@link net.dv8tion.jda.core.AccountType#CLIENT AccountType.CLIENT}. E.g: If the logged in account isn't a Client account!
-     *
      * @return The phone of the currently logged in account or null if there's no number associated
+     * @throws AccountTypeException If this method is called when {@link net.dv8tion.jda.core.JDA#getAccountType() JDA#getAccountType()} does not return
+     *                              {@link net.dv8tion.jda.core.AccountType#CLIENT AccountType.CLIENT}. E.g: If the logged in account isn't a Client account!
      */
     String getPhoneNumber() throws AccountTypeException;
 
@@ -94,9 +85,8 @@ public interface SelfUser extends User
      * Returns the maximum size for files that can be uploaded with this account.
      * <br>Returns {@value net.dv8tion.jda.core.entities.Message#MAX_FILE_SIZE} for bots and non-nitro client accounts
      * and {@value net.dv8tion.jda.core.entities.Message#MAX_FILE_SIZE_NITRO} for client accounts with a active nitro subscription.
-     * 
+     *
      * @return The maximum size for files that can be uploaded with this account
-     * 
      * @see net.dv8tion.jda.core.entities.Message#MAX_FILE_SIZE
      * @see net.dv8tion.jda.core.entities.Message#MAX_FILE_SIZE_NITRO
      */
@@ -119,9 +109,7 @@ public interface SelfUser extends User
      * <p>This can be used to bulk update account fields (like avatar/username)
      *
      * @return An AccountManagerUpdatable instance for the current account
-     *
-     * @deprecated
-     *         Use {@link #getManager()} instead
+     * @deprecated Use {@link #getManager()} instead
      */
     @Deprecated
     AccountManagerUpdatable getManagerUpdatable();

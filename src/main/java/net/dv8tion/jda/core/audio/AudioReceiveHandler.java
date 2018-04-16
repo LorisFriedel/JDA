@@ -21,8 +21,7 @@ import javax.sound.sampled.AudioFormat;
 /**
  * Interface used to receive audio from Discord through JDA.
  */
-public interface AudioReceiveHandler
-{
+public interface AudioReceiveHandler {
     /**
      * Audio Output Format used by JDA. 48KHz 16bit stereo signed BigEndian PCM.
      */
@@ -34,14 +33,18 @@ public interface AudioReceiveHandler
      *
      * @return If true, JDA enables subsystems to combine all user audio into a single provided data packet.
      */
-    boolean canReceiveCombined();
+    default boolean canReceiveCombined() {
+        return false;
+    }
 
     /**
      * If this method returns true, then JDA will provide audio data to the {@link #handleUserAudio(UserAudio)} method.
      *
      * @return If true, JDA enables subsystems to provide user specific audio data.
      */
-    boolean canReceiveUser();
+    default boolean canReceiveUser() {
+        return true;
+    }
 
     /**
      * If {@link #canReceiveCombined()} returns true, JDA will provide a {@link net.dv8tion.jda.core.audio.CombinedAudio CombinedAudio}
@@ -59,10 +62,11 @@ public interface AudioReceiveHandler
      * Output audio format: 48KHz 16bit stereo signed BigEndian PCM
      * <br>and is defined by: {@link net.dv8tion.jda.core.audio.AudioReceiveHandler#OUTPUT_FORMAT AudioRecieveHandler.OUTPUT_FORMAT}
      *
-     * @param  combinedAudio
-     *         The combined audio data.
+     * @param combinedAudio The combined audio data.
      */
-    void handleCombinedAudio(CombinedAudio combinedAudio);
+    default void handleCombinedAudio(CombinedAudio combinedAudio) {
+        throw new IllegalStateException("not implemented");
+    }
 
     /**
      * If {@link #canReceiveUser()} returns true, JDA will provide a {@link net.dv8tion.jda.core.audio.UserAudio UserAudio}
@@ -79,11 +83,10 @@ public interface AudioReceiveHandler
      * If you are wanting to do audio recording, please consider {@link #handleCombinedAudio(CombinedAudio)} as it was created
      * just for that reason.
      * <p>
-     * Output audio format: 48KHz 16bit stereo signed BigEndian PCM
+     * Output audio format: 48KHz 16bit mono, signed BigEndian PCM or OPUS
      * <br>and is defined by: {@link net.dv8tion.jda.core.audio.AudioReceiveHandler#OUTPUT_FORMAT AudioRecieveHandler.OUTPUT_FORMAT}
      *
-     * @param  userAudio
-     *         The user audio data
+     * @param userAudio The user audio data
      */
     void handleUserAudio(UserAudio userAudio);
 }

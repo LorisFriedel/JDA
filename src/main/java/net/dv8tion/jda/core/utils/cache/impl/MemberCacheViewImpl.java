@@ -23,26 +23,21 @@ import net.dv8tion.jda.core.utils.cache.MemberCacheView;
 
 import java.util.*;
 
-public class MemberCacheViewImpl extends AbstractCacheView<Member> implements MemberCacheView
-{
-    public MemberCacheViewImpl()
-    {
+public class MemberCacheViewImpl extends AbstractCacheView<Member> implements MemberCacheView {
+    public MemberCacheViewImpl() {
         super(Member.class, Member::getEffectiveName);
     }
 
     @Override
-    public Member getElementById(long id)
-    {
+    public Member getElementById(long id) {
         return elements.get(id);
     }
 
     @Override
-    public List<Member> getElementsByUsername(String name, boolean ignoreCase)
-    {
+    public List<Member> getElementsByUsername(String name, boolean ignoreCase) {
         Checks.notEmpty(name, "Name");
         List<Member> members = new ArrayList<>();
-        for (Member member : this)
-        {
+        for (Member member : this) {
             final String nick = member.getUser().getName();
             if (equals(ignoreCase, nick, name))
                 members.add(member);
@@ -51,14 +46,11 @@ public class MemberCacheViewImpl extends AbstractCacheView<Member> implements Me
     }
 
     @Override
-    public List<Member> getElementsByNickname(String name, boolean ignoreCase)
-    {
+    public List<Member> getElementsByNickname(String name, boolean ignoreCase) {
         List<Member> members = new ArrayList<>();
-        for (Member member : this)
-        {
+        for (Member member : this) {
             final String nick = member.getNickname();
-            if (nick == null)
-            {
+            if (nick == null) {
                 if (name == null)
                     members.add(member);
                 continue;
@@ -71,12 +63,10 @@ public class MemberCacheViewImpl extends AbstractCacheView<Member> implements Me
     }
 
     @Override
-    public List<Member> getElementsByName(String name, boolean ignoreCase)
-    {
+    public List<Member> getElementsByName(String name, boolean ignoreCase) {
         Checks.notEmpty(name, "Name");
         List<Member> members = new ArrayList<>();
-        for (Member member : this)
-        {
+        for (Member member : this) {
             final String nick = member.getEffectiveName();
             if (equals(ignoreCase, nick, name))
                 members.add(member);
@@ -85,15 +75,13 @@ public class MemberCacheViewImpl extends AbstractCacheView<Member> implements Me
     }
 
     @Override
-    public List<Member> getElementsWithRoles(Role... roles)
-    {
+    public List<Member> getElementsWithRoles(Role... roles) {
         Checks.notNull(roles, "Roles");
         for (Role role : roles)
             Checks.notNull(role, "Roles");
         List<Member> members = new ArrayList<>();
         List<Role> match = Arrays.asList(roles);
-        for (Member member : this)
-        {
+        for (Member member : this) {
             if (member.getRoles().containsAll(match))
                 members.add(member);
         }
@@ -101,12 +89,10 @@ public class MemberCacheViewImpl extends AbstractCacheView<Member> implements Me
     }
 
     @Override
-    public List<Member> getElementsWithRoles(Collection<Role> roles)
-    {
+    public List<Member> getElementsWithRoles(Collection<Role> roles) {
         Checks.noneNull(roles, "Roles");
         List<Member> members = new ArrayList<>();
-        for (Member member : this)
-        {
+        for (Member member : this) {
             if (member.getRoles().containsAll(roles))
                 members.add(member);
         }

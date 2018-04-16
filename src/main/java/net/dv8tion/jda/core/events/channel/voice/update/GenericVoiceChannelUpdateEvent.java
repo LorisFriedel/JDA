@@ -27,22 +27,18 @@ import net.dv8tion.jda.core.events.channel.voice.GenericVoiceChannelEvent;
  *
  * <p>Can be used to detect any VoiceChannelUpdateEvent.
  */
-public abstract class GenericVoiceChannelUpdateEvent<T> extends GenericVoiceChannelEvent implements UpdateEvent<VoiceChannel, T>
-{
-    public GenericVoiceChannelUpdateEvent(JDA api, long responseNumber, VoiceChannel channel)
-    {
+public abstract class GenericVoiceChannelUpdateEvent<T> extends GenericVoiceChannelEvent implements UpdateEvent<VoiceChannel, T> {
+    public GenericVoiceChannelUpdateEvent(JDA api, long responseNumber, VoiceChannel channel) {
         super(api, responseNumber, channel);
     }
 
     @Override
-    public VoiceChannel getEntity()
-    {
+    public VoiceChannel getEntity() {
         return getChannel();
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "VoiceChannelUpdate[" + getPropertyIdentifier() + "](" + getOldValue() + "->" + getNewValue() + ')';
     }
 }

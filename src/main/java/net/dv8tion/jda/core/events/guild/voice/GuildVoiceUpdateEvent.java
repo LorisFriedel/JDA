@@ -28,8 +28,7 @@ import net.dv8tion.jda.core.entities.VoiceChannel;
  *
  * <p>Can be used to detect when a Member leaves a channel in any way
  */
-public class GuildVoiceUpdateEvent extends GenericGuildVoiceEvent
-{
+public class GuildVoiceUpdateEvent extends GenericGuildVoiceEvent {
     protected final VoiceChannel oldChannel;
 
     public GuildVoiceUpdateEvent(JDA api, long responseNumber, Member member, VoiceChannel oldChannel) {
@@ -42,8 +41,7 @@ public class GuildVoiceUpdateEvent extends GenericGuildVoiceEvent
      *
      * @return The {@link net.dv8tion.jda.core.entities.VoiceChannel}
      */
-    public VoiceChannel getChannelLeft()
-    {
+    public VoiceChannel getChannelLeft() {
         return oldChannel;
     }
 }

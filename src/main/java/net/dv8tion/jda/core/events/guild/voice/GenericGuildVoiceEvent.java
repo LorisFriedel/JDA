@@ -27,12 +27,10 @@ import net.dv8tion.jda.core.events.guild.GenericGuildEvent;
  *
  * <p>Can be used to detect any GuildVoiceEvent.
  */
-public abstract class GenericGuildVoiceEvent extends GenericGuildEvent
-{
+public abstract class GenericGuildVoiceEvent extends GenericGuildEvent {
     protected final Member member;
 
-    public GenericGuildVoiceEvent(JDA api, long responseNumber, Member member)
-    {
+    public GenericGuildVoiceEvent(JDA api, long responseNumber, Member member) {
         super(api, responseNumber, member.getGuild());
         this.member = member;
     }
@@ -42,8 +40,7 @@ public abstract class GenericGuildVoiceEvent extends GenericGuildEvent
      *
      * @return The affected Member
      */
-    public Member getMember()
-    {
+    public Member getMember() {
         return member;
     }
 
@@ -53,8 +50,7 @@ public abstract class GenericGuildVoiceEvent extends GenericGuildEvent
      *
      * @return The {@link net.dv8tion.jda.core.entities.GuildVoiceState GuildVoiceState} of the member
      */
-    public GuildVoiceState getVoiceState()
-    {
+    public GuildVoiceState getVoiceState() {
         return member.getVoiceState();
     }
 }

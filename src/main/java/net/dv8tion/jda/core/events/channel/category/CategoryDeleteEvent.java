@@ -24,10 +24,8 @@ import net.dv8tion.jda.core.entities.Category;
  *
  * <p>Can be used to retrieve the old Category
  */
-public class CategoryDeleteEvent extends GenericCategoryEvent
-{
-    public CategoryDeleteEvent(JDA api, long responseNumber, Category category)
-    {
+public class CategoryDeleteEvent extends GenericCategoryEvent {
+    public CategoryDeleteEvent(JDA api, long responseNumber, Category category) {
         super(api, responseNumber, category);
     }
 }

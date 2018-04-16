@@ -31,7 +31,7 @@ plugins {
 def versionObj = new Version(major: 3, minor: 6, revision: 0)
 
 group = "net.dv8tion"
-archivesBaseName = "JDA"
+archivesBaseName = "JDA2"
 version = "$versionObj"
 
 sourceCompatibility = 1.8
@@ -165,9 +165,9 @@ bintray {
     publications = ["BintrayRelease"]
     pkg {
         repo = 'maven'
-        name = 'JDA'
+        name = 'JDA2'
         licenses = ['Apache-2.0']
-        vcsUrl = 'https://github.com/DV8FromTheWorld/JDA.git'
+        vcsUrl = 'https://github.com/LorisFriedel/JDA.git'
         publish = true
         version {
             name = project.version
@@ -219,9 +219,6 @@ build {
 bintrayUpload {
     dependsOn build
 
-    onlyIf { !getProjectProperty("bintrayUsername").empty }
-    onlyIf { !getProjectProperty("bintrayApiKey").empty }
-    onlyIf { System.getenv("BUILD_NUMBER") }
 }
 
 class Version {

@@ -26,12 +26,10 @@ import net.dv8tion.jda.core.entities.Guild;
  *
  * <p>Identifier: {@code explicit_content_filter}
  */
-public class GuildUpdateExplicitContentLevelEvent extends GenericGuildUpdateEvent<Guild.ExplicitContentLevel>
-{
+public class GuildUpdateExplicitContentLevelEvent extends GenericGuildUpdateEvent<Guild.ExplicitContentLevel> {
     public static final String IDENTIFIER = "explicit_content_filter";
 
-    public GuildUpdateExplicitContentLevelEvent(JDA api, long responseNumber, Guild guild, Guild.ExplicitContentLevel oldLevel)
-    {
+    public GuildUpdateExplicitContentLevelEvent(JDA api, long responseNumber, Guild guild, Guild.ExplicitContentLevel oldLevel) {
         super(api, responseNumber, guild, oldLevel, guild.getExplicitContentLevel(), IDENTIFIER);
     }
 
@@ -41,8 +39,7 @@ public class GuildUpdateExplicitContentLevelEvent extends GenericGuildUpdateEven
      *
      * @return The old explicit content level
      */
-    public Guild.ExplicitContentLevel getOldLevel()
-    {
+    public Guild.ExplicitContentLevel getOldLevel() {
         return getOldValue();
     }
 
@@ -52,8 +49,7 @@ public class GuildUpdateExplicitContentLevelEvent extends GenericGuildUpdateEven
      *
      * @return The new explicit content level
      */
-    public Guild.ExplicitContentLevel getNewLevel()
-    {
+    public Guild.ExplicitContentLevel getNewLevel() {
         return getNewValue();
     }
 }

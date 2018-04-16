@@ -28,22 +28,19 @@ import net.dv8tion.jda.core.entities.TextChannel;
  *
  * <p>Identifier: {@code system_channel}
  */
-public class GuildUpdateSystemChannelEvent extends GenericGuildUpdateEvent<TextChannel>
-{
+public class GuildUpdateSystemChannelEvent extends GenericGuildUpdateEvent<TextChannel> {
     public static final String IDENTIFIER = "system_channel";
 
-    public GuildUpdateSystemChannelEvent(JDA api, long responseNumber, Guild guild, TextChannel oldSystemChannel)
-    {
+    public GuildUpdateSystemChannelEvent(JDA api, long responseNumber, Guild guild, TextChannel oldSystemChannel) {
         super(api, responseNumber, guild, oldSystemChannel, guild.getSystemChannel(), IDENTIFIER);
     }
 
     /**
      * The previous system channel.
-     * 
+     *
      * @return The previous system channel
      */
-    public TextChannel getOldSystemChannel()
-    {
+    public TextChannel getOldSystemChannel() {
         return getOldValue();
     }
 
@@ -52,8 +49,7 @@ public class GuildUpdateSystemChannelEvent extends GenericGuildUpdateEvent<TextC
      *
      * @return The new system channel
      */
-    public TextChannel getNewSystemChannel()
-    {
+    public TextChannel getNewSystemChannel() {
         return getNewValue();
     }
 }

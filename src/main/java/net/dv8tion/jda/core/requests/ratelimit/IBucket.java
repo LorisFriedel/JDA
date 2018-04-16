@@ -21,14 +21,14 @@ import net.dv8tion.jda.core.requests.Route;
 
 import java.util.Queue;
 
-public interface IBucket
-{
+public interface IBucket {
     Route.RateLimit getRatelimit();
+
     String getRoute();
+
     Queue<Request> getRequests();
-    
-    default boolean hasRatelimit()
-    {
+
+    default boolean hasRatelimit() {
         return getRatelimit() != null;
     }
 }

@@ -38,16 +38,13 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
-public class VoiceStateUpdateHandler extends SocketHandler
-{
-    public VoiceStateUpdateHandler(JDAImpl api)
-    {
+public class VoiceStateUpdateHandler extends SocketHandler {
+    public VoiceStateUpdateHandler(JDAImpl api) {
         super(api);
     }
 
     @Override
-    protected Long handleInternally(JSONObject content)
-    {
+    protected Long handleInternally(JSONObject content) {
         final Long guildId = content.has("guild_id") ? content.getLong("guild_id") : null;
         if (guildId != null && api.getGuildLock().isLocked(guildId))
             return guildId;
@@ -59,8 +56,7 @@ public class VoiceStateUpdateHandler extends SocketHandler
         return null;
     }
 
-    private void handleGuildVoiceState(JSONObject content)
-    {
+    private void handleGuildVoiceState(JSONObject content) {
         final long userId = content.getLong("user_id");
         final long guildId = content.getLong("guild_id");
         final Long channelId = !content.isNull("channel_id") ? content.getLong("channel_id") : null;
@@ -72,24 +68,21 @@ public class VoiceStateUpdateHandler extends SocketHandler
         boolean suppressed = content.getBoolean("suppress");
 
         Guild guild = api.getGuildById(guildId);
-        if (guild == null)
-        {
+        if (guild == null) {
             api.getEventCache().cache(EventCache.Type.GUILD, guildId, () -> handle(responseNumber, allContent));
             EventCache.LOG.debug("Received a VOICE_STATE_UPDATE for a Guild that has yet to be cached. JSON: {}", content);
             return;
         }
 
         VoiceChannelImpl channel = channelId != null ? (VoiceChannelImpl) guild.getVoiceChannelById(channelId) : null;
-        if (channel == null && channelId != null)
-        {
+        if (channel == null && channelId != null) {
             api.getEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
             EventCache.LOG.debug("Received VOICE_STATE_UPDATE for a VoiceChannel that has yet to be cached. JSON: {}", content);
             return;
         }
 
         MemberImpl member = (MemberImpl) guild.getMemberById(userId);
-        if (member == null)
-        {
+        if (member == null) {
             //Caching of this might not be valid. It is possible that we received this
             // update due to this Member leaving the guild while still connected to a voice channel.
             // In that case, we should not cache this because it could cause problems if they rejoined.
@@ -108,36 +101,29 @@ public class VoiceStateUpdateHandler extends SocketHandler
         GuildVoiceStateImpl vState = (GuildVoiceStateImpl) member.getVoiceState();
         vState.setSessionId(sessionId); //Cant really see a reason for an event for this
 
-        if (!Objects.equals(channel, vState.getChannel()))
-        {
+        if (!Objects.equals(channel, vState.getChannel())) {
             VoiceChannelImpl oldChannel = (VoiceChannelImpl) vState.getChannel();
             vState.setConnectedChannel(channel);
 
-            if (oldChannel == null)
-            {
+            if (oldChannel == null) {
                 channel.getConnectedMembersMap().put(userId, member);
                 api.getEventManager().handle(
-                        new GuildVoiceJoinEvent(
-                                api, responseNumber,
-                                member));
-            }
-            else if (channel == null)
-            {
+                    new GuildVoiceJoinEvent(
+                        api, responseNumber,
+                        member));
+            } else if (channel == null) {
                 oldChannel.getConnectedMembersMap().remove(userId);
                 if (guild.getSelfMember().equals(member))
                     api.getClient().updateAudioConnection(guildId, null);
                 api.getEventManager().handle(
-                        new GuildVoiceLeaveEvent(
-                                api, responseNumber,
-                                member, oldChannel));
-            }
-            else
-            {
+                    new GuildVoiceLeaveEvent(
+                        api, responseNumber,
+                        member, oldChannel));
+            } else {
                 AudioManagerImpl mng = (AudioManagerImpl) api.getAudioManagerMap().get(guildId);
 
                 //If the currently connected account is the one that is being moved
-                if (guild.getSelfMember().equals(member) && mng != null)
-                {
+                if (guild.getSelfMember().equals(member) && mng != null) {
                     //And this instance of JDA is connected or attempting to connect,
                     // then change the channel we expect to be connected to.
                     if (mng.isConnected() || mng.isAttemptingToConnect())
@@ -155,37 +141,32 @@ public class VoiceStateUpdateHandler extends SocketHandler
                 channel.getConnectedMembersMap().put(userId, member);
                 oldChannel.getConnectedMembersMap().remove(userId);
                 api.getEventManager().handle(
-                        new GuildVoiceMoveEvent(
-                                api, responseNumber,
-                                member, oldChannel));
+                    new GuildVoiceMoveEvent(
+                        api, responseNumber,
+                        member, oldChannel));
             }
         }
 
         boolean wasMute = vState.isMuted();
         boolean wasDeaf = vState.isDeafened();
 
-        if (selfMuted != vState.isSelfMuted())
-        {
+        if (selfMuted != vState.isSelfMuted()) {
             vState.setSelfMuted(selfMuted);
             api.getEventManager().handle(new GuildVoiceSelfMuteEvent(api, responseNumber, member));
         }
-        if (selfDeafened != vState.isSelfDeafened())
-        {
+        if (selfDeafened != vState.isSelfDeafened()) {
             vState.setSelfDeafened(selfDeafened);
             api.getEventManager().handle(new GuildVoiceSelfDeafenEvent(api, responseNumber, member));
         }
-        if (guildMuted != vState.isGuildMuted())
-        {
+        if (guildMuted != vState.isGuildMuted()) {
             vState.setGuildMuted(guildMuted);
             api.getEventManager().handle(new GuildVoiceGuildMuteEvent(api, responseNumber, member));
         }
-        if (guildDeafened != vState.isGuildDeafened())
-        {
+        if (guildDeafened != vState.isGuildDeafened()) {
             vState.setGuildDeafened(guildDeafened);
             api.getEventManager().handle(new GuildVoiceGuildDeafenEvent(api, responseNumber, member));
         }
-        if (suppressed != vState.isSuppressed())
-        {
+        if (suppressed != vState.isSuppressed()) {
             vState.setSuppressed(suppressed);
             api.getEventManager().handle(new GuildVoiceSuppressEvent(api, responseNumber, member));
         }
@@ -195,8 +176,7 @@ public class VoiceStateUpdateHandler extends SocketHandler
             api.getEventManager().handle(new GuildVoiceDeafenEvent(api, responseNumber, member));
     }
 
-    private void handleCallVoiceState(JSONObject content)
-    {
+    private void handleCallVoiceState(JSONObject content) {
         final long userId = content.getLong("user_id");
         final Long channelId = content.isNull("channel_id") ? null : content.getLong("channel_id");
         String sessionId = content.optString("session_id", null);
@@ -206,37 +186,32 @@ public class VoiceStateUpdateHandler extends SocketHandler
         //Joining a call
         CallableChannel channel;
         CallVoiceStateImpl vState;
-        if (channelId != null)
-        {
+        if (channelId != null) {
             channel = api.asClient().getGroupById(channelId);
             if (channel == null)
                 channel = api.getPrivateChannelMap().get(channelId);
 
-            if (channel == null)
-            {
+            if (channel == null) {
                 api.getEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
                 EventCache.LOG.debug("Received a VOICE_STATE_UPDATE for a Group/PrivateChannel that was not yet cached! JSON: {}", content);
                 return;
             }
 
             CallImpl call = (CallImpl) channel.getCurrentCall();
-            if (call == null)
-            {
+            if (call == null) {
                 api.getEventCache().cache(EventCache.Type.CALL, channelId, () -> handle(responseNumber, allContent));
                 EventCache.LOG.debug("Received a VOICE_STATE_UPDATE for a Call that is not yet cached. JSON: {}", content);
                 return;
             }
 
             CallUser cUser = api.asClient().getCallUserMap().get(userId);
-            if (cUser != null && channelId != cUser.getCall().getCallableChannel().getIdLong())
-            {
+            if (cUser != null && channelId != cUser.getCall().getCallableChannel().getIdLong()) {
                 WebSocketClient.LOG.error("Received a VOICE_STATE_UPDATE for a user joining a call, but the user was already in a different call! Big error! JSON: {}", content);
                 ((CallVoiceStateImpl) cUser.getVoiceState()).setInCall(false);
             }
 
             cUser = call.getCallUserMap().get(userId);
-            if (cUser == null)
-            {
+            if (cUser == null) {
                 api.getEventCache().cache(EventCache.Type.USER, userId, () -> handle(responseNumber, allContent));
                 EventCache.LOG.debug("Received a VOICE_STATE_UPDATE for a user that is not yet a a cached CallUser for the call. (groups only). JSON: {}", content);
                 return;
@@ -248,15 +223,13 @@ public class VoiceStateUpdateHandler extends SocketHandler
             vState.setInCall(true);
 
             api.getEventManager().handle(
-                    new CallVoiceJoinEvent(
-                            api, responseNumber,
-                            cUser));
-        }
-        else //Leaving a call
+                new CallVoiceJoinEvent(
+                    api, responseNumber,
+                    cUser));
+        } else //Leaving a call
         {
             CallUser cUser = api.asClient().getCallUserMap().remove(userId);
-            if (cUser == null)
-            {
+            if (cUser == null) {
                 api.getEventCache().cache(EventCache.Type.USER, userId, () -> handle(responseNumber, allContent));
                 EventCache.LOG.debug("Received a VOICE_STATE_UPDATE for a User leaving a Call, but the Call was not yet cached! JSON: {}", content);
                 return;
@@ -269,19 +242,17 @@ public class VoiceStateUpdateHandler extends SocketHandler
             vState.setInCall(false);
 
             api.getEventManager().handle(
-                    new CallVoiceLeaveEvent(
-                            api, responseNumber,
-                            cUser));
+                new CallVoiceLeaveEvent(
+                    api, responseNumber,
+                    cUser));
         }
 
         //Now that we're done dealing with the joins and leaves, we can deal with the mute/deaf changes.
-        if (selfMuted != vState.isSelfMuted())
-        {
+        if (selfMuted != vState.isSelfMuted()) {
             vState.setSelfMuted(selfMuted);
             api.getEventManager().handle(new CallVoiceSelfMuteEvent(api, responseNumber, vState.getCallUser()));
         }
-        if (selfDeafened != vState.isSelfDeafened())
-        {
+        if (selfDeafened != vState.isSelfDeafened()) {
             vState.setSelfDeafened(selfDeafened);
             api.getEventManager().handle(new CallVoiceSelfDeafenEvent(api, responseNumber, vState.getCallUser()));
         }

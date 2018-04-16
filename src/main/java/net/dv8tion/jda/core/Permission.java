@@ -23,8 +23,7 @@ import java.util.stream.Collectors;
 /**
  * Represents the bit offsets used by Discord for Permissions.
  */
-public enum Permission
-{
+public enum Permission {
     CREATE_INSTANT_INVITE(0, true, true, "Create Instant Invite"),
     KICK_MEMBERS(1, true, false, "Kick Members"),
     BAN_MEMBERS(2, true, false, "Ban Members"),
@@ -81,33 +80,32 @@ public enum Permission
      * All permissions that apply to a channel
      */
     public static final long ALL_CHANNEL_PERMISSIONS = Permission.getRaw(Arrays.stream(values())
-            .filter(Permission::isChannel).collect(Collectors.toList()));
+        .filter(Permission::isChannel).collect(Collectors.toList()));
 
     /**
      * All Guild specific permissions which are only available to roles
      */
     public static final long ALL_GUILD_PERMISSIONS = Permission.getRaw(Arrays.stream(values())
-            .filter(Permission::isGuild).collect(Collectors.toList()));
+        .filter(Permission::isGuild).collect(Collectors.toList()));
 
     /**
      * All text channel specific permissions which are only available in text channel permission overrides
      */
     public static final long ALL_TEXT_PERMISSIONS = Permission.getRaw(Arrays.stream(values())
-            .filter(Permission::isText).collect(Collectors.toList()));
+        .filter(Permission::isText).collect(Collectors.toList()));
 
     /**
      * All voice channel specific permissions which are only available in voice channel permission overrides
      */
     public static final long ALL_VOICE_PERMISSIONS = Permission.getRaw(Arrays.stream(values())
-            .filter(Permission::isVoice).collect(Collectors.toList()));
+        .filter(Permission::isVoice).collect(Collectors.toList()));
 
     private final int offset;
     private final long raw;
     private final boolean isGuild, isChannel;
     private final String name;
 
-    Permission(int offset, boolean isGuild, boolean isChannel, String name)
-    {
+    Permission(int offset, boolean isGuild, boolean isChannel, String name) {
         this.offset = offset;
         this.raw = 1 << offset;
         this.isGuild = isGuild;
@@ -120,8 +118,7 @@ public enum Permission
      *
      * @return The readable name of this {@link net.dv8tion.jda.core.Permission Permission}.
      */
-    public String getName()
-    {
+    public String getName() {
         return this.name;
     }
 
@@ -132,8 +129,7 @@ public enum Permission
      *
      * @return The offset that represents this {@link net.dv8tion.jda.core.Permission Permission}.
      */
-    public int getOffset()
-    {
+    public int getOffset() {
         return offset;
     }
 
@@ -143,8 +139,7 @@ public enum Permission
      *
      * @return The raw value of this specific permission.
      */
-    public long getRawValue()
-    {
+    public long getRawValue() {
         return raw;
     }
 
@@ -154,8 +149,7 @@ public enum Permission
      *
      * @return True if this permission is present at the Guild level.
      */
-    public boolean isGuild()
-    {
+    public boolean isGuild() {
         return isGuild;
     }
 
@@ -165,8 +159,7 @@ public enum Permission
      *
      * @return True if this permission is present at the Channel level.
      */
-    public boolean isChannel()
-    {
+    public boolean isChannel() {
         return isChannel;
     }
 
@@ -175,8 +168,7 @@ public enum Permission
      *
      * @return True, if and only if this permission can be applied to only text channels
      */
-    public boolean isText()
-    {
+    public boolean isText() {
         return offset > 9 && offset < 20;
     }
 
@@ -185,8 +177,7 @@ public enum Permission
      *
      * @return True, if and only if this permission can be applied to only voice channels
      */
-    public boolean isVoice()
-    {
+    public boolean isVoice() {
         return offset == 10 || offset > 19 && offset < 26;
     }
 
@@ -195,17 +186,14 @@ public enum Permission
      * <br>If there is no {@link net.dv8tion.jda.core.Permission Permssions} that matches the provided
      * offset, {@link net.dv8tion.jda.core.Permission#UNKNOWN Permission.UNKNOWN} is returned.
      *
-     * @param  offset
-     *         The offset to match a {@link net.dv8tion.jda.core.Permission Permission} to.
-     *
+     * @param offset The offset to match a {@link net.dv8tion.jda.core.Permission Permission} to.
      * @return {@link net.dv8tion.jda.core.Permission Permission} relating to the provided offset.
      */
-    public static Permission getFromOffset(int offset)
-    {
-        for (Permission perm : values())
-        {
-            if (perm.offset == offset)
+    public static Permission getFromOffset(int offset) {
+        for (Permission perm : values()) {
+            if (perm.offset == offset) {
                 return perm;
+            }
         }
         return UNKNOWN;
     }
@@ -220,22 +208,19 @@ public enum Permission
      * <br>{@link net.dv8tion.jda.core.utils.PermissionUtil#getEffectivePermission(net.dv8tion.jda.core.entities.Channel, net.dv8tion.jda.core.entities.Member)
      * PermissionUtil.getEffectivePermission(Channel, Member)}
      *
-     * @param  permissions
-     *         The raw {@code long} representation of permissions.
-     *
+     * @param permissions The raw {@code long} representation of permissions.
      * @return Possibly-empty list of {@link net.dv8tion.jda.core.Permission Permissions}.
-     *
-     * @see    #toEnumSet(long)
+     * @see #toEnumSet(long)
      */
-    public static List<Permission> getPermissions(long permissions)
-    {
-        if (permissions == 0)
+    public static List<Permission> getPermissions(long permissions) {
+        if (permissions == 0) {
             return Collections.emptyList();
+        }
         List<Permission> perms = new LinkedList<>();
-        for (Permission perm : Permission.values())
-        {
-            if (perm != UNKNOWN && (permissions & perm.raw) == perm.raw)
+        for (Permission perm : Permission.values()) {
+            if (perm != UNKNOWN && (permissions & perm.raw) == perm.raw) {
                 perms.add(perm);
+            }
         }
         return perms;
     }
@@ -244,20 +229,18 @@ public enum Permission
      * Constructs an {@link java.util.EnumSet EnumSet} from the provided permissions bitmask.
      * <br>If provided with {@code 0} this will fast-fail with an empty set.
      *
-     * @param  permissions
-     *         The permission bitmask
-     *
+     * @param permissions The permission bitmask
      * @return Possibly-empty {@link java.util.EnumSet EnumSet} containing the constants for this permission bitmask
      */
-    public static EnumSet<Permission> toEnumSet(long permissions)
-    {
+    public static EnumSet<Permission> toEnumSet(long permissions) {
         EnumSet<Permission> set = EnumSet.noneOf(Permission.class);
-        if (permissions == 0)
+        if (permissions == 0) {
             return set;
-        for (Permission perm : values())
-        {
-            if (perm != UNKNOWN && (permissions & perm.raw) == perm.raw)
+        }
+        for (Permission perm : values()) {
+            if (perm != UNKNOWN && (permissions & perm.raw) == perm.raw) {
                 set.add(perm);
+            }
         }
         return set;
     }
@@ -266,18 +249,15 @@ public enum Permission
      * This is effectively the opposite of {@link #getPermissions(long)}, this takes 1 or more {@link net.dv8tion.jda.core.Permission Permissions}
      * and returns the raw offset {@code long} representation of the permissions.
      *
-     * @param  permissions
-     *         The array of permissions of which to form into the raw long representation.
-     *
+     * @param permissions The array of permissions of which to form into the raw long representation.
      * @return Unsigned long representing the provided permissions.
      */
-    public static long getRaw(Permission... permissions)
-    {
+    public static long getRaw(Permission... permissions) {
         long raw = 0;
-        for (Permission perm : permissions)
-        {
-            if (perm != null && perm != UNKNOWN)
+        for (Permission perm : permissions) {
+            if (perm != null && perm != UNKNOWN) {
                 raw |= perm.raw;
+            }
         }
 
         return raw;
@@ -288,15 +268,11 @@ public enum Permission
      * and returns the raw offset {@code long} representation of the permissions.
      * <br>Example: {@code getRaw(EnumSet.of(Permission.MESSAGE_READ, Permission.MESSAGE_WRITE))}
      *
-     * @param  permissions
-     *         The Collection of permissions of which to form into the raw long representation.
-     *
+     * @param permissions The Collection of permissions of which to form into the raw long representation.
      * @return Unsigned long representing the provided permissions.
-     *
-     * @see    java.util.EnumSet EnumSet
+     * @see java.util.EnumSet EnumSet
      */
-    public static long getRaw(Collection<Permission> permissions)
-    {
+    public static long getRaw(Collection<Permission> permissions) {
         Checks.notNull(permissions, "Permission Collection");
 
         return getRaw(permissions.toArray(EMPTY_PERMISSIONS));

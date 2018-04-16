@@ -27,16 +27,12 @@ import java.util.function.Supplier;
  * for {@link #checkValue(Object)}</b>
  * <br>Known specification {@link net.dv8tion.jda.core.managers.fields.PermissionField PermissionField}.
  *
- * @param  <T>
- *         The Field-Type for this RoleField
- *
- * @since  3.0
+ * @param <T> The Field-Type for this RoleField
+ * @since 3.0
  */
 @Deprecated
-public abstract class RoleField<T> extends Field<T, net.dv8tion.jda.core.managers.RoleManagerUpdatable>
-{
-    public RoleField(net.dv8tion.jda.core.managers.RoleManagerUpdatable manager, Supplier<T> originalValue)
-    {
+public abstract class RoleField<T> extends Field<T, net.dv8tion.jda.core.managers.RoleManagerUpdatable> {
+    public RoleField(net.dv8tion.jda.core.managers.RoleManagerUpdatable manager, Supplier<T> originalValue) {
         super(manager, originalValue);
     }
 }

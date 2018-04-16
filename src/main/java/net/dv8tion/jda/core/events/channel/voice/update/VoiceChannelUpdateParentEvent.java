@@ -27,15 +27,13 @@ import net.dv8tion.jda.core.entities.VoiceChannel;
  *
  * <p>Identifier: {@code parent}
  */
-public class VoiceChannelUpdateParentEvent extends GenericVoiceChannelUpdateEvent<Category>
-{
+public class VoiceChannelUpdateParentEvent extends GenericVoiceChannelUpdateEvent<Category> {
     public static final String IDENTIFIER = "parent";
 
     private final Category oldParent;
     private final Category newParent;
 
-    public VoiceChannelUpdateParentEvent(JDA api, long responseNumber, VoiceChannel channel, Category oldParent)
-    {
+    public VoiceChannelUpdateParentEvent(JDA api, long responseNumber, VoiceChannel channel, Category oldParent) {
         super(api, responseNumber, channel);
         this.oldParent = oldParent;
         this.newParent = channel.getParent();
@@ -46,8 +44,7 @@ public class VoiceChannelUpdateParentEvent extends GenericVoiceChannelUpdateEven
      *
      * @return The old parent, or null
      */
-    public Category getOldParent()
-    {
+    public Category getOldParent() {
         return oldParent;
     }
 
@@ -56,26 +53,22 @@ public class VoiceChannelUpdateParentEvent extends GenericVoiceChannelUpdateEven
      *
      * @return The new parent, or null
      */
-    public Category getNewParent()
-    {
+    public Category getNewParent() {
         return newParent;
     }
 
     @Override
-    public String getPropertyIdentifier()
-    {
+    public String getPropertyIdentifier() {
         return IDENTIFIER;
     }
 
     @Override
-    public Category getOldValue()
-    {
+    public Category getOldValue() {
         return oldParent;
     }
 
     @Override
-    public Category getNewValue()
-    {
+    public Category getNewValue() {
         return newParent;
     }
 }

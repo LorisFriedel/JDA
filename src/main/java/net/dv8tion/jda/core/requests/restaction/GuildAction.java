@@ -43,10 +43,9 @@ import java.util.function.BooleanSupplier;
  * specifically designed to allow for the creation of {@link net.dv8tion.jda.core.entities.Guild Guilds}.
  * <br>This is available to all account types but may undergo certain restrictions by Discord.
  *
- * @since  3.4.0
+ * @since 3.4.0
  */
-public class GuildAction extends RestAction<Void>
-{
+public class GuildAction extends RestAction<Void> {
     protected String name;
     protected Region region;
     protected Icon icon;
@@ -57,8 +56,7 @@ public class GuildAction extends RestAction<Void>
     protected final List<RoleData> roles;
     protected final List<ChannelData> channels;
 
-    public GuildAction(JDA api, String name)
-    {
+    public GuildAction(JDA api, String name) {
         super(api, Route.Guilds.CREATE_GUILD.compile());
         this.setName(name);
 
@@ -69,8 +67,7 @@ public class GuildAction extends RestAction<Void>
     }
 
     @Override
-    public GuildAction setCheck(BooleanSupplier checks)
-    {
+    public GuildAction setCheck(BooleanSupplier checks) {
         return (GuildAction) super.setCheck(checks);
     }
 
@@ -78,17 +75,12 @@ public class GuildAction extends RestAction<Void>
      * Sets the voice {@link net.dv8tion.jda.core.Region Region} of
      * the resulting {@link net.dv8tion.jda.core.entities.Guild Guild}.
      *
-     * @param  region
-     *         The {@link net.dv8tion.jda.core.Region Region} to use
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided region is a VIP region as per {@link net.dv8tion.jda.core.Region#isVip() Region.isVip()}
-     *
+     * @param region The {@link net.dv8tion.jda.core.Region Region} to use
      * @return The current GuildAction for chaining convenience
+     * @throws java.lang.IllegalArgumentException If the provided region is a VIP region as per {@link net.dv8tion.jda.core.Region#isVip() Region.isVip()}
      */
     @CheckReturnValue
-    public GuildAction setRegion(Region region)
-    {
+    public GuildAction setRegion(Region region) {
         Checks.check(region == null || !region.isVip(), "Cannot create a Guild with a VIP voice region!");
         this.region = region;
         return this;
@@ -98,14 +90,11 @@ public class GuildAction extends RestAction<Void>
      * Sets the {@link net.dv8tion.jda.core.entities.Icon Icon}
      * for the resulting {@link net.dv8tion.jda.core.entities.Guild Guild}
      *
-     * @param  icon
-     *         The {@link net.dv8tion.jda.core.entities.Icon Icon} to use
-     *
+     * @param icon The {@link net.dv8tion.jda.core.entities.Icon Icon} to use
      * @return The current GuildAction for chaining convenience
      */
     @CheckReturnValue
-    public GuildAction setIcon(Icon icon)
-    {
+    public GuildAction setIcon(Icon icon) {
         this.icon = icon;
         return this;
     }
@@ -113,17 +102,12 @@ public class GuildAction extends RestAction<Void>
     /**
      * Sets the name for the resulting {@link net.dv8tion.jda.core.entities.Guild Guild}
      *
-     * @param  name
-     *         The name to use
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided name is {@code null}, blank or not between 2-100 characters long
-     *
+     * @param name The name to use
      * @return The current GuildAction for chaining convenience
+     * @throws java.lang.IllegalArgumentException If the provided name is {@code null}, blank or not between 2-100 characters long
      */
     @CheckReturnValue
-    public GuildAction setName(String name)
-    {
+    public GuildAction setName(String name) {
         Checks.notBlank(name, "Name");
         name = name.trim();
         Checks.check(name.length() >= 2 && name.length() <= 100, "Name must have 2-100 characters in length!");
@@ -135,14 +119,11 @@ public class GuildAction extends RestAction<Void>
      * Sets the {@link net.dv8tion.jda.core.entities.Guild.VerificationLevel VerificationLevel}
      * for the resulting {@link net.dv8tion.jda.core.entities.Guild Guild}
      *
-     * @param  level
-     *         The {@link net.dv8tion.jda.core.entities.Guild.VerificationLevel VerificationLevel} to use
-     *
+     * @param level The {@link net.dv8tion.jda.core.entities.Guild.VerificationLevel VerificationLevel} to use
      * @return The current GuildAction for chaining convenience
      */
     @CheckReturnValue
-    public GuildAction setVerificationLevel(Guild.VerificationLevel level)
-    {
+    public GuildAction setVerificationLevel(Guild.VerificationLevel level) {
         this.verificationLevel = level;
         return this;
     }
@@ -151,14 +132,11 @@ public class GuildAction extends RestAction<Void>
      * Sets the {@link net.dv8tion.jda.core.entities.Guild.NotificationLevel NotificationLevel}
      * for the resulting {@link net.dv8tion.jda.core.entities.Guild Guild}
      *
-     * @param  level
-     *         The {@link net.dv8tion.jda.core.entities.Guild.NotificationLevel NotificationLevel} to use
-     *
+     * @param level The {@link net.dv8tion.jda.core.entities.Guild.NotificationLevel NotificationLevel} to use
      * @return The current GuildAction for chaining convenience
      */
     @CheckReturnValue
-    public GuildAction setNotificationLevel(Guild.NotificationLevel level)
-    {
+    public GuildAction setNotificationLevel(Guild.NotificationLevel level) {
         this.notificationLevel = level;
         return this;
     }
@@ -167,14 +145,11 @@ public class GuildAction extends RestAction<Void>
      * Sets the {@link net.dv8tion.jda.core.entities.Guild.ExplicitContentLevel ExplicitContentLevel}
      * for the resulting {@link net.dv8tion.jda.core.entities.Guild Guild}
      *
-     * @param  level
-     *         The {@link net.dv8tion.jda.core.entities.Guild.ExplicitContentLevel ExplicitContentLevel} to use
-     *
+     * @param level The {@link net.dv8tion.jda.core.entities.Guild.ExplicitContentLevel ExplicitContentLevel} to use
      * @return The current GuildAction for chaining convenience
      */
     @CheckReturnValue
-    public GuildAction setExplicitContentLevel(Guild.ExplicitContentLevel level)
-    {
+    public GuildAction setExplicitContentLevel(Guild.ExplicitContentLevel level) {
         this.explicitContentLevel = level;
         return this;
     }
@@ -185,18 +160,13 @@ public class GuildAction extends RestAction<Void>
      * Adds a {@link net.dv8tion.jda.core.entities.Channel Channel} to the resulting
      * Guild. This cannot be of type {@link net.dv8tion.jda.core.entities.ChannelType#CATEGORY CATEGORY}!
      *
-     * @param  channel
-     *         The {@link net.dv8tion.jda.core.requests.restaction.GuildAction.ChannelData ChannelData}
-     *         to use for the construction of the Channel
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the provided channel is {@code null}!
-     *
+     * @param channel The {@link net.dv8tion.jda.core.requests.restaction.GuildAction.ChannelData ChannelData}
+     *                to use for the construction of the Channel
      * @return The current GuildAction for chaining convenience
+     * @throws java.lang.IllegalArgumentException If the provided channel is {@code null}!
      */
     @CheckReturnValue
-    public GuildAction addChannel(ChannelData channel)
-    {
+    public GuildAction addChannel(ChannelData channel) {
         Checks.notNull(channel, "Channel");
         this.channels.add(channel);
         return this;
@@ -206,17 +176,12 @@ public class GuildAction extends RestAction<Void>
      * Gets the {@link net.dv8tion.jda.core.requests.restaction.GuildAction.ChannelData ChannelData}
      * of the specified index. The index is 0 based on insertion order of {@link #addChannel(GuildAction.ChannelData)}!
      *
-     * @param  index
-     *         The 0 based index of the channel
-     *
-     * @throws java.lang.IndexOutOfBoundsException
-     *         If the provided index is not in bounds
-     *
+     * @param index The 0 based index of the channel
      * @return The current GuildAction for chaining convenience
+     * @throws java.lang.IndexOutOfBoundsException If the provided index is not in bounds
      */
     @CheckReturnValue
-    public ChannelData getChannel(int index)
-    {
+    public ChannelData getChannel(int index) {
         return this.channels.get(index);
     }
 
@@ -224,17 +189,12 @@ public class GuildAction extends RestAction<Void>
      * Removes the {@link net.dv8tion.jda.core.requests.restaction.GuildAction.ChannelData ChannelData}
      * at the specified index and returns the removed object.
      *
-     * @param  index
-     *         The index of the channel
-     *
-     * @throws java.lang.IndexOutOfBoundsException
-     *         If the index is out of bounds
-     *
+     * @param index The index of the channel
      * @return The removed object
+     * @throws java.lang.IndexOutOfBoundsException If the index is out of bounds
      */
     @CheckReturnValue
-    public ChannelData removeChannel(int index)
-    {
+    public ChannelData removeChannel(int index) {
         return this.channels.remove(index);
     }
 
@@ -242,14 +202,11 @@ public class GuildAction extends RestAction<Void>
      * Removes the provided {@link net.dv8tion.jda.core.requests.restaction.GuildAction.ChannelData ChannelData}
      * from this GuildAction if present.
      *
-     * @param  data
-     *         The ChannelData to remove
-     *
+     * @param data The ChannelData to remove
      * @return The current GuildAction for chaining convenience
      */
     @CheckReturnValue
-    public GuildAction removeChannel(ChannelData data)
-    {
+    public GuildAction removeChannel(ChannelData data) {
         this.channels.remove(data);
         return this;
     }
@@ -258,25 +215,19 @@ public class GuildAction extends RestAction<Void>
      * Creates a new {@link net.dv8tion.jda.core.requests.restaction.GuildAction.ChannelData ChannelData}
      * instance and adds it to this GuildAction.
      *
-     * @param  type
-     *         The {@link net.dv8tion.jda.core.entities.ChannelType ChannelType} of the resulting Channel
-     *         <br>This may be of type {@link net.dv8tion.jda.core.entities.ChannelType#TEXT TEXT} or {@link net.dv8tion.jda.core.entities.ChannelType#VOICE VOICE}!
-     * @param  name
-     *         The name of the channel. This must be alphanumeric with underscores for type TEXT
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>If provided with an invalid ChannelType</li>
-     *             <li>If the provided name is {@code null} or blank</li>
-     *             <li>If the provided name is not between 2-100 characters long</li>
-     *             <li>If the type is TEXT and the provided name is not alphanumeric with underscores</li>
-     *         </ul>
-     *
+     * @param type The {@link net.dv8tion.jda.core.entities.ChannelType ChannelType} of the resulting Channel
+     *             <br>This may be of type {@link net.dv8tion.jda.core.entities.ChannelType#TEXT TEXT} or {@link net.dv8tion.jda.core.entities.ChannelType#VOICE VOICE}!
+     * @param name The name of the channel. This must be alphanumeric with underscores for type TEXT
      * @return The new ChannelData instance
+     * @throws java.lang.IllegalArgumentException <ul>
+     *                                            <li>If provided with an invalid ChannelType</li>
+     *                                            <li>If the provided name is {@code null} or blank</li>
+     *                                            <li>If the provided name is not between 2-100 characters long</li>
+     *                                            <li>If the type is TEXT and the provided name is not alphanumeric with underscores</li>
+     *                                            </ul>
      */
     @CheckReturnValue
-    public ChannelData newChannel(ChannelType type, String name)
-    {
+    public ChannelData newChannel(ChannelType type, String name) {
         ChannelData data = new ChannelData(type, name);
         addChannel(data);
         return data;
@@ -294,8 +245,7 @@ public class GuildAction extends RestAction<Void>
      * @return RoleData of the public role
      */
     @CheckReturnValue
-    public RoleData getPublicRole()
-    {
+    public RoleData getPublicRole() {
         return this.roles.get(0);
     }
 
@@ -304,17 +254,12 @@ public class GuildAction extends RestAction<Void>
      * provided index.
      * <br>The public role is at the index 0 and all others are ordered by insertion order!
      *
-     * @param  index
-     *         The index of the role
-     *
-     * @throws java.lang.IndexOutOfBoundsException
-     *         If the provided index is out of bounds
-     *
+     * @param index The index of the role
      * @return RoleData of the provided index
+     * @throws java.lang.IndexOutOfBoundsException If the provided index is out of bounds
      */
     @CheckReturnValue
-    public RoleData getRole(int index)
-    {
+    public RoleData getRole(int index) {
         return this.roles.get(index);
     }
 
@@ -328,16 +273,14 @@ public class GuildAction extends RestAction<Void>
      * @return RoleData for the new Role
      */
     @CheckReturnValue
-    public RoleData newRole()
-    {
+    public RoleData newRole() {
         final RoleData role = new RoleData(roles.size());
         this.roles.add(role);
         return role;
     }
 
     @Override
-    protected RequestBody finalizeData()
-    {
+    protected RequestBody finalizeData() {
         final JSONObject object = new JSONObject();
         object.put("name", name);
         object.put("roles", new JSONArray(roles));
@@ -357,8 +300,7 @@ public class GuildAction extends RestAction<Void>
     }
 
     @Override
-    protected void handleResponse(Response response, Request<Void> request)
-    {
+    protected void handleResponse(Response response, Request<Void> request) {
         if (response.isOk())
             request.onSuccess(null);
         else
@@ -371,8 +313,7 @@ public class GuildAction extends RestAction<Void>
      *
      * <p>This may be used in {@link net.dv8tion.jda.core.requests.restaction.GuildAction.ChannelData#addPermissionOverride(GuildAction.RoleData, long, long)}  ChannelData.addPermissionOverride(...)}!
      */
-    public static class RoleData implements JSONString
-    {
+    public static class RoleData implements JSONString {
         protected final long id;
         protected final boolean isPublicRole;
 
@@ -382,8 +323,7 @@ public class GuildAction extends RestAction<Void>
         protected Integer position;
         protected Boolean mentionable, hoisted;
 
-        protected RoleData(long id)
-        {
+        protected RoleData(long id) {
             this.id = id;
             this.isPublicRole = id == 0;
         }
@@ -391,18 +331,12 @@ public class GuildAction extends RestAction<Void>
         /**
          * Sets the raw permission value for this Role
          *
-         * @param  rawPermissions
-         *         Raw permission value
-         *
-         * @throws java.lang.IllegalArgumentException
-         *         If the provided permissions are negative or exceed the maximum permissions
-         *
+         * @param rawPermissions Raw permission value
          * @return The current RoleData instance for chaining convenience
+         * @throws java.lang.IllegalArgumentException If the provided permissions are negative or exceed the maximum permissions
          */
-        public RoleData setPermissionsRaw(Long rawPermissions)
-        {
-            if (rawPermissions != null)
-            {
+        public RoleData setPermissionsRaw(Long rawPermissions) {
+            if (rawPermissions != null) {
                 Checks.notNegative(rawPermissions, "Raw Permissions");
                 Checks.check(rawPermissions <= Permission.ALL_PERMISSIONS, "Provided permissions may not be greater than a full permission set!");
             }
@@ -413,16 +347,11 @@ public class GuildAction extends RestAction<Void>
         /**
          * Adds the provided permissions to the Role
          *
-         * @param  permissions
-         *         The permissions to add
-         *
-         * @throws java.lang.IllegalArgumentException
-         *         If any of the provided permissions is {@code null}
-         *
+         * @param permissions The permissions to add
          * @return The current RoleData instance for chaining convenience
+         * @throws java.lang.IllegalArgumentException If any of the provided permissions is {@code null}
          */
-        public RoleData addPermissions(Permission... permissions)
-        {
+        public RoleData addPermissions(Permission... permissions) {
             Checks.notNull(permissions, "Permissions");
             for (Permission perm : permissions)
                 Checks.notNull(perm, "Permissions");
@@ -435,16 +364,11 @@ public class GuildAction extends RestAction<Void>
         /**
          * Adds the provided permissions to the Role
          *
-         * @param  permissions
-         *         The permissions to add
-         *
-         * @throws java.lang.IllegalArgumentException
-         *         If any of the provided permissions is {@code null}
-         *
+         * @param permissions The permissions to add
          * @return The current RoleData instance for chaining convenience
+         * @throws java.lang.IllegalArgumentException If any of the provided permissions is {@code null}
          */
-        public RoleData addPermissions(Collection<Permission> permissions)
-        {
+        public RoleData addPermissions(Collection<Permission> permissions) {
             Checks.noneNull(permissions, "Permissions");
             if (this.permissions == null)
                 this.permissions = 0L;
@@ -455,16 +379,11 @@ public class GuildAction extends RestAction<Void>
         /**
          * Sets the name for this Role
          *
-         * @param  name
-         *         The name
-         *
-         * @throws java.lang.IllegalStateException
-         *         If this is the public role
-         *
+         * @param name The name
          * @return The current RoleData instance for chaining convenience
+         * @throws java.lang.IllegalStateException If this is the public role
          */
-        public RoleData setName(String name)
-        {
+        public RoleData setName(String name) {
             checkPublic("name");
             this.name = name;
             return this;
@@ -473,16 +392,11 @@ public class GuildAction extends RestAction<Void>
         /**
          * Sets the color for this Role
          *
-         * @param  color
-         *         The color for this Role
-         *
-         * @throws java.lang.IllegalStateException
-         *         If this is the public role
-         *
+         * @param color The color for this Role
          * @return The current RoleData instance for chaining convenience
+         * @throws java.lang.IllegalStateException If this is the public role
          */
-        public RoleData setColor(Color color)
-        {
+        public RoleData setColor(Color color) {
             checkPublic("color");
             this.color = color == null ? null : color.getRGB();
             return this;
@@ -491,16 +405,11 @@ public class GuildAction extends RestAction<Void>
         /**
          * Sets the color for this Role
          *
-         * @param  color
-         *         The color for this Role, or {@code null} to unset
-         *
-         * @throws java.lang.IllegalStateException
-         *         If this is the public role
-         *
+         * @param color The color for this Role, or {@code null} to unset
          * @return The current RoleData instance for chaining convenience
+         * @throws java.lang.IllegalStateException If this is the public role
          */
-        public RoleData setColor(Integer color)
-        {
+        public RoleData setColor(Integer color) {
             checkPublic("color");
             this.color = color;
             return this;
@@ -509,16 +418,11 @@ public class GuildAction extends RestAction<Void>
         /**
          * Sets the position for this Role
          *
-         * @param  position
-         *         The position
-         *
-         * @throws java.lang.IllegalStateException
-         *         If this is the public role
-         *
+         * @param position The position
          * @return The current RoleData instance for chaining convenience
+         * @throws java.lang.IllegalStateException If this is the public role
          */
-        public RoleData setPosition(Integer position)
-        {
+        public RoleData setPosition(Integer position) {
             checkPublic("position");
             this.position = position;
             return this;
@@ -527,16 +431,11 @@ public class GuildAction extends RestAction<Void>
         /**
          * Sets whether the Role is mentionable
          *
-         * @param  mentionable
-         *         Whether the role is mentionable
-         *
-         * @throws java.lang.IllegalStateException
-         *         If this is the public role
-         *
+         * @param mentionable Whether the role is mentionable
          * @return The current RoleData instance for chaining convenience
+         * @throws java.lang.IllegalStateException If this is the public role
          */
-        public RoleData setMentionable(Boolean mentionable)
-        {
+        public RoleData setMentionable(Boolean mentionable) {
             checkPublic("mentionable");
             this.mentionable = mentionable;
             return this;
@@ -545,24 +444,18 @@ public class GuildAction extends RestAction<Void>
         /**
          * Sets whether the Role is hoisted
          *
-         * @param  hoisted
-         *         Whether the role is hoisted
-         *
-         * @throws java.lang.IllegalStateException
-         *         If this is the public role
-         *
+         * @param hoisted Whether the role is hoisted
          * @return The current RoleData instance for chaining convenience
+         * @throws java.lang.IllegalStateException If this is the public role
          */
-        public RoleData setHoisted(Boolean hoisted)
-        {
+        public RoleData setHoisted(Boolean hoisted) {
             checkPublic("hoisted");
             this.hoisted = hoisted;
             return this;
         }
 
         @Override
-        public String toJSONString()
-        {
+        public String toJSONString() {
             final JSONObject o = new JSONObject().put("id", Long.toUnsignedString(id));
             if (permissions != null)
                 o.put("permissions", permissions);
@@ -579,8 +472,7 @@ public class GuildAction extends RestAction<Void>
             return o.toString();
         }
 
-        protected void checkPublic(String comment)
-        {
+        protected void checkPublic(String comment) {
             if (isPublicRole)
                 throw new IllegalStateException("Cannot modify " + comment + " for the public role!");
         }
@@ -592,8 +484,7 @@ public class GuildAction extends RestAction<Void>
      *
      * <p>Use with {@link net.dv8tion.jda.core.requests.restaction.GuildAction#addChannel(GuildAction.ChannelData) GuildAction.addChannel(ChannelData)}.
      */
-    public static class ChannelData implements JSONString
-    {
+    public static class ChannelData implements JSONString {
         protected final ChannelType type;
         protected final String name;
 
@@ -612,22 +503,17 @@ public class GuildAction extends RestAction<Void>
          * a {@link net.dv8tion.jda.core.entities.Channel Channel} to be used in the construction
          * of a {@link net.dv8tion.jda.core.entities.Guild Guild}!
          *
-         * @param  type
-         *         The {@link net.dv8tion.jda.core.entities.ChannelType ChannelType} of the resulting Channel
-         *         <br>This may be of type {@link net.dv8tion.jda.core.entities.ChannelType#TEXT TEXT} or {@link net.dv8tion.jda.core.entities.ChannelType#VOICE VOICE}!
-         * @param  name
-         *         The name of the channel. This must be alphanumeric with underscores for type TEXT
-         *
-         * @throws java.lang.IllegalArgumentException
-         *         <ul>
-         *             <li>If provided with an invalid ChannelType</li>
-         *             <li>If the provided name is {@code null} or blank</li>
-         *             <li>If the provided name is not between 2-100 characters long</li>
-         *             <li>If the type is TEXT and the provided name is not alphanumeric with underscores</li>
-         *         </ul>
+         * @param type The {@link net.dv8tion.jda.core.entities.ChannelType ChannelType} of the resulting Channel
+         *             <br>This may be of type {@link net.dv8tion.jda.core.entities.ChannelType#TEXT TEXT} or {@link net.dv8tion.jda.core.entities.ChannelType#VOICE VOICE}!
+         * @param name The name of the channel. This must be alphanumeric with underscores for type TEXT
+         * @throws java.lang.IllegalArgumentException <ul>
+         *                                            <li>If provided with an invalid ChannelType</li>
+         *                                            <li>If the provided name is {@code null} or blank</li>
+         *                                            <li>If the provided name is not between 2-100 characters long</li>
+         *                                            <li>If the type is TEXT and the provided name is not alphanumeric with underscores</li>
+         *                                            </ul>
          */
-        public ChannelData(ChannelType type, String name)
-        {
+        public ChannelData(ChannelType type, String name) {
             Checks.notBlank(name, "Name");
             Checks.check(type == ChannelType.TEXT || type == ChannelType.VOICE, "Can only create channels of type TEXT or VOICE in GuildAction!");
             Checks.check(name.length() >= 2 && name.length() <= 100, "Channel name has to be between 2-100 characters long!");
@@ -641,16 +527,11 @@ public class GuildAction extends RestAction<Void>
          * Sets the topic for this channel.
          * <br>These are only relevant to channels of type {@link net.dv8tion.jda.core.entities.ChannelType#TEXT TEXT}.
          *
-         * @param  topic
-         *         The topic for the channel
-         *
-         * @throws java.lang.IllegalArgumentException
-         *         If the provided topic is bigger than 1024 characters
-         *
+         * @param topic The topic for the channel
          * @return This ChannelData instance for chaining convenience
+         * @throws java.lang.IllegalArgumentException If the provided topic is bigger than 1024 characters
          */
-        public ChannelData setTopic(String topic)
-        {
+        public ChannelData setTopic(String topic) {
             if (topic != null && topic.length() > 1024)
                 throw new IllegalArgumentException("Channel Topic must not be greater than 1024 in length!");
             this.topic = topic;
@@ -661,13 +542,10 @@ public class GuildAction extends RestAction<Void>
          * Sets the whether this channel should be marked NSFW.
          * <br>These are only relevant to channels of type {@link net.dv8tion.jda.core.entities.ChannelType#TEXT TEXT}.
          *
-         * @param  nsfw
-         *         Whether this channel should be marked NSFW
-         *
+         * @param nsfw Whether this channel should be marked NSFW
          * @return This ChannelData instance for chaining convenience
          */
-        public ChannelData setNSFW(Boolean nsfw)
-        {
+        public ChannelData setNSFW(Boolean nsfw) {
             this.nsfw = nsfw;
             return this;
         }
@@ -676,18 +554,12 @@ public class GuildAction extends RestAction<Void>
          * Sets the bitrate for this channel.
          * <br>These are only relevant to channels of type {@link net.dv8tion.jda.core.entities.ChannelType#VOICE VOICE}.
          *
-         * @param  bitrate
-         *         The bitrate for the channel (8000-96000)
-         *
-         * @throws java.lang.IllegalArgumentException
-         *         If the provided bitrate is not between 8000-96000
-         *
+         * @param bitrate The bitrate for the channel (8000-96000)
          * @return This ChannelData instance for chaining convenience
+         * @throws java.lang.IllegalArgumentException If the provided bitrate is not between 8000-96000
          */
-        public ChannelData setBitrate(Integer bitrate)
-        {
-            if (bitrate != null)
-            {
+        public ChannelData setBitrate(Integer bitrate) {
+            if (bitrate != null) {
                 Checks.check(bitrate >= 8000, "Bitrate must be greater than 8000.");
                 Checks.check(bitrate <= 96000, "Bitrate must be less than 96000.");
             }
@@ -699,16 +571,11 @@ public class GuildAction extends RestAction<Void>
          * Sets the userlimit for this channel.
          * <br>These are only relevant to channels of type {@link net.dv8tion.jda.core.entities.ChannelType#VOICE VOICE}.
          *
-         * @param  userlimit
-         *         The userlimit for the channel (0-99)
-         *
-         * @throws java.lang.IllegalArgumentException
-         *         If the provided userlimit is not between 0-99
-         *
+         * @param userlimit The userlimit for the channel (0-99)
          * @return This ChannelData instance for chaining convenience
+         * @throws java.lang.IllegalArgumentException If the provided userlimit is not between 0-99
          */
-        public ChannelData setUserlimit(Integer userlimit)
-        {
+        public ChannelData setUserlimit(Integer userlimit) {
             if (userlimit != null && (userlimit < 0 || userlimit > 99))
                 throw new IllegalArgumentException("Userlimit must be between 0-99!");
             this.userlimit = userlimit;
@@ -718,13 +585,10 @@ public class GuildAction extends RestAction<Void>
         /**
          * Sets the position for this channel.
          *
-         * @param  position
-         *         The position for the channel
-         *
+         * @param position The position for the channel
          * @return This ChannelData instance for chaining convenience
          */
-        public ChannelData setPosition(Integer position)
-        {
+        public ChannelData setPosition(Integer position) {
             this.position = position;
             return this;
         }
@@ -734,29 +598,22 @@ public class GuildAction extends RestAction<Void>
          * with the provided {@link net.dv8tion.jda.core.requests.restaction.GuildAction.RoleData RoleData}!
          * <br>Use {@link GuildAction#newRole() GuildAction.newRole()} to retrieve an instance of RoleData.
          *
-         * @param  role
-         *         The target role
-         * @param  allow
-         *         The permissions to grant in the override
-         * @param  deny
-         *         The permissions to deny in the override
-         *
-         * @throws java.lang.IllegalArgumentException
-         *         <ul>
-         *             <li>If the provided role is {@code null}</li>
-         *             <li>If the provided allow value is negative or exceeds maximum permissions</li>
-         *             <li>If the provided deny value is negative or exceeds maximum permissions</li>
-         *         </ul>
-         *
+         * @param role  The target role
+         * @param allow The permissions to grant in the override
+         * @param deny  The permissions to deny in the override
          * @return This ChannelData instance for chaining convenience
+         * @throws java.lang.IllegalArgumentException <ul>
+         *                                            <li>If the provided role is {@code null}</li>
+         *                                            <li>If the provided allow value is negative or exceeds maximum permissions</li>
+         *                                            <li>If the provided deny value is negative or exceeds maximum permissions</li>
+         *                                            </ul>
          */
-        public ChannelData addPermissionOverride(RoleData role, long allow, long deny)
-        {
+        public ChannelData addPermissionOverride(RoleData role, long allow, long deny) {
             Checks.notNull(role, "Role");
             Checks.notNegative(allow, "Granted permissions value");
             Checks.notNegative(deny, "Denied permissions value");
             Checks.check(allow <= Permission.ALL_PERMISSIONS, "Specified allow value may not be greater than a full permission set");
-            Checks.check(deny <= Permission.ALL_PERMISSIONS,  "Specified deny value may not be greater than a full permission set");
+            Checks.check(deny <= Permission.ALL_PERMISSIONS, "Specified deny value may not be greater than a full permission set");
             this.overrides.add(new PermOverrideData(PermOverrideData.ROLE_TYPE, role.id, allow, deny));
             return this;
         }
@@ -766,32 +623,23 @@ public class GuildAction extends RestAction<Void>
          * with the provided {@link net.dv8tion.jda.core.requests.restaction.GuildAction.RoleData RoleData}!
          * <br>Use {@link GuildAction#newRole() GuildAction.newRole()} to retrieve an instance of RoleData.
          *
-         * @param  role
-         *         The target role
-         * @param  allow
-         *         The permissions to grant in the override
-         * @param  deny
-         *         The permissions to deny in the override
-         *
-         * @throws java.lang.IllegalArgumentException
-         *         <ul>
-         *             <li>If the provided role is {@code null}</li>
-         *             <li>If any permission is {@code null}</li>
-         *         </ul>
-         *
+         * @param role  The target role
+         * @param allow The permissions to grant in the override
+         * @param deny  The permissions to deny in the override
          * @return This ChannelData instance for chaining convenience
+         * @throws java.lang.IllegalArgumentException <ul>
+         *                                            <li>If the provided role is {@code null}</li>
+         *                                            <li>If any permission is {@code null}</li>
+         *                                            </ul>
          */
-        public ChannelData addPermissionOverride(RoleData role, @Nullable Collection<Permission> allow, @Nullable Collection<Permission> deny)
-        {
+        public ChannelData addPermissionOverride(RoleData role, @Nullable Collection<Permission> allow, @Nullable Collection<Permission> deny) {
             long allowRaw = 0;
             long denyRaw = 0;
-            if (allow != null)
-            {
+            if (allow != null) {
                 Checks.noneNull(allow, "Granted Permissions");
                 allowRaw = Permission.getRaw(allow);
             }
-            if (deny != null)
-            {
+            if (deny != null) {
                 Checks.noneNull(deny, "Denied Permissions");
                 denyRaw = Permission.getRaw(deny);
             }
@@ -799,8 +647,7 @@ public class GuildAction extends RestAction<Void>
         }
 
         @Override
-        public String toJSONString()
-        {
+        public String toJSONString() {
             final JSONObject o = new JSONObject();
             o.put("name", name);
             o.put("type", type.getId());

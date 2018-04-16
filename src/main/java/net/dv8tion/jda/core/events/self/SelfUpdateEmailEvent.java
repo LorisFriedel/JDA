@@ -25,12 +25,10 @@ import net.dv8tion.jda.core.JDA;
  *
  * <p>Identifier: {@code email}
  */
-public class SelfUpdateEmailEvent extends GenericSelfUpdateEvent<String>
-{
+public class SelfUpdateEmailEvent extends GenericSelfUpdateEvent<String> {
     public static final String IDENTIFIER = "email";
 
-    public SelfUpdateEmailEvent(JDA api, long responseNumber, String oldEmail)
-    {
+    public SelfUpdateEmailEvent(JDA api, long responseNumber, String oldEmail) {
         super(api, responseNumber, oldEmail, api.getSelfUser().getEmail(), IDENTIFIER);
     }
 
@@ -39,8 +37,7 @@ public class SelfUpdateEmailEvent extends GenericSelfUpdateEvent<String>
      *
      * @return The old email
      */
-    public String getOldEmail()
-    {
+    public String getOldEmail() {
         return getOldValue();
     }
 
@@ -49,8 +46,7 @@ public class SelfUpdateEmailEvent extends GenericSelfUpdateEvent<String>
      *
      * @return The new email
      */
-    public String getNewEmail()
-    {
+    public String getNewEmail() {
         return getNewValue();
     }
 }

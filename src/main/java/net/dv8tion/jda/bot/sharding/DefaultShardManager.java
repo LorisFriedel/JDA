@@ -45,11 +45,10 @@ import java.util.function.IntFunction;
  * JDA's default {@link net.dv8tion.jda.bot.sharding.ShardManager ShardManager} implementation.
  * To create new instances use the {@link net.dv8tion.jda.bot.sharding.DefaultShardManagerBuilder DefaultShardManagerBuilder}.
  *
- * @since  3.4
  * @author Aljoscha Grebe
+ * @since 3.4
  */
-public class DefaultShardManager implements ShardManager
-{
+public class DefaultShardManager implements ShardManager {
     public static final Logger LOG = JDALogger.getLog(ShardManager.class);
     public static final ThreadFactory DEFAULT_THREAD_FACTORY = r ->
     {
@@ -213,59 +212,35 @@ public class DefaultShardManager implements ShardManager
 
     /**
      * Creates a new DefaultShardManager instance.
-     * @param  shardsTotal
-     *         The total amount of shards or {@code -1} to retrieve the recommended amount from discord.
-     * @param  shardIds
-     *         A {@link java.util.Collection Collection} of all shard ids that should be started in the beginning or {@code null}
-     *         to start all possible shards. This will be ignored if shardsTotal is {@code -1}.
-     * @param  controller
-     *         The {@link net.dv8tion.jda.core.utils.SessionController SessionController}
-     * @param  listeners
-     *         The event listeners for new JDA instances.
-     * @param  listenerProviders
-     *         Providers of event listeners for JDA instances. Each will have the shard id applied to them upon
-     *         shard creation (including shard restarts) and must return an event listener
-     * @param  token
-     *         The token
-     * @param  eventManager
-     *         The event manager
-     * @param  audioSendFactory
-     *         The {@link net.dv8tion.jda.core.audio.factory.IAudioSendFactory IAudioSendFactory}
-     * @param  gameProvider
-     *         The games used at startup of new JDA instances
-     * @param  statusProvider
-     *         The statusProvider used at startup of new JDA instances
-     * @param  httpClientBuilder
-     *         The {@link okhttp3.OkHttpClient.Builder OkHttpClient.Builder}
-     * @param  wsFactory
-     *         The {@link com.neovisionaries.ws.client.WebSocketFactory WebSocketFactory}
-     * @param  threadFactory
-     *         The {@link java.util.concurrent.ThreadFactory ThreadFactory}
-     * @param  maxReconnectDelay
-     *         The max reconnect delay
-     * @param  corePoolSize
-     *         The core pool size for JDA's internal executor
-     * @param  enableVoice
-     *         Whether or not Voice should be enabled
-     * @param  enableShutdownHook
-     *         Whether or not the shutdown hook should be enabled
-     * @param  enableBulkDeleteSplitting
-     *         Whether or not {@link net.dv8tion.jda.bot.sharding.DefaultShardManagerBuilder#setBulkDeleteSplittingEnabled(boolean)
-     *         bulk delete splitting} should be enabled
-     * @param  autoReconnect
-     *         Whether or not auto reconnect should be enabled
-     * @param  idleProvider
-     *         The Function that is used to set a shards idle state
-     * @param  retryOnTimeout
-     *         hether the Requester should retry when a {@link java.net.SocketTimeoutException SocketTimeoutException} occurs.
-     * @param  useShutdownNow
-     *         Whether the ShardManager should use JDA#shutdown() or not
-     * @param  enableMDC
-     *         Whether MDC should be enabled
-     * @param  contextProvider
-     *         The MDC context provider new JDA instances should use on startup
-     * @param  enableCompression
-     *         Whether to enable transport compression
+     *
+     * @param shardsTotal               The total amount of shards or {@code -1} to retrieve the recommended amount from discord.
+     * @param shardIds                  A {@link java.util.Collection Collection} of all shard ids that should be started in the beginning or {@code null}
+     *                                  to start all possible shards. This will be ignored if shardsTotal is {@code -1}.
+     * @param controller                The {@link net.dv8tion.jda.core.utils.SessionController SessionController}
+     * @param listeners                 The event listeners for new JDA instances.
+     * @param listenerProviders         Providers of event listeners for JDA instances. Each will have the shard id applied to them upon
+     *                                  shard creation (including shard restarts) and must return an event listener
+     * @param token                     The token
+     * @param eventManager              The event manager
+     * @param audioSendFactory          The {@link net.dv8tion.jda.core.audio.factory.IAudioSendFactory IAudioSendFactory}
+     * @param gameProvider              The games used at startup of new JDA instances
+     * @param statusProvider            The statusProvider used at startup of new JDA instances
+     * @param httpClientBuilder         The {@link okhttp3.OkHttpClient.Builder OkHttpClient.Builder}
+     * @param wsFactory                 The {@link com.neovisionaries.ws.client.WebSocketFactory WebSocketFactory}
+     * @param threadFactory             The {@link java.util.concurrent.ThreadFactory ThreadFactory}
+     * @param maxReconnectDelay         The max reconnect delay
+     * @param corePoolSize              The core pool size for JDA's internal executor
+     * @param enableVoice               Whether or not Voice should be enabled
+     * @param enableShutdownHook        Whether or not the shutdown hook should be enabled
+     * @param enableBulkDeleteSplitting Whether or not {@link net.dv8tion.jda.bot.sharding.DefaultShardManagerBuilder#setBulkDeleteSplittingEnabled(boolean)
+     *                                  bulk delete splitting} should be enabled
+     * @param autoReconnect             Whether or not auto reconnect should be enabled
+     * @param idleProvider              The Function that is used to set a shards idle state
+     * @param retryOnTimeout            hether the Requester should retry when a {@link java.net.SocketTimeoutException SocketTimeoutException} occurs.
+     * @param useShutdownNow            Whether the ShardManager should use JDA#shutdown() or not
+     * @param enableMDC                 Whether MDC should be enabled
+     * @param contextProvider           The MDC context provider new JDA instances should use on startup
+     * @param enableCompression         Whether to enable transport compression
      */
     protected DefaultShardManager(final int shardsTotal, final Collection<Integer> shardIds,
                                   final SessionController controller, final List<Object> listeners,
@@ -279,8 +254,7 @@ public class DefaultShardManager implements ShardManager
                                   final boolean autoReconnect, final IntFunction<Boolean> idleProvider,
                                   final boolean retryOnTimeout, final boolean useShutdownNow,
                                   final boolean enableMDC, final IntFunction<ConcurrentMap<String, String>> contextProvider,
-                                  final boolean enableCompression)
-    {
+                                  final boolean enableCompression) {
         this.shardsTotal = shardsTotal;
         this.listeners = listeners;
         this.listenerProviders = listenerProviders;
@@ -306,18 +280,13 @@ public class DefaultShardManager implements ShardManager
         this.enableMDC = enableMDC;
         this.enableCompression = enableCompression;
 
-        synchronized (queue)
-        {
-            if (shardsTotal != -1)
-            {
-                if (shardIds == null)
-                {
+        synchronized (queue) {
+            if (shardsTotal != -1) {
+                if (shardIds == null) {
                     this.shards = new ShardCacheViewImpl(shardsTotal);
                     for (int i = 0; i < this.shardsTotal; i++)
                         this.queue.add(i);
-                }
-                else
-                {
+                } else {
                     this.shards = new ShardCacheViewImpl(shardIds.size());
                     shardIds.stream().distinct().sorted().forEach(this.queue::add);
                 }
@@ -326,68 +295,54 @@ public class DefaultShardManager implements ShardManager
     }
 
     @Override
-    public void addEventListener(final Object... listeners)
-    {
+    public void addEventListener(final Object... listeners) {
         ShardManager.super.addEventListener(listeners);
         Collections.addAll(this.listeners, listeners);
     }
 
     @Override
-    public void removeEventListener(final Object... listeners)
-    {
+    public void removeEventListener(final Object... listeners) {
         ShardManager.super.removeEventListener(listeners);
         this.listeners.removeAll(Arrays.asList(listeners));
     }
 
     @Override
-    public void addEventListeners(IntFunction<Object> eventListenerProvider)
-    {
+    public void addEventListeners(IntFunction<Object> eventListenerProvider) {
         ShardManager.super.addEventListeners(eventListenerProvider);
         this.listenerProviders.add(eventListenerProvider);
     }
 
     @Override
-    public void removeEventListenerProvider(IntFunction<Object> eventListenerProvider)
-    {
+    public void removeEventListenerProvider(IntFunction<Object> eventListenerProvider) {
         this.listenerProviders.remove(eventListenerProvider);
     }
 
     @Override
-    public int getShardsQueued()
-    {
+    public int getShardsQueued() {
         return this.queue.size();
     }
 
     @Override
-    public ShardCacheView getShardCache()
-    {
+    public ShardCacheView getShardCache() {
         return this.shards;
     }
 
-    public void login() throws LoginException
-    {
+    public void login() throws LoginException {
         // building the first one in the current thread ensures that LoginException and IllegalArgumentException can be thrown on login
         JDAImpl jda = null;
-        try
-        {
+        try {
             final int shardId = this.queue.isEmpty() ? 0 : this.queue.peek();
 
             jda = this.buildInstance(shardId);
             this.shards.getMap().put(shardId, jda);
-            synchronized (queue)
-            {
+            synchronized (queue) {
                 this.queue.remove(shardId);
             }
-        }
-        catch (final InterruptedException e)
-        {
+        } catch (final InterruptedException e) {
             LOG.error("Interrupted Startup", e);
             throw new IllegalStateException(e);
-        }
-        catch (final Exception e)
-        {
-            if (jda != null)
-            {
+        } catch (final Exception e) {
+            if (jda != null) {
                 if (this.useShutdownNow)
                     jda.shutdownNow();
                 else
@@ -405,14 +360,12 @@ public class DefaultShardManager implements ShardManager
     }
 
     @Override
-    public void restart(final int shardId)
-    {
+    public void restart(final int shardId) {
         Checks.notNegative(shardId, "shardId");
         Checks.check(shardId < this.shardsTotal, "shardId must be lower than shardsTotal");
 
         final JDA jda = this.shards.getMap().remove(shardId);
-        if (jda != null)
-        {
+        if (jda != null) {
             if (this.useShutdownNow)
                 jda.shutdownNow();
             else
@@ -423,41 +376,34 @@ public class DefaultShardManager implements ShardManager
     }
 
     @Override
-    public void restart()
-    {
+    public void restart() {
         TIntObjectMap<JDA> map = this.shards.getMap();
-        synchronized (map)
-        {
+        synchronized (map) {
             Arrays.stream(map.keys())
-                  .sorted() // this ensures shards are started in natural order
-                  .forEach(this::restart);
+                .sorted() // this ensures shards are started in natural order
+                .forEach(this::restart);
         }
     }
 
     @Override
-    public void shutdown()
-    {
+    public void shutdown() {
         if (this.shutdown.getAndSet(true))
             return; // shutdown has already been requested
 
         if (this.worker != null && !this.worker.isDone())
             this.worker.cancel(true);
 
-        if (this.shutdownHook != null)
-        {
-            try
-            {
+        if (this.shutdownHook != null) {
+            try {
                 Runtime.getRuntime().removeShutdownHook(this.shutdownHook);
+            } catch (final Exception ignored) {
             }
-            catch (final Exception ignored) {}
         }
 
         this.executor.shutdown();
 
-        if (this.shards != null)
-        {
-            for (final JDA jda : this.shards)
-            {
+        if (this.shards != null) {
+            for (final JDA jda : this.shards) {
                 if (this.useShutdownNow)
                     jda.shutdownNow();
                 else
@@ -467,11 +413,9 @@ public class DefaultShardManager implements ShardManager
     }
 
     @Override
-    public void shutdown(final int shardId)
-    {
+    public void shutdown(final int shardId) {
         final JDA jda = this.shards.getMap().remove(shardId);
-        if (jda != null)
-        {
+        if (jda != null) {
             if (this.useShutdownNow)
                 jda.shutdownNow();
             else
@@ -480,57 +424,45 @@ public class DefaultShardManager implements ShardManager
     }
 
     @Override
-    public void start(final int shardId)
-    {
+    public void start(final int shardId) {
         Checks.notNegative(shardId, "shardId");
         Checks.check(shardId < this.shardsTotal, "shardId must be lower than shardsTotal");
         enqueueShard(shardId);
     }
 
-    protected void enqueueShard(final int shardId)
-    {
-        synchronized (queue)
-        {
+    protected void enqueueShard(final int shardId) {
+        synchronized (queue) {
             queue.add(shardId);
             runQueueWorker();
         }
     }
 
-    protected void runQueueWorker()
-    {
+    protected void runQueueWorker() {
         if (worker != null)
             return;
-        try
-        {
+        try {
             worker = executor.submit(() ->
             {
                 while (!queue.isEmpty())
                     processQueue();
                 this.gatewayURL = null;
-                synchronized (queue)
-                {
+                synchronized (queue) {
                     worker = null;
                     if (!shutdown.get() && !queue.isEmpty())
                         runQueueWorker();
                 }
             });
-        }
-        catch (RejectedExecutionException ex)
-        {
+        } catch (RejectedExecutionException ex) {
             LOG.debug("ThreadPool rejected queue worker thread", ex);
         }
     }
 
-    protected void processQueue()
-    {
+    protected void processQueue() {
         int shardId;
 
-        if (this.shards == null)
-        {
+        if (this.shards == null) {
             shardId = 0;
-        }
-        else
-        {
+        } else {
             Integer tmp = this.queue.peek();
 
             shardId = tmp == null ? -1 : tmp;
@@ -540,42 +472,33 @@ public class DefaultShardManager implements ShardManager
             return;
 
         JDAImpl api;
-        try
-        {
+        try {
             api = this.shards == null ? null : (JDAImpl) this.shards.getElementById(shardId);
 
             if (api == null)
                 api = this.buildInstance(shardId);
-        }
-        catch (InterruptedException e)
-        {
+        } catch (InterruptedException e) {
             //caused by shutdown
             LOG.debug("Queue has been interrupted", e);
             return;
-        }
-        catch (LoginException e)
-        {
+        } catch (LoginException e) {
             // this can only happen if the token has been changed
             // in this case the ShardManager will just shutdown itself as there currently is no way of hot-swapping the token on a running JDA instance.
             LOG.warn("The token has been invalidated and the ShardManager will shutdown!", e);
             this.shutdown();
             return;
-        }
-        catch (final Exception e)
-        {
+        } catch (final Exception e) {
             LOG.error("Caught an exception in the queue processing thread", e);
             return;
         }
 
         this.shards.getMap().put(shardId, api);
-        synchronized (queue)
-        {
+        synchronized (queue) {
             this.queue.remove(shardId);
         }
     }
 
-    protected JDAImpl buildInstance(final int shardId) throws LoginException, InterruptedException
-    {
+    protected JDAImpl buildInstance(final int shardId) throws LoginException, InterruptedException {
         final JDAImpl jda = new JDAImpl(AccountType.BOT, this.token, this.controller, this.httpClientBuilder, this.wsFactory,
             this.autoReconnect, this.enableVoice, false, this.enableBulkDeleteSplitting, this.retryOnTimeout, this.enableMDC,
             this.corePoolSize, this.maxReconnectDelay, this.contextProvider == null || !this.enableMDC ? null : contextProvider.apply(shardId));
@@ -601,27 +524,21 @@ public class DefaultShardManager implements ShardManager
         if (statusProvider != null)
             presence.setCacheStatus(this.statusProvider.apply(shardId));
 
-        if (this.gatewayURL == null)
-        {
-            try
-            {
+        if (this.gatewayURL == null) {
+            try {
                 Pair<String, Integer> gateway = jda.getGatewayBot();
                 this.gatewayURL = gateway.getLeft();
 
-                if (this.shardsTotal == -1)
-                {
+                if (this.shardsTotal == -1) {
                     this.shardsTotal = gateway.getRight();
                     this.shards = new ShardCacheViewImpl(this.shardsTotal);
 
-                    synchronized (queue)
-                    {
+                    synchronized (queue) {
                         for (int i = 0; i < shardsTotal; i++)
                             queue.add(i);
                     }
                 }
-            }
-            catch (RuntimeException e)
-            {
+            } catch (RuntimeException e) {
                 if (e.getCause() instanceof InterruptedException)
                     throw (InterruptedException) e.getCause();
                 //We check if the LoginException is masked inside of a ExecutionException which is masked inside of the RuntimeException
@@ -643,24 +560,21 @@ public class DefaultShardManager implements ShardManager
     }
 
     @Override
-    public void setGameProvider(IntFunction<Game> gameProvider)
-    {
+    public void setGameProvider(IntFunction<Game> gameProvider) {
         ShardManager.super.setGameProvider(gameProvider);
 
         this.gameProvider = gameProvider;
     }
 
     @Override
-    public void setIdleProvider(IntFunction<Boolean> idleProvider)
-    {
+    public void setIdleProvider(IntFunction<Boolean> idleProvider) {
         ShardManager.super.setIdleProvider(idleProvider);
 
         this.idleProvider = idleProvider;
     }
 
     @Override
-    public void setStatusProvider(IntFunction<OnlineStatus> statusProvider)
-    {
+    public void setStatusProvider(IntFunction<OnlineStatus> statusProvider) {
         ShardManager.super.setStatusProvider(statusProvider);
 
         this.statusProvider = statusProvider;
@@ -672,8 +586,7 @@ public class DefaultShardManager implements ShardManager
      *
      * @return A new ScheduledExecutorService
      */
-    protected ScheduledExecutorService createExecutor(ThreadFactory threadFactory)
-    {
+    protected ScheduledExecutorService createExecutor(ThreadFactory threadFactory) {
         ThreadFactory factory = threadFactory == null
             ? DEFAULT_THREAD_FACTORY
             : threadFactory;

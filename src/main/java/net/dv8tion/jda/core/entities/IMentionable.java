@@ -33,14 +33,14 @@ import java.util.Formatter;
  * <p>This will use {@link #getAsMention()} rather than {@link Object#toString()}!
  * <br>Supported Features:
  * <ul>
- *     <li><b>Width/Left-Justification</b>
- *     <br>   - Ensures the size of a format
- *              (Example: {@code %20s} - uses at minimum 20 chars;
- *              {@code %-10s} - uses left-justified padding)</li>
+ * <li><b>Width/Left-Justification</b>
+ * <br>   - Ensures the size of a format
+ * (Example: {@code %20s} - uses at minimum 20 chars;
+ * {@code %-10s} - uses left-justified padding)</li>
  *
- *     <li><b>Precision</b>
- *     <br>   - Cuts the content to the specified size
- *              (Example: {@code %.20s})</li>
+ * <li><b>Precision</b>
+ * <br>   - Cuts the content to the specified size
+ * (Example: {@code %.20s})</li>
  * </ul>
  *
  * <p>More information on formatting syntax can be found in the {@link java.util.Formatter format syntax documentation}!
@@ -48,8 +48,7 @@ import java.util.Formatter;
  *
  * @since 3.0
  */
-public interface IMentionable extends Formattable
-{
+public interface IMentionable extends Formattable {
     /**
      * Retrieve a Mention for this Entity.
      *
@@ -58,8 +57,7 @@ public interface IMentionable extends Formattable
     String getAsMention();
 
     @Override
-    default void formatTo(Formatter formatter, int flags, int width, int precision)
-    {
+    default void formatTo(Formatter formatter, int flags, int width, int precision) {
         boolean leftJustified = (flags & FormattableFlags.LEFT_JUSTIFY) == FormattableFlags.LEFT_JUSTIFY;
         boolean upper = (flags & FormattableFlags.UPPERCASE) == FormattableFlags.UPPERCASE;
         String out = upper ? getAsMention().toUpperCase(formatter.locale()) : getAsMention();

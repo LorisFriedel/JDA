@@ -20,6 +20,6 @@
  * users to modify multiple {@code Field}s of an existing entity.
  *
  * @deprecated This package is obsolete as of <b>3.6.0</b>
- *             use the new managers instead!
+ * use the new managers instead!
  */
 package net.dv8tion.jda.core.managers.fields;

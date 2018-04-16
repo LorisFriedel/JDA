@@ -38,22 +38,18 @@ import net.dv8tion.jda.core.requests.WebSocketClient;
 import net.dv8tion.jda.core.utils.Helpers;
 import org.json.JSONObject;
 
-public class GuildDeleteHandler extends SocketHandler
-{
-    public GuildDeleteHandler(JDAImpl api)
-    {
+public class GuildDeleteHandler extends SocketHandler {
+    public GuildDeleteHandler(JDAImpl api) {
         super(api);
     }
 
     @Override
-    protected Long handleInternally(JSONObject content)
-    {
+    protected Long handleInternally(JSONObject content) {
         final long id = content.getLong("id");
         GuildImpl guild = (GuildImpl) api.getGuildMap().get(id);
 
         boolean unavailable = Helpers.optBoolean(content, "unavailable");
-        if (guild == null)
-        {
+        if (guild == null) {
 //            api.getEventCache().cache(EventCache.Type.GUILD, id, () -> handle(responseNumber, allContent));
             WebSocketClient.LOG.debug("Received GUILD_DELETE for a Guild that is not currently cached. ID: {} unavailable: {}", id, unavailable);
             return null;
@@ -67,8 +63,7 @@ public class GuildDeleteHandler extends SocketHandler
         if (api.getGuildLock().isLocked(id))
             return id;
 
-        if (unavailable)
-        {
+        if (unavailable) {
             guild.setAvailable(false);
             api.getEventManager().handle(
                 new GuildUnavailableEvent(
@@ -79,8 +74,7 @@ public class GuildDeleteHandler extends SocketHandler
 
         api.getClient().removeAudioConnection(id);
         final TLongObjectMap<AudioManager> audioManagerMap = api.getAudioManagerMap();
-        synchronized (audioManagerMap)
-        {
+        synchronized (audioManagerMap) {
             final AudioManagerImpl manager = (AudioManagerImpl) audioManagerMap.get(id);
             if (manager != null) // close existing audio connection if needed
                 manager.closeAudioConnection(ConnectionStatus.DISCONNECTED_REMOVED_FROM_GUILD);
@@ -92,14 +86,12 @@ public class GuildDeleteHandler extends SocketHandler
         // Anything left in memberIds will be removed from the main userMap
         //Use a new HashSet so that we don't actually modify the Member map so it doesn't affect Guild#getMembers for the leave event.
         TLongSet memberIds = new TLongHashSet(guild.getMembersMap().keySet());
-        for (Guild guildI : api.getGuilds())
-        {
+        for (Guild guildI : api.getGuilds()) {
             GuildImpl g = (GuildImpl) guildI;
             if (g.equals(guild))
                 continue;
 
-            for (TLongIterator it = memberIds.iterator(); it.hasNext();)
-            {
+            for (TLongIterator it = memberIds.iterator(); it.hasNext(); ) {
                 if (g.getMembersMap().containsKey(it.next()))
                     it.remove();
             }
@@ -107,11 +99,9 @@ public class GuildDeleteHandler extends SocketHandler
 
         //If we are a client account, be sure to not remove any users from the cache that are Friends.
         // Remember, everything left in memberIds is removed from the userMap
-        if (api.getAccountType() == AccountType.CLIENT)
-        {
+        if (api.getAccountType() == AccountType.CLIENT) {
             TLongObjectMap<Relationship> relationships = api.asClient().getRelationshipMap();
-            for (TLongIterator it = memberIds.iterator(); it.hasNext();)
-            {
+            for (TLongIterator it = memberIds.iterator(); it.hasNext(); ) {
                 Relationship rel = relationships.get(it.next());
                 if (rel != null && rel.getType() == RelationshipType.FRIEND)
                     it.remove();
@@ -124,23 +114,18 @@ public class GuildDeleteHandler extends SocketHandler
             if (memberId == selfId)
                 return true; // don't remove selfUser from cache
             UserImpl user = (UserImpl) api.getUserMap().remove(memberId);
-            if (user.hasPrivateChannel())
-            {
+            if (user.hasPrivateChannel()) {
                 PrivateChannelImpl priv = (PrivateChannelImpl) user.getPrivateChannel();
                 user.setFake(true);
                 priv.setFake(true);
                 api.getFakeUserMap().put(user.getIdLong(), user);
                 api.getFakePrivateChannelMap().put(priv.getIdLong(), priv);
-            }
-            else if (api.getAccountType() == AccountType.CLIENT)
-            {
+            } else if (api.getAccountType() == AccountType.CLIENT) {
                 //While the user might not have a private channel, if this is a client account then the user
                 // could be in a Group, and if so we need to change the User object to be fake and
                 // place it in the FakeUserMap
-                for (Group grp : api.asClient().getGroups())
-                {
-                    if (grp.getNonFriendUsers().contains(user))
-                    {
+                for (Group grp : api.asClient().getGroups()) {
+                    if (grp.getNonFriendUsers().contains(user)) {
                         user.setFake(true);
                         api.getFakeUserMap().put(user.getIdLong(), user);
                         break; //Breaks from groups loop, not memberIds loop

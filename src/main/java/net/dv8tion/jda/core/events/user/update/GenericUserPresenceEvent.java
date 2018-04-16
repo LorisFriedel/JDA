@@ -29,14 +29,12 @@ import net.dv8tion.jda.core.entities.User;
  *
  * <p>Can be used to track the presence updates of members/friends.
  */
-public abstract class GenericUserPresenceEvent<T> extends GenericUserUpdateEvent<T>
-{
+public abstract class GenericUserPresenceEvent<T> extends GenericUserUpdateEvent<T> {
     protected final Guild guild;
 
     public GenericUserPresenceEvent(
         JDA api, long responseNumber, User user, Guild guild,
-        T previous, T next, String identifier)
-    {
+        T previous, T next, String identifier) {
         super(api, responseNumber, user, previous, next, identifier);
         this.guild = guild;
     }
@@ -46,8 +44,7 @@ public abstract class GenericUserPresenceEvent<T> extends GenericUserUpdateEvent
      *
      * @return The guild, or null if this is related to a {@link net.dv8tion.jda.client.entities.Friend Friend}
      */
-    public Guild getGuild()
-    {
+    public Guild getGuild() {
         return guild;
     }
 
@@ -56,8 +53,7 @@ public abstract class GenericUserPresenceEvent<T> extends GenericUserUpdateEvent
      *
      * @return The member, or null if this is related to a {@link net.dv8tion.jda.client.entities.Friend Friend}
      */
-    public Member getMember()
-    {
+    public Member getMember() {
         return !isRelationshipUpdate() ? getGuild().getMember(getUser()) : null;
     }
 
@@ -66,8 +62,7 @@ public abstract class GenericUserPresenceEvent<T> extends GenericUserUpdateEvent
      *
      * @return The friend, or null if this is related to a {@link net.dv8tion.jda.core.entities.Member Member}
      */
-    public Friend getFriend()
-    {
+    public Friend getFriend() {
         return isRelationshipUpdate() ? getJDA().asClient().getFriend(getUser()) : null;
     }
 
@@ -76,8 +71,7 @@ public abstract class GenericUserPresenceEvent<T> extends GenericUserUpdateEvent
      *
      * @return True, if this was the presence update for a {@link net.dv8tion.jda.client.entities.Friend Friend}
      */
-    public boolean isRelationshipUpdate()
-    {
+    public boolean isRelationshipUpdate() {
         return getGuild() == null;
     }
 }

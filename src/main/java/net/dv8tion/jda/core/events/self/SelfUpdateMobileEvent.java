@@ -25,12 +25,10 @@ import net.dv8tion.jda.core.JDA;
  *
  * <p>Identifier: {@code mobile}
  */
-public class SelfUpdateMobileEvent extends GenericSelfUpdateEvent<Boolean>
-{
+public class SelfUpdateMobileEvent extends GenericSelfUpdateEvent<Boolean> {
     public static final String IDENTIFIER = "mobile";
 
-    public SelfUpdateMobileEvent(JDA api, long responseNumber, boolean wasMobile)
-    {
+    public SelfUpdateMobileEvent(JDA api, long responseNumber, boolean wasMobile) {
         super(api, responseNumber, wasMobile, !wasMobile, IDENTIFIER);
     }
 
@@ -39,8 +37,7 @@ public class SelfUpdateMobileEvent extends GenericSelfUpdateEvent<Boolean>
      *
      * @return The mobile status.
      */
-    public boolean wasMobile()
-    {
+    public boolean wasMobile() {
         return getOldValue();
     }
 }

@@ -23,20 +23,16 @@ import org.json.JSONObject;
 
 import java.util.LinkedList;
 
-public class MessageBulkDeleteHandler extends SocketHandler
-{
-    public MessageBulkDeleteHandler(JDAImpl api)
-    {
+public class MessageBulkDeleteHandler extends SocketHandler {
+    public MessageBulkDeleteHandler(JDAImpl api) {
         super(api);
     }
 
     @Override
-    protected Long handleInternally(JSONObject content)
-    {
+    protected Long handleInternally(JSONObject content) {
         final long channelId = content.getLong("channel_id");
 
-        if (api.isBulkDeleteSplittingEnabled())
-        {
+        if (api.isBulkDeleteSplittingEnabled()) {
             SocketHandler handler = api.getClient().getHandlers().get("MESSAGE_DELETE");
             content.getJSONArray("ids").forEach(id ->
             {
@@ -46,28 +42,24 @@ public class MessageBulkDeleteHandler extends SocketHandler
                         .put("channel_id", Long.toUnsignedString(channelId))
                         .put("id", id)));
             });
-        }
-        else
-        {
+        } else {
             TextChannel channel = api.getTextChannelMap().get(channelId);
-            if (channel == null)
-            {
+            if (channel == null) {
                 api.getEventCache().cache(EventCache.Type.CHANNEL, channelId, () -> handle(responseNumber, allContent));
                 EventCache.LOG.debug("Received a Bulk Message Delete for a TextChannel that is not yet cached.");
                 return null;
             }
 
-            if (api.getGuildLock().isLocked(channel.getGuild().getIdLong()))
-            {
+            if (api.getGuildLock().isLocked(channel.getGuild().getIdLong())) {
                 return channel.getGuild().getIdLong();
             }
 
             LinkedList<String> msgIds = new LinkedList<>();
             content.getJSONArray("ids").forEach(id -> msgIds.add((String) id));
             api.getEventManager().handle(
-                    new MessageBulkDeleteEvent(
-                            api, responseNumber,
-                            channel, msgIds));
+                new MessageBulkDeleteEvent(
+                    api, responseNumber,
+                    channel, msgIds));
         }
         return null;
     }

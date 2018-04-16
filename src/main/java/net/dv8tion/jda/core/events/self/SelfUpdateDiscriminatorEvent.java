@@ -25,12 +25,10 @@ import net.dv8tion.jda.core.JDA;
  *
  * <p>Identifier: {@code discriminator}
  */
-public class SelfUpdateDiscriminatorEvent extends GenericSelfUpdateEvent<String>
-{
+public class SelfUpdateDiscriminatorEvent extends GenericSelfUpdateEvent<String> {
     public static final String IDENTIFIER = "discriminator";
 
-    public SelfUpdateDiscriminatorEvent(JDA api, long responseNumber, String oldDiscriminator)
-    {
+    public SelfUpdateDiscriminatorEvent(JDA api, long responseNumber, String oldDiscriminator) {
         super(api, responseNumber, oldDiscriminator, api.getSelfUser().getDiscriminator(), IDENTIFIER);
     }
 
@@ -39,8 +37,7 @@ public class SelfUpdateDiscriminatorEvent extends GenericSelfUpdateEvent<String>
      *
      * @return The old discriminator
      */
-    public String getOldDiscriminator()
-    {
+    public String getOldDiscriminator() {
         return getOldValue();
     }
 
@@ -49,8 +46,7 @@ public class SelfUpdateDiscriminatorEvent extends GenericSelfUpdateEvent<String>
      *
      * @return The new discriminator
      */
-    public String getNewDiscriminator()
-    {
+    public String getNewDiscriminator() {
         return getNewValue();
     }
 }

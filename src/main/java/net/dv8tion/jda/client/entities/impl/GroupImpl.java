@@ -33,8 +33,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class GroupImpl implements Group
-{
+public class GroupImpl implements Group {
     private final long id;
     private final JDAImpl api;
 
@@ -46,15 +45,13 @@ public class GroupImpl implements Group
     private String iconId;
     private long lastMessageId;
 
-    public GroupImpl(long id, JDAImpl api)
-    {
+    public GroupImpl(long id, JDAImpl api) {
         this.id = id;
         this.api = api;
     }
 
     @Override
-    public long getLatestMessageIdLong()
-    {
+    public long getLatestMessageIdLong() {
         final long messageId = lastMessageId;
         if (messageId < 0)
             throw new IllegalStateException("No last message id found.");
@@ -62,56 +59,47 @@ public class GroupImpl implements Group
     }
 
     @Override
-    public boolean hasLatestMessage()
-    {
+    public boolean hasLatestMessage() {
         return lastMessageId > 0;
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
     @Override
-    public ChannelType getType()
-    {
+    public ChannelType getType() {
         return ChannelType.GROUP;
     }
 
     @Override
-    public String getIconId()
-    {
+    public String getIconId() {
         return iconId;
     }
 
     @Override
-    public String getIconUrl()
-    {
+    public String getIconUrl() {
         return iconId == null ? null : "https://cdn.discordapp.com/channel-icons/" + id + "/" + iconId + ".jpg";
     }
 
     @Override
-    public User getOwner()
-    {
+    public User getOwner() {
         return owner;
     }
 
     @Override
-    public SnowflakeCacheView<User> getUserCache()
-    {
+    public SnowflakeCacheView<User> getUserCache() {
         return userCache;
     }
 
     @Override
-    public List<User> getUsers()
-    {
+    public List<User> getUsers() {
         return userCache.asList();
     }
 
     @Override
-    public List<User> getNonFriendUsers()
-    {
+    public List<User> getNonFriendUsers() {
         List<User> nonFriends = new ArrayList<>();
         TLongObjectMap<Relationship> map = api.asClient().getRelationshipMap();
         userCache.forEach((user) ->
@@ -125,8 +113,7 @@ public class GroupImpl implements Group
     }
 
     @Override
-    public List<Friend> getFriends()
-    {
+    public List<Friend> getFriends() {
         List<Friend> friends = new ArrayList<>();
         TLongObjectMap<Relationship> map = api.asClient().getRelationshipMap();
         userCache.forEach(user ->
@@ -140,38 +127,32 @@ public class GroupImpl implements Group
     }
 
     @Override
-    public RestAction<Call> startCall()
-    {
+    public RestAction<Call> startCall() {
         return null;
     }
 
     @Override
-    public Call getCurrentCall()
-    {
+    public Call getCurrentCall() {
         return currentCall;
     }
 
     @Override
-    public RestAction leaveGroup()
-    {
+    public RestAction leaveGroup() {
         return null;
     }
 
     @Override
-    public JDA getJDA()
-    {
+    public JDA getJDA() {
         return api;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return String.format("G:%s(%d)", getName(), id);
     }
 
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         if (!(o instanceof GroupImpl))
             return false;
 
@@ -180,55 +161,46 @@ public class GroupImpl implements Group
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return Long.hashCode(id);
     }
 
-    public TLongObjectMap<User> getUserMap()
-    {
+    public TLongObjectMap<User> getUserMap() {
         return userCache.getMap();
     }
 
-    public GroupImpl setCurrentCall(Call call)
-    {
+    public GroupImpl setCurrentCall(Call call) {
         this.currentCall = call;
         return this;
     }
 
-    public GroupImpl setOwner(User owner)
-    {
+    public GroupImpl setOwner(User owner) {
         this.owner = owner;
         return this;
     }
 
-    public GroupImpl setName(String name)
-    {
+    public GroupImpl setName(String name) {
         this.name = name;
         return this;
     }
 
-    public GroupImpl setIconId(String iconId)
-    {
+    public GroupImpl setIconId(String iconId) {
         this.iconId = iconId;
         return this;
     }
 
-    public GroupImpl setLastMessageId(long lastMessageId)
-    {
+    public GroupImpl setLastMessageId(long lastMessageId) {
         this.lastMessageId = lastMessageId;
         return this;
     }
 
-    private void checkNull(Object obj, String name)
-    {
+    private void checkNull(Object obj, String name) {
         if (obj == null)
             throw new NullPointerException("Provided " + name + " was null!");
     }
 
     @Override
-    public long getIdLong()
-    {
+    public long getIdLong() {
         return id;
     }
 }

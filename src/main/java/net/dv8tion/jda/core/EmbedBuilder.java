@@ -34,11 +34,10 @@ import java.util.regex.Pattern;
  * <br>A visual breakdown of an Embed and how it relates to this class is available at
  * <a href="http://imgur.com/a/yOb5n" target="_blank">https://imgur.com/a/yOb5n</a>.
  *
- * @since  3.0
  * @author John A. Grosh
+ * @since 3.0
  */
-public class EmbedBuilder
-{
+public class EmbedBuilder {
     public final static String ZERO_WIDTH_SPACE = "\u200E";
     public final static Pattern URL_PATTERN = Pattern.compile("\\s*(https?|attachment)://.+\\..{2,}\\s*", Pattern.CASE_INSENSITIVE);
 
@@ -56,12 +55,11 @@ public class EmbedBuilder
      * Creates an EmbedBuilder to be used to creates an embed to send.
      * <br>Every part of an embed can be removed or cleared by providing {@code null} to the setter method.
      */
-    public EmbedBuilder() { }
+    public EmbedBuilder() {
+    }
 
-    public EmbedBuilder(EmbedBuilder builder)
-    {
-        if (builder != null)
-        {
+    public EmbedBuilder(EmbedBuilder builder) {
+        if (builder != null) {
             setDescription(builder.description.toString());
             this.fields.addAll(builder.fields);
             this.url = builder.url;
@@ -74,17 +72,14 @@ public class EmbedBuilder
             this.image = builder.image;
         }
     }
-    
+
     /**
      * Creates an EmbedBuilder using fields in an existing embed.
      *
-     * @param  embed
-     *         the existing embed
+     * @param embed the existing embed
      */
-    public EmbedBuilder(MessageEmbed embed)
-    {
-        if(embed != null)
-        {
+    public EmbedBuilder(MessageEmbed embed) {
+        if (embed != null) {
             setDescription(embed.getDescription());
             this.url = embed.getUrl();
             this.title = embed.getTitle();
@@ -103,13 +98,10 @@ public class EmbedBuilder
      * Returns a {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed}
      * that has been checked as being valid for sending.
      *
-     * @throws java.lang.IllegalStateException
-     *         If the embed is empty. Can be checked with {@link #isEmpty()}.
-     *
      * @return the built, sendable {@link net.dv8tion.jda.core.entities.MessageEmbed}
+     * @throws java.lang.IllegalStateException If the embed is empty. Can be checked with {@link #isEmpty()}.
      */
-    public MessageEmbed build()
-    {
+    public MessageEmbed build() {
         if (isEmpty())
             throw new IllegalStateException("Cannot build an empty embed!");
         if (description.length() > MessageEmbed.TEXT_MAX_LENGTH)
@@ -117,7 +109,7 @@ public class EmbedBuilder
         final String descrip = this.description.length() < 1 ? null : this.description.toString();
 
         return EntityBuilder.createMessageEmbed(url, title, descrip, EmbedType.RICH, timestamp,
-                color, thumbnail, null, author, null, footer, image, new LinkedList<>(fields));
+            color, thumbnail, null, author, null, footer, image, new LinkedList<>(fields));
     }
 
     /**
@@ -126,8 +118,7 @@ public class EmbedBuilder
      *
      * @return The current EmbedBuilder with default values
      */
-    public EmbedBuilder clear()
-    {
+    public EmbedBuilder clear() {
         description.setLength(0);
         fields.clear();
         url = null;
@@ -146,17 +137,16 @@ public class EmbedBuilder
      *
      * @return true if the embed is empty and cannot be built
      */
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return title == null
-                && description.length() == 0
-                && timestamp == null
-                //&& color == null color alone is not enough to send
-                && thumbnail == null
-                && author == null
-                && footer == null
-                && image == null
-                && fields.isEmpty();
+            && description.length() == 0
+            && timestamp == null
+            //&& color == null color alone is not enough to send
+            && thumbnail == null
+            && author == null
+            && footer == null
+            && image == null
+            && fields.isEmpty();
     }
 
     /**
@@ -165,11 +155,9 @@ public class EmbedBuilder
      *
      * @return length of the current builder state
      */
-    public int length()
-    {
+    public int length() {
         int length = description.length();
-        synchronized (fields)
-        {
+        synchronized (fields) {
             length = fields.stream().map(f -> f.getName().length() + f.getValue().length()).reduce(length, Integer::sum);
         }
         if (title != null)
@@ -185,24 +173,18 @@ public class EmbedBuilder
      * Checks whether the constructed {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed}
      * is within the limits for the specified {@link net.dv8tion.jda.core.AccountType AccountType}
      * <ul>
-     *     <li>Bot: {@value MessageEmbed#EMBED_MAX_LENGTH_BOT}</li>
-     *     <li>Client: {@value MessageEmbed#EMBED_MAX_LENGTH_CLIENT}</li>
+     * <li>Bot: {@value MessageEmbed#EMBED_MAX_LENGTH_BOT}</li>
+     * <li>Client: {@value MessageEmbed#EMBED_MAX_LENGTH_CLIENT}</li>
      * </ul>
      *
-     * @param  type
-     *         The {@link net.dv8tion.jda.core.AccountType AccountType} to validate
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If provided with {@code null}
-     *
+     * @param type The {@link net.dv8tion.jda.core.AccountType AccountType} to validate
      * @return True, if the {@link #length() length} is less or equal to the specific limit
+     * @throws java.lang.IllegalArgumentException If provided with {@code null}
      */
-    public boolean isValidLength(AccountType type)
-    {
+    public boolean isValidLength(AccountType type) {
         Checks.notNull(type, "AccountType");
         final int length = length();
-        switch (type)
-        {
+        switch (type) {
             case BOT:
                 return length <= MessageEmbed.EMBED_MAX_LENGTH_BOT;
             case CLIENT:
@@ -217,52 +199,38 @@ public class EmbedBuilder
      *
      * <p><b><a href="http://i.imgur.com/JgZtxIM.png">Example</a></b>
      *
-     * @param  title
-     *         the title of the embed
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>If the provided {@code title} is an empty String.</li>
-     *             <li>If the length of {@code title} is greater than {@link net.dv8tion.jda.core.entities.MessageEmbed#TITLE_MAX_LENGTH}.</li>
-     *         </ul>
-     *
+     * @param title the title of the embed
      * @return the builder after the title has been set
+     * @throws java.lang.IllegalArgumentException <ul>
+     *                                            <li>If the provided {@code title} is an empty String.</li>
+     *                                            <li>If the length of {@code title} is greater than {@link net.dv8tion.jda.core.entities.MessageEmbed#TITLE_MAX_LENGTH}.</li>
+     *                                            </ul>
      */
-    public EmbedBuilder setTitle(String title)
-    {
+    public EmbedBuilder setTitle(String title) {
         return setTitle(title, null);
     }
-    
+
     /**
      * Sets the Title of the embed.
      * <br>You can provide {@code null} as url if no url should be used.
      *
      * <p><b><a href="http://i.imgur.com/JgZtxIM.png">Example</a></b>
      *
-     * @param  title
-     *         the title of the embed
-     * @param  url
-     *         Makes the title into a hyperlink pointed at this url.
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>If the provided {@code title} is an empty String.</li>
-     *             <li>If the length of {@code title} is greater than {@link net.dv8tion.jda.core.entities.MessageEmbed#TITLE_MAX_LENGTH}.</li>
-     *             <li>If the length of {@code url} is longer than {@link net.dv8tion.jda.core.entities.MessageEmbed#URL_MAX_LENGTH}.</li>
-     *             <li>If the provided {@code url} is not a properly formatted http or https url.</li>
-     *         </ul>
-     *
+     * @param title the title of the embed
+     * @param url   Makes the title into a hyperlink pointed at this url.
      * @return the builder after the title has been set
+     * @throws java.lang.IllegalArgumentException <ul>
+     *                                            <li>If the provided {@code title} is an empty String.</li>
+     *                                            <li>If the length of {@code title} is greater than {@link net.dv8tion.jda.core.entities.MessageEmbed#TITLE_MAX_LENGTH}.</li>
+     *                                            <li>If the length of {@code url} is longer than {@link net.dv8tion.jda.core.entities.MessageEmbed#URL_MAX_LENGTH}.</li>
+     *                                            <li>If the provided {@code url} is not a properly formatted http or https url.</li>
+     *                                            </ul>
      */
-    public EmbedBuilder setTitle(String title, String url)
-    {
-        if (title == null)
-        {
+    public EmbedBuilder setTitle(String title, String url) {
+        if (title == null) {
             this.title = null;
             this.url = null;
-        }
-        else
-        {
+        } else {
             if (title.isEmpty())
                 throw new IllegalArgumentException("Title cannot be empty!");
             if (title.length() > MessageEmbed.TITLE_MAX_LENGTH)
@@ -284,8 +252,7 @@ public class EmbedBuilder
      *
      * @return StringBuilder with current description context
      */
-    public StringBuilder getDescriptionBuilder()
-    {
+    public StringBuilder getDescriptionBuilder() {
         return description;
     }
 
@@ -294,16 +261,11 @@ public class EmbedBuilder
      *
      * <p><b><a href="http://i.imgur.com/lbchtwk.png">Example</a></b>
      *
-     * @param  description
-     *         the description of the embed, {@code null} to reset
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         If the length of {@code description} is greater than {@link net.dv8tion.jda.core.entities.MessageEmbed#TEXT_MAX_LENGTH}
-     *
+     * @param description the description of the embed, {@code null} to reset
      * @return the builder after the description has been set
+     * @throws java.lang.IllegalArgumentException If the length of {@code description} is greater than {@link net.dv8tion.jda.core.entities.MessageEmbed#TEXT_MAX_LENGTH}
      */
-    public final EmbedBuilder setDescription(CharSequence description)
-    {
+    public final EmbedBuilder setDescription(CharSequence description) {
         this.description.setLength(0);
         if (description != null && description.length() >= 1)
             appendDescription(description);
@@ -315,22 +277,17 @@ public class EmbedBuilder
      *
      * <p><b><a href="http://i.imgur.com/lbchtwk.png">Example</a></b>
      *
-     * @param  description
-     *         the string to append to the description of the embed
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>If the provided {@code description} String is null</li>
-     *             <li>If the length of {@code description} is greater than {@link net.dv8tion.jda.core.entities.MessageEmbed#TEXT_MAX_LENGTH}.</li>
-     *         </ul>
-     *
+     * @param description the string to append to the description of the embed
      * @return the builder after the description has been set
+     * @throws java.lang.IllegalArgumentException <ul>
+     *                                            <li>If the provided {@code description} String is null</li>
+     *                                            <li>If the length of {@code description} is greater than {@link net.dv8tion.jda.core.entities.MessageEmbed#TEXT_MAX_LENGTH}.</li>
+     *                                            </ul>
      */
-    public EmbedBuilder appendDescription(CharSequence description)
-    {
+    public EmbedBuilder appendDescription(CharSequence description) {
         Checks.notNull(description, "description");
         Checks.check(this.description.length() + description.length() <= MessageEmbed.TEXT_MAX_LENGTH,
-                "Description cannot be longer than %d characters.", MessageEmbed.TEXT_MAX_LENGTH);
+            "Description cannot be longer than %d characters.", MessageEmbed.TEXT_MAX_LENGTH);
         this.description.append(description);
         return this;
     }
@@ -343,69 +300,48 @@ public class EmbedBuilder
      * <p><b>Hint:</b> You can get the current time using {@link java.time.Instant#now() Instant.now()} or convert time from a
      * millisecond representation by using {@link java.time.Instant#ofEpochMilli(long) Instant.ofEpochMilli(long)};
      *
-     * @param  temporal
-     *         the temporal accessor of the timestamp
-     *
+     * @param temporal the temporal accessor of the timestamp
      * @return the builder after the timestamp has been set
      */
-    public EmbedBuilder setTimestamp(TemporalAccessor temporal)
-    {
-        if (temporal == null)
-        {
+    public EmbedBuilder setTimestamp(TemporalAccessor temporal) {
+        if (temporal == null) {
             this.timestamp = null;
-        }
-        else if (temporal instanceof OffsetDateTime)
-        {
+        } else if (temporal instanceof OffsetDateTime) {
             this.timestamp = (OffsetDateTime) temporal;
-        }
-        else
-        {
+        } else {
             ZoneOffset offset;
-            try
-            {
+            try {
                 offset = ZoneOffset.from(temporal);
-            }
-            catch (DateTimeException ignore)
-            {
+            } catch (DateTimeException ignore) {
                 offset = ZoneOffset.UTC;
             }
-            try
-            {
+            try {
                 LocalDateTime ldt = LocalDateTime.from(temporal);
                 this.timestamp = OffsetDateTime.of(ldt, offset);
-            }
-            catch (DateTimeException ignore)
-            {
-                try
-                {
+            } catch (DateTimeException ignore) {
+                try {
                     Instant instant = Instant.from(temporal);
                     this.timestamp = OffsetDateTime.ofInstant(instant, offset);
-                }
-                catch (DateTimeException ex)
-                {
+                } catch (DateTimeException ex) {
                     throw new DateTimeException("Unable to obtain OffsetDateTime from TemporalAccessor: " +
-                            temporal + " of type " + temporal.getClass().getName(), ex);
+                        temporal + " of type " + temporal.getClass().getName(), ex);
                 }
             }
         }
-        return this; 
+        return this;
     }
-    
+
     /**
      * Sets the Color of the embed.
      *
      * <a href="http://i.imgur.com/2YnxnRM.png" target="_blank">Example</a>
      *
-     * @param  color
-     *         The {@link java.awt.Color Color} of the embed
-     *         or {@code null} to use no color
-     *
+     * @param color The {@link java.awt.Color Color} of the embed
+     *              or {@code null} to use no color
      * @return the builder after the color has been set
-     *
-     * @see    #setColor(int)
+     * @see #setColor(int)
      */
-    public EmbedBuilder setColor(Color color)
-    {
+    public EmbedBuilder setColor(Color color) {
         this.color = color == null ? Role.DEFAULT_COLOR_RAW : color.getRGB();
         return this;
     }
@@ -415,19 +351,15 @@ public class EmbedBuilder
      *
      * <a href="http://i.imgur.com/2YnxnRM.png" target="_blank">Example</a>
      *
-     * @param  color
-     *         The raw rgb value, or {@link Role#DEFAULT_COLOR_RAW} to use no color
-     *
+     * @param color The raw rgb value, or {@link Role#DEFAULT_COLOR_RAW} to use no color
      * @return the builder after the color has been set
-     *
-     * @see    #setColor(java.awt.Color)
+     * @see #setColor(java.awt.Color)
      */
-    public EmbedBuilder setColor(int color)
-    {
+    public EmbedBuilder setColor(int color) {
         this.color = color;
         return this;
     }
-    
+
     /**
      * Sets the Thumbnail of the embed.
      *
@@ -450,25 +382,17 @@ public class EmbedBuilder
      * channel.sendFile(file, "cat.png", message.build()).queue();
      * </code></pre>
      *
-     * @param  url
-     *         the url of the thumbnail of the embed
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>If the length of {@code url} is longer than {@link net.dv8tion.jda.core.entities.MessageEmbed#URL_MAX_LENGTH}.</li>
-     *             <li>If the provided {@code url} is not a properly formatted http or https url.</li>
-     *         </ul>
-     *
+     * @param url the url of the thumbnail of the embed
      * @return the builder after the thumbnail has been set
+     * @throws java.lang.IllegalArgumentException <ul>
+     *                                            <li>If the length of {@code url} is longer than {@link net.dv8tion.jda.core.entities.MessageEmbed#URL_MAX_LENGTH}.</li>
+     *                                            <li>If the provided {@code url} is not a properly formatted http or https url.</li>
+     *                                            </ul>
      */
-    public EmbedBuilder setThumbnail(String url)
-    {
-        if (url == null)
-        {
+    public EmbedBuilder setThumbnail(String url) {
+        if (url == null) {
             this.thumbnail = null;
-        }
-        else
-        {
+        } else {
             urlCheck(url);
             this.thumbnail = new MessageEmbed.Thumbnail(url, null, 0, 0);
         }
@@ -497,33 +421,24 @@ public class EmbedBuilder
      * channel.sendFile(file, "cat.png", message.build()).queue();
      * </code></pre>
      *
-     * @param  url
-     *         the url of the image of the embed
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>If the length of {@code url} is longer than {@link net.dv8tion.jda.core.entities.MessageEmbed#URL_MAX_LENGTH}.</li>
-     *             <li>If the provided {@code url} is not a properly formatted http or https url.</li>
-     *         </ul>
-     *
+     * @param url the url of the image of the embed
      * @return the builder after the image has been set
-     *
-     * @see    net.dv8tion.jda.core.entities.MessageChannel#sendFile(java.io.File, String, net.dv8tion.jda.core.entities.Message) MessageChannel.sendFile(...)
+     * @throws java.lang.IllegalArgumentException <ul>
+     *                                            <li>If the length of {@code url} is longer than {@link net.dv8tion.jda.core.entities.MessageEmbed#URL_MAX_LENGTH}.</li>
+     *                                            <li>If the provided {@code url} is not a properly formatted http or https url.</li>
+     *                                            </ul>
+     * @see net.dv8tion.jda.core.entities.MessageChannel#sendFile(java.io.File, String, net.dv8tion.jda.core.entities.Message) MessageChannel.sendFile(...)
      */
-    public EmbedBuilder setImage(String url)
-    {
-        if (url == null)
-        {
+    public EmbedBuilder setImage(String url) {
+        if (url == null) {
             this.image = null;
-        }
-        else
-        {
+        } else {
             urlCheck(url);
             this.image = new MessageEmbed.ImageInfo(url, null, 0, 0);
         }
         return this;
     }
-    
+
     /**
      * Sets the Author of the embed. The author appears in the top left of the embed and can have a small
      * image beside it along with the author's name being made clickable by way of providing a url.
@@ -531,13 +446,10 @@ public class EmbedBuilder
      *
      * <p><b><a href="http://i.imgur.com/JgZtxIM.png">Example</a></b>
      *
-     * @param  name
-     *         the name of the author of the embed. If this is not set, the author will not appear in the embed
-     *
+     * @param name the name of the author of the embed. If this is not set, the author will not appear in the embed
      * @return the builder after the author has been set
      */
-    public EmbedBuilder setAuthor(String name)
-    {
+    public EmbedBuilder setAuthor(String name) {
         return setAuthor(name, null, null);
     }
 
@@ -548,21 +460,15 @@ public class EmbedBuilder
      *
      * <p><b><a href="http://i.imgur.com/JgZtxIM.png">Example</a></b>
      *
-     * @param  name
-     *         the name of the author of the embed. If this is not set, the author will not appear in the embed
-     * @param  url
-     *         the url of the author of the embed
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>If the length of {@code url} is longer than {@link net.dv8tion.jda.core.entities.MessageEmbed#URL_MAX_LENGTH}.</li>
-     *             <li>If the provided {@code url} is not a properly formatted http or https url.</li>
-     *         </ul>
-     *
+     * @param name the name of the author of the embed. If this is not set, the author will not appear in the embed
+     * @param url  the url of the author of the embed
      * @return the builder after the author has been set
+     * @throws java.lang.IllegalArgumentException <ul>
+     *                                            <li>If the length of {@code url} is longer than {@link net.dv8tion.jda.core.entities.MessageEmbed#URL_MAX_LENGTH}.</li>
+     *                                            <li>If the provided {@code url} is not a properly formatted http or https url.</li>
+     *                                            </ul>
      */
-    public EmbedBuilder setAuthor(String name, String url)
-    {
+    public EmbedBuilder setAuthor(String name, String url) {
         return setAuthor(name, url, null);
     }
 
@@ -589,40 +495,30 @@ public class EmbedBuilder
      * channel.sendFile(file, "cat.png", message.build()).queue();
      * </code></pre>
      *
-     * @param  name
-     *         the name of the author of the embed. If this is not set, the author will not appear in the embed
-     * @param  url
-     *         the url of the author of the embed
-     * @param  iconUrl
-     *         the url of the icon for the author
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>If the length of {@code url} is longer than {@link net.dv8tion.jda.core.entities.MessageEmbed#URL_MAX_LENGTH}.</li>
-     *             <li>If the provided {@code url} is not a properly formatted http or https url.</li>
-     *             <li>If the length of {@code iconUrl} is longer than {@link net.dv8tion.jda.core.entities.MessageEmbed#URL_MAX_LENGTH}.</li>
-     *             <li>If the provided {@code iconUrl} is not a properly formatted http or https url.</li>
-     *         </ul>
-     *
+     * @param name    the name of the author of the embed. If this is not set, the author will not appear in the embed
+     * @param url     the url of the author of the embed
+     * @param iconUrl the url of the icon for the author
      * @return the builder after the author has been set
+     * @throws java.lang.IllegalArgumentException <ul>
+     *                                            <li>If the length of {@code url} is longer than {@link net.dv8tion.jda.core.entities.MessageEmbed#URL_MAX_LENGTH}.</li>
+     *                                            <li>If the provided {@code url} is not a properly formatted http or https url.</li>
+     *                                            <li>If the length of {@code iconUrl} is longer than {@link net.dv8tion.jda.core.entities.MessageEmbed#URL_MAX_LENGTH}.</li>
+     *                                            <li>If the provided {@code iconUrl} is not a properly formatted http or https url.</li>
+     *                                            </ul>
      */
-    public EmbedBuilder setAuthor(String name, String url, String iconUrl)
-    {
+    public EmbedBuilder setAuthor(String name, String url, String iconUrl) {
         //We only check if the name is null because its presence is what determines if the
         // the author will appear in the embed.
-        if (name == null)
-        {
+        if (name == null) {
             this.author = null;
-        }
-        else
-        {
+        } else {
             urlCheck(url);
             urlCheck(iconUrl);
             this.author = new MessageEmbed.AuthorInfo(name, url, iconUrl, null);
         }
         return this;
     }
-    
+
     /**
      * Sets the Footer of the embed.
      *
@@ -645,30 +541,21 @@ public class EmbedBuilder
      * channel.sendFile(file, "cat.png", message.build()).queue();
      * </code></pre>
      *
-     * @param  text
-     *         the text of the footer of the embed. If this is not set, the footer will not appear in the embed.
-     * @param  iconUrl
-     *         the url of the icon for the footer
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>If the length of {@code text} is longer than {@link net.dv8tion.jda.core.entities.MessageEmbed#TEXT_MAX_LENGTH}.</li>
-     *             <li>If the length of {@code iconUrl} is longer than {@link net.dv8tion.jda.core.entities.MessageEmbed#URL_MAX_LENGTH}.</li>
-     *             <li>If the provided {@code iconUrl} is not a properly formatted http or https url.</li>
-     *         </ul>
-     *
+     * @param text    the text of the footer of the embed. If this is not set, the footer will not appear in the embed.
+     * @param iconUrl the url of the icon for the footer
      * @return the builder after the footer has been set
+     * @throws java.lang.IllegalArgumentException <ul>
+     *                                            <li>If the length of {@code text} is longer than {@link net.dv8tion.jda.core.entities.MessageEmbed#TEXT_MAX_LENGTH}.</li>
+     *                                            <li>If the length of {@code iconUrl} is longer than {@link net.dv8tion.jda.core.entities.MessageEmbed#URL_MAX_LENGTH}.</li>
+     *                                            <li>If the provided {@code iconUrl} is not a properly formatted http or https url.</li>
+     *                                            </ul>
      */
-    public EmbedBuilder setFooter(String text, String iconUrl)
-    {
+    public EmbedBuilder setFooter(String text, String iconUrl) {
         //We only check if the text is null because its presence is what determines if the
         // footer will appear in the embed.
-        if (text == null)
-        {
+        if (text == null) {
             this.footer = null;
-        }
-        else
-        {
+        } else {
             if (text.length() > MessageEmbed.TEXT_MAX_LENGTH)
                 throw new IllegalArgumentException("Text cannot be longer than " + MessageEmbed.TEXT_MAX_LENGTH + " characters.");
             urlCheck(iconUrl);
@@ -676,21 +563,18 @@ public class EmbedBuilder
         }
         return this;
     }
-    
+
     /**
      * Copies the provided Field into a new Field for this builder.
      * <br>For additional documentation, see {@link #addField(String, String, boolean)}
-     * 
-     * @param  field
-     *         the field object to add
      *
+     * @param field the field object to add
      * @return the builder after the field has been added
      */
-    public EmbedBuilder addField(MessageEmbed.Field field)
-    {
+    public EmbedBuilder addField(MessageEmbed.Field field) {
         return field == null ? this : addField(field.getName(), field.getValue(), field.isInline());
     }
-    
+
     /**
      * Adds a Field to the embed.
      *
@@ -700,43 +584,33 @@ public class EmbedBuilder
      * <p><b><a href="http://i.imgur.com/gnjzCoo.png">Example of Inline</a></b>
      * <p><b><a href="http://i.imgur.com/Ky0KlsT.png">Example if Non-inline</a></b>
      *
-     * @param  name
-     *         the name of the Field, displayed in bold above the {@code value}.
-     * @param  value
-     *         the contents of the field.
-     * @param  inline
-     *         whether or not this field should display inline.
-     *
-     * @throws java.lang.IllegalArgumentException
-     *         <ul>
-     *             <li>If only {@code name} or {@code value} is set. Both must be set.</li>
-     *             <li>If the length of {@code name} is greater than {@link net.dv8tion.jda.core.entities.MessageEmbed#TITLE_MAX_LENGTH}.</li>
-     *             <li>If the length of {@code value} is greater than {@link net.dv8tion.jda.core.entities.MessageEmbed#VALUE_MAX_LENGTH}.</li>
-     *         </ul>
-     *
+     * @param name   the name of the Field, displayed in bold above the {@code value}.
+     * @param value  the contents of the field.
+     * @param inline whether or not this field should display inline.
      * @return the builder after the field has been added
+     * @throws java.lang.IllegalArgumentException <ul>
+     *                                            <li>If only {@code name} or {@code value} is set. Both must be set.</li>
+     *                                            <li>If the length of {@code name} is greater than {@link net.dv8tion.jda.core.entities.MessageEmbed#TITLE_MAX_LENGTH}.</li>
+     *                                            <li>If the length of {@code value} is greater than {@link net.dv8tion.jda.core.entities.MessageEmbed#VALUE_MAX_LENGTH}.</li>
+     *                                            </ul>
      */
-    public EmbedBuilder addField(String name, String value, boolean inline)
-    {
+    public EmbedBuilder addField(String name, String value, boolean inline) {
         if (name == null && value == null)
             return this;
         this.fields.add(new MessageEmbed.Field(name, value, inline));
         return this;
     }
-    
+
     /**
      * Adds a blank (empty) Field to the embed.
      *
      * <p><b><a href="http://i.imgur.com/tB6tYWy.png">Example of Inline</a></b>
      * <p><b><a href="http://i.imgur.com/lQqgH3H.png">Example of Non-inline</a></b>
      *
-     * @param  inline
-     *         whether or not this field should display inline
-     *
+     * @param inline whether or not this field should display inline
      * @return the builder after the field has been added
      */
-    public EmbedBuilder addBlankField(boolean inline)
-    {
+    public EmbedBuilder addBlankField(boolean inline) {
         this.fields.add(new MessageEmbed.Field(ZERO_WIDTH_SPACE, ZERO_WIDTH_SPACE, inline));
         return this;
     }
@@ -749,12 +623,11 @@ public class EmbedBuilder
      *
      * @return the builder after the field has been added
      */
-    public EmbedBuilder clearFields()
-    {
+    public EmbedBuilder clearFields() {
         this.fields.clear();
         return this;
     }
-    
+
     /**
      * <b>Modifiable</b> list of {@link net.dv8tion.jda.core.entities.MessageEmbed MessageEmbed} Fields that the builder will
      * use for {@link #build()}.
@@ -763,13 +636,11 @@ public class EmbedBuilder
      *
      * @return Mutable List of {@link net.dv8tion.jda.core.entities.MessageEmbed.Field Fields}
      */
-    public List<MessageEmbed.Field> getFields()
-    {
+    public List<MessageEmbed.Field> getFields() {
         return fields;
     }
 
-    private void urlCheck(String url)
-    {
+    private void urlCheck(String url) {
         if (url == null)
             return;
         else if (url.length() > MessageEmbed.URL_MAX_LENGTH)

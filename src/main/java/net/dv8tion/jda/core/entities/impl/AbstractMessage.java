@@ -30,44 +30,38 @@ import java.util.FormattableFlags;
 import java.util.Formatter;
 import java.util.List;
 
-public abstract class AbstractMessage implements Message
-{
+public abstract class AbstractMessage implements Message {
     protected static final String UNSUPPORTED = "This operation is not supported for Messages of this type!";
 
     protected final String content;
     protected final String nonce;
     protected final boolean isTTS;
 
-    public AbstractMessage(String content, String nonce, boolean isTTS)
-    {
+    public AbstractMessage(String content, String nonce, boolean isTTS) {
         this.content = content;
         this.nonce = nonce;
         this.isTTS = isTTS;
     }
 
     @Override
-    public String getContentRaw()
-    {
+    public String getContentRaw() {
         return content;
     }
 
     @Override
-    public String getNonce()
-    {
+    public String getNonce() {
         return nonce;
     }
 
     @Override
-    public boolean isTTS()
-    {
+    public boolean isTTS() {
         return isTTS;
     }
 
     protected abstract void unsupported();
 
     @Override
-    public void formatTo(Formatter formatter, int flags, int width, int precision)
-    {
+    public void formatTo(Formatter formatter, int flags, int width, int precision) {
         boolean upper = (flags & FormattableFlags.UPPERCASE) == FormattableFlags.UPPERCASE;
         boolean leftJustified = (flags & FormattableFlags.LEFT_JUSTIFY) == FormattableFlags.LEFT_JUSTIFY;
 
@@ -79,13 +73,10 @@ public abstract class AbstractMessage implements Message
         appendFormat(formatter, width, precision, leftJustified, out);
     }
 
-    protected void appendFormat(Formatter formatter, int width, int precision, boolean leftJustified, String out)
-    {
-        try
-        {
+    protected void appendFormat(Formatter formatter, int width, int precision, boolean leftJustified, String out) {
+        try {
             Appendable appendable = formatter.out();
-            if (precision > -1 && out.length() > precision)
-            {
+            if (precision > -1 && out.length() > precision) {
                 appendable.append(Helpers.truncate(out, precision - 3)).append("...");
                 return;
             }
@@ -94,296 +85,253 @@ public abstract class AbstractMessage implements Message
                 appendable.append(Helpers.rightPad(out, width));
             else
                 appendable.append(Helpers.leftPad(out, width));
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             throw new AssertionError(e);
         }
     }
 
     @Override
-    public List<User> getMentionedUsers()
-    {
+    public List<User> getMentionedUsers() {
         unsupported();
         return null;
     }
 
     @Override
-    public List<TextChannel> getMentionedChannels()
-    {
+    public List<TextChannel> getMentionedChannels() {
         unsupported();
         return null;
     }
 
     @Override
-    public List<Role> getMentionedRoles()
-    {
+    public List<Role> getMentionedRoles() {
         unsupported();
         return null;
     }
 
     @Override
-    public List<Member> getMentionedMembers(Guild guild)
-    {
+    public List<Member> getMentionedMembers(Guild guild) {
         unsupported();
         return null;
     }
 
     @Override
-    public List<Member> getMentionedMembers()
-    {
+    public List<Member> getMentionedMembers() {
         unsupported();
         return null;
     }
 
     @Override
-    public List<IMentionable> getMentions(MentionType... types)
-    {
+    public List<IMentionable> getMentions(MentionType... types) {
         unsupported();
         return null;
     }
 
     @Override
-    public boolean isMentioned(IMentionable mentionable, MentionType... types)
-    {
+    public boolean isMentioned(IMentionable mentionable, MentionType... types) {
         unsupported();
         return false;
     }
 
     @Override
-    public boolean mentionsEveryone()
-    {
+    public boolean mentionsEveryone() {
         unsupported();
         return false;
     }
 
     @Override
-    public boolean isEdited()
-    {
+    public boolean isEdited() {
         unsupported();
         return false;
     }
 
     @Override
-    public OffsetDateTime getEditedTime()
-    {
+    public OffsetDateTime getEditedTime() {
         unsupported();
         return null;
     }
 
     @Override
-    public User getAuthor()
-    {
+    public User getAuthor() {
         unsupported();
         return null;
     }
 
     @Override
-    public Member getMember()
-    {
+    public Member getMember() {
         unsupported();
         return null;
     }
 
     @Override
-    public String getContentDisplay()
-    {
+    public String getContentDisplay() {
         unsupported();
         return null;
     }
 
     @Override
-    public String getContentStripped()
-    {
+    public String getContentStripped() {
         unsupported();
         return null;
     }
 
     @Override
-    public List<String> getInvites()
-    {
+    public List<String> getInvites() {
         unsupported();
         return null;
     }
 
     @Override
-    public boolean isFromType(ChannelType type)
-    {
+    public boolean isFromType(ChannelType type) {
         unsupported();
         return false;
     }
 
     @Override
-    public ChannelType getChannelType()
-    {
+    public ChannelType getChannelType() {
         unsupported();
         return null;
     }
 
     @Override
-    public boolean isWebhookMessage()
-    {
+    public boolean isWebhookMessage() {
         unsupported();
         return false;
     }
 
     @Override
-    public MessageChannel getChannel()
-    {
+    public MessageChannel getChannel() {
         unsupported();
         return null;
     }
 
     @Override
-    public PrivateChannel getPrivateChannel()
-    {
+    public PrivateChannel getPrivateChannel() {
         unsupported();
         return null;
     }
 
     @Override
-    public Group getGroup()
-    {
+    public Group getGroup() {
         unsupported();
         return null;
     }
 
     @Override
-    public TextChannel getTextChannel()
-    {
+    public TextChannel getTextChannel() {
         unsupported();
         return null;
     }
 
     @Override
-    public Category getCategory()
-    {
+    public Category getCategory() {
         unsupported();
         return null;
     }
 
     @Override
-    public Guild getGuild()
-    {
+    public Guild getGuild() {
         unsupported();
         return null;
     }
 
     @Override
-    public List<Attachment> getAttachments()
-    {
+    public List<Attachment> getAttachments() {
         unsupported();
         return null;
     }
 
     @Override
-    public List<MessageEmbed> getEmbeds()
-    {
+    public List<MessageEmbed> getEmbeds() {
         unsupported();
         return null;
     }
 
     @Override
-    public List<Emote> getEmotes()
-    {
+    public List<Emote> getEmotes() {
         unsupported();
         return null;
     }
 
     @Override
-    public List<MessageReaction> getReactions()
-    {
+    public List<MessageReaction> getReactions() {
         unsupported();
         return null;
     }
 
     @Override
-    public MessageAction editMessage(CharSequence newContent)
-    {
+    public MessageAction editMessage(CharSequence newContent) {
         unsupported();
         return null;
     }
 
     @Override
-    public MessageAction editMessage(MessageEmbed newContent)
-    {
+    public MessageAction editMessage(MessageEmbed newContent) {
         unsupported();
         return null;
     }
 
     @Override
-    public MessageAction editMessageFormat(String format, Object... args)
-    {
+    public MessageAction editMessageFormat(String format, Object... args) {
         unsupported();
         return null;
     }
 
     @Override
-    public MessageAction editMessage(Message newContent)
-    {
+    public MessageAction editMessage(Message newContent) {
         unsupported();
         return null;
     }
 
     @Override
-    public AuditableRestAction<Void> delete()
-    {
+    public AuditableRestAction<Void> delete() {
         unsupported();
         return null;
     }
 
     @Override
-    public JDA getJDA()
-    {
+    public JDA getJDA() {
         unsupported();
         return null;
     }
 
     @Override
-    public boolean isPinned()
-    {
+    public boolean isPinned() {
         unsupported();
         return false;
     }
 
     @Override
-    public RestAction<Void> pin()
-    {
+    public RestAction<Void> pin() {
         unsupported();
         return null;
     }
 
     @Override
-    public RestAction<Void> unpin()
-    {
+    public RestAction<Void> unpin() {
         unsupported();
         return null;
     }
 
     @Override
-    public RestAction<Void> addReaction(Emote emote)
-    {
+    public RestAction<Void> addReaction(Emote emote) {
         unsupported();
         return null;
     }
 
     @Override
-    public RestAction<Void> addReaction(String unicode)
-    {
+    public RestAction<Void> addReaction(String unicode) {
         unsupported();
         return null;
     }
 
     @Override
-    public RestAction<Void> clearReactions()
-    {
+    public RestAction<Void> clearReactions() {
         unsupported();
         return null;
     }
 
     @Override
-    public MessageType getType()
-    {
+    public MessageType getType() {
         unsupported();
         return null;
     }

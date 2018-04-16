@@ -26,13 +26,11 @@ import net.dv8tion.jda.core.entities.User;
  *
  * <p>Identifier: {@code avatar}
  */
-public class UserUpdateAvatarEvent extends GenericUserUpdateEvent<String>
-{
+public class UserUpdateAvatarEvent extends GenericUserUpdateEvent<String> {
     public static final String IDENTIFIER = "avatar";
     private static final String AVATAR_URL = "https://cdn.discordapp.com/avatars/%s/%s%s";
 
-    public UserUpdateAvatarEvent(JDA api, long responseNumber, User user, String oldAvatar)
-    {
+    public UserUpdateAvatarEvent(JDA api, long responseNumber, User user, String oldAvatar) {
         super(api, responseNumber, user, oldAvatar, user.getAvatarId(), IDENTIFIER);
     }
 
@@ -41,8 +39,7 @@ public class UserUpdateAvatarEvent extends GenericUserUpdateEvent<String>
      *
      * @return The previous avatar id
      */
-    public String getOldAvatarId()
-    {
+    public String getOldAvatarId() {
         return getOldValue();
     }
 
@@ -51,8 +48,7 @@ public class UserUpdateAvatarEvent extends GenericUserUpdateEvent<String>
      *
      * @return The previous avatar url
      */
-    public String getOldAvatarUrl()
-    {
+    public String getOldAvatarUrl() {
         return previous == null ? null : String.format(AVATAR_URL, getUser().getId(), previous, previous.startsWith("a_") ? ".gif" : ".png");
     }
 
@@ -61,8 +57,7 @@ public class UserUpdateAvatarEvent extends GenericUserUpdateEvent<String>
      *
      * @return The new avatar id
      */
-    public String getNewAvatarId()
-    {
+    public String getNewAvatarId() {
         return getNewValue();
     }
 
@@ -71,8 +66,7 @@ public class UserUpdateAvatarEvent extends GenericUserUpdateEvent<String>
      *
      * @return The url of the new avatar
      */
-    public String getNewAvatarUrl()
-    {
+    public String getNewAvatarUrl() {
         return next == null ? null : String.format(AVATAR_URL, getUser().getId(), next, next.startsWith("a_") ? ".gif" : ".png");
     }
 }
