@@ -61,7 +61,5 @@ public interface AudioSendHandler {
      * @return If true, JDA will not attempt to encode the provided audio data as Opus.
      * <br>Default - False.
      */
-    default boolean isOpus() {
-        return true;
-    }
+    boolean isOpus();
 }

@@ -67,8 +67,9 @@ public class UserAudio {
         byte[] audio = new byte[audioData.length * 2];
         for (int i = 0; i < audioData.length; i++) {
             s = audioData[i];
-            if (volume != 1.0)
+            if (volume != 1.0) {
                 s = (short) (s * volume);
+            }
 
             byte leftByte = (byte) ((0x000000FF) & (s >> 8));
             byte rightByte = (byte) (0x000000FF & s);
@@ -79,8 +80,21 @@ public class UserAudio {
         return audio;
     }
 
-    public short[] getAudioData() {
-        return this.audioData;
+    public byte[] getAudioData() {
+        if (audioData == null) {
+            return null;
+        }
+
+        short s;
+        int byteIndex = 0;
+        byte[] audio = new byte[audioData.length * 2];
+        for (int i = 0; i < audioData.length; i++) {
+            s = audioData[i];
+            audio[byteIndex] = (byte) ((0x000000FF) & (s >> 8));
+            audio[byteIndex + 1] = (byte) (0x000000FF & s);
+            byteIndex += 2;
+        }
+        return audio;
     }
 
     public AudioPacket getAudioPacket() {

@@ -526,6 +526,8 @@ public class AudioWebSocket extends WebSocketAdapter {
 
             this.address = address;
 
+            LOG.debug("Initializing websocket on " + ourIP + ":" + ourPort);
+
             return new InetSocketAddress(ourIP, ourPort);
         } catch (SocketException e) {
             return null;
