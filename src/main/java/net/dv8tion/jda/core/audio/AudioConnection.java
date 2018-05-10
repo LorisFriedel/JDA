@@ -341,7 +341,7 @@ public class AudioConnection {
 //                                continue;
 //                            }
                             if (receiveHandler.canReceiveUser()) {
-                                receiveHandler.handleUserAudio(new UserAudio(user, decryptedPacket));
+                                receiveHandler.handleUserAudio(new UserAudio(user, decryptedPacket, decoder.decodeFromOpus(decryptedPacket)));
                             }
 
                             // Disable the ReceiveCombined functionality for now

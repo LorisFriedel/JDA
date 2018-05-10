@@ -92,7 +92,6 @@ public class AudioPacket {
             this.encodedAudio = new byte[buffer.array().length - RTP_HEADER_BYTE_LENGTH];
             System.arraycopy(buffer.array(), RTP_HEADER_BYTE_LENGTH, this.encodedAudio, 0, this.encodedAudio.length);
         }
-//        this.nonce = Arrays.copyOf(rawPacket, RTP_HEADER_BYTE_LENGTH);
     }
 
     public AudioPacket(char seq, int timestamp, int ssrc, byte[] encodedAudio) {
@@ -109,7 +108,6 @@ public class AudioPacket {
         buffer.putInt(SSRC_INDEX, ssrc);                                    //8 - 11
         System.arraycopy(encodedAudio, 0, buffer.array(), RTP_HEADER_BYTE_LENGTH, encodedAudio.length);//12 - n
         this.rawPacket = buffer.array();
-//        this.nonce = Arrays.copyOf(rawPacket, RTP_HEADER_BYTE_LENGTH);
 
     }
 
@@ -125,7 +123,8 @@ public class AudioPacket {
     }
 
     public byte[] getEncodedAudio() {
-        return Arrays.copyOf(encodedAudio, encodedAudio.length);
+//        return Arrays.copyOf(encodedAudio, encodedAudio.length);
+        return encodedAudio;
     }
 
     public char getSequence() {

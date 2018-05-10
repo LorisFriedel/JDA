@@ -18,6 +18,7 @@ package net.dv8tion.jda.core.audio;
 
 import net.dv8tion.jda.core.entities.User;
 
+
 /**
  * Represents a packet of User specific audio.
  */
@@ -26,17 +27,19 @@ public class UserAudio {
     private final short[] audioData;
     private final AudioPacket audioPacket;
 
-    public UserAudio(User user, short[] audioData) {
+    public UserAudio(User user, AudioPacket audioPacket, short[] audioData) {
         this.user = user;
         this.audioData = audioData;
-        this.audioPacket = null;
-    }
-
-    public UserAudio(User user, AudioPacket audioPacket) {
-        this.user = user;
-        this.audioData = null;
         this.audioPacket = audioPacket;
     }
+
+    public UserAudio(User user, short[] audioData) {
+        this(user, null, audioData);
+    }
+
+//    public UserAudio(User user, AudioPacket audioPacket) {
+//        this(user, audioPacket, null);
+//    }
 
     /**
      * The {@link net.dv8tion.jda.core.entities.User User} that provided the audio data.
@@ -55,7 +58,7 @@ public class UserAudio {
      * <br>Going above {@code `1.0`} can increase the volume further, but you run the risk of audio distortion.
      *
      * @param volume Value used to modify the "volume" of the returned audio data. 1.0 is normal volume.
-     * @return Never-null byte array of PCM data defined by {@link net.dv8tion.jda.core.audio.AudioReceiveHandler#OUTPUT_FORMAT AudioReceiveHandler.OUTPUT_FORMAT}
+     * @return possibly null byte array of PCM data defined by {@link net.dv8tion.jda.core.audio.AudioReceiveHandler#OUTPUT_FORMAT AudioReceiveHandler.OUTPUT_FORMAT}
      */
     public byte[] getAudioData(double volume) {
         if (audioData == null) {
@@ -80,6 +83,13 @@ public class UserAudio {
         return audio;
     }
 
+    /**
+     * Provides 20 Milliseconds of combined audio data in 48KHz 16bit stereo signed BigEndian PCM.
+     * <br>Format defined by: {@link net.dv8tion.jda.core.audio.AudioReceiveHandler#OUTPUT_FORMAT AudioReceiveHandler.OUTPUT_FORMAT}.
+     * <p>
+     *
+     * @return possibly null byte array of PCM data defined by {@link net.dv8tion.jda.core.audio.AudioReceiveHandler#OUTPUT_FORMAT AudioReceiveHandler.OUTPUT_FORMAT}
+     */
     public byte[] getAudioData() {
         if (audioData == null) {
             return null;
@@ -94,6 +104,7 @@ public class UserAudio {
             audio[byteIndex + 1] = (byte) (0x000000FF & s);
             byteIndex += 2;
         }
+
         return audio;
     }
 
